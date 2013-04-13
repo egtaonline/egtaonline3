@@ -1,0 +1,25 @@
+%h1 Listing simulators
+
+%table
+  %tr
+    %th Name
+    %th Version
+    %th Email
+    %th Source
+    %th
+    %th
+    %th
+
+  - @simulators.each do |simulator|
+    %tr
+      %td= simulator.name
+      %td= simulator.version
+      %td= simulator.email
+      %td= simulator.source
+      %td= link_to 'Show', simulator
+      %td= link_to 'Edit', edit_simulator_path(simulator)
+      %td= link_to 'Destroy', simulator, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Simulator', new_simulator_path

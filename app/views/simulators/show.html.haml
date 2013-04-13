@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @simulator.name
+%p
+  %b Version:
+  = @simulator.version
+%p
+  %b Email:
+  = @simulator.email
+%p
+  %b Source:
+  = @simulator.source
+
+= link_to 'Edit', edit_simulator_path(@simulator)
+\|
+= link_to 'Back', simulators_path

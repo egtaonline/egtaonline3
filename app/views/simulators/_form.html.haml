@@ -1,0 +1,11 @@
+= simple_form_for(@simulator) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :version
+    = f.input :email
+    = f.input :source
+
+  .form-actions
+    = f.button :submit
