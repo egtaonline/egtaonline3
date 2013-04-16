@@ -1,0 +1,7 @@
+= simple_form_for simulator do |f|
+  .form-inputs
+    = f.input :email
+    = f.input :source, as: :file, label: "Zipped Source"
+
+  .form-actions
+    = f.button :submit, 'Update Simulator'

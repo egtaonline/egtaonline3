@@ -6,6 +6,7 @@ gem 'rails', '3.2.13'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'activerecord-jdbcpostgresql-adapter'
+gem 'activerecord-postgres-hstore'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -28,7 +29,7 @@ gem 'kaminari'
 gem 'celluloid'
 gem 'airbrake'
 gem 'puma'
-gem 'json-jruby'
+gem 'jrjackson'
 gem 'simple_form'
 gem 'show_for'
 gem 'high_voltage'

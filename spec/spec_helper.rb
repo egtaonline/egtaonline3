@@ -1,4 +1,3 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require 'simplecov'
 SimpleCov.start
@@ -33,5 +32,6 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
   config.include(MailerMacros)
+  config.include(SessionHelpers, type: :feature)
   config.before(:each) { reset_email }
 end

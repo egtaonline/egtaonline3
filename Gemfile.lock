@@ -26,6 +26,10 @@ GEM
     activerecord-jdbcpostgresql-adapter (1.2.9)
       activerecord-jdbc-adapter (~> 1.2.9)
       jdbc-postgres (>= 9.1, < 9.3)
+    activerecord-postgres-hstore (0.7.6)
+      activerecord (>= 3.1)
+      pg-hstore (>= 1.1.5)
+      rake
     activeresource (3.2.13)
       activemodel (= 3.2.13)
       activesupport (= 3.2.13)
@@ -113,9 +117,9 @@ GEM
     jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jrjackson (0.1.1)
     json (1.7.7)
     json (1.7.7-java)
-    json-jruby (1.4.3.1-java)
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -131,6 +135,7 @@ GEM
     nokogiri (1.5.9)
     nokogiri (1.5.9-java)
     orm_adapter (0.4.0)
+    pg-hstore (1.1.7)
     poltergeist (1.1.0)
       capybara (~> 2.0, >= 2.0.1)
       faye-websocket (~> 0.4, >= 0.4.4)
@@ -242,6 +247,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcpostgresql-adapter
+  activerecord-postgres-hstore
   airbrake
   better_errors
   capybara
@@ -257,7 +263,7 @@ DEPENDENCIES
   haml-rails
   high_voltage
   jquery-rails
-  json-jruby
+  jrjackson
   kaminari
   poltergeist
   puma

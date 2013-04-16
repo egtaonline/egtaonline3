@@ -11,15 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130413000142) do
+ActiveRecord::Schema.define(:version => 20130416200142) do
 
   create_table "simulators", :force => true do |t|
-    t.string   "name",       :limit => 32, :null => false
-    t.string   "version",    :limit => 32, :null => false
-    t.string   "email",                    :null => false
-    t.string   "source",                   :null => false
-    t.datetime "created_at",               :null => false
-    t.datetime "updated_at",               :null => false
+    t.string   "name",          :limit => 32, :null => false
+    t.string   "version",       :limit => 32, :null => false
+    t.string   "email",                       :null => false
+    t.string   "source",                      :null => false
+    t.hstore   "configuration",               :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "users", :force => true do |t|

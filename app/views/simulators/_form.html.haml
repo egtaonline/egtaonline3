@@ -1,11 +1,11 @@
-= simple_form_for(@simulator) do |f|
+= simple_form_for(simulator) do |f|
   = f.error_notification
 
   .form-inputs
     = f.input :name
     = f.input :version
-    = f.input :email
-    = f.input :source
+    = f.input :email, input_html: { value: current_user.email }
+    = f.input :source, as: :file, label: "Zipped Source"
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, "Upload Simulator"

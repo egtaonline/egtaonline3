@@ -1,0 +1,6 @@
+= show_for simulator do |u|
+  %h3 Simulator Configuration
+  = u.attribute :name
+  = u.attribute :version
+  = u.attribute :email
+  = render partial: 'configuration/parameter', collection: simulator.configuration.to_a

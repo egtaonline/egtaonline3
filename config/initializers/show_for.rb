@@ -9,6 +9,8 @@ ShowFor.setup do |config|
   # The tag used to wrap each label. Default is :strong.
   # config.label_tag = :dt
 
+  config.label_class = nil
+
   # The tag used to wrap each content (value). Default is nil.
   # config.content_tag = :dd
 
@@ -16,7 +18,7 @@ ShowFor.setup do |config|
   # config.blank_content_class = 'no_content'
 
   # The separator between label and content. Default is "<br />".
-  # config.separator = "<br />"
+  config.separator = "&nbsp;&nbsp;"
 
   # The tag used to wrap collections. Default is :ul.
   # config.collection_tag = :ul
@@ -33,5 +35,5 @@ ShowFor.setup do |config|
 
   # If you want to wrap the text inside a label (e.g. to append a semicolon),
   # specify label_proc - it will be automatically called, passing in the label text.
-  # config.label_proc = lambda { |l| l + ":" }
+  config.label_proc = lambda { |l| l + ":" }
 end
