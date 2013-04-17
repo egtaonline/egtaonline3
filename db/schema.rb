@@ -11,7 +11,86 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130416200142) do
+ActiveRecord::Schema.define(:version => 20130417221805) do
+
+  create_table "games", :force => true do |t|
+    t.string   "name",                  :null => false
+    t.integer  "size",                  :null => false
+    t.integer  "simulator_instance_id", :null => false
+    t.hstore   "role_configuration"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+  end
+
+  create_table "games_profiles", :id => false, :force => true do |t|
+    t.integer "profile_id", :null => false
+    t.integer "game_id",    :null => false
+  end
+
+  create_table "observations", :force => true do |t|
+    t.integer  "profile_id", :null => false
+    t.hstore   "features"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "players", :force => true do |t|
+    t.float    "payoff",            :null => false
+    t.hstore   "features"
+    t.integer  "observation_id",    :null => false
+    t.integer  "symmetry_group_id", :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "profiles", :force => true do |t|
+    t.integer  "simulator_instance_id",                :null => false
+    t.integer  "size",                                 :null => false
+    t.integer  "observation_count",     :default => 0, :null => false
+    t.string   "assignment",                           :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
+  create_table "schedulers", :force => true do |t|
+    t.string   "name",                                      :null => false
+    t.boolean  "active",                 :default => false, :null => false
+    t.integer  "process_memory",                            :null => false
+    t.integer  "time_per_sample",                           :null => false
+    t.integer  "samples_per_simulation", :default => 10,    :null => false
+    t.integer  "nodes",                  :default => 1,     :null => false
+    t.integer  "size",                                      :null => false
+    t.integer  "simulator_instance_id",                     :null => false
+    t.hstore   "role_configuration"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "scheduling_requirements", :force => true do |t|
+    t.integer  "count",        :null => false
+    t.integer  "scheduler_id", :null => false
+    t.integer  "profile_id",   :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "simulations", :force => true do |t|
+    t.integer  "profile_id",                           :null => false
+    t.integer  "scheduler_id",                         :null => false
+    t.integer  "size",                                 :null => false
+    t.string   "state",         :default => "pending", :null => false
+    t.integer  "job_id",                               :null => false
+    t.string   "error_message"
+    t.string   "qos"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
+  create_table "simulator_instances", :force => true do |t|
+    t.hstore   "configuration", :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "simulators", :force => true do |t|
     t.string   "name",          :limit => 32, :null => false
@@ -21,6 +100,17 @@ ActiveRecord::Schema.define(:version => 20130416200142) do
     t.hstore   "configuration",               :null => false
     t.datetime "created_at",                  :null => false
     t.datetime "updated_at",                  :null => false
+  end
+
+  create_table "symmetry_groups", :force => true do |t|
+    t.integer  "profile_id", :null => false
+    t.string   "role",       :null => false
+    t.string   "strategy",   :null => false
+    t.integer  "count",      :null => false
+    t.float    "payoff"
+    t.float    "payoff_sd"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|
