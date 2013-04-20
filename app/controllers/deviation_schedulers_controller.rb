@@ -1,0 +1,2 @@
+class DeviationSchedulersController < SchedulersController
+end

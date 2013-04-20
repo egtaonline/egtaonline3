@@ -1,0 +1,3 @@
+class GameScheduler < Scheduler
+
+end

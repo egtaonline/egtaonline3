@@ -1,0 +1,3 @@
+class DprSchedulersController < SchedulersController
+
+end

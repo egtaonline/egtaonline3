@@ -1,0 +1,21 @@
+class SchedulersController < AuthenticatedController
+  include SimulatorSelector
+  before_filter :merge, only: [:create, :update]
+
+  expose(:schedulers){ klass.joins(:simulator_instance).order("#{sort_column} #{sort_direction}").page(params[:page]) }
+  expose(:scheduler) do
+    if id = params["#{model_name}_id"] || params[:id]
+      klass.find(id).tap do |r|
+        r.attributes = params[model_name] unless request.get?
+      end
+    else
+      klass.new(params[model_name])
+    end
+  end
+
+  private
+
+  def merge
+    params[model_name] = params[model_name].merge(params[:selector])
+  end
+end

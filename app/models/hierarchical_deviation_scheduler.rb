@@ -1,0 +1,2 @@
+class HierarchicalDeviationScheduler < Scheduler
+end

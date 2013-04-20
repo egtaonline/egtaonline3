@@ -1,0 +1,2 @@
+class DprScheduler < Scheduler
+end

@@ -5,5 +5,5 @@ class Game < ActiveRecord::Base
   validates_presence_of :name, :size
 
   has_and_belongs_to_many :profiles
-  belongs_to :simulator_instance, inverse_of: :games, read_only: true
+  belongs_to :simulator_instance, inverse_of: :games
 end

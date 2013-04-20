@@ -1,0 +1,6 @@
+{
+    "configuration": { "parm-integer": 60,
+    		       "parm-float": 0.0,
+                       "parm-string": "CDA"
+	}
+}

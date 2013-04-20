@@ -14,7 +14,7 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'twitter-bootstrap-rails'
-
+  gem 'jquery-migrate-rails'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyrhino'
 
@@ -37,7 +37,7 @@ gem 'carrierwave'
 
 group :development do
   gem 'quiet_assets'
-  gem 'better_errors'
+#  gem 'better_errors', github: 'charliesome/better_errors'
 end
 
 group :test, :development do
@@ -45,6 +45,7 @@ group :test, :development do
 end
 
 group :test do
+  gem 'launchy'
   gem 'simplecov', :require => false
   gem 'capybara'
   gem 'poltergeist'

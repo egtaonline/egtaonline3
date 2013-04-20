@@ -1,0 +1,9 @@
+-if Simulator.all.count == 0
+  %p Cannot construct this object without a simulator defined
+-else
+  .control-group
+    = label :selector, :simulator_id, class: "control-label"
+    - simulators = Simulator.all.to_a
+    .controls
+      = collection_select :selector, :simulator_id, simulators, :id, :fullname
+  #param= render partial: "configuration/configuration", object: simulators.first.configuration

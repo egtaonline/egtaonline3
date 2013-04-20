@@ -36,6 +36,7 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    addressable (2.3.4)
     airbrake (3.1.11)
       activesupport
       builder
@@ -43,9 +44,6 @@ GEM
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-java)
-    better_errors (0.8.0)
-      coderay (>= 1.0.0)
-      erubis (>= 2.6.6)
     builder (3.0.4)
     capybara (2.1.0)
       mime-types (>= 1.16)
@@ -75,7 +73,6 @@ GEM
       warden (~> 1.2.1)
     diff-lcs (1.2.3)
     erubis (2.7.0)
-    eventmachine (1.0.3)
     eventmachine (1.0.3-java)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -84,8 +81,6 @@ GEM
     factory_girl_rails (4.2.1)
       factory_girl (~> 4.2.0)
       railties (>= 3.0.0)
-    faye-websocket (0.4.7)
-      eventmachine (>= 0.12.0)
     faye-websocket (0.4.7-java)
       eventmachine (>= 0.12.0)
     ffi (1.7.0-java)
@@ -109,11 +104,11 @@ GEM
       railties (>= 3.1, < 4.1)
     high_voltage (1.2.2)
     hike (1.2.2)
-    http_parser.rb (0.5.3)
     http_parser.rb (0.5.3-java)
     i18n (0.6.1)
     jdbc-postgres (9.2.1002.1)
     journey (1.0.4)
+    jquery-migrate-rails (1.1.1)
     jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -123,6 +118,8 @@ GEM
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    launchy (2.3.0)
+      addressable (~> 2.3)
     listen (0.7.3)
     lumberjack (1.0.3)
     mail (2.5.3)
@@ -132,12 +129,11 @@ GEM
     method_source (0.8.1)
     mime-types (1.22)
     multi_json (1.7.2)
-    nokogiri (1.5.9)
     nokogiri (1.5.9-java)
     orm_adapter (0.4.0)
     pg-hstore (1.1.7)
-    poltergeist (1.1.0)
-      capybara (~> 2.0, >= 2.0.1)
+    poltergeist (1.2.0)
+      capybara (~> 2.1.0)
       faye-websocket (~> 0.4, >= 0.4.4)
       http_parser.rb (~> 0.5.3)
     polyglot (0.3.3)
@@ -249,7 +245,6 @@ DEPENDENCIES
   activerecord-jdbcpostgresql-adapter
   activerecord-postgres-hstore
   airbrake
-  better_errors
   capybara
   carrierwave
   celluloid
@@ -262,9 +257,11 @@ DEPENDENCIES
   guard-rspec
   haml-rails
   high_voltage
+  jquery-migrate-rails
   jquery-rails
   jrjackson
   kaminari
+  launchy
   poltergeist
   puma
   quiet_assets

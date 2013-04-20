@@ -1,5 +1,5 @@
 class SimulatorsController < AuthenticatedController
-  expose(:simulators)
+  expose(:simulators){ Simulator.order("#{sort_column} #{sort_direction}").page(params[:page]) }
   expose(:simulator)
 
   def create

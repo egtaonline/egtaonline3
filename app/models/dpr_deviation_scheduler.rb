@@ -1,0 +1,2 @@
+class DprDeviationScheduler < Scheduler
+end

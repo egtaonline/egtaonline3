@@ -1,0 +1,2 @@
+class HierarchicalScheduler < Scheduler
+end

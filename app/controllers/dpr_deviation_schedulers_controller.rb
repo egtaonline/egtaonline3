@@ -1,0 +1,2 @@
+class DprDeviationSchedulersController < SchedulersController
+end

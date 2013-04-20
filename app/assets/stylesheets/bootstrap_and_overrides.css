@@ -7,3 +7,16 @@
   */
 
 .main { padding-top: 60px; }
+
+.btn-primary {
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+.table th, .table td {
+  border-top-color: white;
+}
+
+p .navbar-text {
+  margin-right:10px;
+}

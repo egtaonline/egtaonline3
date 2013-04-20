@@ -1,0 +1,2 @@
+class HierarchicalSchedulersController < SchedulersController
+end

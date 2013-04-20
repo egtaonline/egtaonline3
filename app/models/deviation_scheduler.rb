@@ -1,0 +1,2 @@
+class DeviationScheduler < Scheduler
+end

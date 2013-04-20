@@ -1,0 +1,3 @@
+class GenericSchedulersController < SchedulersController
+
+end

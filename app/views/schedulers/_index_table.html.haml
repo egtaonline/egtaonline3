@@ -1,0 +1,10 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= sortable("name")
+      %th= sortable("type", "Type")
+      %th= sortable("simulator_instances.simulator_fullname", "Simulator")
+      %th= sortable("active", "Active?")
+  %tbody
+    =render partial: "scheduler", collection: schedulers
+=paginate schedulers, remote: true

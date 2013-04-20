@@ -1,7 +1,29 @@
 Egtaonline3::Application.routes.draw do
-  
-  resources :simulators
 
+  resources :simulators
+  resources :schedulers do
+    collection do
+      post :update_configuration
+    end
+  end
+
+  resources :generic_schedulers do
+    collection do
+      post :update_configuration
+    end
+  end
+
+  resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers do
+    collection do
+      post :update_configuration
+    end
+  end
+
+  resources :deviation_schedulers, :hierarchical_deviation_schedulers, :dpr_deviation_schedulers do
+    collection do
+      post :update_configuration
+    end
+  end
 
   devise_for :users
 
