@@ -18,7 +18,7 @@ ShowFor.setup do |config|
   # config.blank_content_class = 'no_content'
 
   # The separator between label and content. Default is "<br />".
-  config.separator = "&nbsp;&nbsp;"
+  config.separator = "  "
 
   # The tag used to wrap collections. Default is :ul.
   # config.collection_tag = :ul

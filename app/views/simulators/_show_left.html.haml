@@ -3,4 +3,4 @@
   = u.attribute :name
   = u.attribute :version
   = u.attribute :email
-  = render partial: 'configuration/parameter', collection: simulator.configuration.to_a
+  = render partial: 'configuration/parameter', collection: simulator.configuration.to_a, locals: { u: u }

@@ -47,7 +47,7 @@ end
 group :test do
   gem 'launchy'
   gem 'simplecov', :require => false
-  gem 'capybara'
+  gem 'capybara', '~> 1.1.0'
   gem 'poltergeist'
   gem 'factory_girl_rails'
   gem 'growl'

@@ -13,6 +13,11 @@ class SchedulersController < AuthenticatedController
     end
   end
 
+  def create
+    scheduler = klass.create_with_simulator_instance(params[model_name])
+    respond_with(scheduler)
+  end
+
   private
 
   def merge

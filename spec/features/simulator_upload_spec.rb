@@ -14,7 +14,7 @@ feature 'users can upload new simulators:' do
     click_button 'Upload Simulator'
     page.should have_content 'Inspect Simulator'
     # configuration information
-    page.should have_content 'Parm-integer:  60'
+    page.should have_content 'Parm-integer: 60'
   end
 end
 
@@ -31,7 +31,7 @@ feature 'users can update simulators with new programs' do
     click_button 'Update Simulator'
     page.should have_content 'Inspect Simulator'
     # configuration information
-    page.should have_content 'Parm-integer:  60'
-    page.should have_content 'Email:  test1@example.com'
+    page.should have_content "Parm-integer: 60"
+    page.should have_content 'Email: test1@example.com'
   end
 end
