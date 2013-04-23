@@ -1,0 +1,10 @@
+%tr
+  %td= role[0]
+  %td
+    %table
+      =render partial: "strategy", collection: role[1], locals: {role_name: role[0]}
+      =form_tag simulator_role_strategies_path(simulator.id, role[0]), method: :post do
+        %tr
+          %td= text_field_tag "#{role[0]}_strategy".to_sym
+          %td= submit_tag "Add Strategy", class: 'btn btn-mini btn-info'
+  %td= link_to 'Remove Role', simulator_role_path(simulator.id, role[0]), method: :delete, class: 'btn btn-danger'

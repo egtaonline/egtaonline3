@@ -1,7 +1,7 @@
 class Simulator < ActiveRecord::Base
   attr_accessible :email, :name, :source, :version
   serialize :configuration, ActiveRecord::Coders::Hstore
-  serialize :role_configuration, ActiveRecord::Coders::Hstore
+  serialize :role_configuration, JSON
   mount_uploader :source, SimulatorUploader
 
   has_many :simulator_instances, dependent: :destroy, inverse_of: :simulator
@@ -38,9 +38,31 @@ class Simulator < ActiveRecord::Base
     name + '-' + version
   end
 
+  def add_strategy(role, strategy)
+    self.role_configuration[role] ||= []
+    self.role_configuration[role] << strategy
+    self.save!
+  end
+  
+  def remove_strategy(role, strategy)
+    self.role_configuration[role].delete(strategy)
+    self.save!
+  end
+  
+  def add_role(role)
+    self.role_configuration[role] ||= []
+    self.save!
+  end
+  
+  def remove_role(role)
+    self.role_configuration.delete(role)
+    self.save!
+  end
+
   private
 
   def location
     File.join(Rails.root, 'simulator_uploads', fullname)
   end
+
 end

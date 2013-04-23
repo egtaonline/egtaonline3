@@ -1,6 +1,6 @@
 class Game < ActiveRecord::Base
   attr_accessible :name, :size
-  serialize :role_configuration, ActiveRecord::Coders::Hstore
+  serialize :role_configuration, JSON
 
   validates_presence_of :name, :size
 

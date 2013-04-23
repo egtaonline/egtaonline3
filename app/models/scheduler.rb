@@ -1,7 +1,7 @@
 class Scheduler < ActiveRecord::Base
   attr_accessible :active, :name, :nodes, :process_memory, :observations_per_simulation, :size, :time_per_observation,
                   :default_observation_requirement, :simulator_instance_id
-  serialize :role_configuration, ActiveRecord::Coders::Hstore
+  serialize :role_configuration, JSON
 
   validates :name, presence: true, uniqueness: true
   validates_presence_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation
@@ -28,5 +28,37 @@ class Scheduler < ActiveRecord::Base
       end
     end
     create(params)
+  end
+  
+  def add_strategy(role, strategy)
+    self.role_configuration[role]['strategies'] << strategy
+    self.save!
+  end
+  
+  def remove_strategy(role, strategy)
+    self.role_configuration[role]['strategies'].delete(strategy)
+    self.save!
+  end
+  
+  def add_role(role, count)
+    self.role_configuration[role] ||= { 'count' => count, 'strategies' => [] }
+    self.save!
+  end
+  
+  def remove_role(role)
+    self.role_configuration.delete(role)
+    self.save!
+  end
+  
+  def unassigned_player_count
+    role_configuration == {} ? size : size-role_configuration.collect{ |k,v| v["count"] }.reduce(:+)
+  end
+  
+  def available_roles
+    simulator.role_configuration.keys - role_configuration.keys
+  end
+  
+  def available_strategies(role)
+    simulator.role_configuration[role] - role_configuration[role]['strategies']
   end
 end

@@ -10,7 +10,7 @@ class CreateSchedulers < ActiveRecord::Migration
       t.integer :nodes, :null => false, :default => 1
       t.integer :size, :null => false
       t.integer :simulator_instance_id, :null => false
-      t.hstore :role_configuration
+      t.text :role_configuration, :null => false, :default => '{}'
       t.timestamps
     end
   end

@@ -25,27 +25,30 @@ feature 'some objects have index pages' do
     end
   end
 
-  scenario 'some schedulers' do
-    scheduler1 = FactoryGirl.create(:game_scheduler)
-    scheduler2 = FactoryGirl.create(:game_scheduler)
-    visit schedulers_path
-    within(".main") do
-      click_on 'Simulator'
-    end
-    within(:xpath, "//tbody/tr[1]/td[3]") do
-      page.should have_content(scheduler1.simulator_fullname)
-    end
-    within(:xpath, "//tbody/tr[2]/td[3]") do
-      page.should have_content(scheduler2.simulator_fullname)
-    end
-    within(".main") do
-      click_on 'Simulator'
-    end
-    within(:xpath, "//tbody/tr[1]/td[3]") do
-      page.should have_content(scheduler2.simulator_fullname)
-    end
-    within(:xpath, "//tbody/tr[2]/td[3]") do
-      page.should have_content(scheduler1.simulator_fullname)
+  ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
+   'generic_scheduler', 'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
+    scenario 'some schedulers' do
+      scheduler1 = FactoryGirl.create(scheduler.to_sym)
+      scheduler2 = FactoryGirl.create(scheduler.to_sym)
+      visit "/#{scheduler}s"
+      within(".main") do
+        click_on 'Simulator'
+      end
+      within(:xpath, "//tbody/tr[1]/td[3]") do
+        page.should have_content(scheduler1.simulator_fullname)
+      end
+      within(:xpath, "//tbody/tr[2]/td[3]") do
+        page.should have_content(scheduler2.simulator_fullname)
+      end
+      within(".main") do
+        click_on 'Simulator'
+      end
+      within(:xpath, "//tbody/tr[1]/td[3]") do
+        page.should have_content(scheduler2.simulator_fullname)
+      end
+      within(:xpath, "//tbody/tr[2]/td[3]") do
+        page.should have_content(scheduler1.simulator_fullname)
+      end
     end
   end
 end

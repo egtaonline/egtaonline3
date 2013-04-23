@@ -1,0 +1,11 @@
+%h3 Roles and Strategies
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th Strategy Set
+  %tbody
+    =render partial: "role", collection: simulator.role_configuration.to_a
+    =form_tag simulator_roles_path(simulator), method: :post do
+      %td= text_field_tag :role
+      %td= submit_tag "Add Role", class: 'btn btn-primary'

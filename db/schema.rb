@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(:version => 20130419211055) do
     t.string   "name",                  :null => false
     t.integer  "size",                  :null => false
     t.integer  "simulator_instance_id", :null => false
-    t.hstore   "role_configuration"
+    t.text     "role_configuration"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
   end
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(:version => 20130419211055) do
     t.integer  "nodes",                           :default => 1,     :null => false
     t.integer  "size",                                               :null => false
     t.integer  "simulator_instance_id",                              :null => false
-    t.hstore   "role_configuration"
+    t.text     "role_configuration",              :default => "{}",  :null => false
     t.datetime "created_at",                                         :null => false
     t.datetime "updated_at",                                         :null => false
     t.string   "type",                                               :null => false
@@ -97,14 +97,14 @@ ActiveRecord::Schema.define(:version => 20130419211055) do
   end
 
   create_table "simulators", :force => true do |t|
-    t.string   "name",               :limit => 32, :null => false
-    t.string   "version",            :limit => 32, :null => false
-    t.string   "email",                            :null => false
-    t.string   "source",                           :null => false
-    t.hstore   "configuration",                    :null => false
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.hstore   "role_configuration"
+    t.string   "name",               :limit => 32,                   :null => false
+    t.string   "version",            :limit => 32,                   :null => false
+    t.string   "email",                                              :null => false
+    t.string   "source",                                             :null => false
+    t.hstore   "configuration",                                      :null => false
+    t.text     "role_configuration",               :default => "{}", :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
   end
 
   create_table "symmetry_groups", :force => true do |t|

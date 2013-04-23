@@ -5,7 +5,8 @@ feature 'Users can make schedulers to schedule profiles' do
     sign_in
   end
 
-  ['game_scheduler'].each do |scheduler|
+  ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
+   'generic_scheduler', 'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
     scenario "User creates a #{scheduler} for a particular simulator, modifying the config", :js => true do
       simulator1 = FactoryGirl.create(:simulator)
       simulator2 = FactoryGirl.create(:simulator)
@@ -19,6 +20,28 @@ feature 'Users can make schedulers to schedule profiles' do
       fill_in 'Parm2', with: 7
       click_button 'Create Scheduler'
       page.should have_content('Parm2: 7')
+    end
+  end
+  
+  ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
+   'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
+    scenario "User adds a strategy to a #{scheduler} and a profile is added", :js => true do
+      simulator = FactoryGirl.create(:simulator_with_strategies)
+      simulator_instance = FactoryGirl.create(:simulator_instance, simulator_id: simulator.id,
+                                              configuration: { 'fake' => 'value' } )
+      scheduler1 = FactoryGirl.create(scheduler.to_sym, simulator_instance_id: simulator_instance.id)
+      visit "/#{scheduler}s/#{scheduler1.id}"
+      role = simulator.role_configuration.keys.last
+      strategy = simulator.role_configuration[role].last
+      select role, from: 'role'
+      fill_in 'role_count', with: 2
+      click_button 'Add Role'
+      page.should have_content(role)
+      select strategy, from: "#{role}_strategy"
+      click_button 'Add Strategy'
+      page.should have_content(strategy)
+      page.should have_content("#{role}: 2 #{strategy}")
+      scheduler1.reload.profiles.count.should == 1
     end
   end
 end

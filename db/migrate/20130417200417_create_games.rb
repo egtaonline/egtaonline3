@@ -4,7 +4,7 @@ class CreateGames < ActiveRecord::Migration
       t.string :name, :null => false
       t.integer :size, :null => false
       t.integer :simulator_instance_id, :null => false
-      t.hstore :role_configuration
+      t.text :role_configuration
       t.timestamps
     end
   end

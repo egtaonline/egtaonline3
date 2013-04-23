@@ -6,6 +6,7 @@ class CreateSimulators < ActiveRecord::Migration
       t.string :email, :null => false
       t.string :source, :null => false
       t.hstore :configuration, :null => false
+      t.text :role_configuration, :null => false, default: "{}"
       t.timestamps
     end
   end
