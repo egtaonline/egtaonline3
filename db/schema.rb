@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130419211055) do
+ActiveRecord::Schema.define(:version => 20130424233213) do
+
+  add_extension "hstore"
 
   create_table "games", :force => true do |t|
     t.string   "name",                  :null => false
     t.integer  "size",                  :null => false
     t.integer  "simulator_instance_id", :null => false
-    t.text     "role_configuration"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
   end
@@ -52,6 +53,18 @@ ActiveRecord::Schema.define(:version => 20130419211055) do
     t.datetime "updated_at",                           :null => false
   end
 
+  create_table "roles", :force => true do |t|
+    t.integer  "count",                                :null => false
+    t.integer  "reduced_count",                        :null => false
+    t.string   "name",                                 :null => false
+    t.integer  "role_owner_id",                        :null => false
+    t.string   "role_owner_type",                      :null => false
+    t.string   "strategies",           :default => [],                 :array => true
+    t.string   "deviating_strategies", :default => [],                 :array => true
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
   create_table "schedulers", :force => true do |t|
     t.string   "name",                                               :null => false
     t.boolean  "active",                          :default => false, :null => false
@@ -62,10 +75,9 @@ ActiveRecord::Schema.define(:version => 20130419211055) do
     t.integer  "nodes",                           :default => 1,     :null => false
     t.integer  "size",                                               :null => false
     t.integer  "simulator_instance_id",                              :null => false
-    t.text     "role_configuration",              :default => "{}",  :null => false
+    t.string   "type",                                               :null => false
     t.datetime "created_at",                                         :null => false
     t.datetime "updated_at",                                         :null => false
-    t.string   "type",                                               :null => false
   end
 
   create_table "scheduling_requirements", :force => true do |t|
@@ -91,9 +103,9 @@ ActiveRecord::Schema.define(:version => 20130419211055) do
   create_table "simulator_instances", :force => true do |t|
     t.hstore   "configuration"
     t.integer  "simulator_id",       :null => false
+    t.string   "simulator_fullname", :null => false
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
-    t.string   "simulator_fullname", :null => false
   end
 
   create_table "simulators", :force => true do |t|

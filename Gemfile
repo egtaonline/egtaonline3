@@ -7,6 +7,8 @@ gem 'rails', '3.2.13'
 
 gem 'activerecord-jdbcpostgresql-adapter'
 gem 'activerecord-postgres-hstore'
+gem 'postgres_ext'
+
 
 # Gems used only for assets and not required
 # in production environments by default.

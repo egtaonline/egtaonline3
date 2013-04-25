@@ -29,41 +29,70 @@ shared_examples 'a scheduler class' do
   describe '#add_role' do
     it 'adds the role to role_configuration' do
       scheduler.add_role('All', 2)
-      scheduler.reload.role_configuration.should == { 'All' => { 'count' => 2, 'strategies' => [] } }
+      scheduler.roles.first.name.should == 'All'
+      scheduler.roles.first.count.should == 2
+      scheduler.roles.first.reduced_count.should == 2
+      scheduler.roles.first.strategies.should == []
     end
   end
   
-  describe '#remove_role' do
-    it "removes the role if present" do
-      scheduler.role_configuration = { "All" => { 'count' => 2, 'strategies' => ["A1"] } }
-      scheduler.save!
-      scheduler.reload.remove_role("B")
-      scheduler.reload.role_configuration.should == { "All" => { 'count' => 2, 'strategies' => ["A1"] } }
-      scheduler.remove_role("All")
-      scheduler.reload.role_configuration.should == { }
+  context 'stubbing ProfileAssociator' do
+    let(:profile_associator){ double("ProfileAssociator") }
+
+    before do
+      ProfileAssociator.stub(:new).and_return(profile_associator)
     end
-  end
-  
-  describe '#add_strategy' do
-    it 'adds the strategy to specified role' do
-      scheduler.add_role('A', 1)
-      scheduler.add_role('B', 1)
-      scheduler.add_strategy('A', 'A1')
-      scheduler.reload.role_configuration.should == { "A" => { "count" => 1, "strategies" => ["A1"] },
-                                                      "B" => { "count" => 1, "strategies" => [] } }
+    
+    describe '#remove_role' do
+      it 'triggers profile association' do
+        profile_associator.should_receive(:associate)
+        scheduler.roles.create!(name: "All", count: 2, reduced_count: 2)
+        scheduler.remove_role("All")
+      end
+    
+      it "removes the role if present" do
+        profile_associator.stub(:associate)
+        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2)
+        scheduler.remove_role("B")
+        scheduler.roles.count.should == 1
+        scheduler.remove_role("All")
+        scheduler.roles.count.should == 0
+      end
     end
-  end
   
-  describe '#remove_strategy' do
-    it 'removes the specified strategy from the specified role if possible' do
-      scheduler.role_configuration = { 'Role1' => { "count" => 1, "strategies" => ['A', 'B'] },
-                                       'Role2' => { "count" => 1, "strategies" => ['A'] } }
-      scheduler.remove_strategy('Role1', 'A')
-      scheduler.reload.role_configuration.should == { 'Role1' => { "count" => 1, "strategies" => ['B'] },
-                                                      'Role2' => { "count" => 1, "strategies" => ['A'] } }
-      scheduler.remove_strategy('Role2', 'B')
-      scheduler.reload.role_configuration.should == { 'Role1' => { "count" => 1, "strategies" => ['B'] },
-                                                      'Role2' => { "count" => 1, "strategies" => ['A'] } }
+    describe '#add_strategy' do
+      it 'triggers profile association' do
+        profile_associator.should_receive(:associate)
+        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2)
+        scheduler.add_strategy('All', 'A')
+      end
+    
+      it 'adds the strategy to specified role' do
+        profile_associator.stub(:associate)
+        scheduler.add_role('A', 1)
+        scheduler.add_role('B', 1)
+        scheduler.add_strategy('A', 'A1')
+        scheduler.roles.where(name: 'A').first.strategies.should == ['A1']
+        scheduler.roles.where(name: 'B').first.strategies.should == []
+      end
+    end
+  
+    describe '#remove_strategy' do
+      it 'triggers profile association' do
+        profile_associator.should_receive(:associate)
+        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A'])
+        scheduler.remove_strategy('All', 'A')
+      end
+    
+      it 'removes the specified strategy from the specified role if possible' do
+        profile_associator.stub(:associate)
+        scheduler.roles.create!(name: 'Role1', "count" => 1, "reduced_count" => 1, "strategies" => ['A', 'B'])
+        scheduler.roles.create!(name: 'Role2', "count" => 1, "reduced_count" => 1, "strategies" => ['A'])
+        scheduler.remove_strategy('Role1', 'A')
+        scheduler.remove_strategy('Role2', 'B')
+        scheduler.roles.where(name: 'Role1').first.strategies.should == ['B']
+        scheduler.roles.where(name: 'Role2').first.strategies.should == ['A']
+      end
     end
   end
   
@@ -71,8 +100,8 @@ shared_examples 'a scheduler class' do
     it 'returns the difference between scheduler size and the sum of role counts' do
       scheduler.size = 4
       scheduler.unassigned_player_count.should == 4
-      scheduler.role_configuration = { 'A' => { 'count' => 2, 'strategies' => [] },
-                                       'B' => { 'count' => 1, 'strategies' => [] } }
+      scheduler.add_role('A', 2)
+      scheduler.add_role('B', 1)
       scheduler.unassigned_player_count.should == 1
     end
   end
@@ -82,7 +111,7 @@ shared_examples 'a scheduler class' do
       simulator = scheduler.simulator_instance.simulator
       simulator.role_configuration = { 'A' => [], 'B' => [] }
       simulator.save!
-      scheduler.role_configuration = { 'A' => { 'count' => 2, 'strategies' => [] } }
+      scheduler.add_role('A', 2)
       scheduler.available_roles.should == ['B']
     end
   end
@@ -92,7 +121,7 @@ shared_examples 'a scheduler class' do
       simulator = scheduler.simulator_instance.simulator
       simulator.role_configuration = { 'A' => [], 'B' => ['B1', 'B2'] }
       simulator.save!
-      scheduler.role_configuration = { 'B' => { 'count' => 2, 'strategies' => ['B2'] } }
+      scheduler.roles.create!(name: 'B', 'count' => 2, 'reduced_count' => 2, 'strategies' => ['B2'])
       scheduler.available_strategies('B').should == ['B1']
     end
   end

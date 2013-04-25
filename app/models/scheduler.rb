@@ -1,7 +1,6 @@
 class Scheduler < ActiveRecord::Base
   attr_accessible :active, :name, :nodes, :process_memory, :observations_per_simulation, :size, :time_per_observation,
                   :default_observation_requirement, :simulator_instance_id
-  serialize :role_configuration, JSON
 
   validates :name, presence: true, uniqueness: true
   validates_presence_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation
@@ -11,6 +10,7 @@ class Scheduler < ActiveRecord::Base
   belongs_to :simulator_instance, inverse_of: :schedulers
   has_many :simulations, inverse_of: :scheduler
   has_many :scheduling_requirements, inverse_of: :scheduler, dependent: :destroy
+  has_many :roles, as: :role_owner
 
   delegate :simulator_fullname, to: :simulator_instance
   delegate :simulator, to: :simulator_instance
@@ -30,35 +30,44 @@ class Scheduler < ActiveRecord::Base
     create(params)
   end
   
-  def add_strategy(role, strategy)
-    self.role_configuration[role]['strategies'] << strategy
-    self.save!
+  def add_strategy(role_name, strategy)
+    role = self.roles.where(name: role_name).first
+    if role
+      role.strategies += [strategy]
+      role.save!
+      ProfileAssociator.new.associate(self)
+    end
   end
   
-  def remove_strategy(role, strategy)
-    self.role_configuration[role]['strategies'].delete(strategy)
-    self.save!
+  def remove_strategy(role_name, strategy)
+    role = self.roles.where(name: role_name).first
+    if role && role.strategies.include?(strategy)
+      role.strategies -= [strategy]
+      role.save!
+      ProfileAssociator.new.associate(self)
+    end
   end
   
-  def add_role(role, count)
-    self.role_configuration[role] ||= { 'count' => count, 'strategies' => [] }
-    self.save!
+  def add_role(role, count, reduced_count=count)
+    if !self.roles.where(name: role).first
+      self.roles.create!(name: role, count: count, reduced_count: reduced_count)
+    end
   end
   
   def remove_role(role)
-    self.role_configuration.delete(role)
-    self.save!
+    self.roles.where(name: role).destroy_all
+    ProfileAssociator.new.associate(self)
   end
   
   def unassigned_player_count
-    role_configuration == {} ? size : size-role_configuration.collect{ |k,v| v["count"] }.reduce(:+)
+    roles.count == 0 ? size : size-roles.collect{ |r| r.count }.reduce(:+)
   end
   
   def available_roles
-    simulator.role_configuration.keys - role_configuration.keys
+    simulator.role_configuration.keys - roles.collect{ |r| r.name }
   end
   
   def available_strategies(role)
-    simulator.role_configuration[role] - role_configuration[role]['strategies']
+    simulator.role_configuration[role] - self.roles.where(name: role).first.strategies
   end
 end
