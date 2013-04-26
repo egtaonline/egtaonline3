@@ -41,7 +41,7 @@ feature 'Users can make schedulers to schedule profiles' do
       click_button 'Add Strategy'
       page.should have_content(strategy)
       page.should have_content("#{role}: 2 #{strategy}")
-      scheduler1.reload.profiles.count.should == 1
+      scheduler1.scheduling_requirements.count.should == 1
     end
   end
 end

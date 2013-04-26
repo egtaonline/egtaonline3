@@ -70,4 +70,8 @@ class Scheduler < ActiveRecord::Base
   def available_strategies(role)
     simulator.role_configuration[role] - self.roles.where(name: role).first.strategies
   end
+  
+  def invalid_role_partition?
+    (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
+  end
 end

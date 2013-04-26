@@ -13,6 +13,10 @@ class SchedulersController < AuthenticatedController
     end
   end
 
+  expose(:scheduling_requirements) do
+    SchedulingRequirement.joins(:profile).where(scheduler_id: params[:id]).order("#{sort_column} #{sort_direction}").page(params[:page])
+  end
+
   def create
     scheduler = klass.create_with_simulator_instance(params[model_name])
     respond_with(scheduler)
@@ -22,5 +26,13 @@ class SchedulersController < AuthenticatedController
 
   def merge
     params[model_name] = params[model_name].merge(params[:selector])
+  end
+  
+  def sort_column
+    if params[:id]
+      params[:sort] ||= "assignment"
+    else
+      super
+    end
   end
 end

@@ -6,32 +6,25 @@ FactoryGirl.define do
     time_per_observation 40
     simulator_instance
     
-    factory :game_scheduler do
-      type 'GameScheduler'
+    factory :game_scheduler, class: GameScheduler do
     end
     
-    factory :deviation_scheduler do
-      type 'DeviationScheduler'
+    factory :deviation_scheduler, class: DeviationScheduler do
     end
     
-    factory :dpr_deviation_scheduler do
-      type 'DprDeviationScheduler'
+    factory :dpr_deviation_scheduler, class: DprDeviationScheduler do
     end
     
-    factory :dpr_scheduler do
-      type 'DprScheduler'
+    factory :dpr_scheduler, class: DprScheduler do
     end
     
-    factory :generic_scheduler do
-      type 'GenericScheduler'
+    factory :generic_scheduler, class: GenericScheduler do
     end
     
-    factory :hierarchical_deviation_scheduler do
-      type 'HierarchicalDeviationScheduler'
+    factory :hierarchical_deviation_scheduler, class: HierarchicalDeviationScheduler do
     end
     
-    factory :hierarchical_scheduler do
-      type 'HierarchicalScheduler'
+    factory :hierarchical_scheduler, class: HierarchicalScheduler do
     end
   end
 end

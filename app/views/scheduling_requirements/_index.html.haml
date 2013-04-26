@@ -1,0 +1,10 @@
+%h3 Profiles
+%table.table.table-striped
+  %thead
+    %tr
+      %th= sortable "profiles.assignment", "Assignment"
+      %th= sortable "count", "Requested Observations"
+      %th= sortable "profiles.observation_count", "Observation Count"
+  %tbody
+    =render partial: "scheduling_requirements/scheduling_requirement", collection: scheduling_requirements
+= paginate(scheduling_requirements, remote: true)

@@ -1,12 +1,12 @@
 %tr
-  %td= role[0]
-  %td= role[1]["count"]
+  %td= role.name
+  %td= role.count
   %td
     %table
-      =render partial: "strategy", collection: role[1]["strategies"], locals: {role: role[0]}
-      -if (scheduler.available_strategies(role[0])) != []
-        =form_tag scheduler_role_strategies_path(scheduler.id, role[0]), method: :post do
+      =render partial: "strategy", collection: role.strategies, locals: {role: role.name}
+      -if (scheduler.available_strategies(role.name)) != []
+        =form_tag scheduler_role_strategies_path(scheduler.id, role.name), method: :post do
           %tr
-            %td= select_tag "#{role[0]}_strategy", options_for_select(scheduler.available_strategies(role[0]))
+            %td= select_tag "#{role.name}_strategy", options_for_select(scheduler.available_strategies(role.name))
             %td= submit_tag "Add Strategy", class: 'btn btn-mini btn-info'
-  %td= link_to 'Remove Role', scheduler_role_path(scheduler.id, role[0]), method: :delete, class: 'btn btn-danger'
+  %td= link_to 'Remove Role', scheduler_role_path(scheduler.id, role.name), method: :delete, class: 'btn btn-danger'

@@ -43,55 +43,90 @@ shared_examples 'a scheduler class' do
       ProfileAssociator.stub(:new).and_return(profile_associator)
     end
     
-    describe '#remove_role' do
-      it 'triggers profile association' do
+    context 'asserting that profile_associator is triggered' do
+      before do
         profile_associator.should_receive(:associate)
-        scheduler.roles.create!(name: "All", count: 2, reduced_count: 2)
-        scheduler.remove_role("All")
       end
-    
-      it "removes the role if present" do
-        profile_associator.stub(:associate)
-        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2)
-        scheduler.remove_role("B")
-        scheduler.roles.count.should == 1
-        scheduler.remove_role("All")
-        scheduler.roles.count.should == 0
+      
+      describe '#remove_role' do
+        it 'triggers profile association' do
+          scheduler.roles.create!(name: "All", count: 2, reduced_count: 2)
+          scheduler.remove_role("All")
+        end
+      end
+      
+      describe '#add_strategy' do
+        it 'triggers profile association' do
+          scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2)
+          scheduler.add_strategy('All', 'A')
+        end
+      end
+      
+      describe '#remove_strategy' do
+        it 'triggers profile association' do
+          scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A'])
+          scheduler.remove_strategy('All', 'A')
+        end
       end
     end
-  
-    describe '#add_strategy' do
-      it 'triggers profile association' do
-        profile_associator.should_receive(:associate)
-        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2)
-        scheduler.add_strategy('All', 'A')
-      end
     
-      it 'adds the strategy to specified role' do
+    context 'stubbed out' do
+      before do
         profile_associator.stub(:associate)
-        scheduler.add_role('A', 1)
-        scheduler.add_role('B', 1)
-        scheduler.add_strategy('A', 'A1')
-        scheduler.roles.where(name: 'A').first.strategies.should == ['A1']
-        scheduler.roles.where(name: 'B').first.strategies.should == []
       end
-    end
-  
-    describe '#remove_strategy' do
-      it 'triggers profile association' do
-        profile_associator.should_receive(:associate)
-        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A'])
-        scheduler.remove_strategy('All', 'A')
+      
+      describe '#remove_role' do
+        it "removes the role if present" do
+          scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2)
+          scheduler.remove_role("B")
+          scheduler.roles.count.should == 1
+          scheduler.remove_role("All")
+          scheduler.roles.count.should == 0
+        end
       end
-    
-      it 'removes the specified strategy from the specified role if possible' do
-        profile_associator.stub(:associate)
-        scheduler.roles.create!(name: 'Role1', "count" => 1, "reduced_count" => 1, "strategies" => ['A', 'B'])
-        scheduler.roles.create!(name: 'Role2', "count" => 1, "reduced_count" => 1, "strategies" => ['A'])
-        scheduler.remove_strategy('Role1', 'A')
-        scheduler.remove_strategy('Role2', 'B')
-        scheduler.roles.where(name: 'Role1').first.strategies.should == ['B']
-        scheduler.roles.where(name: 'Role2').first.strategies.should == ['A']
+      
+      describe '#add_strategy' do
+        it 'adds the strategy to specified role' do
+          scheduler.add_role('A', 1)
+          scheduler.add_role('B', 1)
+          scheduler.add_strategy('A', 'A1')
+          scheduler.add_strategy('A', 'A2')
+          scheduler.roles.where(name: 'A').first.strategies.should == ['A1', 'A2']
+          scheduler.roles.where(name: 'B').first.strategies.should == []
+        end
+      end
+      
+      describe '#remove_strategy' do
+        it 'removes the specified strategy from the specified role if possible' do
+          scheduler.roles.create!(name: 'Role1', "count" => 1, "reduced_count" => 1, "strategies" => ['A', 'B'])
+          scheduler.roles.create!(name: 'Role2', "count" => 1, "reduced_count" => 1, "strategies" => ['A'])
+          scheduler.remove_strategy('Role1', 'A')
+          scheduler.remove_strategy('Role2', 'B')
+          scheduler.roles.where(name: 'Role1').first.strategies.should == ['B']
+          scheduler.roles.where(name: 'Role2').first.strategies.should == ['A']
+        end
+      end
+      
+      describe '#invalid_role_partition?' do
+        it 'returns true if the insufficient players have been assigned' do
+          scheduler.add_role('A', 1)
+          scheduler.invalid_role_partition?.should == true
+        end
+
+        it 'returns true if there are no strategies on one of the roles' do
+          scheduler.add_role('A', 1)
+          scheduler.add_role('B', 1)
+          scheduler.add_strategy('A', 'S1')
+          scheduler.invalid_role_partition?.should == true
+        end
+
+        it 'returns false when all the players are assigned and each role has a strategy' do
+          scheduler.add_role('A', 1)
+          scheduler.add_role('B', 1)
+          scheduler.add_strategy('A', 'S1')
+          scheduler.add_strategy('B', 'S2')
+          scheduler.invalid_role_partition?.should == false
+        end
       end
     end
   end

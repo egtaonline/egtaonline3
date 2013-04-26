@@ -29,4 +29,8 @@ class Profile < ActiveRecord::Base
       end
     end
   end
+  
+  def required_observations(profile)
+    
+  end
 end

@@ -6,4 +6,7 @@ class SchedulingRequirement < ActiveRecord::Base
 
   belongs_to :profile, inverse_of: :scheduling_requirements
   belongs_to :scheduler, inverse_of: :scheduling_requirements
+  
+  delegate :assignment, to: :profile
+  delegate :observation_count, to: :profile
 end

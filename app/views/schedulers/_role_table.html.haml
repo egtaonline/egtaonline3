@@ -6,7 +6,7 @@
       %th Count
       %th Strategy Set
   %tbody
-    =render partial: "role", collection: scheduler.role_configuration.to_a
+    =render partial: "role", collection: scheduler.roles
 -if scheduler.unassigned_player_count > 0
   =form_tag scheduler_roles_path(scheduler), method: :post do
     = select_tag "role", options_for_select(scheduler.available_roles)
