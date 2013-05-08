@@ -5,6 +5,8 @@ FactoryGirl.define do
     size 2
     time_per_observation 40
     simulator_instance
+    default_observation_requirement 10
+    observations_per_simulation 5
     
     factory :game_scheduler, class: GameScheduler do
     end

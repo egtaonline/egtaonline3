@@ -37,6 +37,7 @@ feature 'Users can make schedulers to schedule profiles' do
       fill_in 'role_count', with: 2
       click_button 'Add Role'
       page.should have_content(role)
+      ProfileScheduler.should_receive(:perform_in)
       select strategy, from: "#{role}_strategy"
       click_button 'Add Strategy'
       page.should have_content(strategy)

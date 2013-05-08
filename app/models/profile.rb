@@ -28,9 +28,14 @@ class Profile < ActiveRecord::Base
         self.symmetry_groups.create!(role: rsplit[0], strategy: ssplit[1], count: ssplit[0].to_i)
       end
     end
+    try_scheduling
   end
   
-  def required_observations(profile)
-    
+  def try_scheduling
+    ProfileScheduler.perform_in(5.minutes, self.id)
+  end
+  
+  def scheduled?
+    simulations.scheduled.count > 0
   end
 end

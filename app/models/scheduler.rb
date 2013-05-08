@@ -35,7 +35,7 @@ class Scheduler < ActiveRecord::Base
     if role
       role.strategies += [strategy]
       role.save!
-      ProfileAssociator.new.associate(self)
+      ProfileAssociator.perform_async(self.id)
     end
   end
   
@@ -44,7 +44,7 @@ class Scheduler < ActiveRecord::Base
     if role && role.strategies.include?(strategy)
       role.strategies -= [strategy]
       role.save!
-      ProfileAssociator.new.associate(self)
+      ProfileAssociator.perform_async(self.id)
     end
   end
   
@@ -56,7 +56,7 @@ class Scheduler < ActiveRecord::Base
   
   def remove_role(role)
     self.roles.where(name: role).destroy_all
-    ProfileAssociator.new.associate(self)
+    ProfileAssociator.perform_async(self.id)
   end
   
   def unassigned_player_count
@@ -73,5 +73,11 @@ class Scheduler < ActiveRecord::Base
   
   def invalid_role_partition?
     (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
+  end
+  
+  def schedule_profile(profile, required_count)
+    observations_to_schedule = [observations_per_simulation, required_count-profile.observation_count].min
+    self.simulations.create!(size: observations_to_schedule, state: 'pending',
+                             profile_id: profile.id) if observations_to_schedule > 0
   end
 end

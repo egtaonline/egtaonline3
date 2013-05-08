@@ -36,6 +36,10 @@ gem 'simple_form'
 gem 'show_for'
 gem 'high_voltage'
 gem 'carrierwave'
+gem 'sidekiq'
+gem 'sidekiq-failures'
+gem 'slim'
+gem 'sinatra', :require => nil
 
 group :development do
   gem 'quiet_assets'
@@ -48,12 +52,10 @@ end
 
 group :test do
   gem 'launchy'
-  gem 'simplecov', :require => false
+  # gem 'simplecov', :require => false
   gem 'capybara', '~> 1.1.0'
   gem 'poltergeist'
   gem 'factory_girl_rails'
-  gem 'growl'
-  gem 'rb-fsevent'
-  gem 'guard-rspec'
   gem 'database_cleaner'
+  gem 'timecop'
 end

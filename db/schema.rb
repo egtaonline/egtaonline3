@@ -93,7 +93,7 @@ ActiveRecord::Schema.define(:version => 20130424233213) do
     t.integer  "scheduler_id",                         :null => false
     t.integer  "size",                                 :null => false
     t.string   "state",         :default => "pending", :null => false
-    t.integer  "job_id",                               :null => false
+    t.integer  "job_id"
     t.string   "error_message"
     t.string   "qos"
     t.datetime "created_at",                           :null => false

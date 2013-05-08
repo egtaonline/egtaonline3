@@ -4,7 +4,7 @@ class DeviationScheduler < Scheduler
     if role
       role.deviating_strategies += [strategy]
       role.save!
-      ProfileAssociator.new.associate(self)
+      ProfileAssociator.perform_async(self.id)
     end
   end
   
@@ -13,7 +13,7 @@ class DeviationScheduler < Scheduler
     if role && role.deviating_strategies.include?(strategy)
       role.deviating_strategies -= [strategy]
       role.save!
-      ProfileAssociator.new.associate(self)
+      ProfileAssociator.perform_async(self.id)
     end
   end
   

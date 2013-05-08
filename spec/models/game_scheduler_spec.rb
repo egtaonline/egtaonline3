@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GameScheduler do
   describe '#profile_space' do
     it 'returns an array of profiles consistent with the current roles' do
-      ProfileAssociator.stub(:new).and_return(double(associate: nil))
+      ProfileAssociator.stub(:perform_async)
       scheduler = FactoryGirl.create(:game_scheduler, size: 3)
       scheduler.add_role('A', 2)
       scheduler.add_role('B', 1)

@@ -36,16 +36,10 @@ shared_examples 'a scheduler class' do
     end
   end
   
-  context 'stubbing ProfileAssociator' do
-    let(:profile_associator){ double("ProfileAssociator") }
-
-    before do
-      ProfileAssociator.stub(:new).and_return(profile_associator)
-    end
-    
+  context 'stubbing ProfileAssociator' do    
     context 'asserting that profile_associator is triggered' do
       before do
-        profile_associator.should_receive(:associate)
+        ProfileAssociator.should_receive(:perform_async)
       end
       
       describe '#remove_role' do
@@ -72,7 +66,7 @@ shared_examples 'a scheduler class' do
     
     context 'stubbed out' do
       before do
-        profile_associator.stub(:associate)
+        ProfileAssociator.stub(:perform_async)
       end
       
       describe '#remove_role' do
@@ -158,6 +152,35 @@ shared_examples 'a scheduler class' do
       simulator.save!
       scheduler.roles.create!(name: 'B', 'count' => 2, 'reduced_count' => 2, 'strategies' => ['B2'])
       scheduler.available_strategies('B').should == ['B1']
+    end
+  end
+  
+  describe '#schedule_profile' do
+    let(:profile){ FactoryGirl.create(:profile, simulator_instance: scheduler.simulator_instance, observation_count: 3) }
+    
+    context 'when more observations are required' do
+      context 'and the requirement is greater than the observation_per_simulation' do
+        it 'creates a simulation with size equal to observation_per_simulation' do
+          scheduler.schedule_profile(profile, 10)
+          Simulation.last.profile.should == profile
+          Simulation.last.size.should == scheduler.observations_per_simulation
+        end
+      end
+      
+      context 'and the requirement is less than the observation_per_simulation' do
+        it 'creates a simulation with size equal to requirement minus the profile observation count' do
+          scheduler.schedule_profile(profile, 5)
+          Simulation.last.profile.should == profile
+          Simulation.last.size.should == 5-profile.observation_count
+        end
+      end
+    end
+    
+    context 'when no observations are required' do
+      it 'does not create a simulation' do
+        scheduler.schedule_profile(profile, 2)
+        Simulation.count.should == 0
+      end
     end
   end
 end

@@ -2,12 +2,10 @@ require 'spec_helper'
 
 shared_examples 'a deviation scheduler' do
   let(:scheduler){ FactoryGirl.create(described_class.to_s.underscore.to_sym) }
-  let(:profile_associator){ double("ProfileAssociator") }
   
   context 'asserting that profile_associator is triggered' do
     before do
-      ProfileAssociator.stub(:new).and_return(profile_associator)
-      profile_associator.should_receive(:associate)
+      ProfileAssociator.should_receive(:perform_async)
     end
   
     describe '#add_deviating_strategy' do
@@ -34,7 +32,7 @@ describe DeviationScheduler do
   
   describe '#profile_space' do
     it 'returns an array of profiles consistent with the current roles' do
-      ProfileAssociator.stub(:new).and_return(double(associate: nil))
+      ProfileAssociator.stub(:perform_async)
       scheduler = FactoryGirl.create(:deviation_scheduler, size: 3)
       scheduler.add_role('A', 2)
       scheduler.add_role('B', 1)

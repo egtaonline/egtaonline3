@@ -5,6 +5,7 @@ describe HierarchicalDeviationScheduler do
 
   describe '#profile_space' do
     it 'returns an array of profiles consistent with the current roles' do
+      ProfileAssociator.stub(:perform_async)
       scheduler.add_role('Role1', 3, 2)
       scheduler.add_role('Role2', 4, 2)
       scheduler.add_strategy('Role1', 'A')

@@ -1,2 +1,2 @@
-require 'lib/util'
-require 'lib/profile_space'
+require "#{Rails.root}/lib/util"
+require "#{Rails.root}/lib/profile_space"

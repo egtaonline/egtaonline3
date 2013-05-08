@@ -7,6 +7,7 @@ require 'rspec/autorun'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'capybara/rails'
+require 'sidekiq/testing/inline'
 Capybara.javascript_driver = :poltergeist
 
 # Requires supporting ruby files with custom matchers and macros, etc,

@@ -1,1 +1,1 @@
-require 'lib/backend'
+require "#{Rails.root}/lib/backend"

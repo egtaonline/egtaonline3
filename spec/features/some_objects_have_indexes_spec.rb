@@ -51,4 +51,24 @@ feature 'some objects have index pages' do
       end
     end
   end
+  
+  scenario 'some simulations' do
+    simulation = FactoryGirl.create(:simulation, state: 'queued')
+    simulation2 = FactoryGirl.create(:simulation, state: 'pending')
+    visit simulations_path
+    click_on 'State'
+    within(:xpath, "//tbody/tr[1]/td[1]") do
+      page.should have_content('pending')
+    end
+    within(:xpath, "//tbody/tr[2]/td[1]") do
+      page.should have_content('queued')
+    end
+    click_on 'State'
+    within(:xpath, "//tbody/tr[1]/td[1]") do
+      page.should have_content('queued')
+    end
+    within(:xpath, "//tbody/tr[2]/td[1]") do
+      page.should have_content('pending')
+    end
+  end
 end
