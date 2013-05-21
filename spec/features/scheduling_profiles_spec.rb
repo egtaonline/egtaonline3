@@ -45,4 +45,20 @@ feature 'Users can make schedulers to schedule profiles' do
       scheduler1.scheduling_requirements.count.should == 1
     end
   end
+  
+  ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
+   'generic_scheduler', 'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
+    scenario "User updates the configuration of a #{scheduler} leading to new profiles" do
+      simulator_instance = FactoryGirl.create(:simulator_instance, configuration: { 'fake' => 'value' } )
+      scheduler1 = FactoryGirl.create("#{scheduler}_with_profiles".to_sym, simulator_instance_id: simulator_instance.id)
+      visit "/#{scheduler}s/#{scheduler1.id}/edit"
+      fill_in 'fake', with: 'other_value'
+      click_button 'Update Scheduler'
+      page.should have_content('Fake: other_value')
+      scheduler1.reload
+      scheduler1.simulator_instance.should_not == simulator_instance
+      scheduler1.simulator_instance.profiles.count.should == simulator_instance.profiles.count
+      Profile.count.should == simulator_instance.profiles.count*2
+    end
+  end
 end
