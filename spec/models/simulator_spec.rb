@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe Simulator do
   describe 'setup/validation:' do
+    before :all do
+      Simulator.set_callback(:validation, :before, :setup_simulator, if: :source_changed?)
+    end
+
+    after :all do
+      Simulator.skip_callback(:validation, :before, :setup_simulator, if: :source_changed?)
+    end
     context 'with valid simulator' do
       context 'new simulator' do
         it 'sets up the simulator, locally and on the backend' do
@@ -26,16 +33,16 @@ describe Simulator do
       end
     end
   end
-  
+
   let(:simulator){ FactoryGirl.create(:simulator) }
-  
+
   describe '#add_role' do
     it "adds a new empty role" do
       simulator.add_role("All")
       simulator.reload.role_configuration.should == { "All" => [] }
     end
   end
-  
+
   describe '#remove_role' do
     it "removes the role if present" do
       simulator.role_configuration = { "All" => ["A1"] }
@@ -46,7 +53,7 @@ describe Simulator do
       simulator.reload.role_configuration.should == { }
     end
   end
-  
+
   describe '#add_strategy' do
     it 'adds the strategy to specified role' do
       simulator.add_strategy('All', 'A1')
@@ -54,7 +61,7 @@ describe Simulator do
       simulator.reload.role_configuration.should == { "All" => ["A1", "A2"] }
     end
   end
-  
+
   describe '#remove_strategy' do
     it 'removes the specified strategy from the specified role if possible' do
       simulator.role_configuration = { 'Role1' => ['A', 'B'], 'Role2' => ['A'] }

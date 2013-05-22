@@ -10,7 +10,9 @@ class Simulator < ActiveRecord::Base
   validates_uniqueness_of :version, scope: :name
   validates_format_of :name, with: /\A\w+\z/, message: 'can contain only letters, numbers, and underscores'
 
-  before_validation(if: :source_changed?) do
+  before_validation :setup_simulator, if: :source_changed?
+
+  def setup_simulator
     FileUtils.rm_rf location
 
     begin
@@ -43,17 +45,17 @@ class Simulator < ActiveRecord::Base
     self.role_configuration[role] << strategy
     self.save!
   end
-  
+
   def remove_strategy(role, strategy)
     self.role_configuration[role].delete(strategy)
     self.save!
   end
-  
+
   def add_role(role)
     self.role_configuration[role] ||= []
     self.save!
   end
-  
+
   def remove_role(role)
     self.role_configuration.delete(role)
     self.save!

@@ -5,8 +5,7 @@ feature 'Users can make schedulers to schedule profiles' do
     sign_in
   end
 
-  ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
-   'generic_scheduler', 'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
+  SCHEDULER_CLASSES.collect{ |klass| klass.to_s.underscore }.each do |scheduler|
     scenario "User creates a #{scheduler} for a particular simulator, modifying the config", :js => true do
       simulator1 = FactoryGirl.create(:simulator)
       simulator2 = FactoryGirl.create(:simulator)
@@ -22,11 +21,10 @@ feature 'Users can make schedulers to schedule profiles' do
       page.should have_content('Parm2: 7')
     end
   end
-  
-  ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
-   'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
+
+  NONGENERIC_SCHEDULER_CLASSES.collect{ |klass| klass.to_s.underscore }.each do |scheduler|
     scenario "User adds a strategy to a #{scheduler} and a profile is added", :js => true do
-      simulator = FactoryGirl.create(:simulator_with_strategies)
+      simulator = FactoryGirl.create(:simulator, :with_strategies)
       simulator_instance = FactoryGirl.create(:simulator_instance, simulator_id: simulator.id,
                                               configuration: { 'fake' => 'value' } )
       scheduler1 = FactoryGirl.create(scheduler.to_sym, simulator_instance_id: simulator_instance.id)
@@ -45,19 +43,18 @@ feature 'Users can make schedulers to schedule profiles' do
       scheduler1.scheduling_requirements.count.should == 1
     end
   end
-  
-  ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
-   'generic_scheduler', 'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
-    scenario "User updates the configuration of a #{scheduler} leading to new profiles" do
-      simulator_instance = FactoryGirl.create(:simulator_instance, configuration: { 'fake' => 'value' } )
-      scheduler1 = FactoryGirl.create("#{scheduler}_with_profiles".to_sym, simulator_instance_id: simulator_instance.id)
-      visit "/#{scheduler}s/#{scheduler1.id}/edit"
-      fill_in 'fake', with: 'other_value'
+
+  NONGENERIC_SCHEDULER_CLASSES.collect{ |klass| klass.to_s.underscore }.each do |scheduler_klass|
+    scenario "User updates the configuration of a #{scheduler_klass} leading to new profiles" do
+      scheduler = FactoryGirl.create(scheduler_klass.to_sym, :with_profiles)
+      simulator_instance = scheduler.simulator_instance
+      visit "/#{scheduler_klass}s/#{scheduler.id}/edit"
+      fill_in 'Parm2', with: 7
+      ProfileScheduler.should_receive(:perform_in).exactly(3).times
       click_button 'Update Scheduler'
-      page.should have_content('Fake: other_value')
-      scheduler1.reload
-      scheduler1.simulator_instance.should_not == simulator_instance
-      scheduler1.simulator_instance.profiles.count.should == simulator_instance.profiles.count
+      page.should have_content('Parm2: 7')
+      scheduler.reload
+      scheduler.simulator_instance.should_not == simulator_instance
       Profile.count.should == simulator_instance.profiles.count*2
     end
   end

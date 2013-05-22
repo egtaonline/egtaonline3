@@ -37,3 +37,6 @@ RSpec.configure do |config|
   config.include(SessionHelpers, type: :feature)
   config.before(:each) { reset_email }
 end
+
+SCHEDULER_CLASSES = [GameScheduler, DeviationScheduler, DprDeviationScheduler, DprScheduler, GenericScheduler, HierarchicalDeviationScheduler, HierarchicalScheduler]
+NONGENERIC_SCHEDULER_CLASSES = SCHEDULER_CLASSES-[GenericScheduler]

@@ -7,25 +7,34 @@ FactoryGirl.define do
     simulator_instance
     default_observation_requirement 10
     observations_per_simulation 5
-    
+
+    trait :with_profiles do
+      simulator_instance { FactoryGirl.create(:simulator_instance, :with_simulator_with_strategies) }
+      after(:create) do |instance|
+        instance.add_role("All", 2)
+        instance.add_strategy("All", "A")
+        instance.add_strategy("All", "B")
+      end
+    end
+
     factory :game_scheduler, class: GameScheduler do
     end
-    
+
     factory :deviation_scheduler, class: DeviationScheduler do
     end
-    
+
     factory :dpr_deviation_scheduler, class: DprDeviationScheduler do
     end
-    
+
     factory :dpr_scheduler, class: DprScheduler do
     end
-    
+
     factory :generic_scheduler, class: GenericScheduler do
     end
-    
+
     factory :hierarchical_deviation_scheduler, class: HierarchicalDeviationScheduler do
     end
-    
+
     factory :hierarchical_scheduler, class: HierarchicalScheduler do
     end
   end

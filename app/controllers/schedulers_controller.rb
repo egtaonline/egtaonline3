@@ -5,9 +5,7 @@ class SchedulersController < AuthenticatedController
   expose(:schedulers){ klass.joins(:simulator_instance).order("#{sort_column} #{sort_direction}").page(params[:page]) }
   expose(:scheduler) do
     if id = params["#{model_name}_id"] || params[:id]
-      klass.find(id).tap do |r|
-        r.attributes = params[model_name] unless request.get?
-      end
+      klass.find(id)
     else
       klass.new(params[model_name])
     end
@@ -18,8 +16,14 @@ class SchedulersController < AuthenticatedController
   end
 
   def create
-    scheduler = klass.create_with_simulator_instance(params[model_name])
-    respond_with(scheduler)
+    @scheduler = SchedulerFactory.create(klass, params[model_name])
+    respond_with(@scheduler)
+  end
+
+  def update
+    @scheduler = klass.find(params[:id])
+    @scheduler = SchedulerFactory.update(@scheduler, params[model_name])
+    respond_with(@scheduler)
   end
 
   private
@@ -27,7 +31,7 @@ class SchedulersController < AuthenticatedController
   def merge
     params[model_name] = params[model_name].merge(params[:selector])
   end
-  
+
   def sort_column
     if params[:id]
       params[:sort] ||= "assignment"
