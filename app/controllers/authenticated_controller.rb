@@ -1,6 +1,7 @@
 class AuthenticatedController < ApplicationController
   respond_to :html
   before_filter :authenticate_user!
+  expose(:flux_connection){ FluxConnection.first }
   expose(:model_name){ params[:controller].singularize }
   expose(:klass){ model_name.classify.constantize }
   helper_method :sort_column, :sort_direction

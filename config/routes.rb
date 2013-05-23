@@ -5,7 +5,7 @@ Egtaonline3::Application.routes.draw do
       resources :strategies, only: [:create, :destroy]
     end
   end
-  
+
   resources :schedulers, only: [:index, :destroy] do
     collection do
       post :update_configuration
@@ -32,11 +32,12 @@ Egtaonline3::Application.routes.draw do
       post :update_configuration
     end
   end
-  
+
   resources :profile, only: :show
   resources :simulations, only: [:index, :show]
 
   devise_for :users
 
+  resources :connection, only: [:new, :create]
   root to: 'high_voltage/pages#show', id: 'home'
 end

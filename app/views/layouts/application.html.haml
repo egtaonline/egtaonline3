@@ -52,6 +52,11 @@
                 = link_to "Sign in", new_user_session_path
 
     .main.container
+      -if !Backend.connected?
+        .alert.alert-error
+          %a.close{"data-dismiss"=>"alert"}
+            x
+          = link_to 'Missing connection to Flux. Please authenticate with your Flux account to restore.', '/connection/new'
       -flash.each do |name, msg|
         -if name == :notice
           .alert.alert-success
