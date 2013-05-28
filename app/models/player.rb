@@ -1,5 +1,5 @@
 class Player < ActiveRecord::Base
-  attr_accessible :features, :payoff
+  attr_accessible :features, :payoff, :symmetry_group_id
   serialize :features, ActiveRecord::Coders::Hstore
 
   validates :payoff, presence: true, numericality: true

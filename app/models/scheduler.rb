@@ -68,7 +68,7 @@ class Scheduler < ActiveRecord::Base
   end
 
   def schedule_profile(profile, required_count)
-    observations_to_schedule = [observations_per_simulation, required_count-profile.observation_count].min
+    observations_to_schedule = [observations_per_simulation, required_count-profile.observations_count].min
     self.simulations.create!(size: observations_to_schedule, state: 'pending',
                              profile_id: profile.id) if observations_to_schedule > 0
   end

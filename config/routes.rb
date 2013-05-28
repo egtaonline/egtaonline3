@@ -10,6 +10,9 @@ Egtaonline3::Application.routes.draw do
     collection do
       post :update_configuration
     end
+    member do
+      post :create_game_to_match
+    end
     resources :roles, only: [:create, :destroy] do
       resources :strategies, only: [:create, :destroy]
     end

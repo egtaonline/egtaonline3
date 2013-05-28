@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130424233213) do
+ActiveRecord::Schema.define(:version => 20130527185303) do
 
   add_extension "hstore"
 
@@ -21,11 +21,6 @@ ActiveRecord::Schema.define(:version => 20130424233213) do
     t.integer  "simulator_instance_id", :null => false
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
-  end
-
-  create_table "games_profiles", :id => false, :force => true do |t|
-    t.integer "profile_id", :null => false
-    t.integer "game_id",    :null => false
   end
 
   create_table "observations", :force => true do |t|
@@ -47,7 +42,7 @@ ActiveRecord::Schema.define(:version => 20130424233213) do
   create_table "profiles", :force => true do |t|
     t.integer  "simulator_instance_id",                :null => false
     t.integer  "size",                                 :null => false
-    t.integer  "observation_count",     :default => 0, :null => false
+    t.integer  "observations_count",    :default => 0, :null => false
     t.string   "assignment",                           :null => false
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false

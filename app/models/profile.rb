@@ -5,13 +5,12 @@ class Profile < ActiveRecord::Base
                          uniqueness: { scope: :simulator_instance_id }
   validates :size, presence: true, numericality: { only_integer: true }
 
-  has_and_belongs_to_many :games
   belongs_to :simulator_instance, inverse_of: :profiles
   has_many :simulations, inverse_of: :profile, dependent: :destroy
   has_many :scheduling_requirements, dependent: :destroy, inverse_of: :profile
   has_many :symmetry_groups, dependent: :destroy, inverse_of: :profile
   has_many :observations, dependent: :destroy, inverse_of: :profile
-  
+
   before_validation(on: :create) do
     self.size = assignment.split("; ").collect do |role|
       role.split(': ')[1].split(", ").collect do |strategy|
@@ -19,7 +18,7 @@ class Profile < ActiveRecord::Base
       end.reduce(:+)
     end.reduce(:+)
   end
-  
+
   after_create do
     assignment.split("; ").each do |role|
       rsplit = role.split(": ")
@@ -30,11 +29,11 @@ class Profile < ActiveRecord::Base
     end
     try_scheduling
   end
-  
+
   def try_scheduling
     ProfileScheduler.perform_in(5.minutes, self.id)
   end
-  
+
   def scheduled?
     simulations.scheduled.count > 0
   end

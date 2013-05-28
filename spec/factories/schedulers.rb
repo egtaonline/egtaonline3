@@ -17,6 +17,18 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_sampled_profiles do
+      simulator_instance { FactoryGirl.create(:simulator_instance, :with_simulator_with_strategies) }
+      after(:create) do |instance|
+        instance.add_role("All", 2)
+        instance.add_strategy("All", "A")
+        instance.add_strategy("All", "B")
+        instance.reload.scheduling_requirements.each do |sr|
+          sr.profile.observations << FactoryGirl.create(:observation, profile_id: sr.profile_id)
+        end
+      end
+    end
+
     factory :game_scheduler, class: GameScheduler do
     end
 
@@ -30,6 +42,19 @@ FactoryGirl.define do
     end
 
     factory :generic_scheduler, class: GenericScheduler do
+      trait :with_sampled_profiles do
+        simulator_instance { FactoryGirl.create(:simulator_instance, :with_simulator_with_strategies) }
+        after(:create) do |instance|
+          instance.add_role("All", 2)
+          instance.add_strategy("All", "A")
+          instance.add_strategy("All", "B")
+          instance.add_profile("All: 2 A")
+          instance.add_profile("All: 2 B")
+          instance.reload.scheduling_requirements.each do |sr|
+            sr.profile.observations << FactoryGirl.create(:observation, profile_id: sr.profile_id)
+          end
+        end
+      end
     end
 
     factory :hierarchical_deviation_scheduler, class: HierarchicalDeviationScheduler do

@@ -26,6 +26,11 @@ class SchedulersController < AuthenticatedController
     respond_with(@scheduler)
   end
 
+  def create_game_to_match
+    @scheduler = klass.find(params[:id])
+    respond_with(GameFactory.create_game_to_match(@scheduler))
+  end
+
   private
 
   def merge
