@@ -8,6 +8,8 @@ FactoryGirl.define do
   trait :with_observations do
     after(:create) do |instance|
       instance.observations << FactoryGirl.create(:observation, profile_id: instance.id)
+      instance.save!
+      instance.reload
     end
   end
 end

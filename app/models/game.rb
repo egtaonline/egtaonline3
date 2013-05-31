@@ -7,4 +7,13 @@ class Game < ActiveRecord::Base
   has_many :roles, as: :role_owner
   delegate :simulator_fullname, to: :simulator_instance
   delegate :configuration, to: :simulator_instance
+
+  def profile_space
+    return [] if invalid_role_partition?
+    AssignmentFormatter.format_assignments(SubgameCreator.subgame_assignments(roles))
+  end
+
+  def invalid_role_partition?
+    (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
+  end
 end
