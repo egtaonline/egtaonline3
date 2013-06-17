@@ -1,4 +1,6 @@
 class Scheduler < ActiveRecord::Base
+  include ProfileSpaces
+  
   attr_accessible :active, :name, :nodes, :process_memory, :observations_per_simulation, :size, :time_per_observation,
                   :default_observation_requirement, :simulator_instance_id
 
@@ -51,16 +53,8 @@ class Scheduler < ActiveRecord::Base
     update_scheduling_requirements
   end
 
-  def unassigned_player_count
-    roles.count == 0 ? size : size-roles.collect{ |r| r.count }.reduce(:+)
-  end
-
   def available_roles
     simulator.role_configuration.keys - roles.collect{ |r| r.name }
-  end
-
-  def available_strategies(role)
-    simulator.role_configuration[role] - self.roles.where(name: role).first.strategies
   end
 
   def invalid_role_partition?

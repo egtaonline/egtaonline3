@@ -1,4 +1,4 @@
-module SimulatorSelector
+class ProfileSpacesController < AuthenticatedController
   def update_configuration
     @simulator = Simulator.find(params[:simulator_id])
     respond_to do |format|

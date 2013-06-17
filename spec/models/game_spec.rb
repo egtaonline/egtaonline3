@@ -10,4 +10,12 @@ describe Game do
 
     it { game.profile_space.should == ['All: 2 A', 'All: 1 A, 1 B', 'All: 2 B'] }
   end
+  
+  describe '#profile_count' do
+    
+  end
+  
+  describe '#observation_count' do
+    
+  end
 end

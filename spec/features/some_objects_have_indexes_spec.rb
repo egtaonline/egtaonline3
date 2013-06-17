@@ -28,26 +28,27 @@ feature 'some objects have index pages' do
   ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
    'generic_scheduler', 'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
     scenario 'some schedulers' do
-      scheduler1 = FactoryGirl.create(scheduler.to_sym)
-      scheduler2 = FactoryGirl.create(scheduler.to_sym)
+      first_name, second_name = [FactoryGirl.create(scheduler.to_sym).simulator_fullname,
+                                 FactoryGirl.create(scheduler.to_sym).simulator_fullname].sort
+      
       visit "/#{scheduler}s"
       within(".main") do
         click_on 'Simulator'
       end
       within(:xpath, "//tbody/tr[1]/td[3]") do
-        page.should have_content(scheduler1.simulator_fullname)
+        page.should have_content(first_name)
       end
       within(:xpath, "//tbody/tr[2]/td[3]") do
-        page.should have_content(scheduler2.simulator_fullname)
+        page.should have_content(second_name)
       end
       within(".main") do
         click_on 'Simulator'
       end
       within(:xpath, "//tbody/tr[1]/td[3]") do
-        page.should have_content(scheduler2.simulator_fullname)
+        page.should have_content(second_name)
       end
       within(:xpath, "//tbody/tr[2]/td[3]") do
-        page.should have_content(scheduler1.simulator_fullname)
+        page.should have_content(first_name)
       end
     end
   end

@@ -24,11 +24,11 @@ describe 'Games can be created from schedulers', type: :feature do
         page.should have_content "Name: #{scheduler.name}"
         page.should have_content "Size: #{scheduler.size}"
         scheduler.simulator_instance.configuration.each do |key, value|
-          page.should have_content "#{key}: #{value}"
+          page.should have_content "#{key.humanize}: #{value}"
         end
       end
 
-      it 'a game representation will have the sampled profiles from the scheduler' do
+      it 'a summary game representation will have the sampled profiles from the scheduler' do
         pending
       end
     end

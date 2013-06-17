@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe SchedulerFactory do
-  describe 'create' do
-    let(:simulator){ FactoryGirl.create(:simulator, :with_strategies) }
-    let(:configuration){ { 'fake' => 'variable', 'fake2' => 'other_variable' } }
-    let(:scheduler_details){ { name: 'fake', process_memory: 1000, size: 2, time_per_observation: 40, simulator_id: simulator.id, configuration: configuration } }
+  SCHEDULER_CLASSES.each do |scheduler_klass|
+    describe 'create' do
+      let(:simulator){ FactoryGirl.create(:simulator, :with_strategies) }
+      let(:configuration){ { 'fake' => 'variable', 'fake2' => 'other_variable' } }
+      let(:scheduler_details){ { name: 'fake', process_memory: 1000, size: 2, time_per_observation: 40, simulator_id: simulator.id, configuration: configuration } }
 
-    SCHEDULER_CLASSES.each do |scheduler_klass|
       context "when constructing a #{scheduler_klass} and a matching SimulatorInstance exists" do
         before do
           @simulator_instance = SimulatorInstance.create(simulator_id: simulator.id, configuration: configuration)
@@ -39,8 +39,8 @@ describe SchedulerFactory do
     end
   end
 
-  describe 'update' do
-    NONGENERIC_SCHEDULER_CLASSES.collect{ |klass| klass.to_s.underscore }.each do |scheduler_klass|
+  NONGENERIC_SCHEDULER_CLASSES.collect{ |klass| klass.to_s.underscore }.each do |scheduler_klass|
+    describe 'update' do
       let(:scheduler){ FactoryGirl.create(scheduler_klass, :with_profiles) }
       let(:simulator_instance){ scheduler.simulator_instance }
 

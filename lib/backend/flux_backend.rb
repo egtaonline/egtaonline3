@@ -13,4 +13,8 @@ class FluxBackend
       return false
     end
   end
+  
+  def prepare_simulator(simulator)
+    
+  end
 end

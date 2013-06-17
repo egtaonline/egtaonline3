@@ -4,6 +4,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'database_cleaner'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'capybara/rails'
@@ -13,6 +14,8 @@ Capybara.javascript_driver = :poltergeist
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+
+Rails.logger.level = 4
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -35,7 +38,27 @@ RSpec.configure do |config|
   config.order = "random"
   config.include(MailerMacros)
   config.include(SessionHelpers, type: :feature)
-  config.before(:each) { reset_email }
+
+  config.before(:each) do
+    reset_email
+  end
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each, :type => :feature) do
+    DatabaseCleaner.strategy = :truncation, {:pre_count => true}
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
 end
 
 SCHEDULER_CLASSES = [GameScheduler, DeviationScheduler, DprDeviationScheduler, DprScheduler, GenericScheduler, HierarchicalDeviationScheduler, HierarchicalScheduler]

@@ -4,6 +4,8 @@ class RolesController < AuthenticatedController
       Simulator.find(params["simulator_id"])
     elsif params["scheduler_id"]
       Scheduler.find(params["scheduler_id"])
+    elsif params["game_id"]
+      Game.find(params["game_id"])
     end
   end
 

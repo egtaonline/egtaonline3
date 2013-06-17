@@ -1,5 +1,4 @@
-class SchedulersController < AuthenticatedController
-  include SimulatorSelector
+class SchedulersController < ProfileSpacesController
   before_filter :merge, only: [:create, :update]
 
   expose(:schedulers){ klass.joins(:simulator_instance).order("#{sort_column} #{sort_direction}").page(params[:page]) }
@@ -10,6 +9,9 @@ class SchedulersController < AuthenticatedController
       klass.new(params[model_name])
     end
   end
+
+  expose(:role_owner){ scheduler }
+  expose(:role_owner_path){ "/schedulers/#{scheduler.id}" }
 
   expose(:scheduling_requirements) do
     SchedulingRequirement.joins(:profile).where(scheduler_id: params[:id]).order("#{sort_column} #{sort_direction}").page(params[:page])
