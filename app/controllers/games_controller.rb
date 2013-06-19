@@ -27,4 +27,10 @@ class GamesController < ProfileSpacesController
     game.destroy
     respond_with(game)
   end
+
+  private
+
+  def game_parameters
+    params.require(:game).permit(:name, :size, :simulator_instance_id)
+  end
 end

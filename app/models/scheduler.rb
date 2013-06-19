@@ -1,9 +1,6 @@
 class Scheduler < ActiveRecord::Base
   include ProfileSpaces
 
-  attr_accessible :active, :name, :nodes, :process_memory, :observations_per_simulation, :size, :time_per_observation,
-                  :default_observation_requirement, :simulator_instance_id
-
   validates :name, presence: true, uniqueness: true
   validates_presence_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation
   validates_numericality_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation,

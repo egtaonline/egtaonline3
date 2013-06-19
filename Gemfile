@@ -1,41 +1,34 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '~> 4.0.0.rc2'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'activerecord-jdbcpostgresql-adapter', platform: :jruby
-gem 'pg', platform: :ruby
-gem 'activerecord-postgres-hstore'
-gem 'postgres_ext'
+# gem 'activerecord-jdbcpostgresql-adapter', platform: :jruby
+gem 'pg'
 
+gem 'sass-rails',   '~> 4.0.0.rc2'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'twitter-bootstrap-rails'
+gem 'jquery-migrate-rails'
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+# gem 'therubyrhino', platform: :jruby
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'twitter-bootstrap-rails'
-  gem 'jquery-migrate-rails'
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyrhino', platform: :jruby
-
-  gem 'uglifier', '>= 1.0.3'
-end
+gem 'uglifier', '>= 1.3.0'
 
 gem 'jquery-rails'
 gem 'haml-rails'
 gem 'decent_exposure'
-gem 'devise'
+gem 'devise', github: 'plataformatec/devise', branch: 'rails4'
 gem 'kaminari'
 gem 'celluloid'
 gem 'airbrake'
 gem 'puma'
-gem 'jrjackson', platform: :jruby
-gem 'oj', platform: :ruby
-gem 'simple_form'
-gem 'show_for'
+# gem 'jrjackson', platform: :jruby
+gem 'oj'
+gem 'simple_form', '~> 3.0.0.rc'
+gem 'show_for', '~> 0.3.0.rc'
 gem 'high_voltage'
 gem 'carrierwave'
 gem 'sidekiq'
@@ -45,7 +38,7 @@ gem 'sinatra', :require => nil
 
 group :development do
   gem 'quiet_assets'
-  gem 'better_errors', github: 'charliesome/better_errors', platform: :ruby
+  gem 'better_errors', github: 'charliesome/better_errors'
 end
 
 group :test, :development do
@@ -54,8 +47,8 @@ end
 
 group :test do
   gem 'launchy'
-  gem 'simplecov', :require => false, platform: :ruby
-  gem 'capybara', '~> 1.1.0'
+  gem 'simplecov', :require => false
+  gem 'capybara'
   gem 'poltergeist'
   gem 'factory_girl_rails'
   gem 'database_cleaner'

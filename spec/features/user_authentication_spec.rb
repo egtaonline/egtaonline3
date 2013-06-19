@@ -11,7 +11,7 @@ feature 'user authentication:' do
     page.should have_content 'The admin has been emailed to verify your access.'
     last_email.to.should include(admin.email)
   end
-  
+
   scenario 'an invalid signup does not email the admin for approval' do
     admin = FactoryGirl.create(:admin)
     visit '/users/sign_up'
@@ -19,10 +19,10 @@ feature 'user authentication:' do
     fill_in 'Password', with: 'fake-pass'
     fill_in 'Password confirmation', with: 'fake-pass2'
     click_button 'Sign up'
-    page.should have_content "Password doesn't match confirmation"
+    page.should have_content "Password confirmation doesn't match Password"
     last_email.should == nil
   end
-  
+
   scenario 'an unconfirmed user tries to sign in' do
     user = FactoryGirl.create(:user)
     visit '/users/sign_in'

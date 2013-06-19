@@ -1,6 +1,4 @@
 class SchedulingRequirement < ActiveRecord::Base
-  attr_accessible :count, :scheduler_id, :profile_id
-
   validates :count, presence: true, numericality: { only_integer: true }
   validates_uniqueness_of :scheduler_id, scope: :profile_id
 

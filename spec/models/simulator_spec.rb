@@ -15,7 +15,7 @@ describe Simulator do
           Backend.should_receive(:prepare_simulator)
           simulator = Simulator.create!(name: 'fake_sim', version: '1.0', email: 'test@example.com',
                                         source: File.new("#{Rails.root}/spec/support/data/fake_sim.zip"))
-          simulator.configuration.should == { "parm-integer" => "60", "parm-float" => "0.0", "parm-string" => "CDA" }
+          simulator.configuration.should == { "parm-integer" => 60, "parm-float" => 0.0, "parm-string" => "CDA" }
         end
       end
 
@@ -28,7 +28,7 @@ describe Simulator do
           Backend.should_receive(:prepare_simulator).with(simulator)
           FileUtils.should_receive(:rm_rf).with(File.join(Rails.root, 'simulator_uploads', simulator.fullname))
           simulator.update_attributes(source: File.new("#{Rails.root}/spec/support/data/fake_sim.zip"))
-          simulator.configuration.should == { "parm-integer" => "60", "parm-float" => "0.0", "parm-string" => "CDA" }
+          simulator.configuration.should == { "parm-integer" => 60, "parm-float" => 0.0, "parm-string" => "CDA" }
         end
       end
     end
@@ -44,13 +44,24 @@ describe Simulator do
   end
 
   describe '#remove_role' do
-    it "removes the role if present" do
+    before do
       simulator.role_configuration = { "All" => ["A1"] }
       simulator.save!
-      simulator.reload.remove_role("B")
-      simulator.reload.role_configuration.should == { "All" => ["A1"] }
-      simulator.remove_role("All")
-      simulator.reload.role_configuration.should == { }
+      simulator.reload
+    end
+
+    context 'when the role is present' do
+      it 'removes the role' do
+        simulator.remove_role("All")
+        simulator.reload.role_configuration.should == {}
+      end
+    end
+
+    context 'when the role is not present' do
+      it 'does nothing to the role configuration' do
+        simulator.reload.remove_role("B")
+        simulator.reload.role_configuration.should == { "All" => ["A1"] }
+      end
     end
   end
 

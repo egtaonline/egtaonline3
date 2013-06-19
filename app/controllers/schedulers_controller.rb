@@ -1,6 +1,4 @@
 class SchedulersController < ProfileSpacesController
-  before_filter :merge, only: [:create, :update]
-
   expose(:schedulers){ klass.joins(:simulator_instance).order("#{sort_column} #{sort_direction}").page(params[:page]) }
   expose(:scheduler) do
     if id = params["#{model_name}_id"] || params[:id]
@@ -18,13 +16,13 @@ class SchedulersController < ProfileSpacesController
   end
 
   def create
-    @scheduler = SchedulerFactory.create(klass, params[model_name])
+    @scheduler = SchedulerFactory.create(klass, scheduler_parameters, params[:selector][:simulator_id], params[:selector][:configuration])
     respond_with(@scheduler)
   end
 
   def update
     @scheduler = klass.find(params[:id])
-    @scheduler = SchedulerFactory.update(@scheduler, params[model_name])
+    @scheduler = SchedulerFactory.update(@scheduler, scheduler_parameters, params[:selector][:configuration])
     respond_with(@scheduler)
   end
 
@@ -35,8 +33,9 @@ class SchedulersController < ProfileSpacesController
 
   private
 
-  def merge
-    params[model_name] = params[model_name].merge(params[:selector])
+  def scheduler_parameters
+    params.require(model_name.to_sym).permit(:active, :name, :nodes, :process_memory, :observations_per_simulation, :size, :time_per_observation,
+                    :default_observation_requirement, :simulator_instance_id)
   end
 
   def sort_column

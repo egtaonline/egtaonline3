@@ -1,9 +1,6 @@
 class Simulator < ActiveRecord::Base
-  attr_accessible :email, :name, :source, :version
-  serialize :configuration, ActiveRecord::Coders::Hstore
-  serialize :role_configuration, JSON
   mount_uploader :source, SimulatorUploader
-
+  serialize :role_configuration, JSON
   has_many :simulator_instances, dependent: :destroy, inverse_of: :simulator
 
   validates_presence_of :email, :name, :version, :source

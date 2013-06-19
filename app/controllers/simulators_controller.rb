@@ -1,6 +1,6 @@
 class SimulatorsController < AuthenticatedController
   expose(:simulators){ Simulator.order("#{sort_column} #{sort_direction}").page(params[:page]) }
-  expose(:simulator)
+  expose(:simulator, attributes: :simulator_parameters)
 
   def create
     simulator.save
@@ -15,5 +15,11 @@ class SimulatorsController < AuthenticatedController
   def destroy
     simulator.destroy
     respond_with(simulator)
+  end
+
+  private
+
+  def simulator_parameters
+    params.require(:simulator).permit(:email, :name, :source, :version)
   end
 end

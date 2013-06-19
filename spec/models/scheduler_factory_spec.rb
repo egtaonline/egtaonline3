@@ -5,12 +5,12 @@ describe SchedulerFactory do
     describe 'create' do
       let(:simulator){ FactoryGirl.create(:simulator, :with_strategies) }
       let(:configuration){ { 'fake' => 'variable', 'fake2' => 'other_variable' } }
-      let(:scheduler_details){ { name: 'fake', process_memory: 1000, size: 2, time_per_observation: 40, simulator_id: simulator.id, configuration: configuration } }
+      let(:scheduler_details){ { name: 'fake', process_memory: 1000, size: 2, time_per_observation: 40 } }
 
       context "when constructing a #{scheduler_klass} and a matching SimulatorInstance exists" do
         before do
           @simulator_instance = SimulatorInstance.create(simulator_id: simulator.id, configuration: configuration)
-          @scheduler = SchedulerFactory.create(scheduler_klass, scheduler_details)
+          @scheduler = SchedulerFactory.create(scheduler_klass, scheduler_details, simulator.id, configuration)
         end
 
         [:name, :process_memory, :size, :time_per_observation].each do |field|
@@ -23,7 +23,7 @@ describe SchedulerFactory do
 
       context "when constructing a #{scheduler_klass} and a matching SimulatorInstance does not exist" do
         before do
-          @scheduler = SchedulerFactory.create(scheduler_klass, scheduler_details)
+          @scheduler = SchedulerFactory.create(scheduler_klass, scheduler_details, simulator.id, configuration)
           @simulator_instance = SimulatorInstance.last
         end
 
@@ -45,10 +45,10 @@ describe SchedulerFactory do
       let(:simulator_instance){ scheduler.simulator_instance }
 
       context "when updating a #{scheduler_klass} and the run time configuration is not changed" do
-        let(:new_details){ { name: scheduler.name, process_memory: scheduler.process_memory+1000, size: scheduler.size, time_per_observation: scheduler.time_per_observation, configuration: scheduler.simulator_instance.configuration } }
+        let(:new_details){ { name: scheduler.name, process_memory: scheduler.process_memory+1000, size: scheduler.size, time_per_observation: scheduler.time_per_observation } }
 
         before do
-          @scheduler = SchedulerFactory.update(scheduler, new_details)
+          @scheduler = SchedulerFactory.update(scheduler, new_details, simulator_instance.configuration)
         end
 
         it { @scheduler.process_memory.should == new_details[:process_memory] }
@@ -56,11 +56,10 @@ describe SchedulerFactory do
       end
 
       context "when updating a #{scheduler_klass} when the run time configuration is changed" do
-        let(:new_details){ { name: scheduler.name, process_memory: scheduler.process_memory, size: scheduler.size, time_per_observation: scheduler.time_per_observation,
-                             configuration: { "new" => "configuration" } } }
+        let(:new_details){ { name: scheduler.name, process_memory: scheduler.process_memory, size: scheduler.size, time_per_observation: scheduler.time_per_observation } }
 
         before do
-           @scheduler = SchedulerFactory.update(scheduler, new_details)
+           @scheduler = SchedulerFactory.update(scheduler, new_details, { "new" => "configuration" })
         end
 
         it { @scheduler.simulator_instance.should_not == simulator_instance }
@@ -69,10 +68,6 @@ describe SchedulerFactory do
         it { SchedulingRequirement.count.should == @scheduler.scheduling_requirements.count }
         it { @scheduler.simulator_instance.profiles.count.should == simulator_instance.profiles.count }
       end
-    end
-
-    context 'when updating a generic_scheduler' do
-
     end
   end
 end

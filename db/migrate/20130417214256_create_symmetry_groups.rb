@@ -5,9 +5,6 @@ class CreateSymmetryGroups < ActiveRecord::Migration
       t.string :role, :null => false
       t.string :strategy, :null => false
       t.integer :count, :null => false
-      t.float :payoff
-      t.float :payoff_sd
-
       t.timestamps
     end
   end

@@ -1,6 +1,4 @@
 class Profile < ActiveRecord::Base
-  attr_accessible :assignment
-
   validates :assignment, presence: true, format: { with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/ },
                          uniqueness: { scope: :simulator_instance_id }
   validates :size, presence: true, numericality: { only_integer: true }

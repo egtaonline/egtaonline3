@@ -1,7 +1,5 @@
 class Game < ActiveRecord::Base
   include ProfileSpaces
-  
-  attr_accessible :name, :size, :simulator_instance_id
 
   validates_presence_of :name, :size
 
@@ -19,12 +17,12 @@ class Game < ActiveRecord::Base
   def invalid_role_partition?
     (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
   end
-  
+
   def profile_count
-    Profile.where("simulator_instance_id = ? AND assignment IN (?) AND observations_count > 0", 
+    Profile.where("simulator_instance_id = ? AND assignment IN (?) AND observations_count > 0",
                   simulator_instance_id, profile_space).count
   end
-  
+
   def observation_count
     Observation.joins(:profile).where("profiles.simulator_instance_id = ? AND profiles.assignment IN (?)",
                  simulator_instance_id, profile_space).count
