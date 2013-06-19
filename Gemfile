@@ -5,7 +5,8 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'activerecord-jdbcpostgresql-adapter'
+gem 'activerecord-jdbcpostgresql-adapter', platform: :jruby
+gem 'pg', platform: :ruby
 gem 'activerecord-postgres-hstore'
 gem 'postgres_ext'
 
@@ -18,7 +19,7 @@ group :assets do
   gem 'twitter-bootstrap-rails'
   gem 'jquery-migrate-rails'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyrhino'
+  gem 'therubyrhino', platform: :jruby
 
   gem 'uglifier', '>= 1.0.3'
 end
@@ -31,7 +32,8 @@ gem 'kaminari'
 gem 'celluloid'
 gem 'airbrake'
 gem 'puma'
-gem 'jrjackson'
+gem 'jrjackson', platform: :jruby
+gem 'oj', platform: :ruby
 gem 'simple_form'
 gem 'show_for'
 gem 'high_voltage'
@@ -43,7 +45,7 @@ gem 'sinatra', :require => nil
 
 group :development do
   gem 'quiet_assets'
-#  gem 'better_errors', github: 'charliesome/better_errors'
+  gem 'better_errors', github: 'charliesome/better_errors', platform: :ruby
 end
 
 group :test, :development do
@@ -52,7 +54,7 @@ end
 
 group :test do
   gem 'launchy'
-  # gem 'simplecov', :require => false
+  gem 'simplecov', :require => false, platform: :ruby
   gem 'capybara', '~> 1.1.0'
   gem 'poltergeist'
   gem 'factory_girl_rails'
