@@ -5,7 +5,14 @@ class GamesController < ProfileSpacesController
   expose(:role_owner_path){ "/games/#{game.id}" }
   expose(:profile_count){ game.profile_count }
   expose(:observation_count){ game.observation_count }
-  
+
+  def show
+    respond_to do |format|
+      format.html
+      format.json { send_data GamePresenter.new(game).to_json(granularity: params[:granularity]), type: 'text/json', filename: "#{game.id}.json" }
+    end
+  end
+
   def create
     game.save
     respond_with(game)

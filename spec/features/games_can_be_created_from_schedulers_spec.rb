@@ -27,10 +27,6 @@ describe 'Games can be created from schedulers', type: :feature do
           page.should have_content "#{key.humanize}: #{value}"
         end
       end
-
-      it 'a summary game representation will have the sampled profiles from the scheduler' do
-        pending
-      end
     end
   end
 end

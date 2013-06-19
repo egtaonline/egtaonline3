@@ -3,20 +3,20 @@ require 'spec_helper'
 describe ProfileMaker do
   describe '#find_or_create' do
     let(:scheduler){ FactoryGirl.create(:game_scheduler) }
-    
+
     it 'creates a profile with the required (sorted) assignment when necessary' do
       subject.perform(scheduler.id, 'B: 2 S1; A: 1 S3, 1 S2')
       profile = Profile.last
       profile.simulator_instance_id.should == scheduler.simulator_instance_id
       profile.assignment.should == 'A: 1 S2, 1 S3; B: 2 S1'
     end
-    
+
     it 'does not create a profile when the necessary profile exists' do
       profile = scheduler.simulator_instance.profiles.create!(assignment: 'A: 1 S2, 1 S3; B: 2 S1')
       subject.perform(scheduler.id, 'B: 2 S1; A: 1 S3, 1 S2')
       Profile.count.should == 1
     end
-    
+
     it 'creates a scheduling requirement if necessary' do
       profile = scheduler.simulator_instance.profiles.create!(assignment: 'A: 1 S2, 1 S3; B: 2 S1')
       subject.perform(scheduler.id, 'B: 2 S1; A: 1 S3, 1 S2')
@@ -25,7 +25,7 @@ describe ProfileMaker do
       scheduling_requirement.scheduler_id.should == scheduler.id
       scheduling_requirement.count.should == scheduler.default_observation_requirement
     end
-    
+
     it 'does nothing when the profile and scheduling requirement already exist' do
       profile = scheduler.simulator_instance.profiles.create!(assignment: 'A: 1 S2, 1 S3; B: 2 S1')
       profile.scheduling_requirements.create!(scheduler_id: scheduler.id, count: scheduler.default_observation_requirement)
