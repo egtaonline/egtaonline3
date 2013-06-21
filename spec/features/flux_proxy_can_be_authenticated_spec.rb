@@ -9,18 +9,15 @@ describe 'The flux proxy can be connected through the web page', type: :feature 
   let(:password){ 'Also fake'}
   let(:verification_number){ 'More fake' }
 
-  before do
-    Backend.reset
-  end
-
   context 'when the proxy is not authenticated' do
     before do
-      visit '/'
+      Backend.connected = false
     end
 
     context 'when the authentication is successful' do
       before do
-        Backend.implementation.should_receive(:authenticate).with({ "uniqname" => uniqname, "password" => password, "verification_number" => verification_number}).and_return(true)
+        Backend.connection.should_receive(:authenticate).with({ "uniqname" => uniqname, "password" => password, "verification_number" => verification_number}).and_return(true)
+        visit '/'
       end
 
       it 'informs the user that authentication succeeded' do
@@ -37,7 +34,8 @@ describe 'The flux proxy can be connected through the web page', type: :feature 
 
     context 'when the authentication is unsuccessful' do
       before do
-        Backend.implementation.should_receive(:authenticate).with({ "uniqname" => uniqname, "password" => password, "verification_number" => verification_number}).and_return(false)
+        Backend.connection.should_receive(:authenticate).with({ "uniqname" => uniqname, "password" => password, "verification_number" => verification_number}).and_return(false)
+        visit '/'
       end
 
       it 'informs the user that authentication succeeded' do

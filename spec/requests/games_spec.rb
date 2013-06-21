@@ -138,6 +138,7 @@ describe "Games" do
       sim2.configuration = {"Parm2"=>"7","Parm3"=>"6"}
       sim2.save
       visit new_game_path
+      select sim1.fullname
       page.should have_content("Parm1")
       page.should have_content("Parm2")
       page.should_not have_content("Parm3")
