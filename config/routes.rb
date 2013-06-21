@@ -1,8 +1,17 @@
 Egtaonline3::Application.routes.draw do
 
-  resources :simulators, :games do
+  resources :simulators do
     resources :roles, only: [:create, :destroy] do
       resources :strategies, only: [:create, :destroy]
+    end
+  end
+
+  resources :games do
+    resources :roles, only: [:create, :destroy] do
+      resources :strategies, only: [:create, :destroy]
+    end
+    collection do
+      post :update_configuration
     end
   end
 

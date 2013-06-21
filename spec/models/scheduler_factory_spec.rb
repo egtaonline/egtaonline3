@@ -59,7 +59,7 @@ describe SchedulerFactory do
         let(:new_details){ { name: scheduler.name, process_memory: scheduler.process_memory, size: scheduler.size, time_per_observation: scheduler.time_per_observation } }
 
         before do
-           @scheduler = SchedulerFactory.update(scheduler, new_details, { "new" => "configuration" })
+          @scheduler = SchedulerFactory.update(scheduler, new_details, { "new" => "configuration" })
         end
 
         it { @scheduler.simulator_instance.should_not == simulator_instance }

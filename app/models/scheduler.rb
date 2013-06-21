@@ -25,6 +25,7 @@ class Scheduler < ActiveRecord::Base
     role = self.roles.where(name: role_name).first
     if role
       role.strategies += [strategy]
+      role.strategies.uniq!
       role.save!
       update_scheduling_requirements
     end
@@ -39,19 +40,9 @@ class Scheduler < ActiveRecord::Base
     end
   end
 
-  def add_role(role, count, reduced_count=count)
-    if !self.roles.where(name: role).first
-      self.roles.create!(name: role, count: count, reduced_count: reduced_count)
-    end
-  end
-
-  def remove_role(role)
-    self.roles.where(name: role).destroy_all
+  def remove_role(role_name)
+    super
     update_scheduling_requirements
-  end
-
-  def available_roles
-    simulator.role_configuration.keys - roles.collect{ |r| r.name }
   end
 
   def invalid_role_partition?

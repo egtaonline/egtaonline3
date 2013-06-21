@@ -19,8 +19,7 @@ class RolesController < AuthenticatedController
   end
 
   def destroy
-    parent.remove_role(params["role"])
+    parent.remove_role(params["id"])
     respond_with(parent)
   end
-
 end

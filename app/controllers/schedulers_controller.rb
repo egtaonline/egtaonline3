@@ -1,6 +1,6 @@
 class SchedulersController < ProfileSpacesController
-  expose(:schedulers){ klass.joins(:simulator_instance).order("#{sort_column} #{sort_direction}").page(params[:page]) }
-  expose(:scheduler) do
+  expose(:schedulers){ klass.includes(:simulator_instance).order("#{sort_column} #{sort_direction}").page(params[:page]) }
+  expose(:scheduler, attributes: :scheduler_parameters) do
     if id = params["#{model_name}_id"] || params[:id]
       klass.find(id)
     else

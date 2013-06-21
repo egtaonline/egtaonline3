@@ -10,7 +10,6 @@ require 'capybara/poltergeist'
 require 'capybara/rails'
 require 'sidekiq/testing/inline'
 Capybara.javascript_driver = :poltergeist
-Capybara.default_wait_time = 15
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}

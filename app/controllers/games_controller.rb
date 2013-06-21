@@ -1,6 +1,6 @@
 class GamesController < ProfileSpacesController
-  expose(:games){ Game.order("#{sort_column} #{sort_direction}").page(params[:page]) }
-  expose(:game)
+  expose(:games){ Game.includes(:simulator_instance).order("#{sort_column} #{sort_direction}").page(params[:page]) }
+  expose(:game, attributes: :game_parameters)
   expose(:role_owner){ game }
   expose(:role_owner_path){ "/games/#{game.id}" }
   expose(:profile_count){ game.profile_count }
@@ -14,8 +14,8 @@ class GamesController < ProfileSpacesController
   end
 
   def create
-    game.save
-    respond_with(game)
+    @game = GameFactory.create(game_parameters, params[:selector][:simulator_id], params[:selector][:configuration])
+    respond_with(@game)
   end
 
   def update

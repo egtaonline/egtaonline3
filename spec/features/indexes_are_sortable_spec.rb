@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-feature 'some objects have index pages' do
+feature 'index pages are sortable' do
   background do
     sign_in
   end
 
-  scenario 'some simulators' do
+  scenario 'when on the simulator index page' do
     simulator1 = FactoryGirl.create(:simulator, version: 'alpha')
     simulator2 = FactoryGirl.create(:simulator, version: 'beta')
     visit simulators_path
@@ -30,7 +30,7 @@ feature 'some objects have index pages' do
     scenario 'some schedulers' do
       first_name, second_name = [FactoryGirl.create(scheduler.to_sym).simulator_fullname,
                                  FactoryGirl.create(scheduler.to_sym).simulator_fullname].sort
-      
+
       visit "/#{scheduler}s"
       within(".main") do
         click_on 'Simulator'
@@ -52,7 +52,7 @@ feature 'some objects have index pages' do
       end
     end
   end
-  
+
   scenario 'some simulations' do
     simulation = FactoryGirl.create(:simulation, state: 'queued')
     simulation2 = FactoryGirl.create(:simulation, state: 'pending')

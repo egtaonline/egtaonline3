@@ -1,0 +1,10 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= sortable "name"
+      %th= sortable "simulator_fullname", "Simulator"
+      %th= sortable("simulator_instances.simulator_fullname", "Simulator")
+      %th= sortable "size"
+  %tbody
+    =render games
+=paginate games, remote: true
