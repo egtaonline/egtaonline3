@@ -9,6 +9,8 @@ class Profile < ActiveRecord::Base
   has_many :symmetry_groups, dependent: :destroy, inverse_of: :profile
   has_many :observations, dependent: :destroy, inverse_of: :profile
 
+  delegate :simulator_fullname, to: :simulator_instance
+
   before_validation(on: :create) do
     self.size = assignment.split("; ").collect do |role|
       role.split(': ')[1].split(", ").collect do |strategy|

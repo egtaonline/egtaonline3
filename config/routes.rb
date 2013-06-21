@@ -45,7 +45,7 @@ Egtaonline3::Application.routes.draw do
     end
   end
 
-  resources :profile, only: :show
+  resources :profiles, only: :show
   resources :simulations, only: [:index, :show]
 
   devise_for :users

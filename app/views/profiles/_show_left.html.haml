@@ -1,0 +1,7 @@
+=show_for profile do |u|
+  %h3 Profile Configuration
+  = u.attribute :assignment
+  = u.attribute :simulator_fullname, label: "Simulator"
+  = u.attribute :observations_count
+  %h3 Simulator Configuration
+  = render partial: 'configuration/parameter', collection: profile.simulator_instance.configuration.to_a, locals: { u: u }
