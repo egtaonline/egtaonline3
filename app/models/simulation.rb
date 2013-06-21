@@ -6,6 +6,7 @@ class Simulation < ActiveRecord::Base
   belongs_to :scheduler, inverse_of: :simulations
 
   delegate :assignment, to: :profile
+  delegate :simulator_fullname, to: :profile
 
   def self.scheduled
     where(state: ['pending', 'queued', 'running'])

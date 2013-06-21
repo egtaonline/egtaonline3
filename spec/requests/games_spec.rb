@@ -131,8 +131,12 @@ describe "Games" do
 
   describe "POST /games/update_configuration", type: :feature, js: true do
     it "should update parameter info" do
-      sim1 = FactoryGirl.create(:simulator, :configuration => {"Parm1"=>"2","Parm2"=>"3"})
-      sim2 = FactoryGirl.create(:simulator, :configuration => {"Parm2"=>"7","Parm3"=>"6"})
+      sim1 = FactoryGirl.create(:simulator)
+      sim1.configuration = {"Parm1"=>"2","Parm2"=>"3"}
+      sim1.save
+      sim2 = FactoryGirl.create(:simulator)
+      sim2.configuration = {"Parm2"=>"7","Parm3"=>"6"}
+      sim2.save
       visit new_game_path
       page.should have_content("Parm1")
       page.should have_content("Parm2")

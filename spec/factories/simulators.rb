@@ -1,5 +1,3 @@
-Simulator.skip_callback(:validation, :before, :setup_simulator)
-
 FactoryGirl.define do
   factory :simulator do
     name 'fake_sim'
@@ -7,10 +5,6 @@ FactoryGirl.define do
     email 'test@example.com'
     source File.new("#{Rails.root}/spec/support/data/fake_sim.zip")
     configuration { {} }
-
-    trait :with_setup do
-      before(:validation) { |simulator| simulator.send(:setup_simulator) }
-    end
 
     trait :with_strategies do
       role_configuration { { 'All' => ['A', 'B'] } }

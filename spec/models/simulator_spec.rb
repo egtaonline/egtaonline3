@@ -2,13 +2,6 @@ require 'spec_helper'
 
 describe Simulator do
   describe 'setup/validation:' do
-    before :all do
-      Simulator.set_callback(:validation, :before, :setup_simulator, if: :source_changed?)
-    end
-
-    after :all do
-      Simulator.skip_callback(:validation, :before, :setup_simulator, if: :source_changed?)
-    end
     context 'with valid simulator' do
       context 'new simulator' do
         it 'sets up the simulator, locally and on the backend' do
