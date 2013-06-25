@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe 'Simulator upload functionality' do
+  before :all do
+    Simulator.set_callback(:validation, :before, :setup_simulator, if: :source_changed?)
+  end
+
+  after :all do
+    Simulator.skip_callback(:validation, :before, :setup_simulator)
+  end
+
   before do
     sign_in
   end
@@ -22,6 +30,7 @@ describe 'Simulator upload functionality' do
 
   describe 'users can update simulators with new programs', type: :feature do
     it 'updates a Simulator with valid simulator' do
+      Backend.should_receive(:prepare_simulator)
       simulator = Simulator.create!(name: 'fake_sim', version: '1.0', email: 'test@example.com',
                                     source: File.new("#{Rails.root}/spec/support/data/fake_sim.zip"))
       simulator.configuration["parm-integer"] = 61

@@ -31,6 +31,7 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
+    Simulator.skip_callback(:validation, :before, :setup_simulator)
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.strategy = :transaction
   end

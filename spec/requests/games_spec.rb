@@ -143,9 +143,9 @@ describe "Games" do
       page.should have_content("Parm2")
       page.should_not have_content("Parm3")
       select sim2.fullname, :from => :selector_simulator_id
-      page.should_not have_content("Parm1")
       page.should have_content("Parm2")
       page.should have_content("Parm3")
+      page.should_not have_content("Parm1")
     end
   end
 end
