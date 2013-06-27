@@ -8,7 +8,46 @@ class Simulation < ActiveRecord::Base
   delegate :assignment, to: :profile
   delegate :simulator_fullname, to: :profile
 
+  def self.active_on_flux
+    active.where(flux: true)
+  end
+
+  def self.active_on_other
+    active.where(flux: false)
+  end
+
+  def self.active
+    where(state: ['queued', 'running'])
+  end
+
   def self.scheduled
     where(state: ['pending', 'queued', 'running'])
+  end
+
+  def start
+    self.update_attributes(state: 'running') if self.state == 'queued'
+  end
+
+  def process
+    self.update_attributes(state: 'processing')
+    DataParser.perform_async(id)
+  end
+
+  def finish
+    self.update_attributes(state: 'complete')
+    requeue
+  end
+
+  def queue_as(jid)
+    self.update_attributes(job_id: jid, state: 'queued')
+  end
+
+  def fail(message)
+    self.update_attributes(error_message: message, state: 'failed')
+    requeue
+  end
+
+  def requeue
+    ProfileScheduler.perform_in(5.minutes, profile_id)
   end
 end
