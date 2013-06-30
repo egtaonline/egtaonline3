@@ -330,51 +330,5 @@ describe ObservationValidator do
 
       it { ObservationValidator.validate(profile, path).should == nil }
     end
-
-    context 'when there are NaN or Inf payoffs' do
-      let(:file_contents) do
-        <<-JSON
-          {
-            "symmetry_groups": [
-              {
-                "role": "Buyer",
-                "strategy": "BidValue",
-                "count": 2,
-                "players": [
-                  {
-                    "payoff": "NaN"
-          			  },
-            			{
-            			  "payoff": 2990.53
-                  }
-                ]
-              },
-              {
-                "role": "Seller",
-                "strategy": "Shade1",
-                "count": 1,
-                "players": [
-                  {
-                    "payoff": 2929.34
-          			  }
-                ]
-              },
-              {
-                "role": "Seller",
-                "strategy": "Shade2",
-                "count": 1,
-                "players": [
-          			  {
-          			    "payoff": 2924.44
-          			  }
-                ]
-              }
-            ]
-          }
-        JSON
-      end
-
-      it { ObservationValidator.validate(profile, path).should == nil }
-    end
   end
 end
