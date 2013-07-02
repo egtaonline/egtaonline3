@@ -27,14 +27,14 @@ ActiveRecord::Schema.define(version: 20130424233213) do
 
   create_table "observations", force: true do |t|
     t.integer  "profile_id", null: false
-    t.hstore   "features"
+    t.json     "features"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "players", force: true do |t|
     t.float    "payoff",            null: false
-    t.hstore   "features"
+    t.json     "features"
     t.integer  "observation_id",    null: false
     t.integer  "symmetry_group_id", null: false
     t.datetime "created_at"

@@ -5,8 +5,7 @@ class SimulationStatusMonitor
     @status_resolver = SimulationStatusResolver.new(local_data_path)
   end
 
-  def update_simulations(connection)
-    simulations = Simulation.active
+  def update_simulations(connection, simulations)
     proxy = connection.acquire
     if proxy
       output = proxy.exec!("qstat -a | grep egta-")

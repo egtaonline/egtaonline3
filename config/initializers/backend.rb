@@ -1,4 +1,5 @@
 require "#{Rails.root}/lib/backend"
+require 'drb/drb'
 
 Backend.configure do |config|
   config.queue_periodicity = 5.minutes

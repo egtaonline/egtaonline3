@@ -11,7 +11,11 @@ class SimulationStatusResolver
       simulation.start
     when "C", "", nil
       error_message = check_for_errors("#{@data_path}/#{simulation.id}")
-      error_message ? simulation.fail(error_message) : simulation.process
+      if error_message
+        simulation.fail(error_message)
+      else
+        simulation.process("#{@data_path}/#{simulation.id}")
+      end
     end
   end
 

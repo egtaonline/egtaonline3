@@ -5,7 +5,7 @@ class ObservationValidator
   def self.validate(profile, file_path)
     begin
       json = File.open(file_path).read
-      data_hash = MultiJson.load(json)
+      data_hash = extract_symmetry_groups(MultiJson.load(json))
       if matches_profile?(profile, data_hash) && payoffs_are_valid?(data_hash)
         filter_content(data_hash)
       end
@@ -16,19 +16,31 @@ class ObservationValidator
 
   private
 
-  def self.convert_payoffs(data)
-
+  def self.extract_symmetry_groups(data)
+    symmetry_groups = {}
+    data["players"].each do |player|
+      symmetry_groups[player["role"]] ||= {}
+      symmetry_groups[player["role"]][player["strategy"]] ||= []
+      symmetry_groups[player["role"]][player["strategy"]] <<
+        { "payoff" => player["payoff"], "features" => player["features"] }
+    end
+    new_symmetry_groups = []
+    symmetry_groups.each do |role, shash|
+      shash.each do |strategy, players|
+        new_symmetry_groups << { "role" => role, "strategy" => strategy,
+                                 "players" => players }
+      end
+    end
+    { "features" => data["features"], "symmetry_groups" => new_symmetry_groups }
   end
 
   def self.filter_content(data)
-    data["symmetry_groups"] = data["symmetry_groups"].map do |sgroup|
-      sgroup["players"] = sgroup["players"].map do |player|
+    data["symmetry_groups"].each do |sgroup|
+      sgroup["players"].each do |player|
         player["payoff"] = Float(player["payoff"])
-        player.keep_if { |k,v| ["payoff","features"].include?(k) }
       end
-      sgroup.keep_if { |k,v| ["role","strategy","players"].include?(k) }
     end
-    data.keep_if { |k,v| ["features","symmetry_groups"].include?(k) }
+    data
   end
 
   def self.payoffs_are_valid?(data)

@@ -1,14 +1,6 @@
 require 'backend/flux/simulation_status_resolver'
 
 describe SimulationStatusResolver do
-  module Backend
-    class Simulation
-    end
-
-    class DataParser
-    end
-  end
-
   describe '#act_on_status' do
     let(:local_data_path){ "fake/local/path" }
     let(:simulation){ double(id: 3) }
@@ -33,9 +25,13 @@ describe SimulationStatusResolver do
 
     context 'simulation completed successfully' do
       before do
-        File.should_receive(:exists?).with("#{local_data_path}/#{simulation.id}/error").and_return(true)
-        File.should_receive(:open).with("#{local_data_path}/#{simulation.id}/error").and_return(double(read: nil))
-        simulation.should_receive(:process)
+        File.should_receive(:exists?).with(
+          "#{local_data_path}/#{simulation.id}/error").and_return(true)
+        File.should_receive(:open).with(
+          "#{local_data_path}/#{simulation.id}/error").and_return(
+          double(read: nil))
+        simulation.should_receive(:process).with(
+          "#{local_data_path}/#{simulation.id}")
       end
 
       it{ status_resolver.act_on_status("C", simulation) }
@@ -45,8 +41,11 @@ describe SimulationStatusResolver do
 
     context 'simulation did not complete successfully' do
       before do
-        File.stub(:exists?).with("#{local_data_path}/#{simulation.id}/error").and_return(true)
-        File.should_receive(:open).with("#{local_data_path}/#{simulation.id}/error").and_return(double(read: 'I has error'))
+        File.stub(:exists?).with(
+          "#{local_data_path}/#{simulation.id}/error").and_return(true)
+        File.should_receive(:open).with(
+          "#{local_data_path}/#{simulation.id}/error").and_return(
+          double(read: 'I has error'))
         simulation.should_receive(:fail).with('I has error')
       end
 

@@ -92,9 +92,7 @@ class GamePresenter
           (
             select array_to_json(array_agg(observation))
             from (
-              select (
-                hstore_to_matrix(features)
-              ) as features, (
+              select features, (
                 select array_to_json(array_agg(sg))
                 from (
                   select symmetry_group_id as id, avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd
@@ -149,14 +147,10 @@ class GamePresenter
           (
             select array_to_json(array_agg(observation))
             from (
-              select (
-                hstore_to_matrix(features)
-              ) as features, (
+              select features, (
                 select array_to_json(array_agg(player))
                 from (
-                  select payoff, (
-                  hstore_to_matrix(features)
-                  ) as features, symmetry_group_id
+                  select payoff, features, symmetry_group_id
                   from players
                   where observation_id = observations.id
                 ) player
