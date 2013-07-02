@@ -111,10 +111,12 @@ describe ObservationValidator do
               "role" => 'Seller',
               "strategy" => 'Shade1',
               "players" => [
-                "payoff" => 2929.34,
-        			  "features" => {
-        				  "featureA" => 0.003,
-        				  "featureB" => [1.3, 1.7]
+                {
+                  "payoff" => 2929.34,
+        			    "features" => {
+        				    "featureA" => 0.003,
+        				    "featureB" => [1.3, 1.7]
+        			    }
         			  }
               ]
             },
@@ -122,10 +124,12 @@ describe ObservationValidator do
               "role" => 'Seller',
               "strategy" => 'Shade2',
               "players" => [
-        			  "payoff" => 2924.44,
-        			  "features" => {
-        				  "featureA" => 0.003,
-        				  "featureB" => [1.4, 1.7]
+                {
+        			    "payoff" => 2924.44,
+        			    "features" => {
+        				    "featureA" => 0.003,
+        				    "featureB" => [1.4, 1.7]
+        			    }
         			  }
               ]
             }

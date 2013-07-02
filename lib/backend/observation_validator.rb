@@ -2,9 +2,9 @@ require 'multi_json'
 require_relative '../util/object_numerism'
 
 class ObservationValidator
-  def self.validate(profile, file)
+  def self.validate(profile, file_path)
     begin
-      json = File.open(file).read
+      json = File.open(file_path).read
       data_hash = MultiJson.load(json)
       if matches_profile?(profile, data_hash) && payoffs_are_valid?(data_hash)
         filter_content(data_hash)
