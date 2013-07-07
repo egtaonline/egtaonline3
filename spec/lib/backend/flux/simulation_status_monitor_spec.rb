@@ -1,10 +1,6 @@
 require 'backend/flux/simulation_status_monitor'
 
 describe SimulationStatusMonitor do
-  class SimulationStatusMonitor
-    class Simulation
-    end
-  end
 
   let(:local_data_path){ 'fake/path' }
   let(:status_monitor){ SimulationStatusMonitor.new(local_data_path) }

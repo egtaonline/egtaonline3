@@ -64,9 +64,11 @@ describe Backend do
     end
 
     describe 'update_simulations' do
+      let(:simulations){ double('Array') }
       it 'passes the message along to the backend implementation' do
-        Backend.configuration.simulation_interface.should_receive(:update_simulations)
-        Backend.update_simulations
+        Backend.configuration.simulation_interface.should_receive(
+          :update_simulations).with(simulations)
+        Backend.update_simulations(simulations)
       end
     end
 

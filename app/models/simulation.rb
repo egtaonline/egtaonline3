@@ -50,4 +50,23 @@ class Simulation < ActiveRecord::Base
   def requeue
     ProfileScheduler.perform_in(5.minutes, profile_id)
   end
+
+  def self.stale(age=300000)
+    where("state IN (?) AND updated_at < ?",
+      ['queued', 'complete', 'failed'], Time.current-age)
+  end
+
+  def self.recently_finished(age=86400)
+    where("state IN (?) AND updated_at > ?",
+      ['complete', 'failed'], Time.current-age)
+  end
+
+  def self.queueable
+    where(state: 'pending').order('created_at ASC').limit(simulation_limit)
+  end
+
+  def self.simulation_limit
+    [[Backend.queue_quantity,
+      Backend.queue_max-Simulation.active.count].min, 0].max
+  end
 end
