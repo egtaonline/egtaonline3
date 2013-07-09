@@ -1,5 +1,22 @@
 Egtaonline3::Application.routes.draw do
 
+  namespace :api do
+    namespace :v3 do
+      resources :generic_schedulers, except: ["new", "edit"] do
+        member do
+          post :add_profile, :remove_profile, :add_role, :remove_role
+        end
+      end
+      resources :simulators, :games, only: [:show, :index] do
+        member do
+          post :add_strategy, :remove_strategy, :add_role, :remove_role
+        end
+      end
+      resources :profiles, only: :show
+      resources :schedulers, only: :show
+    end
+  end
+
   resources :simulators do
     resources :roles, only: [:create, :destroy] do
       resources :strategies, only: [:create, :destroy]

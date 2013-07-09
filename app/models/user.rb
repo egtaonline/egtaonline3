@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable, :token_authenticatable
 
   after_create :send_admin_mail
+  before_save :ensure_authentication_token
 
   def send_admin_mail
     if !admin?
