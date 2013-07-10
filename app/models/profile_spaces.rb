@@ -13,7 +13,7 @@ module ProfileSpaces
 
   def add_role(role, count, reduced_count=count)
     if !self.roles.where(name: role).first
-      self.roles.create!(name: role, count: count, reduced_count: reduced_count)
+      self.roles.create(name: role, count: count, reduced_count: reduced_count)
     end
   end
 
