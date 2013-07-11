@@ -1,5 +1,5 @@
 class Api::V3::GamesController < Api::V3::BaseController
-  before_filter :find_object, only: [:show, :edit, :destroy, :add_strategy,
+  before_filter :find_object, only: [:show, :edit, :add_strategy,
     :remove_strategy, :add_role, :remove_role]
   before_filter :find_role, only: [:add_strategy, :remove_strategy]
   before_filter :find_strategy, only: [:add_strategy]

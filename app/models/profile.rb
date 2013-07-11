@@ -2,6 +2,7 @@ class Profile < ActiveRecord::Base
   validates :assignment, presence: true, format: { with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/ },
                          uniqueness: { scope: :simulator_instance_id }
   validates :size, presence: true, numericality: { only_integer: true }
+  validate :profile_matches_simulator
 
   belongs_to :simulator_instance, inverse_of: :profiles
   has_many :simulations, inverse_of: :profile, dependent: :destroy
@@ -9,22 +10,37 @@ class Profile < ActiveRecord::Base
   has_many :symmetry_groups, dependent: :destroy, inverse_of: :profile
   has_many :observations, dependent: :destroy, inverse_of: :profile
 
+  delegate :simulator, to: :simulator_instance
   delegate :simulator_fullname, to: :simulator_instance
 
+  def profile_matches_simulator
+    assignment.split("; ").each do |role_string|
+      role, strategy_string = role_string.split(": ")
+      unless simulator.role_configuration[role]
+        errors.add(:assignment, "#{role} is not present in the Simulator")
+      else
+        strategy_string.split(", ").each do |count_strategy|
+          strategy = count_strategy.split(" ")[1]
+          unless simulator.role_configuration[role].include?(strategy)
+            errors.add(:assignment, "#{strategy} is not present in the" +
+            " Simulator")
+          end
+        end
+      end
+    end
+  end
+
   before_validation(on: :create) do
-    self.size = assignment.split("; ").collect do |role|
-      role.split(': ')[1].split(", ").collect do |strategy|
-        strategy.split(" ")[0].to_i
-      end.reduce(:+)
-    end.reduce(:+)
+    self.size = assignment.role_counts.values.reduce(:+)
   end
 
   after_create do
-    assignment.split("; ").each do |role|
-      rsplit = role.split(": ")
-      rsplit[1].split(", ").each do |strategy|
-        ssplit = strategy.split(" ")
-        self.symmetry_groups.create!(role: rsplit[0], strategy: ssplit[1], count: ssplit[0].to_i)
+    assignment.split("; ").each do |role_string|
+      role, strategy_string = role_string.split(": ")
+      strategy_string.split(", ").each do |strategy|
+        count, strategy = strategy.split(" ")
+        self.symmetry_groups.create!(role: role, strategy: strategy,
+          count: count.to_i)
       end
     end
     try_scheduling
