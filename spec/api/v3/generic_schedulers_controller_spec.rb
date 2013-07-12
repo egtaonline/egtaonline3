@@ -150,10 +150,10 @@ describe 'GenericSchedulersController' do
     let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
     let(:url){ '/api/v3/generic_schedulers/1' }
 
-    it 'returns the appropriate json from a GenericSchedulerPresenter' do
+    it 'returns the appropriate json from a SchedulerPresenter' do
       get "#{url}.json", auth_token: token, granularity: 'summary'
       response.status.should == 200
-      response.body.should == GenericSchedulerPresenter.new(scheduler).to_json(
+      response.body.should == SchedulerPresenter.new(scheduler).to_json(
         granularity: 'summary')
     end
   end

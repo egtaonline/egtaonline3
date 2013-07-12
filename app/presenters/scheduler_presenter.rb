@@ -1,4 +1,4 @@
-class GenericSchedulerPresenter
+class SchedulerPresenter
   def initialize(scheduler)
     @scheduler = scheduler
   end
@@ -15,7 +15,7 @@ class GenericSchedulerPresenter
   def with_requirements
 
   end
-
+end
   # def json_specialization
   #   ",\"roles\":[#{@scheduler.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"count\":#{role.count}}" }.join(",") }]," <<
   #   "\"samples_per_simulation\":#{@scheduler.samples_per_simulation},\"nodes\":#{@scheduler.nodes},\"sample_hash\":#{sample_hash.to_json}"
@@ -33,4 +33,3 @@ class GenericSchedulerPresenter
   #   end
   #   shash
   # end
-end

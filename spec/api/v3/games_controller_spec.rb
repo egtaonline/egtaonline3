@@ -6,21 +6,12 @@ describe 'GamesController' do
   let(:role){ 'RoleA' }
   let(:strategy){ 'Strategy1' }
 
-  describe 'POST /api/v3/games/:id/add_strategy' do
-    let(:url){"/api/v3/games/1/add_strategy"}
-    let(:query){ { auth_token: token, role: role, strategy: strategy } }
+  context 'when a game exists' do
+    let!(:game){ FactoryGirl.create(:game) }
+    describe 'POST /api/v3/games/:id/add_strategy' do
+      let(:url){"/api/v3/games/#{game.id}/add_strategy"}
+      let(:query){ { auth_token: token, role: role, strategy: strategy } }
 
-    context 'when the game does not exist' do
-      it "returns an appropriate 404" do
-        post "#{url}.json", query
-        response.status.should eql(404)
-        response.body.should eql({error:
-          "the Game you were looking for could" +
-          " not be found"}.to_json)
-      end
-    end
-    context 'when the game exists' do
-      let!(:game){ FactoryGirl.create(:game, id: 1) }
       context 'but the role does not exist' do
         it "returns an appropriate 422" do
           post "#{url}.json", query
@@ -57,23 +48,11 @@ describe 'GamesController' do
         end
       end
     end
-  end
 
-  describe 'POST /api/v3/games/:id/remove_strategy' do
-    let(:url){"/api/v3/games/1/remove_strategy"}
-    let(:query){ { auth_token: token, role: role, strategy: strategy } }
+    describe 'POST /api/v3/games/:id/remove_strategy' do
+      let(:url){"/api/v3/games/#{game.id}/remove_strategy"}
+      let(:query){ { auth_token: token, role: role, strategy: strategy } }
 
-    context 'when the game does not exist' do
-      it "returns an appropriate 404" do
-        post "#{url}.json", query
-        response.status.should eql(404)
-        response.body.should eql({error:
-          "the Game you were looking for could" +
-          " not be found"}.to_json)
-      end
-    end
-    context 'when the game exists' do
-      let!(:game){ FactoryGirl.create(:game, id: 1) }
       context 'but the role does not exist' do
         it "returns an appropriate 422" do
           post "#{url}.json", query
@@ -98,17 +77,31 @@ describe 'GamesController' do
         end
       end
     end
+
+    describe 'GET /api/v3/games/:id' do
+      let(:url){ "/api/v3/games/#{game.id}" }
+
+      it 'returns the appropriate json from a GamePresenter' do
+        get "#{url}.json", auth_token: token, granularity: 'summary'
+        response.status.should == 200
+        response.body.should == GamePresenter.new(game).to_json(
+          granularity: 'summary')
+      end
+    end
   end
 
-  describe 'GET /api/v3/games/:id' do
-    let!(:game){ FactoryGirl.create(:game, id: 1) }
-    let(:url){ '/api/v3/games/1' }
+  context 'when a game does not exist' do
+    let(:query){ { auth_token: token, role: role, strategy: strategy } }
 
-    it 'returns the appropriate json from a GamePresenter' do
-      get "#{url}.json", auth_token: token, granularity: 'summary'
-      response.status.should == 200
-      response.body.should == GamePresenter.new(game).to_json(
-        granularity: 'summary')
+    ["/api/v3/games/0/add_strategy",
+     "/api/v3/games/0/remove_strategy"].each do |url|
+      it "returns an appropriate 404" do
+        post "#{url}.json", query
+        response.status.should eql(404)
+        response.body.should eql({error:
+          "the Game you were looking for could" +
+          " not be found"}.to_json)
+      end
     end
   end
 

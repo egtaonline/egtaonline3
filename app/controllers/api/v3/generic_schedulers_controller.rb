@@ -1,4 +1,4 @@
-class Api::V3::GenericSchedulersController < Api::V3::BaseController
+class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   include Api::V3::RoleManipulator
 
   before_filter :find_object, only: [:show, :update, :destroy, :add_profile,
@@ -7,11 +7,6 @@ class Api::V3::GenericSchedulersController < Api::V3::BaseController
 
   def index
     render json: {generic_schedulers: GenericScheduler.all}, status: 200
-  end
-
-  def show
-    render json: GenericSchedulerPresenter.new(@object).to_json(
-      granularity: params[:granularity]), status: 200
   end
 
   def create
