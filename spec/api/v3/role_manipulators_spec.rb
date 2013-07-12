@@ -26,9 +26,9 @@ describe 'RoleManipulators' do
         let(:url){ "/api/v3/#{described_class.to_s.tableize}/" +
           "#{object.id}/add_role" }
         context 'but the role does not exist on the simulator' do
-          it "returns an appropriate 424" do
+          it "returns an appropriate 422" do
             post "#{url}.json", query
-            response.status.should eql(424)
+            response.status.should eql(422)
             response.body.should eql({error:
               "the Role you wished to add was not found on the" +
               " #{described_class}'s Simulator"}.to_json)
@@ -73,7 +73,7 @@ describe 'RoleManipulators' do
             " not be found"}.to_json)
         end
       end
-      context 'when the game exists' do
+      context "when the #{described_class} exists" do
         let(:url){ "/api/v3/#{described_class.to_s.tableize}/" +
           "#{object.id}/remove_role" }
 

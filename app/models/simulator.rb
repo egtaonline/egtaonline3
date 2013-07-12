@@ -49,8 +49,10 @@ class Simulator < ActiveRecord::Base
   end
 
   def add_role(role)
-    self.role_configuration[role] ||= []
-    self.save!
+    if role =~ /\A\w+\z/
+      self.role_configuration[role] ||= []
+      self.save!
+    end
   end
 
   def remove_role(role)
