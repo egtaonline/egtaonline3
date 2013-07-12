@@ -6,7 +6,7 @@ class GamePresenter
   def to_json(options={})
     case options[:granularity]
     when "structure"
-      structure
+      @game.to_json
     when "full"
       DB.select_value(full)
     when "observations"

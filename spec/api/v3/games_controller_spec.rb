@@ -151,35 +151,6 @@ describe 'GamesController' do
     end
   end
 
-  describe 'POST /api/v3/games/:id/remove_role' do
-    let(:url){"/api/v3/games/1/remove_role"}
-    let(:query){ { auth_token: token, role: role } }
-
-    context 'when the game does not exist' do
-      it "returns an appropriate 404" do
-        post "#{url}.json", query
-        response.status.should eql(404)
-        response.body.should eql({error:
-          "the Game you were looking for could" +
-          " not be found"}.to_json)
-      end
-    end
-    context 'when the game exists' do
-      let!(:game){ FactoryGirl.create(:game, id: 1) }
-
-      before do
-        game.simulator.add_role(role)
-        game.add_role(role, game.size)
-      end
-
-      it 'returns a 204 and removes the role from the game' do
-        post "#{url}.json", query
-        response.status.should eql(204)
-        game.roles.where(name: role).count.should == 0
-      end
-    end
-  end
-
   describe 'GET /api/v3/games/:id' do
     let!(:game){ FactoryGirl.create(:game, id: 1) }
     let(:url){ '/api/v3/games/1' }

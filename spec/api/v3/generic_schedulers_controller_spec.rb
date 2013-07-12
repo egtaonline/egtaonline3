@@ -63,13 +63,122 @@ describe 'GenericSchedulersController' do
       end
     end
   end
-  # remove_profile_api_v3_generic_scheduler POST   /api/v3/generic_schedulers/:id/remove_profile(.:format)           api/v3/generic_schedulers#remove_profile
-  #       add_role_api_v3_generic_scheduler POST   /api/v3/generic_schedulers/:id/add_role(.:format)                 api/v3/generic_schedulers#add_role
-  #    remove_role_api_v3_generic_scheduler POST   /api/v3/generic_schedulers/:id/remove_role(.:format)              api/v3/generic_schedulers#remove_role
-  #               api_v3_generic_schedulers GET    /api/v3/generic_schedulers(.:format)                              api/v3/generic_schedulers#index
-  #                                         POST   /api/v3/generic_schedulers(.:format)                              api/v3/generic_schedulers#create
-  #                api_v3_generic_scheduler GET    /api/v3/generic_schedulers/:id(.:format)                          api/v3/generic_schedulers#show
-  #                                         PATCH  /api/v3/generic_schedulers/:id(.:format)                          api/v3/generic_schedulers#update
-  #                                         PUT    /api/v3/generic_schedulers/:id(.:format)                          api/v3/generic_schedulers#update
-  #                                         DELETE /api/v3/generic_schedulers/:id(.:format)
+
+  describe 'POST /api/v3/generic_schedulers/:id/remove_profile' do
+    let(:url){ '/api/v3/generic_schedulers/1/remove_profile' }
+    let(:query){ { auth_token: token, profile_id: 1 } }
+
+    context 'when the scheduler does not exist' do
+      it "returns an appropriate 404" do
+        post "#{url}.json", query
+        response.status.should eql(404)
+        response.body.should eql({error:
+          "the GenericScheduler you were looking for could" +
+          " not be found"}.to_json)
+      end
+    end
+
+    context 'when the scheduler does exist' do
+      let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+
+      before do
+        scheduler.simulator.add_strategy('All', 'A')
+        scheduler.simulator.add_strategy('All', 'B')
+        scheduler.add_role('All', 2)
+        @to_be_destroyed = scheduler.add_profile('All: 2 A')
+        @not_destroyed = scheduler.add_profile('All: 2 B')
+      end
+
+      it 'only destroys the SchedulingRequirement of the requested Profile' do
+        post "#{url}.json", auth_token: token, profile_id: @to_be_destroyed.id
+        response.status.should eql(204)
+        Profile.count.should == 2
+        scheduler.scheduling_requirements.count.should == 1
+        scheduler.scheduling_requirements.first.profile.should == @not_destroyed
+      end
+    end
+  end
+
+  describe 'GET /api/v3/generic_schedulers' do
+    let!(:scheduler){ FactoryGirl.create(:generic_scheduler) }
+    let!(:scheduler2){ FactoryGirl.create(:generic_scheduler) }
+    let(:url){ '/api/v3/generic_schedulers' }
+
+    it 'returns summary info for the available schedulers' do
+      get "#{url}.json", auth_token: token
+      response.status.should == 200
+      response.body.should == { generic_schedulers: [scheduler, scheduler2]
+        }.to_json
+    end
+  end
+
+  describe 'POST /api/v3/generic_schedulers' do
+    let(:url){ '/api/v3/generic_schedulers' }
+    let(:simulator){ FactoryGirl.create(:simulator) }
+
+    context "when everything is present as expected" do
+      it "responds with the new scheduler" do
+        post "#{url}.json", auth_token: token, scheduler: {
+          simulator_id: simulator.id, name: "test", active: true,
+          process_memory: 1000, size: 4, time_per_observation: 120,
+          observations_per_simulation: 30, nodes: 1,
+          default_observation_requirement: 30, configuration: { "A" => "B" }}
+        scheduler = GenericScheduler.last
+        scheduler.simulator.should == simulator
+        scheduler.simulator_instance.configuration.should == { "A" => "B" }
+        response.status.should eql(201)
+        response.body.should eql(scheduler.to_json)
+      end
+    end
+
+    context "when there are errors" do
+      it "responds with those errors" do
+        post "#{url}.json", auth_token: token, scheduler: {
+          simulator_id: simulator.id, name: "test", active: true,
+          size: 4, time_per_observation: 120,
+          observations_per_simulation: 30, nodes: 1,
+          default_observation_requirement: 30, configuration: { "A" => "B" }}
+        response.status.should eql(422)
+        errors = {"errors" => {"process_memory" =>
+          ["can't be blank","is not a number"]}}.to_json
+        response.body.should eql(errors)
+      end
+    end
+  end
+
+  describe 'GET /api/v3/generic_schedulers/:id' do
+    let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+    let(:url){ '/api/v3/generic_schedulers/1' }
+
+    it 'returns the appropriate json from a GenericSchedulerPresenter' do
+      get "#{url}.json", auth_token: token, granularity: 'summary'
+      response.status.should == 200
+      response.body.should == GenericSchedulerPresenter.new(scheduler).to_json(
+        granularity: 'summary')
+    end
+  end
+
+  describe 'PUT /api/v3/generic_schedulers/:id' do
+    let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+    let(:url) { "/api/v3/generic_schedulers/1" }
+
+    it "updates normally" do
+      put "#{url}.json", :auth_token => token, :scheduler => {
+        time_per_observation: 60}
+      scheduler.reload
+      scheduler.time_per_observation.should eql(60)
+      response.status.should eql(204)
+    end
+  end
+
+  describe 'DELETE /api/v3/generic_schedulers/:id' do
+    let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+    let(:url) { "/api/v3/generic_schedulers/1" }
+
+    it 'deletes the scheduler' do
+      delete "#{url}.json", :auth_token => token
+      Scheduler.count.should == 0
+      response.status.should eql(204)
+    end
+  end
 end

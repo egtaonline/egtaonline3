@@ -1,2 +1,5 @@
 == API Changes
 1. 'sample_count' has been replaced by 'count' for the add_profile method of GenericSchedulers
+2. time_per_sample has been replaced with time_per_observation
+3. samples_per_simulation has been replaced with observations_per_simulation
+4. default_samples has been replaced with default_observation_requirement

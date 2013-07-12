@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'BaseController', type: :api do
+describe 'BaseController' do
   let(:user) { FactoryGirl.create(:approved_user) }
   let(:token) { user.authentication_token }
 

@@ -1,5 +1,7 @@
 class Api::V3::GamesController < Api::V3::BaseController
-  before_filter :find_object, only: [:show, :edit, :add_strategy,
+  include Api::V3::RoleManipulator
+
+  before_filter :find_object, only: [:show, :add_strategy,
     :remove_strategy, :add_role, :remove_role]
   before_filter :find_role, only: [:add_strategy, :remove_strategy]
   before_filter :find_strategy, only: [:add_strategy]
@@ -14,16 +16,6 @@ class Api::V3::GamesController < Api::V3::BaseController
       granularity: params[:granularity]), status: 200
   end
 
-  def add_role
-    role = @object.add_role(params[:role], params[:count])
-    respond_with(role, status: (role.valid? ? 204 : 422), location: nil)
-  end
-
-  def remove_role
-    @object.remove_role(params[:role])
-    render json: nil, status: 204
-  end
-
   def add_strategy
     @object.add_strategy(params[:role], params[:strategy])
     render json: nil, status: 204
@@ -35,13 +27,6 @@ class Api::V3::GamesController < Api::V3::BaseController
   end
 
   private
-
-  def role_exists
-    unless @object.simulator.role_configuration[params[:role]]
-      respond_with({ error: "the Role you wished to add was not found" +
-        " on the Game's Simulator"}, status: 424, location: nil)
-    end
-  end
 
   def find_role
     @role = @object.roles.find_by(name: params[:role])

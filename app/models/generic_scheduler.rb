@@ -26,4 +26,8 @@ class GenericScheduler < Scheduler
     end
     profile
   end
+
+  def remove_profile_by_id(profile_id)
+    scheduling_requirements.where(profile_id: profile_id).destroy_all
+  end
 end
