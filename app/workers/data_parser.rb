@@ -1,5 +1,6 @@
 class DataParser
   include Sidekiq::Worker
+  sidekiq_options queue: 'high_concurrency'
 
   def perform(simulation_id, location)
     simulation = Simulation.find(simulation_id)

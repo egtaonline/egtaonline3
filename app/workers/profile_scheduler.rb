@@ -1,6 +1,7 @@
 class ProfileScheduler
   include Sidekiq::Worker
-  
+  sidekiq_options queue: 'high_concurrency'
+
   def perform(profile_id)
     profile = Profile.find(profile_id)
     unless profile.scheduled?

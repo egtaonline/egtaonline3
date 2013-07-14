@@ -1,5 +1,6 @@
 class SimulationQueuer
   include Sidekiq::Worker
+  sidekiq_options queue: 'backend'
 
   def perform
     to_be_queued = Simulation.queueable.to_a

@@ -11,7 +11,6 @@ class Simulator < ActiveRecord::Base
 
   def setup_simulator
     FileUtils.rm_rf location
-
     begin
       system("unzip -uqq #{source.path} -d #{location}")
     rescue

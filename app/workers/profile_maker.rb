@@ -1,5 +1,6 @@
 class ProfileMaker
   include Sidekiq::Worker
+  sidekiq_options queue: 'profile_space'
 
   def perform(scheduler_id, assignment)
     scheduler = Scheduler.find(scheduler_id)

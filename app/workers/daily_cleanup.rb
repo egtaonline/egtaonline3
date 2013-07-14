@@ -1,5 +1,6 @@
 class DailyCleanup
   include Sidekiq::Worker
+  sidekiq_options queue: 'backend'
 
   def perform
     Simulation.stale.destroy_all

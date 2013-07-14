@@ -1,4 +1,5 @@
 Egtaonline3::Application.routes.draw do
+  devise_for :users, :controllers => { :registrations => "registrations" }
 
   namespace :api do
     namespace :v3 do
@@ -65,7 +66,6 @@ Egtaonline3::Application.routes.draw do
   resources :profiles, only: :show
   resources :simulations, only: [:index, :show]
 
-  devise_for :users
 
   resources :connection, only: [:new, :create]
   root to: 'high_voltage/pages#show', id: 'home'
