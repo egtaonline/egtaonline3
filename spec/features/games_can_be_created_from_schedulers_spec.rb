@@ -32,5 +32,6 @@ describe 'Games can be created from schedulers', type: :feature do
 end
 
 def json_representation(profile)
-  "{\"id\":#{profile.id},\"symmetry_groups\":[#{profile.symmetry_groups.collect{ |s| "{\"id\":#{s.id},\"role\":\"#{s.role}\",\"strategy\":\"#{s.strategy}\",\"count\":#{s.count},\"payoff\":100,\"payoff_sd\":#{s.count > 1 ? 0 : 'null'}}" }.join(',')}]}"
+  profile.reload
+ "{\"id\":#{profile.id},\"observations_count\":#{profile.observations_count},\"symmetry_groups\":[#{profile.symmetry_groups.collect{ |s| "{\"id\":#{s.id},\"role\":\"#{s.role}\",\"strategy\":\"#{s.strategy}\",\"count\":#{s.count},\"payoff\":100,\"payoff_sd\":#{s.count > 1 ? 0 : 'null'}}" }.join(',')}]}"
 end

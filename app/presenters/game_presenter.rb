@@ -39,7 +39,7 @@ class GamePresenter
       (
         select array_to_json(array_agg(profile))
         from (
-          select profiles.id, (
+          select profiles.id, observations_count, (
             select array_to_json(array_agg(symmetry_group))
             from (
               select symmetry_groups.id, role, strategy, count, avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd
