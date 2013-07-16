@@ -31,4 +31,15 @@ feature 'user authentication:' do
     click_button 'Sign in'
     page.should have_content 'Your account has not been verified by the admin.'
   end
+
+  scenario 'a confirmed user tries to sign in' do
+    user = FactoryGirl.create(:approved_user)
+    visit '/users/sign_in'
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: user.password
+    click_button 'Sign in'
+    page.should have_content 'Signed in successfully.'
+    visit '/simulators'
+    current_path.should == '/simulators'
+  end
 end

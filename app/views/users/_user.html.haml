@@ -1,0 +1,5 @@
+%tr
+  %td= user.email
+  = form_for user do |f|
+    %td= f.hidden_field :approved, value: true
+    %td= submit_tag "Approved", class: 'btn btn-primary'

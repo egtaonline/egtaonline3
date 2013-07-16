@@ -4,7 +4,6 @@ class Connection
   end
 
   def authenticate(options)
-    puts options
     begin
       @flux_proxy.authenticate(options[:uniqname], options[:verification_number], options[:password])
     rescue Exception => e
