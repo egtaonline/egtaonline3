@@ -1,0 +1,2 @@
+class ReductionSchedulersController < SchedulersController
+end

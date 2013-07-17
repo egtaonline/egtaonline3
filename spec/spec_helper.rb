@@ -51,3 +51,7 @@ end
 
 SCHEDULER_CLASSES = [GameScheduler, DeviationScheduler, DprDeviationScheduler, DprScheduler, GenericScheduler, HierarchicalDeviationScheduler, HierarchicalScheduler]
 NONGENERIC_SCHEDULER_CLASSES = SCHEDULER_CLASSES-[GenericScheduler]
+REDUCTION_SCHEDULER_CLASSES = [DprScheduler, DprDeviationScheduler,
+  HierarchicalScheduler, HierarchicalDeviationScheduler]
+DEVIATION_SCHEDULER_CLASSES = [DeviationScheduler,
+  HierarchicalDeviationScheduler, DprDeviationScheduler]

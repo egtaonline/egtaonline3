@@ -12,5 +12,8 @@ class Role < ActiveRecord::Base
       errors.add(:count,
         'can\'t be larger than the owner\'s unassigned player count')
     end
+    unless reduced_count <= count
+      errors.add(:reduced_count, 'can\'t be larger than count')
+    end
   end
 end

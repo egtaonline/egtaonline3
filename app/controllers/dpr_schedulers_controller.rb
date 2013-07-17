@@ -1,3 +1,3 @@
-class DprSchedulersController < SchedulersController
+class DprSchedulersController < ReductionSchedulersController
 
 end

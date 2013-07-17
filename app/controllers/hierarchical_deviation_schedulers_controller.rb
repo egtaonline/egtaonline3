@@ -1,2 +1,2 @@
-class HierarchicalDeviationSchedulersController < SchedulersController
+class HierarchicalDeviationSchedulersController < ReductionSchedulersController
 end

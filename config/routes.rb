@@ -34,7 +34,7 @@ Egtaonline3::Application.routes.draw do
     end
   end
 
-  resources :schedulers, only: [:index, :destroy] do
+  resources :schedulers do
     collection do
       post :update_configuration
     end
@@ -43,6 +43,7 @@ Egtaonline3::Application.routes.draw do
     end
     resources :roles, only: [:create, :destroy] do
       resources :strategies, only: [:create, :destroy]
+      resources :deviating_strategies, only: [:create, :destroy]
     end
   end
 
@@ -52,17 +53,9 @@ Egtaonline3::Application.routes.draw do
     end
   end
 
-  resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers do
-    collection do
-      post :update_configuration
-    end
-  end
-
-  resources :deviation_schedulers, :hierarchical_deviation_schedulers, :dpr_deviation_schedulers do
-    collection do
-      post :update_configuration
-    end
-  end
+  resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers,
+    :deviation_schedulers, :hierarchical_deviation_schedulers,
+    :dpr_deviation_schedulers, except: :delete
 
   resources :profiles, only: :show
   resources :simulations, only: [:index, :show]

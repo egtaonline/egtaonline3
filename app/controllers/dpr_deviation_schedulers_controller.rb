@@ -1,2 +1,2 @@
-class DprDeviationSchedulersController < SchedulersController
+class DprDeviationSchedulersController < ReductionSchedulersController
 end

@@ -1,0 +1,12 @@
+%tr
+  %td= deviating_role.name
+  %td= deviating_role.count
+  %td= deviating_role.reduced_count
+  %td
+    %table
+      =render partial: "/deviation_schedulers/deviating_strategy", collection: deviating_role.deviating_strategies, locals: {role: deviating_role.name}
+      -if role_owner.available_strategies(deviating_role.name) != []
+        =form_tag role_owner_path + "/roles/#{deviating_role.name}/deviating_strategies", method: :post do
+          %tr
+            %td= select_tag "#{deviating_role.name}_strategy", options_for_select(role_owner.available_strategies(deviating_role.name))
+            %td= submit_tag "Add Deviating Strategy", class: 'btn btn-mini btn-info'

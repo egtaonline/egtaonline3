@@ -59,7 +59,7 @@ feature 'Users can make schedulers to schedule profiles' do
     scheduler = FactoryGirl.create(:game_scheduler, :with_profiles)
     simulator_instance = scheduler.simulator_instance
     assignment = simulator_instance.profiles.last.assignment
-    visit "/game_schedulers/#{scheduler.id}/edit"
+    visit "/schedulers/#{scheduler.id}/edit"
     fill_in 'Parm2', with: 23
     click_button 'Update Scheduler'
     page.should have_content('Parm2: 23')

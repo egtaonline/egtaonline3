@@ -68,36 +68,32 @@ describe "GameSchedulers" do
   describe HierarchicalScheduler, type: :feature do
     it_behaves_like "a game scheduler on requests" do
       let!(:game_scheduler){FactoryGirl.create(:hierarchical_scheduler)}
-      let!(:klass){ "HierarchicalScheduler" }
     end
   end
 
   describe DeviationScheduler, type: :feature do
     it_behaves_like "a game scheduler on requests" do
       let!(:game_scheduler){FactoryGirl.create(:deviation_scheduler)}
-      let!(:klass){ "DeviationScheduler" }
     end
   end
 
   describe HierarchicalDeviationScheduler, type: :feature do
     it_behaves_like "a game scheduler on requests" do
-      let!(:game_scheduler){FactoryGirl.create(:hierarchical_deviation_scheduler)}
-      let!(:klass){ "HierarchicalDeviationScheduler" }
+      let!(:game_scheduler) do
+        FactoryGirl.create(:hierarchical_deviation_scheduler)
+      end
     end
   end
 
-  context "GET /game_schedulers", type: :feature do
-    before do
-      sign_in
+  describe DprScheduler, type: :feature do
+    it_behaves_like "a game scheduler on requests" do
+      let!(:game_scheduler) { FactoryGirl.create(:dpr_scheduler) }
     end
+  end
 
-    it "should shows only game schedulers" do
-      s1 = FactoryGirl.create(:generic_scheduler)
-      s2 = FactoryGirl.create(:game_scheduler)
-      visit game_schedulers_path
-      page.should have_content("Game Schedulers")
-      page.should_not have_content(s1.name)
-      page.should have_content(s2.name)
+  describe DprDeviationScheduler, type: :feature do
+    it_behaves_like "a game scheduler on requests" do
+      let!(:game_scheduler) { FactoryGirl.create(:dpr_deviation_scheduler) }
     end
   end
 end
