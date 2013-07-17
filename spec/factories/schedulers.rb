@@ -42,6 +42,14 @@ FactoryGirl.define do
     end
 
     factory :generic_scheduler, class: GenericScheduler do
+      trait :with_profiles do
+        simulator_instance { FactoryGirl.create(:simulator_instance, :with_simulator_with_strategies) }
+        after(:create) do |instance|
+          instance.add_role("All", 2)
+          instance.add_profile("All: 2 A")
+        end
+      end
+
       trait :with_sampled_profiles do
         simulator_instance { FactoryGirl.create(:simulator_instance, :with_simulator_with_strategies) }
         after(:create) do |instance|

@@ -2,63 +2,17 @@ require 'spec_helper'
 
 shared_examples 'a pattern-based scheduler class' do
   let(:scheduler){ FactoryGirl.create(described_class.to_s.underscore.to_sym) }
-  
+
   it_behaves_like "a scheduler class"
-  
-  context 'when modifying role configuration with' do
-    before do
-      ProfileAssociator.should_receive(:perform_async)
-    end
 
-    describe '#remove_role' do
-      it 'triggers profile association' do
-        scheduler.roles.create!(name: "All", count: 2, reduced_count: 2)
-        scheduler.remove_role("All")
-      end
-    end
-
-    describe '#add_strategy' do
-      it 'triggers profile association' do
-        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2)
-        scheduler.add_strategy('All', 'A')
-      end
-    end
-
-    describe '#remove_strategy' do
-      it 'triggers profile association' do
-        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A'])
-        scheduler.remove_strategy('All', 'A')
-      end
-    end
-  end
-end
-
-shared_examples 'a scheduler class' do
-  let(:scheduler){ FactoryGirl.create(described_class.to_s.underscore.to_sym) }
-
-  describe '#add_role' do
-    it 'adds the role to role_configuration' do
-      scheduler.add_role('All', 2)
-      scheduler.roles.first.name.should == 'All'
-      scheduler.roles.first.count.should == 2
-      scheduler.roles.first.reduced_count.should == 2
-      scheduler.roles.first.strategies.should == []
-    end
+  before do
+    scheduler.simulator.update_attributes(role_configuration:
+      {'A' => ['A1', 'A2'], 'B' => ['B2']})
   end
 
   context 'stubbed out' do
     before do
       ProfileAssociator.stub(:perform_async)
-    end
-
-    describe '#remove_role' do
-      it "removes the role if present" do
-        scheduler.roles.create!(name: "All", 'count' => 2, 'reduced_count' => 2)
-        scheduler.remove_role("B")
-        scheduler.roles.count.should == 1
-        scheduler.remove_role("All")
-        scheduler.roles.count.should == 0
-      end
     end
 
     describe '#add_strategy' do
@@ -74,12 +28,91 @@ shared_examples 'a scheduler class' do
 
     describe '#remove_strategy' do
       it 'removes the specified strategy from the specified role if possible' do
-        scheduler.roles.create!(name: 'Role1', "count" => 1, "reduced_count" => 1, "strategies" => ['A', 'B'])
-        scheduler.roles.create!(name: 'Role2', "count" => 1, "reduced_count" => 1, "strategies" => ['A'])
-        scheduler.remove_strategy('Role1', 'A')
-        scheduler.remove_strategy('Role2', 'B')
-        scheduler.roles.where(name: 'Role1').first.strategies.should == ['B']
-        scheduler.roles.where(name: 'Role2').first.strategies.should == ['A']
+        scheduler.roles.create!(name: 'A', "count" => 1, "reduced_count" => 1, "strategies" => ['A1', 'A2'])
+        scheduler.roles.create!(name: 'B', "count" => 1, "reduced_count" => 1, "strategies" => ['B2'])
+        scheduler.remove_strategy('A', 'A1')
+        scheduler.remove_strategy('B', 'B1')
+        scheduler.roles.where(name: 'A').first.strategies.should == ['A2']
+        scheduler.roles.where(name: 'B').first.strategies.should == ['B2']
+      end
+    end
+
+    describe '#invalid_role_partition?' do
+      it 'returns true if there are no strategies on one of the roles' do
+        scheduler.add_role('A', 1)
+        scheduler.add_role('B', 1)
+        scheduler.add_strategy('A', 'A1')
+        scheduler.invalid_role_partition?.should == true
+      end
+
+      it 'returns false when all the players are assigned and each role has a strategy' do
+        scheduler.add_role('A', 1)
+        scheduler.add_role('B', 1)
+        scheduler.add_strategy('A', 'A1')
+        scheduler.add_strategy('B', 'B2')
+        scheduler.invalid_role_partition?.should == false
+      end
+    end
+  end
+
+  context 'when modifying role configuration with' do
+    before do
+      ProfileAssociator.should_receive(:perform_async)
+    end
+
+    describe '#remove_role' do
+      it 'triggers profile association' do
+        scheduler.roles.create!(name: "A", count: 2, reduced_count: 2)
+        scheduler.remove_role("A")
+      end
+    end
+
+    describe '#add_strategy' do
+      it 'triggers profile association' do
+        scheduler.roles.create!(name: "A", 'count' => 2, 'reduced_count' => 2)
+        scheduler.add_strategy('A', 'A1')
+      end
+    end
+
+    describe '#remove_strategy' do
+      it 'triggers profile association' do
+        scheduler.roles.create!(name: "A", 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A1'])
+        scheduler.remove_strategy('A', 'A1')
+      end
+    end
+  end
+end
+
+shared_examples 'a scheduler class' do
+  let(:scheduler){ FactoryGirl.create(described_class.to_s.underscore.to_sym) }
+
+  before do
+    scheduler.simulator.update_attributes(role_configuration:
+      {'A' => ['A1', 'A2'], 'B' => ['B2']})
+  end
+
+  describe '#add_role' do
+    it 'adds the role to role_configuration' do
+      scheduler.add_role('A', 2)
+      scheduler.roles.first.name.should == 'A'
+      scheduler.roles.first.count.should == 2
+      scheduler.roles.first.reduced_count.should == 2
+      scheduler.roles.first.strategies.should == []
+    end
+  end
+
+  context 'stubbed out' do
+    before do
+      ProfileAssociator.stub(:perform_async)
+    end
+
+    describe '#remove_role' do
+      it "removes the role if present" do
+        scheduler.roles.create!(name: "A", 'count' => 2, 'reduced_count' => 2)
+        scheduler.remove_role("B")
+        scheduler.roles.count.should == 1
+        scheduler.remove_role("A")
+        scheduler.roles.count.should == 0
       end
     end
 
@@ -87,21 +120,6 @@ shared_examples 'a scheduler class' do
       it 'returns true if the insufficient players have been assigned' do
         scheduler.add_role('A', 1)
         scheduler.invalid_role_partition?.should == true
-      end
-
-      it 'returns true if there are no strategies on one of the roles' do
-        scheduler.add_role('A', 1)
-        scheduler.add_role('B', 1)
-        scheduler.add_strategy('A', 'S1')
-        scheduler.invalid_role_partition?.should == true
-      end
-
-      it 'returns false when all the players are assigned and each role has a strategy' do
-        scheduler.add_role('A', 1)
-        scheduler.add_role('B', 1)
-        scheduler.add_strategy('A', 'S1')
-        scheduler.add_strategy('B', 'S2')
-        scheduler.invalid_role_partition?.should == false
       end
     end
   end
@@ -128,11 +146,8 @@ shared_examples 'a scheduler class' do
 
   describe '#available_strategies' do
     it "shows the strategies defined on the simulator for the role that aren't defined on the scheduler" do
-      simulator = scheduler.simulator_instance.simulator
-      simulator.role_configuration = { 'A' => [], 'B' => ['B1', 'B2'] }
-      simulator.save!
-      scheduler.roles.create!(name: 'B', 'count' => 2, 'reduced_count' => 2, 'strategies' => ['B2'])
-      scheduler.available_strategies('B').should == ['B1']
+      scheduler.roles.create!(name: 'A', 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A2'])
+      scheduler.available_strategies('A').should == ['A1']
     end
   end
 
@@ -184,6 +199,16 @@ end
 
 describe GenericScheduler do
   it_behaves_like "a scheduler class"
+
+  describe '#invalid_role_partition?' do
+    let(:scheduler){ FactoryGirl.create(:generic_scheduler) }
+
+    it 'returns false when all the players are assigned' do
+      scheduler.add_role('A', 1)
+      scheduler.add_role('B', 1)
+      scheduler.invalid_role_partition?.should == false
+    end
+  end
 end
 
 describe HierarchicalScheduler do

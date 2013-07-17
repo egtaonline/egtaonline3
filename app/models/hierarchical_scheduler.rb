@@ -1,4 +1,6 @@
 class HierarchicalScheduler < Scheduler
+  include PatternBasedScheduler
+
   def profile_space
     return [] if invalid_role_partition?
     reduced_assignments = SubgameCreator.subgame_assignments(roles)

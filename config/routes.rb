@@ -47,15 +47,9 @@ Egtaonline3::Application.routes.draw do
     end
   end
 
-  resources :generic_schedulers do
-    collection do
-      post :update_configuration
-    end
-  end
-
   resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers,
     :deviation_schedulers, :hierarchical_deviation_schedulers,
-    :dpr_deviation_schedulers, except: :delete
+    :dpr_deviation_schedulers, :generic_schedulers, except: :delete
 
   resources :profiles, only: :show
   resources :simulations, only: [:index, :show]

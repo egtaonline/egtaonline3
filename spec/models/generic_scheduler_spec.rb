@@ -42,4 +42,32 @@ describe GenericScheduler do
       end
     end
   end
+
+  describe '#remove_profile_by_id' do
+    let!(:profile) do
+      FactoryGirl.create(:profile,
+        simulator_instance: scheduler.simulator_instance,
+        assignment: 'R1: 1 B; R2: 1 D')
+    end
+    before do
+      scheduler.simulator.add_strategy('R1', 'A')
+      scheduler.simulator.add_strategy('R1', 'B')
+      scheduler.simulator.add_strategy('R2', 'C')
+      scheduler.simulator.add_strategy('R2', 'D')
+      scheduler.add_role('R1', 1)
+      scheduler.add_role('R2', 1)
+      scheduler.add_profile('R1: 1 A; R2: 1 C')
+      scheduler.add_profile('R1: 1 A; R2: 1 D')
+      scheduler.add_profile('R1: 1 B; R2: 1 D')
+    end
+
+    it 'removes the scheduling requirement and relevant strategies' do
+      scheduler.remove_profile_by_id(profile.id)
+      scheduler.reload
+      scheduler.scheduling_requirements.find_by(
+        profile_id: profile.id).should == nil
+      scheduler.roles.find_by(name: 'R1').strategies.should == ['A']
+      scheduler.roles.find_by(name: 'R2').strategies.should == ['C', 'D']
+    end
+  end
 end

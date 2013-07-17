@@ -3,7 +3,7 @@ class DeviatingStrategiesController < AuthenticatedController
   expose(:role){ params["role_id"] }
 
   def create
-    parent.add_deviating_strategy(role, params["#{role}_strategy"])
+    parent.add_deviating_strategy(role, params["deviating_#{role}_strategy"])
     respond_with(parent)
   end
 

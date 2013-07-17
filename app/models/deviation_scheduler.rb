@@ -1,4 +1,6 @@
 class DeviationScheduler < Scheduler
+  include PatternBasedScheduler
+
   def add_deviating_strategy(role_name, strategy)
     role = self.roles.where(name: role_name).first
     if role
@@ -7,7 +9,7 @@ class DeviationScheduler < Scheduler
       ProfileAssociator.perform_async(self.id)
     end
   end
-  
+
   def remove_deviating_strategy(role_name, strategy)
     role = self.roles.where(name: role_name).first
     if role && role.deviating_strategies.include?(strategy)
@@ -16,7 +18,7 @@ class DeviationScheduler < Scheduler
       ProfileAssociator.perform_async(self.id)
     end
   end
-  
+
   def profile_space
     return [] if invalid_role_partition?
     subgame_assignments = SubgameCreator.subgame_assignments(roles)

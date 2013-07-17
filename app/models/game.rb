@@ -27,4 +27,21 @@ class Game < ActiveRecord::Base
     Observation.joins(:profile).where("profiles.simulator_instance_id = ? AND profiles.assignment IN (?)",
                  simulator_instance_id, profile_space).count
   end
+
+  def add_strategy(role_name, strategy)
+    role = self.roles.where(name: role_name).first
+    if role
+      role.strategies += [strategy]
+      role.strategies.uniq!
+      role.save!
+    end
+  end
+
+  def remove_strategy(role_name, strategy)
+    role = self.roles.where(name: role_name).first
+    if role && role.strategies.include?(strategy)
+      role.strategies -= [strategy]
+      role.save!
+    end
+  end
 end

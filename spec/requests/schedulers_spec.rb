@@ -70,10 +70,26 @@ describe 'Schedulers' do
     end
   end
 
+  shared_examples "a scheduler on deletion" do
+    let(:klass){ described_class.to_s.tableize }
+
+    describe "DELETE /schedulers/:id", js: true, type: :feature do
+      let!(:scheduler) do
+        FactoryGirl.create(described_class.to_s.underscore.to_sym)
+      end
+      it "should shows only #{described_class}s" do
+        visit "/#{klass}"
+        click_on "Destroy"
+        Scheduler.count.should == 0
+      end
+    end
+  end
+
   SCHEDULER_CLASSES.each do |s_class|
     describe s_class do
       it_behaves_like "a scheduler on configuration manipulation"
       it_behaves_like "a scheduler on index pages"
+      it_behaves_like "a scheduler on deletion"
     end
   end
 end

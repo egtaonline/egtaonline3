@@ -8,5 +8,5 @@
       -if role_owner.available_strategies(deviating_role.name) != []
         =form_tag role_owner_path + "/roles/#{deviating_role.name}/deviating_strategies", method: :post do
           %tr
-            %td= select_tag "#{deviating_role.name}_strategy", options_for_select(role_owner.available_strategies(deviating_role.name))
+            %td= select_tag "deviating_#{deviating_role.name}_strategy", options_for_select(role_owner.available_strategies(deviating_role.name))
             %td= submit_tag "Add Deviating Strategy", class: 'btn btn-mini btn-info'
