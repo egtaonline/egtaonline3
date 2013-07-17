@@ -57,4 +57,9 @@ Egtaonline3::Application.routes.draw do
 
   resources :connection, only: [:new, :create]
   root to: 'high_voltage/pages#show', id: 'home'
+
+  require 'sidekiq/web'
+  authenticate :user do
+    mount Sidekiq::Web, at: "/background_workers"
+  end
 end
