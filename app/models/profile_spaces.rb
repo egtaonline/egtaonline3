@@ -1,4 +1,8 @@
 module ProfileSpaces
+  def invalid_role_partition?
+    roles.collect{ |role| role.count }.reduce(:+) != size
+  end
+
   def available_roles
     simulator.role_configuration.keys - roles.collect{ |r| r.name }
   end

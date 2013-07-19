@@ -5,6 +5,7 @@ class Profile < ActiveRecord::Base
   validate :profile_matches_simulator
 
   belongs_to :simulator_instance, inverse_of: :profiles
+  validates_presence_of :simulator_instance
   has_many :simulations, inverse_of: :profile, dependent: :destroy
   has_many :scheduling_requirements, dependent: :destroy, inverse_of: :profile
   has_many :symmetry_groups, dependent: :destroy, inverse_of: :profile
@@ -52,5 +53,9 @@ class Profile < ActiveRecord::Base
 
   def scheduled?
     simulations.scheduled.count > 0
+  end
+
+  def add_observation(data)
+    Observation.create_from_validated_data(self, data)
   end
 end

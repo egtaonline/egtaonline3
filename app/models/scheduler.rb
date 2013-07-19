@@ -2,7 +2,7 @@ class Scheduler < ActiveRecord::Base
   include ProfileSpaces
 
   validates :name, presence: true, uniqueness: true
-  validates_presence_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation
+  validates_presence_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation, :simulator_instance
   validates_numericality_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation,
                             :default_observation_requirement, only_integer: true, greater_than: 0
 
@@ -24,10 +24,6 @@ class Scheduler < ActiveRecord::Base
   def remove_role(role_name)
     super
     update_scheduling_requirements
-  end
-
-  def invalid_role_partition?
-    roles.collect{ |role| role.count }.reduce(:+) != size
   end
 
   def schedule_profile(profile, required_count)

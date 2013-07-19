@@ -57,26 +57,10 @@ describe ObservationProcessor do
           invalid_path).and_return(nil)
         ObservationValidator.should_receive(:validate).with(profile,
           valid_path).and_return(data)
-        symmetry_groups.should_receive(:find_by).with(role: 'Role1',
-          strategy: 'Strategy1').and_return(double(id: 23))
-        symmetry_groups.should_receive(:find_by).with(role: 'Role2',
-          strategy: 'Strategy2').and_return(double(id: 24))
       end
 
       it 'creates the records for the data and completes the simulation' do
-        profile.should_receive(:observations).and_return(observations)
-        observations.should_receive(:create).with(
-          features: data["features"]).and_return(obs)
-        obs.should_receive(:players).exactly(3).times.and_return(players)
-        players.should_receive(:create).with(symmetry_group_id: 23,
-          features: data["symmetry_groups"].first["players"].first["features"],
-          payoff: data["symmetry_groups"].first["players"].first["payoff"])
-        players.should_receive(:create).with(symmetry_group_id: 24,
-            features: nil,
-            payoff: data["symmetry_groups"].last["players"].first["payoff"])
-        players.should_receive(:create).with(symmetry_group_id: 24,
-            features: nil,
-            payoff: data["symmetry_groups"].last["players"].last["payoff"])
+       profile.should_receive(:add_observation).with(data)
         simulation.should_receive(:finish)
       end
     end

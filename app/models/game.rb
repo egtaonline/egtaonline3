@@ -4,6 +4,7 @@ class Game < ActiveRecord::Base
   validates_presence_of :name, :size
 
   belongs_to :simulator_instance, inverse_of: :games
+  validates_presence_of :simulator_instance
   has_many :roles, as: :role_owner
   delegate :simulator_fullname, to: :simulator_instance
   delegate :configuration, to: :simulator_instance
@@ -11,16 +12,17 @@ class Game < ActiveRecord::Base
 
   def profile_space
     return [] if invalid_role_partition?
-    AssignmentFormatter.format_assignments(SubgameCreator.subgame_assignments(roles))
+    AssignmentFormatter.format_assignments(
+      SubgameCreator.subgame_assignments(roles))
   end
 
   def invalid_role_partition?
-    (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
+    super || roles.detect{ |r| r.strategies.count == 0 } != nil
   end
 
   def profile_count
-    Profile.where("simulator_instance_id = ? AND assignment IN (?) AND observations_count > 0",
-                  simulator_instance_id, profile_space).count
+    Profile.where("simulator_instance_id = ? AND assignment IN (?) AND" +
+      " observations_count > 0", simulator_instance_id, profile_space).count
   end
 
   def observation_count

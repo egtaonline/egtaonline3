@@ -5,6 +5,8 @@ class Simulation < ActiveRecord::Base
   belongs_to :profile, inverse_of: :simulations
   belongs_to :scheduler, inverse_of: :simulations
 
+  validates_presence_of :profile, :scheduler
+
   delegate :assignment, to: :profile
   delegate :simulator_fullname, to: :profile
 

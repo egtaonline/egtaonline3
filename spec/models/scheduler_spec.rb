@@ -12,7 +12,7 @@ shared_examples 'a pattern-based scheduler class' do
 
   context 'stubbed out' do
     before do
-      ProfileAssociator.stub(:perform_async)
+      scheduler.stub(:update_scheduling_requirements)
     end
 
     describe '#add_strategy' do
@@ -57,7 +57,7 @@ shared_examples 'a pattern-based scheduler class' do
 
   context 'when modifying role configuration with' do
     before do
-      ProfileAssociator.should_receive(:perform_async)
+      scheduler.should_receive(:update_scheduling_requirements)
     end
 
     describe '#remove_role' do
@@ -103,7 +103,7 @@ shared_examples 'a scheduler class' do
 
   context 'stubbed out' do
     before do
-      ProfileAssociator.stub(:perform_async)
+      scheduler.stub(:update_scheduling_requirements)
     end
 
     describe '#remove_role' do

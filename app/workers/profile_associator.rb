@@ -9,7 +9,9 @@ class ProfileAssociator
       ProfileMaker.perform_async(scheduler_id, assignment)
     end
     profile_space = ["EMPTY-SPACE"] if profile_space == []
-    SchedulingRequirement.includes(:profile).where("scheduler_id = ? AND (assignment NOT IN (?) OR simulator_instance_id != ?)",
-                                                scheduler_id, profile_space, scheduler.simulator_instance_id).references(:profile).destroy_all
+    SchedulingRequirement.includes(:profile).where("scheduler_id = ? AND" +
+      " (assignment NOT IN (?) OR simulator_instance_id != ?)", scheduler_id,
+      profile_space,
+      scheduler.simulator_instance_id).references(:profile).destroy_all
   end
 end

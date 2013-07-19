@@ -1,5 +1,6 @@
 class Role < ActiveRecord::Base
   belongs_to :role_owner, :polymorphic => true
+  validates_presence_of :role_owner
   validates :count, numericality: { only_integer: true }, presence: true
   validate :count_is_acceptable
   validates :name, presence: true, uniqueness: {

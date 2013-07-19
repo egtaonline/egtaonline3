@@ -13,10 +13,10 @@ describe Profile do
       SymmetryGroup.where(role: 'B', strategy: 'S3', count: 3,
         profile_id: profile.id).count.should == 1
     end
-  end
 
-  it 'sets the size correctly' do
-    profile.size.should == 6
+    it 'sets the size correctly' do
+      profile.size.should == 6
+    end
   end
 
   it 'triggers ProfileScheduler' do
