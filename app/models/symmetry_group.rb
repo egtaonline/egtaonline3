@@ -10,6 +10,7 @@ class SymmetryGroup < ActiveRecord::Base
   end
 
   def payoff_sd
-    players.reorder('').select('stddev_samp(payoff) as payoff_sd').first['payoff_sd']
+    players.reorder('').select(
+      'stddev_samp(payoff) as payoff_sd').first['payoff_sd']
   end
 end

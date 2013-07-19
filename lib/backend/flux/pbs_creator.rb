@@ -5,7 +5,7 @@ class PbsCreator
 
   def prepare(simulation)
     scheduler = simulation.scheduler
-    allocation = simulation.flux ? 'wellman_flux' : 'engin_flux'
+    allocation = simulation.qos == 'flux' ? 'wellman_flux' : 'engin_flux'
     queue =  'flux'
     simulator = simulation.scheduler.simulator
     root_path = "#{@simulators_path}/#{simulator.fullname}/#{simulator.name}"

@@ -11,11 +11,11 @@ class Simulation < ActiveRecord::Base
   delegate :simulator_fullname, to: :profile
 
   def self.active_on_flux
-    active.where(flux: true)
+    active.where(qos: 'flux')
   end
 
   def self.active_on_other
-    active.where(flux: false)
+    active.where.not(qos: 'flux')
   end
 
   def self.active
@@ -31,17 +31,21 @@ class Simulation < ActiveRecord::Base
   end
 
   def process(location)
-    self.update_attributes(state: 'processing')
-    DataParser.perform_async(id, location)
+    if ['queued', 'running'].include?(state)
+      self.update_attributes(state: 'processing')
+      DataParser.perform_async(id, location)
+    end
   end
 
   def finish
-    self.update_attributes(state: 'complete')
-    requeue
+    if state == 'processing'
+      self.update_attributes(state: 'complete')
+      requeue
+    end
   end
 
   def queue_as(jid)
-    self.update_attributes(job_id: jid, state: 'queued')
+    self.update_attributes(job_id: jid, state: 'queued') if state == 'pending'
   end
 
   def fail(message)

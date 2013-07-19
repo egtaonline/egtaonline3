@@ -2,8 +2,11 @@ FactoryGirl.define do
   factory :simulation do
     profile
     state 'pending'
-    qos 'flux'
+    qos 'cac'
     size 5
-    scheduler { FactoryGirl.create(:game_scheduler, simulator_instance: profile.simulator_instance) }
+    scheduler do
+      FactoryGirl.create(:game_scheduler,
+        simulator_instance: profile.simulator_instance)
+    end
   end
 end

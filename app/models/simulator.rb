@@ -17,15 +17,18 @@ class Simulator < ActiveRecord::Base
       errors.add(:source, 'Upload could not be unzipped')
       return
     end
-
+    if !File.exists?("#{location}/#{name}/script/batch")
+      errors.add(:source, "did not find script/batch within" +
+        " #{location}/#{name}")
+    end
     if File.exists?("#{location}/#{name}/defaults.json")
       begin
         self.configuration = MultiJson.load(File.new("#{location}/#{name}/defaults.json"))["configuration"]
       rescue MultiJSON::LoadError
-        errors.add(:source, 'The defaults.json file was malformed.')
+        errors.add(:source, 'defaults.json file is malformed.')
       end
     else
-      errors.add(:source, "Could not find defaults.json in folder #{name}.")
+      errors.add(:source, "did not have defaults.json in folder #{name}")
     end
     if errors.messages.empty?
       Backend.prepare_simulator(self)

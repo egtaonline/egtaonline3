@@ -17,8 +17,8 @@ describe FluxPolicy do
         FluxPolicy::Simulation.should_receive(:active_on_other).and_return([])
       end
 
-      it 'updates the state of the simulation to flux and returns the simulation' do
-        simulation.should_receive(:update_attributes).with(flux: true)
+      it 'updates qos of the simulation to flux and returns the simulation' do
+        simulation.should_receive(:update_attributes).with(qos: 'flux')
         flux_policy.set_queue(simulation).should == simulation
       end
     end
@@ -30,7 +30,7 @@ describe FluxPolicy do
         FluxPolicy::Simulation.should_receive(:active_on_other).and_return([])
       end
 
-      it 'updates the state of the simulation to flux and returns the simulation' do
+      it 'does not update the qos to flux and returns the simulation' do
         simulation.should_not_receive(:update_attributes)
         flux_policy.set_queue(simulation).should == simulation
       end

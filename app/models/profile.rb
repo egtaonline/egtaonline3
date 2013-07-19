@@ -17,15 +17,11 @@ class Profile < ActiveRecord::Base
   def profile_matches_simulator
     assignment.split("; ").each do |role_string|
       role, strategy_string = role_string.split(": ")
-      unless simulator.role_configuration[role]
-        errors.add(:assignment, "#{role} is not present in the Simulator")
-      else
-        strategy_string.split(", ").each do |count_strategy|
-          strategy = count_strategy.split(" ")[1]
-          unless simulator.role_configuration[role].include?(strategy)
-            errors.add(:assignment, "#{strategy} is not present in the" +
+      strategy_string.split(", ").each do |count_strategy|
+        strategy = count_strategy.split(" ")[1]
+        unless simulator.role_configuration[role].try(:include?, strategy)
+          errors.add(:assignment, "#{strategy} is not present in the" +
             " Simulator")
-          end
         end
       end
     end

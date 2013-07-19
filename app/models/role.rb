@@ -9,12 +9,23 @@ class Role < ActiveRecord::Base
     " underscores allowed." }
 
   def count_is_acceptable
-    unless role_owner.unassigned_player_count >= 0
+    unless unassigned_player_count >= count
       errors.add(:count,
         'can\'t be larger than the owner\'s unassigned player count')
     end
     unless reduced_count <= count
       errors.add(:reduced_count, 'can\'t be larger than count')
+    end
+  end
+
+  private
+
+  def unassigned_player_count
+    roles = role_owner.roles.where.not(id: self.id)
+    if roles.count == 0
+      role_owner.size
+    else
+      role_owner.size-roles.collect{ |r| r.count }.reduce(:+)
     end
   end
 end

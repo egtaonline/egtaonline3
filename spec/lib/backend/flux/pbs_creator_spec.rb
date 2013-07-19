@@ -8,7 +8,7 @@ describe PbsCreator do
   let(:simulator){ double(name: 'fake', fullname: 'fake-1', email: 'fake@example.com') }
   let(:node_count){ 1 }
   let(:scheduler){ double(simulator: simulator, process_memory: 1000, time_per_observation: 300, nodes: node_count) }
-  let(:simulation){ double(id: 1, size: 10, scheduler: scheduler, flux: flux_value) }
+  let(:simulation){ double(id: 1, size: 10, scheduler: scheduler, qos: flux_value) }
 
   describe '#prepare' do
     let(:top){ "#!/bin/bash\n#PBS -S /bin/sh\n" }
@@ -21,7 +21,7 @@ describe PbsCreator do
     let(:bottom){ "\ncp -r /tmp/${PBS_JOBID}/#{simulation.id} #{remote_data_path}\nrm -rf /tmp/${PBS_JOBID}"}
 
     context 'when the simulation is to be scheduled on flux' do
-      let(:flux_value){ true }
+      let(:flux_value){ 'flux' }
       let(:response){ top + "#PBS -A wellman_flux\n" + middle + bottom }
 
       it 'writes out a flux wrapper to the necessary location and sets the permissions' do
@@ -34,7 +34,7 @@ describe PbsCreator do
     end
 
     context 'when the simulation is not to be scheduled on flux' do
-      let(:flux_value){ false }
+      let(:flux_value){ 'cac' }
       let(:response){ top + "#PBS -A engin_flux\n" + middle + bottom }
 
       it 'writes out a flux wrapper to the necessary location and sets the permissions' do
@@ -48,7 +48,7 @@ describe PbsCreator do
 
     context 'when the simulation requires multiple nodes' do
       let(:node_count){ 10 }
-      let(:flux_value){ true }
+      let(:flux_value){ 'flux' }
       let(:response){ top + "#PBS -A wellman_flux\n" + middle + " ${PBS_NODEFILE}" + bottom }
 
       it 'writes out a flux wrapper to the necessary location and sets the permissions' do
