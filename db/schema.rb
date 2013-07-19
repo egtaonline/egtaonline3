@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130424233213) do
+ActiveRecord::Schema.define(version: 20130719220509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,12 +25,16 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "updated_at"
   end
 
+  add_index "games", ["simulator_instance_id", "name"], name: "index_games_on_simulator_instance_id_and_name", unique: true, using: :btree
+
   create_table "observations", force: true do |t|
     t.integer  "profile_id", null: false
     t.json     "features"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "observations", ["profile_id"], name: "index_observations_on_profile_id", using: :btree
 
   create_table "players", force: true do |t|
     t.float    "payoff",            null: false
@@ -41,6 +45,9 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "updated_at"
   end
 
+  add_index "players", ["observation_id"], name: "index_players_on_observation_id", using: :btree
+  add_index "players", ["symmetry_group_id"], name: "index_players_on_symmetry_group_id", using: :btree
+
   create_table "profiles", force: true do |t|
     t.integer  "simulator_instance_id",             null: false
     t.integer  "size",                              null: false
@@ -49,6 +56,8 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "profiles", ["simulator_instance_id", "assignment"], name: "index_profiles_on_simulator_instance_id_and_assignment", unique: true, using: :btree
 
   create_table "roles", force: true do |t|
     t.integer  "count",                             null: false
@@ -61,6 +70,9 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+  add_index "roles", ["role_owner_id", "role_owner_type", "name"], name: "index_roles_on_role_owner_id_and_role_owner_type_and_name", unique: true, using: :btree
 
   create_table "schedulers", force: true do |t|
     t.string   "name",                                            null: false
@@ -77,6 +89,9 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "updated_at"
   end
 
+  add_index "schedulers", ["simulator_instance_id", "name"], name: "index_schedulers_on_simulator_instance_id_and_name", unique: true, using: :btree
+  add_index "schedulers", ["type"], name: "index_schedulers_on_type", using: :btree
+
   create_table "scheduling_requirements", force: true do |t|
     t.integer  "count",        null: false
     t.integer  "scheduler_id", null: false
@@ -84,6 +99,9 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "scheduling_requirements", ["profile_id", "scheduler_id"], name: "index_scheduling_requirements_on_profile_id_and_scheduler_id", unique: true, using: :btree
+  add_index "scheduling_requirements", ["scheduler_id"], name: "index_scheduling_requirements_on_scheduler_id", using: :btree
 
   create_table "simulations", force: true do |t|
     t.integer  "profile_id",                        null: false
@@ -97,6 +115,10 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "updated_at"
   end
 
+  add_index "simulations", ["profile_id"], name: "index_simulations_on_profile_id", using: :btree
+  add_index "simulations", ["scheduler_id"], name: "index_simulations_on_scheduler_id", using: :btree
+  add_index "simulations", ["state"], name: "index_simulations_on_state", using: :btree
+
   create_table "simulator_instances", force: true do |t|
     t.hstore   "configuration"
     t.integer  "simulator_id",       null: false
@@ -104,6 +126,9 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "simulator_instances", ["configuration"], name: "simulator_instances_gin_configuration", using: :gin
+  add_index "simulator_instances", ["simulator_id"], name: "index_simulator_instances_on_simulator_id", using: :btree
 
   create_table "simulators", force: true do |t|
     t.string   "name",               limit: 32,                null: false
@@ -116,6 +141,8 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "updated_at"
   end
 
+  add_index "simulators", ["name", "version"], name: "index_simulators_on_name_and_version", unique: true, using: :btree
+
   create_table "symmetry_groups", force: true do |t|
     t.integer  "profile_id", null: false
     t.string   "role",       null: false
@@ -124,6 +151,8 @@ ActiveRecord::Schema.define(version: 20130424233213) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "symmetry_groups", ["profile_id", "role", "strategy"], name: "index_symmetry_groups_on_profile_id_and_role_and_strategy", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                default: "",    null: false

@@ -1,7 +1,8 @@
 class Game < ActiveRecord::Base
   include ProfileSpaces
 
-  validates_presence_of :name, :size
+  validates_presence_of :size
+  validates :name, presence: true, uniqueness: { scope: :simulator_instance }
 
   belongs_to :simulator_instance, inverse_of: :games
   validates_presence_of :simulator_instance

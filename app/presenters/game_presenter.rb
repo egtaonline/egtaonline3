@@ -50,7 +50,7 @@ class GamePresenter
             ) symmetry_group
           ) as symmetry_groups
           from profiles
-          where simulator_instance_id=#{@game.simulator_instance_id} and observations_count > 0 and assignment = any('#{@game.profile_space.to_s.gsub(/\[(.*)\]/, '{\1}')}'::text[])
+          where simulator_instance_id=#{@game.simulator_instance_id} and assignment = any('#{@game.profile_space.to_s.gsub(/\[(.*)\]/, '{\1}')}'::text[]) and observations_count > 0
           group by profiles.id
           order by assignment
         ) as profile
@@ -106,7 +106,7 @@ class GamePresenter
             ) observation
           ) as observations
           from profiles
-          where simulator_instance_id=#{@game.simulator_instance_id} and observations_count > 0 and assignment = any('#{@game.profile_space.to_s.gsub(/\[(.*)\]/, '{\1}')}'::text[])
+          where simulator_instance_id=#{@game.simulator_instance_id} and assignment = any('#{@game.profile_space.to_s.gsub(/\[(.*)\]/, '{\1}')}'::text[]) and observations_count > 0
           group by profiles.id
           order by assignment
         ) as profile
@@ -160,7 +160,7 @@ class GamePresenter
             ) observation
           ) as observations
           from profiles
-          where simulator_instance_id=#{@game.simulator_instance_id} and assignment = any('#{@game.profile_space.to_s.gsub(/\[(.*)\]/, '{\1}')}'::text[])
+          where simulator_instance_id=#{@game.simulator_instance_id} and assignment = any('#{@game.profile_space.to_s.gsub(/\[(.*)\]/, '{\1}')}'::text[]) and observations_count > 0
           group by profiles.id
           order by assignment
         ) as profile

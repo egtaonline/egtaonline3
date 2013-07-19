@@ -30,7 +30,7 @@ describe SchedulerPresenter do
         scheduler.scheduling_requirements.collect do |requirement|
           { profile_id: requirement.profile_id, requirement: requirement.count,
             current_count: requirement.observations_count }
-        end.to_json + "}"
+        end.sort{ |x,y| x[:profile_id] <=> y[:profile_id] }.to_json + "}"
       end
       context 'and the scheduler is non-generic' do
         let(:scheduler){ FactoryGirl.create(:game_scheduler) }

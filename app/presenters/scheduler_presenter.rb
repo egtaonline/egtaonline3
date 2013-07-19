@@ -30,6 +30,7 @@ class SchedulerPresenter
             from profiles, scheduling_requirements
             where profiles.id = scheduling_requirements.profile_id
             and scheduling_requirements.scheduler_id = schedulers.id
+            order by profiles.id
           ) scheduling_requirement
         ) as scheduling_requirements
         from schedulers, simulator_instances
