@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130719220509) do
+ActiveRecord::Schema.define(version: 20130723220840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,6 @@ ActiveRecord::Schema.define(version: 20130719220509) do
     t.datetime "updated_at"
   end
 
-  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
   add_index "roles", ["role_owner_id", "role_owner_type", "name"], name: "index_roles_on_role_owner_id_and_role_owner_type_and_name", unique: true, using: :btree
 
   create_table "schedulers", force: true do |t|
@@ -90,7 +89,6 @@ ActiveRecord::Schema.define(version: 20130719220509) do
   end
 
   add_index "schedulers", ["simulator_instance_id", "name"], name: "index_schedulers_on_simulator_instance_id_and_name", unique: true, using: :btree
-  add_index "schedulers", ["type"], name: "index_schedulers_on_type", using: :btree
 
   create_table "scheduling_requirements", force: true do |t|
     t.integer  "count",        null: false
@@ -116,8 +114,6 @@ ActiveRecord::Schema.define(version: 20130719220509) do
   end
 
   add_index "simulations", ["profile_id"], name: "index_simulations_on_profile_id", using: :btree
-  add_index "simulations", ["scheduler_id"], name: "index_simulations_on_scheduler_id", using: :btree
-  add_index "simulations", ["state"], name: "index_simulations_on_state", using: :btree
 
   create_table "simulator_instances", force: true do |t|
     t.hstore   "configuration"

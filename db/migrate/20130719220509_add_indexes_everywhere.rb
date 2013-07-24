@@ -13,13 +13,9 @@ class AddIndexesEverywhere < ActiveRecord::Migration
     add_index :observations, :profile_id
     add_index :players, :observation_id
     add_index :players, :symmetry_group_id
-    add_index :simulations, :state
-    add_index :simulations, :scheduler_id
     add_index :simulations, :profile_id
-    add_index :schedulers, :type
     add_index :schedulers, [:simulator_instance_id, :name], unique: true
     add_index :roles, [:role_owner_id, :role_owner_type, :name], unique: true
-    add_index :roles, :name
   end
 
   def down
@@ -34,12 +30,8 @@ class AddIndexesEverywhere < ActiveRecord::Migration
     remove_index :observations, :profile_id
     remove_index :players, :observation_id
     remove_index :players, :symmetry_group_id
-    remove_index :simulations, :state
-    remove_index :simulations, :scheduler_id
     remove_index :simulations, :profile_id
-    remove_index :schedulers, :type
     remove_index :schedulers, [:simulator_instance_id, :name]
     remove_index :roles, [:role_owner_id, :role_owner_type, :name]
-    remove_index :roles, :name
   end
 end

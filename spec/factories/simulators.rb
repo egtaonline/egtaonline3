@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :simulator do
-    name 'fake_sim'
+    sequence(:name){ |n| "fake#{n}"}
     sequence(:version){ |n| "#{n}" }
     email 'test@example.com'
     source File.new("#{Rails.root}/spec/support/data/fake_sim.zip")

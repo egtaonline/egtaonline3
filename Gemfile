@@ -35,6 +35,8 @@ gem 'sidekiq'
 gem 'sidekiq-failures'
 gem 'slim'
 gem 'sinatra', :require => nil
+# temporary
+gem 'moped', github: 'mongoid/moped'
 
 group :development do
   gem 'quiet_assets'
