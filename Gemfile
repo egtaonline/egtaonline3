@@ -39,6 +39,8 @@ gem 'sinatra', :require => nil
 gem 'moped', github: 'mongoid/moped'
 gem 'celluloid'
 gem 'capistrano'
+gem 'foreman'
+gem 'clockwork'
 
 group :development do
   gem 'quiet_assets'

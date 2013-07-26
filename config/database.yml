@@ -34,10 +34,3 @@ test:
   database: egtaonline3_test
   username: egtaonline3
   password:
-
-production:
-  adapter: postgresql
-  encoding: unicode
-  database: egtaonline3_production
-  username: egtaonline3
-  password:
