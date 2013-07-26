@@ -37,6 +37,8 @@ gem 'slim'
 gem 'sinatra', :require => nil
 # temporary
 gem 'moped', github: 'mongoid/moped'
+gem 'celluloid'
+gem 'capistrano'
 
 group :development do
   gem 'quiet_assets'

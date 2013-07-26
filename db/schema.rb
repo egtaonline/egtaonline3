@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130723220840) do
+ActiveRecord::Schema.define(version: 20130724204644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20130723220840) do
     t.integer  "simulator_instance_id",             null: false
     t.integer  "size",                              null: false
     t.integer  "observations_count",    default: 0, null: false
-    t.string   "assignment",                        null: false
+    t.text     "assignment",                        null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

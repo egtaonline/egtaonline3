@@ -2,11 +2,11 @@ class Game < ActiveRecord::Base
   include ProfileSpaces
 
   validates_presence_of :size
-  validates :name, presence: true, uniqueness: { scope: :simulator_instance }
+  validates :name, presence: true, uniqueness: { scope: :simulator_instance_id }
 
   belongs_to :simulator_instance, inverse_of: :games
   validates_presence_of :simulator_instance
-  has_many :roles, as: :role_owner
+  has_many :roles, as: :role_owner, dependent: :destroy
   delegate :simulator_fullname, to: :simulator_instance
   delegate :configuration, to: :simulator_instance
   delegate :simulator, to: :simulator_instance

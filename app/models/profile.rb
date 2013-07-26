@@ -20,8 +20,7 @@ class Profile < ActiveRecord::Base
       strategy_string.split(", ").each do |count_strategy|
         strategy = count_strategy.split(" ")[1]
         unless simulator.role_configuration[role].try(:include?, strategy)
-          errors.add(:assignment, "#{strategy} is not present in the" +
-            " Simulator")
+          errors.add(:assignment, "#{strategy} is not present in the Simulator")
         end
       end
     end
@@ -36,8 +35,7 @@ class Profile < ActiveRecord::Base
       role, strategy_string = role_string.split(": ")
       strategy_string.split(", ").each do |strategy|
         count, strategy = strategy.split(" ")
-        self.symmetry_groups.create!(role: role, strategy: strategy,
-          count: count.to_i)
+        self.symmetry_groups.create!(role: role, strategy: strategy, count: count.to_i)
       end
     end
     try_scheduling
