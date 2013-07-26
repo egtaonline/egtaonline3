@@ -50,8 +50,7 @@ describe Game do
   end
 
   describe '#profile_space' do
-    it { game.profile_space.should ==
-      ['All: 2 A', 'All: 1 A, 1 B', 'All: 2 B'] }
+    it { game.profile_space.should == "All: \\d+ (A(, \\d+ )?)*(B(, \\d+ )?)*" }
   end
 
   context 'some profiles' do
@@ -73,6 +72,11 @@ describe Game do
     let!(:profile4) do
       FactoryGirl.create(:profile, :with_observations,
       assignment: 'All: 2 B')
+    end
+    let!(:profile5) do
+      FactoryGirl.create(:profile, :with_observations,
+      simulator_instance: game.simulator_instance,
+      assignment: 'All: 3 B')
     end
 
     describe '#profile_count' do

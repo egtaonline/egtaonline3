@@ -12,9 +12,7 @@ class Game < ActiveRecord::Base
   delegate :simulator, to: :simulator_instance
 
   def profile_space
-    return [] if invalid_role_partition?
-    AssignmentFormatter.format_assignments(
-      SubgameCreator.subgame_assignments(roles))
+    roles.order("name ASC").collect{|r| "#{r.name}: \\d+ (#{r.strategies.join('(, \\d+ )?)*(')}(, \\d+ )?)*"}.join("; ")
   end
 
   def invalid_role_partition?
@@ -22,13 +20,13 @@ class Game < ActiveRecord::Base
   end
 
   def profile_count
-    Profile.where("simulator_instance_id = ? AND assignment IN (?) AND" +
-      " observations_count > 0", simulator_instance_id, profile_space).count
+    Profile.where("simulator_instance_id = ? AND role_configuration @> (?) AND assignment SIMILAR TO (?) AND" +
+      " observations_count > 0", simulator_instance_id, role_configuration, profile_space).count
   end
 
   def observation_count
-    Observation.joins(:profile).where("profiles.simulator_instance_id = ? AND profiles.assignment IN (?)",
-                 simulator_instance_id, profile_space).count
+    Observation.joins(:profile).where("profiles.simulator_instance_id = ? AND profiles.role_configuration @> (?) AND profiles.assignment SIMILAR TO (?)",
+                 simulator_instance_id, role_configuration, profile_space).count
   end
 
   def add_strategy(role_name, strategy)
@@ -46,5 +44,9 @@ class Game < ActiveRecord::Base
       role.strategies -= [strategy]
       role.save!
     end
+  end
+
+  def role_configuration
+    roles.collect{ |role| "\"#{role.name}\" => #{role.count}" }.join(", ")
   end
 end

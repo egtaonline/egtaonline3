@@ -25,15 +25,6 @@ describe "DataParser can process observations" do
         role: 'Seller', strategy: 'Shade1')
       third_symmetry_group = profile.symmetry_groups.find_by(
         role: 'Seller', strategy: 'Shade2')
-  		player1, player2, player3, player4 = first_observation.players.to_a
-  		player1.features.should == { "featureA" => 0.001,
-				"featureB" => [2.0, 2.1] }
-			player2.features.should == { "featureA" => 0.002,
-				"featureB" => [2.0, 2.1] }
-			player3.features.should == { "featureA" => 0.003,
-				"featureB" => [1.4, 1.7] }
-			player4.features.should == { "featureA" => 0.003,
-				"featureB" => [1.3, 1.7] }
 			first_symmetry_group.payoff.should ==
 			  (2992.73+2990.53+2990.73+2690.53)/4.0
 			second_symmetry_group.payoff.should ==

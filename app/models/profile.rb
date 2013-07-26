@@ -28,6 +28,14 @@ class Profile < ActiveRecord::Base
 
   before_validation(on: :create) do
     self.size = assignment.role_counts.values.reduce(:+)
+    self.role_configuration = {}
+    assignment.split("; ").each do |role_string|
+      role, strategy_string = role_string.split(": ")
+      role_configuration[role] = 0
+      strategy_string.split(", ").each do |strategy|
+        role_configuration[role] += strategy.split(" ")[0].to_i
+      end
+    end
   end
 
   after_create do

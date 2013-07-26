@@ -6,12 +6,14 @@ describe Profile do
   describe 'creation events' do
     it 'creates the necessary symmetry groups on creation' do
       SymmetryGroup.where(profile_id: profile.id).count.should == 3
+      profile.role_configuration['A'].should == 3
       SymmetryGroup.where(role: 'A', strategy: 'S1', count: 2,
         profile_id: profile.id).count.should == 1
       SymmetryGroup.where(role: 'A', strategy: 'S2', count: 1,
         profile_id: profile.id).count.should == 1
       SymmetryGroup.where(role: 'B', strategy: 'S3', count: 3,
         profile_id: profile.id).count.should == 1
+      profile.role_configuration['B'].should == 3
     end
 
     it 'sets the size correctly' do

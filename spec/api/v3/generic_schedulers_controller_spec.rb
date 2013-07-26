@@ -55,7 +55,6 @@ describe 'GenericSchedulersController' do
             post "#{url}.json", query
             response.status.should eql(201)
             scheduling_requirement = scheduler.scheduling_requirements.last
-            response.body.should eql(scheduling_requirement.profile.to_json)
             scheduling_requirement.count.should == 20
             scheduling_requirement.profile.assignment.should == 'All: 2 A'
           end

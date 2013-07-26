@@ -9,10 +9,10 @@ describe 'ProfilesController' do
     let(:url){ '/api/v3/profiles/1' }
 
     it 'returns the appropriate json from a ProfilePresenter' do
-      get "#{url}.json", auth_token: token, granularity: 'structure'
+      get "#{url}.json", auth_token: token, granularity: 'full'
       response.status.should == 200
       response.body.should == ProfilePresenter.new(profile).to_json(
-        granularity: 'structure')
+        granularity: 'full')
     end
   end
 end
