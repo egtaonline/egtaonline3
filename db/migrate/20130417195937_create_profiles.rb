@@ -5,6 +5,7 @@ class CreateProfiles < ActiveRecord::Migration
       t.integer :size, :null => false
       t.integer :observations_count, :null => false, :default => 0
       t.string :assignment, :null => false
+      t.hstore :role_configuration, :null => false
       t.timestamps
     end
   end

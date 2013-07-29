@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130726191440) do
+ActiveRecord::Schema.define(version: 20130724204644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,13 +49,13 @@ ActiveRecord::Schema.define(version: 20130726191440) do
   add_index "players", ["symmetry_group_id"], name: "index_players_on_symmetry_group_id", using: :btree
 
   create_table "profiles", force: true do |t|
-    t.integer  "simulator_instance_id",             null: false
-    t.integer  "size",                              null: false
-    t.integer  "observations_count",    default: 0, null: false
-    t.text     "assignment",                        null: false
+    t.integer  "simulator_instance_id",              null: false
+    t.integer  "size",                               null: false
+    t.integer  "observations_count",    default: 0,  null: false
+    t.text     "assignment",                         null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.hstore   "role_configuration",                null: false
+    t.hstore   "role_configuration",    default: {}, null: false
   end
 
   add_index "profiles", ["role_configuration"], name: "profiles_gin_role_configuration", using: :gin

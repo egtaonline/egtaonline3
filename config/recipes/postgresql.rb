@@ -6,9 +6,15 @@ set_default(:postgresql_database) { "#{application}_production" }
 namespace :postgresql do
   desc "Install the latest stable release of PostgreSQL."
   task :install, roles: :db, only: {primary: true} do
-    run "#{sudo} add-apt-repository ppa:pitti/postgresql"
-    run "#{sudo} apt-get -y update"
-    run "#{sudo} apt-get -y install postgresql libpq-dev"
+    # Get a more recent version of postgresql
+    dotdeb = <<-DOTDEB
+               deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main
+             DOTDEB
+    put dotdeb,"/tmp/dotdeb"
+    run "#{sudo} mv /tmp/dotdeb /etc/apt/sources.list.d/pgdg.list"
+    run "wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | #{sudo} apt-key add -"
+    run "#{sudo} apt-get update"
+    run "#{sudo} apt-get -y install postgresql pgadmin3 postgresql-client postgresql-contrib postgresql-server-dev libpq-dev"
   end
   after "deploy:install", "postgresql:install"
 

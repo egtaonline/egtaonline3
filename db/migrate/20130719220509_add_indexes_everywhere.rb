@@ -4,6 +4,7 @@ class AddIndexesEverywhere < ActiveRecord::Migration
     add_index :simulator_instances, :simulator_id
     execute "CREATE INDEX simulator_instances_gin_configuration ON" +
       " simulator_instances USING GIN(configuration)"
+    execute "CREATE INDEX profiles_gin_role_configuration ON profiles USING GIN(role_configuration)"
     add_index :scheduling_requirements, :scheduler_id
     add_index :scheduling_requirements, [:profile_id, :scheduler_id],
       unique: true
@@ -22,6 +23,7 @@ class AddIndexesEverywhere < ActiveRecord::Migration
     remove_index :simulators, [:name, :version]
     remove_index :simulator_instances, :simulator_id
     execute "DROP INDEX simulator_instances_gin_configuration"
+    execute "DROP INDEX profiles_gin_role_configuration"
     remove_index :scheduling_requirements, :scheduler_id
     remove_index :scheduling_requirements, [:profile_id, :scheduler_id]
     remove_index :profiles, [:simulator_instance_id, :assignment]

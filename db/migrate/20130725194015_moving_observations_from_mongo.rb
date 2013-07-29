@@ -26,7 +26,7 @@ class MovingObservationsFromMongo < ActiveRecord::Migration
             end
           end
         end
-        counter += 100
+        counter += 50
         puts counter
       end
     end
@@ -41,7 +41,7 @@ class MovingObservationsFromMongo < ActiveRecord::Migration
   private
 
   def query(collection, counter)
-    collection.find(sample_count: {"$gt" => 0}).limit(100).skip(counter).select(
+    collection.find(sample_count: {"$gt" => 0}).limit(50).skip(counter).select(
       "new_id" => 1, "observations.features" => 1,
       "observations.symmetry_groups.role" => 1,
       "observations.symmetry_groups.strategy" => 1,
