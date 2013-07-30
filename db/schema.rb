@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130724204644) do
+ActiveRecord::Schema.define(version: 20130725194015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,26 +49,26 @@ ActiveRecord::Schema.define(version: 20130724204644) do
   add_index "players", ["symmetry_group_id"], name: "index_players_on_symmetry_group_id", using: :btree
 
   create_table "profiles", force: true do |t|
-    t.integer  "simulator_instance_id",              null: false
-    t.integer  "size",                               null: false
-    t.integer  "observations_count",    default: 0,  null: false
-    t.text     "assignment",                         null: false
+    t.integer  "simulator_instance_id",             null: false
+    t.integer  "size",                              null: false
+    t.integer  "observations_count",    default: 0, null: false
+    t.text     "assignment",                        null: false
+    t.hstore   "role_configuration",                null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.hstore   "role_configuration",    default: {}, null: false
   end
 
   add_index "profiles", ["role_configuration"], name: "profiles_gin_role_configuration", using: :gin
   add_index "profiles", ["simulator_instance_id", "assignment"], name: "index_profiles_on_simulator_instance_id_and_assignment", unique: true, using: :btree
 
   create_table "roles", force: true do |t|
-    t.integer  "count",                             null: false
-    t.integer  "reduced_count",                     null: false
-    t.string   "name",                              null: false
-    t.integer  "role_owner_id",                     null: false
-    t.string   "role_owner_type",                   null: false
-    t.string   "strategies",           default: [],              array: true
-    t.string   "deviating_strategies", default: [],              array: true
+    t.integer  "count",                null: false
+    t.integer  "reduced_count",        null: false
+    t.string   "name",                 null: false
+    t.integer  "role_owner_id",        null: false
+    t.string   "role_owner_type",      null: false
+    t.string   "strategies",                        array: true
+    t.string   "deviating_strategies",              array: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

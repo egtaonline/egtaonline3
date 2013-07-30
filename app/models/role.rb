@@ -8,6 +8,11 @@ class Role < ActiveRecord::Base
     format: { with:  /\A\w+\z/, message: "only letters, numbers, or" +
     " underscores allowed." }
 
+  before_validation(on: :create) do
+    self.strategies ||= []
+    self.deviating_strategies ||= []
+  end
+
   def count_is_acceptable
     unless unassigned_player_count >= count
       errors.add(:count,

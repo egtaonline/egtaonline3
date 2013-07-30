@@ -6,8 +6,8 @@ class CreateRoles < ActiveRecord::Migration
       t.string :name, :null => false
       t.integer :role_owner_id, :null => false
       t.string :role_owner_type, :null => false
-      t.string :strategies, array: true, default: []
-      t.string :deviating_strategies, array: true, default: []
+      t.string :strategies, array: true
+      t.string :deviating_strategies, array: true
       t.timestamps
     end
   end
