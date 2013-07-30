@@ -113,7 +113,7 @@ describe 'GamesController' do
     it 'returns summary info for the available games' do
       get "#{url}.json", auth_token: token
       response.status.should == 200
-      response.body.should == { games: [game, game2] }.to_json
+      response.body.should == { games: [game.reload, game2.reload] }.to_json
     end
   end
 end

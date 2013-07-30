@@ -5,15 +5,15 @@ gem 'rails', '~> 4.0.0.rc2'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-# gem 'activerecord-jdbcpostgresql-adapter', platform: :jruby
-gem 'pg'
+gem 'activerecord-jdbcpostgresql-adapter', '1.3.0.beta2', platform: :jruby
+# gem 'pg'
 
 gem 'sass-rails',   '~> 4.0.0.rc2'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'twitter-bootstrap-rails'
 gem 'jquery-migrate-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyrhino', platform: :jruby
+gem 'therubyrhino', platform: :jruby
 
 gem 'uglifier', '>= 1.3.0'
 
@@ -25,8 +25,9 @@ gem 'kaminari'
 gem 'celluloid'
 gem 'airbrake'
 gem 'puma'
-# gem 'jrjackson', platform: :jruby
-gem 'oj'
+gem 'jrjackson', platform: :jruby
+# gem 'oj'
+gem 'thread_safe', '0.1.2'
 gem 'simple_form', '~> 3.0.0.rc'
 gem 'show_for', '~> 0.3.0.rc'
 gem 'high_voltage'

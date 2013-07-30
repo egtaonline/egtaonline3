@@ -5,7 +5,7 @@ class Api::V3::SimulatorsController < Api::V3::BaseController
   before_filter :find_role, only: [:add_strategy, :remove_strategy]
 
   def index
-    render json: { simulators: Simulator.all}, status: 200
+    render json: { simulators: Simulator.all }, status: 200
   end
 
   def show

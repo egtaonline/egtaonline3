@@ -26,9 +26,10 @@ describe Simulation do
     # use TimeCop or something to test this at some point
     describe '.stale' do
       it 'returns old enough simulations' do
-        sleep 1
-        Simulation.stale(1).pluck(:state).sort.should ==
-          ['queued', 'complete', 'failed'].sort
+        Timecop.freeze(Time.now+2) do
+          Simulation.stale(1).pluck(:state).sort.should ==
+            ['queued', 'complete', 'failed'].sort
+        end
       end
     end
 

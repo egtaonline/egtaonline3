@@ -106,8 +106,7 @@ describe 'GenericSchedulersController' do
     it 'returns summary info for the available schedulers' do
       get "#{url}.json", auth_token: token
       response.status.should == 200
-      response.body.should == { generic_schedulers: [scheduler, scheduler2]
-        }.to_json
+      response.body.should == { generic_schedulers: [scheduler.reload, scheduler2.reload] }.to_json
     end
   end
 
@@ -126,7 +125,7 @@ describe 'GenericSchedulersController' do
         scheduler.simulator.should == simulator
         scheduler.simulator_instance.configuration.should == { "A" => "B" }
         response.status.should eql(201)
-        response.body.should eql(scheduler.to_json)
+        MultiJson.load(response.body)["id"].should eql(scheduler.id)
       end
     end
 
@@ -152,7 +151,7 @@ describe 'GenericSchedulersController' do
     it 'returns the appropriate json from a SchedulerPresenter' do
       get "#{url}.json", auth_token: token, granularity: 'summary'
       response.status.should == 200
-      response.body.should == SchedulerPresenter.new(scheduler).to_json(
+      response.body.should == SchedulerPresenter.new(scheduler.reload).to_json(
         granularity: 'summary')
     end
   end
