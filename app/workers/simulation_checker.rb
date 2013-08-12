@@ -3,6 +3,8 @@ class SimulationChecker
   sidekiq_options queue: 'backend'
 
   def perform
-    Backend.update_simulations(Simulation.active)
+    ActiveRecord::Base.transaction do
+      Backend.update_simulations(Simulation.active)
+    end
   end
 end

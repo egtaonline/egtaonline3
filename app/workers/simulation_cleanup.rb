@@ -3,6 +3,8 @@ class SimulationCleanup
   sidekiq_options queue: 'backend'
 
   def perform(simulation_id)
-    Backend.cleanup_simulation(1)
+    ActiveRecord::Base.transaction do
+      Backend.cleanup_simulation(simulation_id)
+    end
   end
 end

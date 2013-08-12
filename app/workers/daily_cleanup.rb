@@ -3,7 +3,9 @@ class DailyCleanup
   sidekiq_options queue: 'backend'
 
   def perform
-    Simulation.stale.destroy_all
-    Simulation.recently_finished.each { |s| s.requeue }
+    ActiveRecord::Base.transaction do
+      Simulation.stale.destroy_all
+      Simulation.recently_finished.each { |s| s.requeue }
+    end
   end
 end

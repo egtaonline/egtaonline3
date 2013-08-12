@@ -12,21 +12,32 @@ class Game < ActiveRecord::Base
   delegate :simulator, to: :simulator_instance
 
   def profile_space
-    roles.order("name ASC").collect{|r| "#{r.name}: \\d+ (#{r.strategies.join('(, \\d+ )?)*(')}(, \\d+ )?)*"}.join("; ")
+    "(" + roles.collect{ |r| "(role = '#{r.name}' AND #{r.strategy_query})"}.join(" OR ") + ")"
   end
 
   def invalid_role_partition?
     super || roles.detect{ |r| r.strategies.count == 0 } != nil
   end
 
-  def profile_count
-    Profile.where("simulator_instance_id = ? AND role_configuration @> (?) AND assignment SIMILAR TO (?) AND" +
-      " observations_count > 0", simulator_instance_id, role_configuration, profile_space).count
+  def profile_counts
+    if invalid_role_partition?
+      { "count" => 0, "observations_count" => 0}
+    else
+      Game.connection.select_all("WITH reasonable_profiles AS (
+          SELECT symmetry_groups.id, symmetry_groups.profile_id, symmetry_groups.role, symmetry_groups.strategy, profiles.observations_count
+          FROM symmetry_groups, profiles
+          WHERE symmetry_groups.profile_id = profiles.id AND profiles.simulator_instance_id = #{simulator_instance_id} AND profiles.role_configuration @> #{role_configuration} AND profiles.observations_count > 0),
+          in_space AS (SELECT * FROM reasonable_profiles WHERE #{profile_space}),
+          out_space AS ((SELECT * FROM reasonable_profiles) EXCEPT (SELECT * FROM in_space)),
+          result AS (SELECT DISTINCT ON(profile_id) observations_count FROM in_space WHERE profile_id NOT IN (SELECT DISTINCT ON(profile_id) profile_id FROM out_space))
+        SELECT COUNT(*) AS count, SUM(observations_count) AS observations_count FROM result
+      ")[0]
+    end
   end
 
   def observation_count
-    Observation.joins(:profile).where("profiles.simulator_instance_id = ? AND profiles.role_configuration @> (?) AND profiles.assignment SIMILAR TO (?)",
-                 simulator_instance_id, role_configuration, profile_space).count
+    Profile.where("profiles.simulator_instance_id = ? AND profiles.role_configuration @> (?) AND profiles.assignment SIMILAR TO (?) AND" +
+      " observations_count > 0", simulator_instance_id, role_configuration, profile_space).sum(:observations_count)
   end
 
   def add_strategy(role_name, strategy)
@@ -47,6 +58,6 @@ class Game < ActiveRecord::Base
   end
 
   def role_configuration
-    roles.collect{ |role| "\"#{role.name}\" => #{role.count}" }.join(", ")
+    "('" + roles.collect{ |role| "\"#{role.name}\" => #{role.count}" }.join(", ") + "')"
   end
 end

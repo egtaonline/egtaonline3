@@ -14,14 +14,18 @@ class MoveSimulatorsFromMongo < ActiveRecord::Migration
         sim["roles"].each do |role|
           role_configuration[role["name"]] = role["strategies"]
         end
-        simulator = Simulator.create!(name: sim["name"],
-          version: sim["version"],
-          email: sim["email"],
-          source: File.new(sim["simulator_source"], "w"),
-          configuration: sim["configuration"],
-          role_configuration: role_configuration)
-        session[:simulators].find(_id: sim[:_id]).update("$set" => {
-          new_id: simulator.id})
+        begin
+          simulator = Simulator.create!(name: sim["name"],
+            version: sim["version"],
+            email: sim["email"],
+            source: File.new(sim["simulator_source"], "w"),
+            configuration: sim["configuration"],
+            role_configuration: role_configuration)
+          session[:simulators].find(_id: sim[:_id]).update("$set" => {
+            new_id: simulator.id})
+        rescue Exception => e
+          puts sim["name"]
+        end
       end
     end
   end

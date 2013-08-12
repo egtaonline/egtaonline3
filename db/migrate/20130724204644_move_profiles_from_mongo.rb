@@ -12,13 +12,17 @@ class MoveProfilesFromMongo < ActiveRecord::Migration
           session[:profiles].find.limit(1000).skip(counter).select(
             "simulator_id" => 1, "configuration" => 1,
             "assignment" => 1).each do |profile|
-            simulator_instance_id = get_simulator_instance_id(profile, session)
-            p = Profile.create(simulator_instance_id: simulator_instance_id,
-              assignment: profile["assignment"])
-            if p.valid?
-              session[:profiles].find(_id: profile[:_id]).update("$set" => {
-                new_id: p.id})
-            else
+            begin
+              simulator_instance_id = get_simulator_instance_id(profile, session)
+              p = Profile.create(simulator_instance_id: simulator_instance_id,
+                assignment: profile["assignment"])
+              if p.valid?
+                session[:profiles].find(_id: profile[:_id]).update("$set" => {
+                  new_id: p.id})
+              else
+                invalid_count += 1
+              end
+            rescue Exception => e
               invalid_count += 1
             end
           end
@@ -33,6 +37,9 @@ class MoveProfilesFromMongo < ActiveRecord::Migration
   def down
     unless Rails.env == "test"
       Profile.destroy_all
+      session = Moped::Session.new(["127.0.0.1:27017"])
+      session.use :egt_web_interface_production
+      session[:profiles].find.update_all("$unset" => { "new_id" => "" })
     end
   end
 

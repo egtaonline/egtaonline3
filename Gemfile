@@ -45,6 +45,7 @@ gem 'clockwork'
 
 group :development do
   gem 'quiet_assets'
+  gem 'bullet'
   gem 'better_errors', github: 'charliesome/better_errors'
 end
 

@@ -21,8 +21,8 @@ class GamePresenter
   end
 
   def summary
-    sql = <<-SQL
-      select row_to_json(t)
+    profile_set +
+      "select row_to_json(t)
       from (
       select games.id, games.name, simulator_instances.simulator_fullname,
       (
@@ -49,20 +49,19 @@ class GamePresenter
               order by symmetry_groups.id
             ) symmetry_group
           ) as symmetry_groups
-          from profiles
-          where simulator_instance_id=#{@game.simulator_instance_id} and assignment SIMILAR TO '#{@game.profile_space}' and observations_count > 0
+          from profiles, result
+          where profiles.id = result.profile_id
           group by profiles.id
           order by assignment
         ) as profile
       ) as profiles
       from games, simulator_instances
       where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
-      ) t
-    SQL
+      ) t"
   end
 
   def observations
-    sql = <<-SQL
+    profile_set + "
       select row_to_json(t)
       from (
       select games.id, games.name, simulator_instances.simulator_fullname,
@@ -105,20 +104,19 @@ class GamePresenter
               where profile_id = profiles.id
             ) observation
           ) as observations
-          from profiles
-          where simulator_instance_id=#{@game.simulator_instance_id} and assignment SIMILAR TO '#{@game.profile_space}' and observations_count > 0
+          from profiles, result
+          where profiles.id = result.profile_id
           group by profiles.id
           order by assignment
         ) as profile
       ) as profiles
       from games, simulator_instances
       where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
-      ) t
-    SQL
+      ) t"
   end
 
   def full
-    sql = <<-SQL
+    profile_set + "
       select row_to_json(t)
       from (
       select games.id, games.name, simulator_instances.simulator_fullname,
@@ -160,15 +158,30 @@ class GamePresenter
               where profile_id = profiles.id
             ) observation
           ) as observations
-          from profiles
-          where simulator_instance_id=#{@game.simulator_instance_id} and assignment SIMILAR TO '#{@game.profile_space}' and observations_count > 0
+          from profiles, result
+          where profiles.id = result.profile_id
           group by profiles.id
           order by assignment
         ) as profile
       ) as profiles
       from games, simulator_instances
       where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
-      ) t
-    SQL
+      ) t"
+  end
+
+  private
+
+  def profile_set
+    if @game.invalid_role_partition?
+      "WITH result AS (SELECT id as profile_id FROM profiles WHERE id = 0)"
+    else
+      "WITH reasonable_profiles AS (
+        SELECT symmetry_groups.id, symmetry_groups.profile_id, symmetry_groups.role, symmetry_groups.strategy, profiles.observations_count
+        FROM symmetry_groups, profiles
+        WHERE symmetry_groups.profile_id = profiles.id AND profiles.simulator_instance_id = #{@game.simulator_instance_id} AND profiles.role_configuration @> #{@game.role_configuration} AND profiles.observations_count > 0),
+        in_space AS (SELECT * FROM reasonable_profiles WHERE #{@game.profile_space}),
+        out_space AS ((SELECT * FROM reasonable_profiles) EXCEPT (SELECT * FROM in_space)),
+        result AS (SELECT DISTINCT ON(profile_id) profile_id FROM in_space WHERE profile_id NOT IN (SELECT DISTINCT ON(profile_id) profile_id FROM out_space))"
+    end
   end
 end

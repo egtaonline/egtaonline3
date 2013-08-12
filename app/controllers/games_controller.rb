@@ -3,8 +3,7 @@ class GamesController < ProfileSpacesController
   expose(:game, attributes: :game_parameters)
   expose(:role_owner){ game }
   expose(:role_owner_path){ "/games/#{game.id}" }
-  expose(:profile_count){ game.profile_count }
-  expose(:observation_count){ game.observation_count }
+  expose(:profile_counts){ game.profile_counts }
 
   def show
     respond_to do |format|

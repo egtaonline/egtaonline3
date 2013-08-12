@@ -28,17 +28,11 @@ class MoveGamesFromMongo < ActiveRecord::Migration
   private
 
   def get_simulator_instance_id(game, session)
-    configuration_string = game["configuration"].collect do |key,value|
-      "\"#{key}\" => \"#{value}\""
-    end.join(", ")
-    simulator_id = session[:simulators].find(
-      _id: BSON::ObjectId.from_string(
-      game[:simulator_id])).first["new_id"]
-    simulator_instance = SimulatorInstance.where("
-      simulator_id = ? AND configuration @> (?)", simulator_id,
-      configuration_string).first
-    simulator_instance ||= SimulatorInstance.create!(simulator_id: simulator_id,
-      configuration: game["configuration"])
+    configuration_string = game["configuration"].collect{ |key,value| "\"#{key}\" => \"#{value}\"" }.join(", ")
+    simulator_id = session[:simulators].find(_id: BSON::ObjectId.from_string(game[:simulator_id])).first["new_id"]
+    puts simulator_id
+    simulator_instance = SimulatorInstance.where("simulator_id = ? AND configuration @> (?)", simulator_id, configuration_string).first
+    simulator_instance ||= SimulatorInstance.create!(simulator_id: simulator_id, configuration: game["configuration"])
     simulator_instance.id
   end
 

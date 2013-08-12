@@ -4,7 +4,7 @@ class Scheduler < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates_presence_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation, :simulator_instance
   validates_numericality_of :process_memory, :nodes, :observations_per_simulation, :size, :time_per_observation,
-                            :default_observation_requirement, only_integer: true, greater_than: 0
+                            :default_observation_requirement, only_integer: true, greater_than: -1
 
   belongs_to :simulator_instance, inverse_of: :schedulers
   has_many :simulations, inverse_of: :scheduler

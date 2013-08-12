@@ -50,7 +50,7 @@ describe Game do
   end
 
   describe '#profile_space' do
-    it { game.profile_space.should == "All: \\d+ (A(, \\d+ )?)*(B(, \\d+ )?)*" }
+    it { game.profile_space.should == "((role = 'All' AND (strategy = 'A' OR strategy = 'B')))" }
   end
 
   context 'some profiles' do
@@ -79,13 +79,7 @@ describe Game do
       assignment: 'All: 3 B')
     end
 
-    describe '#profile_count' do
-      it "only counts the profiles that match and have observations" do
-        game.profile_count.should == 1
-      end
-    end
-
-    describe '#observation_count' do
+    describe '#profile_counts' do
       before do
         Observation.create_from_validated_data(profile,
           { "features" => {}, "symmetry_groups" => [{ "role" => "All",
@@ -93,8 +87,10 @@ describe Game do
             "payoff" => 200}, { "features" => {}, "payoff" => 300 }]}]})
       end
 
-      it "only counts observations from its profiles" do
-        game.observation_count.should == 2
+      it "only counts profiles and observations from its profiles" do
+        profile_counts = game.profile_counts
+        profile_counts["count"].should == 1
+        profile_counts["observations_count"].should == 2
       end
     end
   end

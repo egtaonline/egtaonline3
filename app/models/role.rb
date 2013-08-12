@@ -14,6 +14,7 @@ class Role < ActiveRecord::Base
   end
 
   def count_is_acceptable
+    self.reduced_count ||= self.count
     unless unassigned_player_count >= count
       errors.add(:count,
         'can\'t be larger than the owner\'s unassigned player count')
@@ -21,6 +22,10 @@ class Role < ActiveRecord::Base
     unless reduced_count <= count
       errors.add(:reduced_count, 'can\'t be larger than count')
     end
+  end
+
+  def strategy_query
+    "(" + strategies.collect { |strat| "strategy = '#{strat}'" }.join(" OR ") + ")"
   end
 
   private
