@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130731191218) do
+ActiveRecord::Schema.define(version: 20130812174745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 20130731191218) do
   end
 
   add_index "games", ["simulator_instance_id", "name"], name: "index_games_on_simulator_instance_id_and_name", unique: true, using: :btree
+
+  create_table "observation_aggs", force: true do |t|
+    t.integer "observation_id",    null: false
+    t.integer "symmetry_group_id", null: false
+    t.float   "payoff",            null: false
+    t.float   "payoff_sd"
+  end
+
+  add_index "observation_aggs", ["observation_id", "symmetry_group_id"], name: "index_observation_aggs_on_observation_id_and_symmetry_group_id", unique: true, using: :btree
 
   create_table "observations", force: true do |t|
     t.integer  "profile_id", null: false
@@ -148,6 +157,8 @@ ActiveRecord::Schema.define(version: 20130731191218) do
     t.integer  "count",      null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "payoff"
+    t.float    "payoff_sd"
   end
 
   add_index "symmetry_groups", ["profile_id", "role", "strategy"], name: "index_symmetry_groups_on_profile_id_and_role_and_strategy", unique: true, using: :btree
