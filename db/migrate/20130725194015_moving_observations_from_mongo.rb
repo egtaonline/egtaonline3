@@ -4,8 +4,8 @@ class MovingObservationsFromMongo < ActiveRecord::Migration
     unless Rails.env == "test"
       session = Moped::Session.new(["127.0.0.1:27017"])
       session.use :egt_web_interface_production
-
       counter = 327870
+      columns = ['observation_id', 'symmetry_group_id', 'payoff', 'features']
       total_count = session[:profiles].find(new_id: { "$exists" => true }, sample_count: { "$gt" => 0 }).count
       puts total_count
       while counter < total_count
@@ -24,14 +24,14 @@ class MovingObservationsFromMongo < ActiveRecord::Migration
                   obs["symmetry_groups"].each do |sym|
                     sid = SymmetryGroup.find_by(profile_id: profile["new_id"], role: sym["role"], strategy: sym["strategy"]).id
                     sym["players"].each do |player|
-                      import_list << Player.new(observation_id: observation.id, symmetry_group_id: sid, payoff: player["payoff"], features: player["features"])
+                      import_list << [observation.id, sid, player["payoff"], player["features"]]
                     end
                   end
                 end
               end
             end
           end
-          Player.import import_list
+          Player.import columns, import_list, validation: false
         end
         counter += 10
         puts counter
