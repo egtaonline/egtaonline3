@@ -10,7 +10,9 @@ class AddPreaggregates < ActiveRecord::Migration
       t.float :payoff_sd
     end
 
-    execute "INSERT INTO observation_aggs(observation_id, symmetry_group_id, payoff, payoff_sd) SELECT observation_id, symmetry_group_id, avg(payoff), stddev_samp(payoff) FROM players GROUP BY observation_id, symmetry_group_id"
+    unless Rails.env == 'test'
+      execute "INSERT INTO observation_aggs(observation_id, symmetry_group_id, payoff, payoff_sd) SELECT observation_id, symmetry_group_id, avg(payoff), stddev_samp(payoff) FROM players GROUP BY observation_id, symmetry_group_id"
+    end
     add_index :observation_aggs, [:observation_id, :symmetry_group_id], unique: true
   end
 
