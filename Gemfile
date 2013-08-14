@@ -16,7 +16,7 @@ gem 'jquery-migrate-rails'
 gem 'therubyrhino', platform: :jruby
 
 gem 'uglifier', '>= 1.3.0'
-
+gem 'activerecord-import', '~> 0.4.0'
 gem 'jquery-rails'
 gem 'haml-rails'
 gem 'decent_exposure'
