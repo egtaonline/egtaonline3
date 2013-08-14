@@ -27,12 +27,9 @@ class ProfilePresenter
         select profiles.id, observations_count, simulator_instance_id, (
           select array_to_json(array_agg(symmetry_group))
           from (
-            select symmetry_groups.id, role, strategy, count,
-            avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd
-            from symmetry_groups, players
-            where players.symmetry_group_id = symmetry_groups.id
-            and symmetry_groups.profile_id = profiles.id
-            group by symmetry_groups.id
+            select symmetry_groups.id, role, strategy, count, payoff, payoff_sd
+            from symmetry_groups
+            where symmetry_groups.profile_id = profiles.id
             order by symmetry_groups.id
           ) symmetry_group
         ) as symmetry_groups
@@ -61,11 +58,10 @@ class ProfilePresenter
             select features, (
               select array_to_json(array_agg(sg))
               from (
-                select symmetry_group_id as id, avg(payoff) as payoff,
-                  stddev_samp(payoff) as payoff_sd
-                from players
+                select symmetry_group_id as id, payoff, payoff_sd
+                from observation_aggs
                 where observation_id = observations.id
-                group by symmetry_group_id order by symmetry_group_id
+                order by symmetry_group_id
               ) sg
             ) as symmetry_groups
             from observations
