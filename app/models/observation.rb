@@ -8,16 +8,15 @@ class Observation < ActiveRecord::Base
     observation = profile.observations.create(features: data["features"])
     if observation.valid?
       data["symmetry_groups"].each do |symmetry_group|
-        symmetry_group_id = profile.symmetry_groups.find_by(
-          role: symmetry_group["role"], strategy: symmetry_group["strategy"]).id
+        sgroup = profile.symmetry_groups.find_by(
+          role: symmetry_group["role"], strategy: symmetry_group["strategy"])
         symmetry_group["players"].each do |player|
-          observation.players.create(symmetry_group_id: symmetry_group_id,
+          Player.create!(observation_id: observation.id, symmetry_group_id: sgroup.id,
             features: player["features"], payoff: player["payoff"])
         end
-        observation.observation_aggs.create(symmetry_group_id: symmetry_group_id)
-        DB.execute "
-          WITH aggregates AS (SELECT symmetry_group_id, avg(players.payoff) as payoff, stddev_samp(players.payoff) as payoff_sd from players where symmetry_group_id=#{symmetry_group_id} group by symmetry_group_id)
-          UPDATE symmetry_groups SET payoff = aggregates.payoff, payoff_sd = aggregates.payoff_sd from aggregates WHERE id = aggregates.symmetry_group_id;"
+        observation.observation_aggs.create(symmetry_group_id: sgroup.id)
+        payoffs = Player.where(symmetry_group_id: sgroup.id).order("").select("avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd").first
+        sgroup.update_attributes(payoff: payoffs["payoff"], payoff_sd: payoffs["payoff_sd"])
       end
       observation
     end
