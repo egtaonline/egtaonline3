@@ -2,13 +2,8 @@ require 'spec_helper'
 
 describe "DataParser can process observations" do
   context "when all of the observations are valid" do
-    let(:profile) do
-      FactoryGirl.create(:profile,
-        assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2')
-    end
-    let(:simulation) do
-      FactoryGirl.create(:simulation, profile: profile, state: 'running')
-    end
+    let!(:profile) { FactoryGirl.create(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
+    let!(:simulation){ FactoryGirl.create(:simulation, profile: profile, state: 'running') }
 
     it "creates all the required objects" do
       DataParser.new.perform(simulation.id, "#{Rails.root}/spec/support/data/3")

@@ -12,7 +12,7 @@ class SchedulersController < ProfileSpacesController
   expose(:role_owner_path){ "/schedulers/#{scheduler.id}" }
 
   expose(:scheduling_requirements) do
-    SchedulingRequirement.joins(:profile).where(scheduler_id: params[:id]).order("#{sort_column} #{sort_direction}").page(params[:page])
+    SchedulingRequirement.where(scheduler_id: params[:id]).includes(:profile).order("#{sort_column} #{sort_direction}").page(params[:page])
   end
 
   def create
@@ -45,7 +45,7 @@ class SchedulersController < ProfileSpacesController
 
   def sort_column
     if params[:id]
-      params[:sort] ||= "assignment"
+      params[:sort] ||= "profiles.assignment"
     else
       super
     end

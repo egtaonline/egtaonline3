@@ -6,13 +6,19 @@ class GamePresenter
   def to_json(options={})
     case options[:granularity]
     when "structure"
-      @game.to_json
+      File.open("#{Rails.root}/public/games/#{@game.id}-structure.json", "w") do |f|
+        f.write(MultiJson.dump(@game.to_json))
+      end
+      "#{Rails.root}/public/games/#{@game.id}-structure.json"
     when "full"
-      DB.select_value(full)
+      DB.execute(full)
+      "#{Rails.root}/public/games/#{@game.id}-full.json"
     when "observations"
-      DB.select_value(observations)
+      DB.execute(observations)
+      "#{Rails.root}/public/games/#{@game.id}-observations.json"
     else
-      DB.select_value(summary)
+      DB.execute(summary)
+      "#{Rails.root}/public/games/#{@game.id}-summary.json"
     end
   end
 
@@ -21,6 +27,7 @@ class GamePresenter
   end
 
   def summary
+    "COPY (" +
     profile_set +
       "select row_to_json(t)
       from (
@@ -45,21 +52,20 @@ class GamePresenter
               select symmetry_groups.id, role, strategy, count, symmetry_groups.payoff, symmetry_groups.payoff_sd
               from symmetry_groups
               where profile_id = profiles.id
-              order by symmetry_groups.id
             ) symmetry_group
           ) as symmetry_groups
           from profiles, result
           where profiles.id = result.profile_id
           group by profiles.id
-          order by assignment
         ) as profile
       ) as profiles
       from games, simulator_instances
       where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
-      ) t"
+      ) t) to '#{Rails.root}/public/games/#{@game.id}-summary.json';"
   end
 
   def observations
+    "COPY (" +
     profile_set + "
       select row_to_json(t)
       from (
@@ -84,7 +90,6 @@ class GamePresenter
               select symmetry_groups.id, role, strategy, count
               from symmetry_groups
               where profile_id = profiles.id
-              order by symmetry_groups.id
             ) symmetry_group
           ) as symmetry_groups,
           (
@@ -96,7 +101,6 @@ class GamePresenter
                   select symmetry_group_id as id, payoff, payoff_sd
                   from observation_aggs
                   where observation_id = observations.id
-                  order by symmetry_group_id
                 ) sg
               ) as symmetry_groups
               from observations
@@ -106,15 +110,15 @@ class GamePresenter
           from profiles, result
           where profiles.id = result.profile_id
           group by profiles.id
-          order by assignment
         ) as profile
       ) as profiles
       from games, simulator_instances
       where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
-      ) t"
+      ) t) to '#{Rails.root}/public/games/#{@game.id}-observations.json';"
   end
 
   def full
+    "COPY (" +
     profile_set + "
       select row_to_json(t)
       from (
@@ -147,10 +151,9 @@ class GamePresenter
               select features, (
                 select array_to_json(array_agg(player))
                 from (
-                  select payoff, features, symmetry_group_id
+                  select payoff as p, features as f, symmetry_group_id as sid
                   from players
                   where observation_id = observations.id
-                  order by symmetry_group_id
                 ) player
               ) as players
               from observations
@@ -160,12 +163,11 @@ class GamePresenter
           from profiles, result
           where profiles.id = result.profile_id
           group by profiles.id
-          order by assignment
         ) as profile
       ) as profiles
       from games, simulator_instances
       where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
-      ) t"
+      ) t) to '#{Rails.root}/public/games/#{@game.id}-full.json';"
   end
 
   private

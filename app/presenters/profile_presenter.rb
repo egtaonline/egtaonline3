@@ -92,7 +92,7 @@ class ProfilePresenter
             select features, (
               select array_to_json(array_agg(player))
               from (
-                select symmetry_group_id, payoff, features
+                select symmetry_group_id as sid, payoff as p, features as f
                 from players
                 where observation_id = observations.id
               ) player

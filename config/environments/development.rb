@@ -28,4 +28,9 @@ Egtaonline3::Application.configure do
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   config.eager_load = false
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.rails_logger = true
+  end
 end
