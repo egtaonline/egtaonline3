@@ -1,7 +1,7 @@
 namespace :foreman do
   desc "Export the Procfile to Ubuntu's upstart scripts"
   task :export, :roles => :app do
-    run "cd /home/#{user}/#{application}/current && rbenvsudo bundle exec foreman export upstart /etc/init -a sidekiq -u #{user} -l /var/#{application}/log"
+    run "cd /home/#{user}/#{application}/current && rbenv sudo bundle exec foreman export upstart /etc/init -a sidekiq -u #{user} -l /var/#{application}/log"
   end
 
   desc "Start the application services"
