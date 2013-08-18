@@ -1,13 +1,13 @@
 require 'bundler/capistrano'
-# require 'puma/capistrano'
+require 'puma/capistrano'
 
 load 'config/recipes/base'
-# load 'config/recipes/foreman'
-# load 'config/recipes/nginx'
-# load 'config/recipes/nodejs'
+load 'config/recipes/foreman'
+load 'config/recipes/nginx'
+load 'config/recipes/nodejs'
 load 'config/recipes/postgresql'
-# load 'config/recipes/rbenv'
-# load 'config/recipes/redis'
+load 'config/recipes/rbenv'
+load 'config/recipes/redis'
 
 server 'egtaonline.eecs.umich.edu', :web, :app, :db, primary: true
 
