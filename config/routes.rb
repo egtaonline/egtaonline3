@@ -1,6 +1,6 @@
 Egtaonline3::Application.routes.draw do
-  devise_for :users, :controllers => { :registrations => "registrations" }
   resources :users, only: [:index, :update]
+  devise_for :users, :controllers => { :registrations => "registrations" }
 
   namespace :api do
     namespace :v3 do
