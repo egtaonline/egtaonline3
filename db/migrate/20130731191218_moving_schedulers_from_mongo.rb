@@ -3,6 +3,7 @@ class MovingSchedulersFromMongo < ActiveRecord::Migration
     unless Rails.env == "test"
       session = Moped::Session.new(["127.0.0.1:27017"])
       session.use :egt_web_interface_production
+      session.login(ENV['mongo_username'], ENV['mongo_password'])
       session[:schedulers].find.each do |scheduler|
         begin
           simulator_instance_id = get_simulator_instance_id(scheduler, session)

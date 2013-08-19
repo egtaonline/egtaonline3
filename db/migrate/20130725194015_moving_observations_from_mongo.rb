@@ -4,7 +4,8 @@ class MovingObservationsFromMongo < ActiveRecord::Migration
     unless Rails.env == "test"
       session = Moped::Session.new(["127.0.0.1:27017"])
       session.use :egt_web_interface_production
-      counter = 327870
+      session.login(ENV['mongo_username'], ENV['mongo_password'])
+      counter = 0
       columns = ['observation_id', 'symmetry_group_id', 'payoff', 'features']
       total_count = session[:profiles].find(new_id: { "$exists" => true }, sample_count: { "$gt" => 0 }).count
       puts total_count

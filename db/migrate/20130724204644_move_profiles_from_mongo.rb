@@ -4,6 +4,7 @@ class MoveProfilesFromMongo < ActiveRecord::Migration
     unless Rails.env == "test"
       session = Moped::Session.new(["127.0.0.1:27017"])
       session.use :egt_web_interface_production
+      session.login(ENV['mongo_username'], ENV['mongo_password'])
       invalid_count = 0
       counter = 0
       total_count = session[:profiles].find.count

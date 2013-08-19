@@ -4,6 +4,7 @@ class MoveSimulatorsFromMongo < ActiveRecord::Migration
       Simulator.skip_callback(:validation, :before, :setup_simulator)
       session = Moped::Session.new(["127.0.0.1:27017"])
       session.use :egt_web_interface_production
+      session.login(ENV['mongo_username'], ENV['mongo_password'])
       session[:simulators].find(simulator_source: nil).each do |sim|
         session[:simulators].find(_id: sim[:_id]).update("$set" => {
           simulator_source: sim[:simulator_source_filename]})
