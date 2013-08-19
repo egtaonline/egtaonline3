@@ -54,7 +54,7 @@ class FixSchedulers < ActiveRecord::Migration
       role['strategies'] ||= []
       dev_role['strategies'] ||= []
       new_role.strategies = role['strategies']
-      new_role.deviating_strategies = dev_role['strategies'])
+      new_role.deviating_strategies = dev_role['strategies']
       new_role.save!
     end
   end

@@ -20,5 +20,5 @@ namespace :foreman do
   end
 end
 
-after "deploy:update", "foreman:export"
+# after "deploy:update", "foreman:export"
 after "deploy:update", "foreman:restart"
