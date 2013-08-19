@@ -11,7 +11,6 @@ load 'deploy/assets'
 
 server 'egtaonline.eecs.umich.edu', :web, :app, :db, primary: true
 
-set :bundle_flags, "--deployment --quiet --binstubs"
 set :application, 'egtaonline3'
 set :user, 'deployment'
 set :deploy_to, "/home/#{user}/#{application}"
