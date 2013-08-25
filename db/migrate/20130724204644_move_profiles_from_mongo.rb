@@ -50,9 +50,7 @@ class MoveProfilesFromMongo < ActiveRecord::Migration
     configuration_string = profile["configuration"].collect do |key,value|
       "\"#{key}\" => \"#{value}\""
     end.join(", ")
-    simulator_id = session[:simulators].find(
-      _id: BSON::ObjectId.from_string(
-      profile[:simulator_id])).first["new_id"]
+    simulator_id = session[:simulators].find(_id: BSON::ObjectId.from_string(profile[:simulator_id])).first["new_id"]
     simulator_instance = SimulatorInstance.where("
       simulator_id = ? AND configuration @> (?)", simulator_id,
       configuration_string).first
