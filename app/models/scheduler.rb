@@ -15,7 +15,7 @@ class Scheduler < ActiveRecord::Base
   delegate :simulator, to: :simulator_instance
   delegate :configuration, to: :simulator_instance
 
-  after_save :update_scheduling_requirements, on: :update, if: :simulator_instance_was_changed?
+  after_save :update_scheduling_requirements, on: :update, if: :update_conditions?
 
   def update_scheduling_requirements
     ProfileAssociator.perform_async(id)
@@ -33,7 +33,7 @@ class Scheduler < ActiveRecord::Base
 
   private
 
-  def simulator_instance_was_changed?
-    simulator_instance_id_changed? && simulator_instance_id_was != nil
+  def update_conditions?
+    (simulator_instance_id_changed? && simulator_instance_id_was != nil) || (default_observation_requirement_changed? && default_observation_requirement_was != nil)
   end
 end

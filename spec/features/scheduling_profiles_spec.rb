@@ -77,22 +77,36 @@ describe 'Users can make schedulers to schedule profiles' do
       end
     end
 
-    describe "updating configuration of a scheduler" do
-      it "leads to new profiles being created" do
-        scheduler = FactoryGirl.create(described_class.to_s.underscore.to_sym,
-          :with_profiles)
-        simulator_instance = scheduler.simulator_instance
-        assignment = simulator_instance.profiles.last.assignment
-        visit "/#{klass}/#{scheduler.id}/edit"
-        fill_in 'Parm2', with: 23
-        click_button 'Update Scheduler'
-        page.should have_content('Parm2: 23')
-        unless described_class == GenericScheduler
-          page.should have_content(assignment)
-          Profile.count.should == simulator_instance.profiles.count*2
-        else
-          page.should_not have_content(assignment)
-          Profile.count.should == simulator_instance.profiles.count
+    context 'when the scheduler has profiles' do
+      let(:scheduler){ FactoryGirl.create(described_class.to_s.underscore.to_sym, :with_profiles)}
+      let(:simulator_instance){ scheduler.simulator_instance }
+      describe "updating configuration of a scheduler" do
+        it "leads to new profiles being created" do
+          assignment = simulator_instance.profiles.last.assignment
+          visit "/#{klass}/#{scheduler.id}/edit"
+          fill_in 'Parm2', with: 23
+          click_button 'Update Scheduler'
+          page.should have_content('Parm2: 23')
+          unless described_class == GenericScheduler
+            page.should have_content(assignment)
+            Profile.count.should == simulator_instance.profiles.count*2
+          else
+            page.should_not have_content(assignment)
+            Profile.count.should == simulator_instance.profiles.count
+          end
+        end
+      end
+
+      describe 'updating default observation requirement' do
+        it 'leads the counts on scheduling requirements to change' do
+          unless scheduler.class == GenericScheduler
+            count = scheduler.scheduling_requirements.first.count
+            new_count = count + 5
+            visit "/#{klass}/#{scheduler.id}/edit"
+            fill_in "Default observation requirement", with: new_count
+            click_button 'Update Scheduler'
+            scheduler.reload.scheduling_requirements.first.count.should == new_count
+          end
         end
       end
     end

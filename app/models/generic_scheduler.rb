@@ -54,4 +54,10 @@ class GenericScheduler < Scheduler
       grole.save!
     end
   end
+
+  private
+
+  def update_conditions?
+    simulator_instance_id_changed? && simulator_instance_id_was != nil
+  end
 end
