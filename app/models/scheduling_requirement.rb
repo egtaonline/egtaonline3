@@ -8,4 +8,6 @@ class SchedulingRequirement < ActiveRecord::Base
 
   delegate :assignment, to: :profile
   delegate :observations_count, to: :profile
+
+  after_save { self.profile.try_scheduling }
 end

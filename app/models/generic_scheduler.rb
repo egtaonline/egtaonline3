@@ -16,9 +16,7 @@ class GenericScheduler < Scheduler
         SchedulingRequirement.joins(:profile).where(
           "scheduler_id = ? AND profiles.assignment = ?",
           id, assignment).destroy_all
-        self.scheduling_requirements.create(profile_id: profile.id,
-          count: observation_count)
-        profile.try_scheduling
+        self.scheduling_requirements.create(profile_id: profile.id, count: observation_count)
       end
     end
     profile

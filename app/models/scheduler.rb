@@ -16,6 +16,7 @@ class Scheduler < ActiveRecord::Base
   delegate :configuration, to: :simulator_instance
 
   after_save :update_scheduling_requirements, on: :update, if: :update_conditions?
+  after_save :try_scheduling, on: :update, if: :activated?
 
   def update_scheduling_requirements
     ProfileAssociator.perform_async(id)
@@ -31,9 +32,19 @@ class Scheduler < ActiveRecord::Base
     self.simulations.create!(size: observations_to_schedule, state: 'pending', profile_id: profile.id) if observations_to_schedule > 0
   end
 
+  def try_scheduling
+    scheduling_requirements.each do |s|
+      s.profile.try_scheduling
+    end
+  end
+
   private
 
   def update_conditions?
     (simulator_instance_id_changed? && simulator_instance_id_was != nil) || (default_observation_requirement_changed? && default_observation_requirement_was != nil)
+  end
+
+  def activated?
+    active_changed? && active == true
   end
 end

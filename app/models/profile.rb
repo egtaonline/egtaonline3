@@ -46,7 +46,6 @@ class Profile < ActiveRecord::Base
         self.symmetry_groups.create!(role: role, strategy: strategy, count: count.to_i)
       end
     end
-    try_scheduling
   end
 
   def try_scheduling

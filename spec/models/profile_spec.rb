@@ -19,11 +19,6 @@ describe Profile do
     it 'sets the size correctly' do
       profile.size.should == 6
     end
-
-    it 'triggers ProfileScheduler' do
-      ProfileScheduler.should_receive(:perform_in)
-      FactoryGirl.create(:profile)
-    end
   end
 
   describe '#scheduled?' do
