@@ -36,6 +36,7 @@ describe RemoteSimulationManager do
         "#{local_data_path}/#{simulation.id}")
       FileUtils.should_receive(:mkdir).with(
         "#{local_data_path}/#{simulation.id}")
+      FileUtils.should_receive(:chmod_R).with(0775, "#{local_data_path}/#{simulation.id}")
       spec_generator.should_receive(:generate).with(simulation)
       simulation_manager.prepare_simulation(simulation)
     end

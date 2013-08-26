@@ -28,7 +28,6 @@ describe PbsCreator do
         f = double("file")
         f.should_receive(:write).with(response)
         File.should_receive(:open).with("#{local_data_path}/#{simulation.id}/wrapper", 'w').and_yield(f)
-        FileUtils.should_receive(:chmod_R).with(0775, "#{local_data_path}/#{simulation.id}")
         pbs_creator.prepare(simulation)
       end
     end
@@ -41,7 +40,6 @@ describe PbsCreator do
         f = double("file")
         f.should_receive(:write).with(response)
         File.should_receive(:open).with("#{local_data_path}/#{simulation.id}/wrapper", 'w').and_yield(f)
-        FileUtils.should_receive(:chmod_R).with(0775, "#{local_data_path}/#{simulation.id}")
         pbs_creator.prepare(simulation)
       end
     end
@@ -55,7 +53,6 @@ describe PbsCreator do
         f = double("file")
         f.should_receive(:write).with(response)
         File.should_receive(:open).with("#{local_data_path}/#{simulation.id}/wrapper", 'w').and_yield(f)
-        FileUtils.should_receive(:chmod_R).with(0775, "#{local_data_path}/#{simulation.id}")
         pbs_creator.prepare(simulation)
       end
     end
