@@ -1,5 +1,5 @@
 class SimulationStatusResolver
-  ERROR_LIMIT = 1024
+  ERROR_LIMIT = 255
 
   def initialize(local_data_path)
     @data_path = local_data_path
