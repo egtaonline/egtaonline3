@@ -52,6 +52,12 @@ describe Backend do
       it 'passes the message along to the backend implementation' do
         Backend.configuration.connection.should_receive(:authenticate).with(uniqname: 'fake', verification_number: 123, password: 'also_fake').and_return(true)
         Backend.authenticate(uniqname: 'fake', verification_number: 123, password: 'also_fake')
+      end
+    end
+
+    describe 'connected?' do
+      it "delegates connected?" do
+        Backend.configuration.connection.should_receive(:authenticated?).and_return(true)
         Backend.connected?.should == true
       end
     end

@@ -12,11 +12,14 @@ class Connection
     end
   end
 
+  def authenticated?
+    @flux_proxy.authenticated?
+  end
+
   def acquire
     if @flux_proxy.authenticated?
       @flux_proxy
     else
-      Backend.connected = false
       nil
     end
   end

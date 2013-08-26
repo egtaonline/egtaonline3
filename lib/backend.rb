@@ -4,7 +4,7 @@ module Backend
   extend SingleForwardable
 
   class << self
-    attr_accessor :connected, :configuration
+    attr_accessor :configuration
   end
 
   def_delegators :configuration, :connection, :simulation_interface,
@@ -14,18 +14,17 @@ module Backend
     :schedule_simulation, :clean_simulation, :update_simulations
 
   def self.connected?
-    self.connected
+    connection.authenticated? rescue false
   end
 
   def self.configure
-    self.connected = false
     self.configuration ||= Configuration.new
     yield(configuration)
     configuration.setup
   end
 
   def self.authenticate(options)
-    self.connected = connection.authenticate(options)
+    connection.authenticate(options)
   end
 
   class Configuration

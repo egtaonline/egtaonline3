@@ -37,10 +37,7 @@ describe Connection do
         flux_proxy.should_receive(:authenticated?).and_return(false)
       end
 
-      it 'informs Backend and the caller that it is not connected' do
-        Backend.should_receive(:connected=).with(false)
-        connection.acquire.should == nil
-      end
+      it { connection.acquire.should == nil }
     end
 
     context 'when the connection is open' do

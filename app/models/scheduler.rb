@@ -12,6 +12,7 @@ class Scheduler < ActiveRecord::Base
   has_many :roles, as: :role_owner
 
   delegate :simulator_fullname, to: :simulator_instance
+  delegate :simulator_id, to: :simulator_instance
   delegate :simulator, to: :simulator_instance
   delegate :configuration, to: :simulator_instance
 

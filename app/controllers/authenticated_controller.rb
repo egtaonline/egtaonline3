@@ -19,4 +19,12 @@ class AuthenticatedController < ApplicationController
   def default_order
     "name"
   end
+
+  def default_secondary
+    ""
+  end
+
+  def secondary_column
+    params[:secondary_column] ||= default_secondary
+  end
 end
