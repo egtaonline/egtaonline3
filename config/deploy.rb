@@ -64,14 +64,6 @@ namespace :deploy do
     finalize_update
   end
 
-  desc "Update the database (overwritten to avoid symlink)"
-  task :migrations do
-    transaction do
-      update_code
-    end
-    restart
-  end
-
   task :finalize_update, except: { no_release: true } do
     # mkdir -p is making sure that the directories are there for some SCM's that don't
     # save empty folders
@@ -84,7 +76,6 @@ namespace :deploy do
       ln -s #{shared_path}/system #{latest_release}/public/system &&
       ln -s #{shared_path}/pids #{latest_release}/tmp/pids &&
       ln -s #{shared_path}/simulator_uploads #{latest_release}/simulator_uploads &&
-      ln -sf #{shared_path}/mongoid.yml #{latest_release}/config/mongoid.yml
     CMD
 
     if fetch(:normalize_asset_timestamps, true)
