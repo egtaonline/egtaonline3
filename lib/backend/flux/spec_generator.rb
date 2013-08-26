@@ -14,7 +14,7 @@ class SpecGenerator
         spec["assignment"][symmetry_group.role] << symmetry_group.strategy
       end
     end
-    spec["configuration"] = profile.simulator_instance.configuration
+    spec["configuration"] = profile.simulator_instance.configuration.to_hash
     file = File.open("#{@path}/#{simulation.id}/simulation_spec.json", 'w') { |f| f.write(MultiJson.dump(spec.to_hash)) }
   end
 end
