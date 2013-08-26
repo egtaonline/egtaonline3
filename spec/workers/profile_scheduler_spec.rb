@@ -3,18 +3,18 @@ require 'spec_helper'
 describe ProfileScheduler do
   describe '#schedule' do
     context 'profile is not scheduled' do
-      let!(:profile){ FactoryGirl.create(:profile) }
-
+      let(:profile){ FactoryGirl.create(:profile, assignment: 'All: 2 A') }
       # Needs to be tested with timing
-
-      # context 'profile scheduling requirements exist' do
-      #   it "it requests a simulation from the scheduler with the largest requirement" do
-      #     scheduling_requirement = FactoryGirl.create(:scheduling_requirement, profile: profile, count: 1)
-      #     scheduling_requirement2 = FactoryGirl.create(:scheduling_requirement, profile: profile, count: 5)
-      #     subject.perform(profile.id)
-      #     Simulation.last.size.should == 5
-      #   end
-      # end
+      it 'respects active' do
+        generic1 = FactoryGirl.create(:generic_scheduler, simulator_instance: profile.simulator_instance, active: false, observations_per_simulation: 25)
+        generic2 = FactoryGirl.create(:generic_scheduler, simulator_instance: profile.simulator_instance, active: true, observations_per_simulation: 25)
+        generic1.add_role('All', 2)
+        generic2.add_role('All', 2)
+        generic1.add_profile(profile.assignment, 25)
+        generic2.add_profile(profile.assignment, 10)
+        ProfileScheduler.new.perform(profile.id)
+        Simulation.last.size.should == 10
+      end
     end
   end
 end
