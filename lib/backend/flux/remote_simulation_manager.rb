@@ -21,7 +21,7 @@ class RemoteSimulationManager
     FileUtils.mkdir("#{@local_path}/#{simulation.id}")
     @pbs_creator.prepare(simulation)
     @spec_generator.generate(simulation)
-    FileUtils.chmod_R(0775, "#{@local_data_path}/#{simulation.id}")
+    FileUtils.chmod_R(0775, "#{@local_path}/#{simulation.id}")
   end
 
   def schedule_simulation(simulation)
