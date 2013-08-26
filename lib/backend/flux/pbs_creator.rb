@@ -33,6 +33,5 @@ class PbsCreator
                "rm -rf /tmp/${PBS_JOBID}"
 
     File.open("#{@local_data_path}/#{simulation.id}/wrapper", 'w'){ |f| f.write(document) }
-    FileUtils.chmod_R(0775, "#{@local_data_path}/#{simulation.id}")
   end
 end
