@@ -40,7 +40,7 @@ class GamePresenter
         from (
           select name, strategies, count
           from roles
-          where role_owner_id = #{@game.id}
+          where role_owner_id = #{@game.id} AND role_owner_type = 'Game'
         ) role
       ) as roles,
       (
@@ -78,7 +78,7 @@ class GamePresenter
         from (
           select name, strategies, count
           from roles
-          where role_owner_id = #{@game.id}
+          where role_owner_id = #{@game.id} AND role_owner_type = 'Game'
         ) role
       ) as roles,
       (
@@ -131,7 +131,7 @@ class GamePresenter
         from (
           select name, strategies, count
           from roles
-          where role_owner_id = #{@game.id}
+          where role_owner_id = #{@game.id} AND role_owner_type = 'Game'
         ) role
       ) as roles,
       (
