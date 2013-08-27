@@ -74,16 +74,16 @@ describe "Simulators" do
       it "should add the required strategy" do
         simulator.add_role("All")
         visit simulator_path(simulator.id)
-        fill_in "All_strategy", :with => "StratA"
+        fill_in "All_strategy", :with => "B.A"
         click_button "Add Strategy"
         page.should have_content("Inspect Simulator")
-        page.should have_content("StratA")
+        page.should have_content("B.A")
       end
     end
 
     describe "DELETE /simulators/:simulator_id/roles/:role/strategies/:id", type: :feature do
       it "should remove the required strategy" do
-        simulator.add_strategy("All", "StratA")
+        simulator.add_strategy("All", "B.A")
         visit simulator_path(simulator.id)
         click_on "Remove Strategy"
         page.should have_content("Inspect Simulator")

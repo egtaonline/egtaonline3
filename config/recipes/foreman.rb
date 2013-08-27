@@ -16,7 +16,8 @@ namespace :foreman do
 
   desc "Restart the application services"
   task :restart, :roles => :app do
-    run "#{sudo} start sidekiq || #{sudo} restart sidekiq"
+    run "#{sudo} stop sidekiq"
+    run "#{sudo} start sidekiq"
   end
 end
 

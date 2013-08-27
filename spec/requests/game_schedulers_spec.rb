@@ -32,24 +32,24 @@ describe "GameSchedulers" do
       end
     end
 
-    describe "POST /schedulers/:scheduler_id/roles/:role/strategies" do
+    describe "POST /schedulers/:scheduler_id/roles/:id/add_strategy" do
       it "adds the relevant strategy" do
-        Simulator.last.add_strategy("Bidder", "Strat1")
+        Simulator.last.add_strategy("Bidder", "A.B")
         game_scheduler.add_role("Bidder", game_scheduler.size)
         visit "/#{klass.tableize}/#{game_scheduler.id}"
         click_button "Add Strategy"
         page.should have_content("Inspect #{klass.titleize}")
-        page.should have_content("Strat1")
+        page.should have_content("A.B")
         game_scheduler.reload.roles.last.strategies.count.should eql(1)
-        game_scheduler.reload.roles.last.strategies.last.should eql("Strat1")
+        game_scheduler.reload.roles.last.strategies.last.should eql("A.B")
       end
     end
 
-    describe "DELETE /schedulers/:scheduler_id/roles/:role/strategies" do
+    describe "POST /schedulers/:scheduler_id/roles/:id/remove_strategy" do
       it "removes the relevant strategy" do
-        Simulator.last.add_strategy("Bidder", "Strat1")
+        Simulator.last.add_strategy("Bidder", "A.B")
         game_scheduler.add_role("Bidder", 1)
-        game_scheduler.add_strategy("Bidder", "Strat1")
+        game_scheduler.add_strategy("Bidder", "A.B")
         visit "/#{klass.tableize}/#{game_scheduler.id}"
         click_on "Remove Strategy"
         page.should have_content("Inspect #{klass.titleize}")

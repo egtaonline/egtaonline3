@@ -1,3 +1,3 @@
 %tr
   %td= deviating_strategy
-  %td= link_to 'Remove Deviating Strategy', scheduler_role_deviating_strategy_path(scheduler.id, role, deviating_strategy), method: :delete, class: 'btn btn-mini btn-warning'
+  %td= link_to 'Remove Deviating Strategy', "/schedulers/#{scheduler.id}/roles/#{role}/remove_deviating_strategy?strategy=#{deviating_strategy}", method: :post, class: 'btn btn-mini btn-warning'

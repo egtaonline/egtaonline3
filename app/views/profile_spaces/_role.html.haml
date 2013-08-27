@@ -5,7 +5,8 @@
     %table
       =render partial: "strategy", collection: role.strategies, locals: {role: role.name}
       -if role_owner.available_strategies(role.name) != []
-        =form_tag role_owner_path + "/roles/#{role.name}/strategies", method: :post do
+        -hash = (role_owner.class == Game ? { game_id: role_owner.id } : { scheduler_id: role_owner.id })
+        =form_tag url_for({ action: :add_strategy, controller: :roles, id: role.name }.merge(hash)), method: :post do
           %tr
             %td= select_tag "#{role.name}_strategy", options_for_select(role_owner.available_strategies(role.name))
             %td= submit_tag "Add Strategy", class: 'btn btn-mini btn-info'

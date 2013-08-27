@@ -1,3 +1,3 @@
 %tr
   %td= strategy
-  %td= link_to 'Remove Strategy', game_role_strategy_path(game.id, role, strategy), method: :delete, class: 'btn btn-mini btn-warning'
+  %td= link_to 'Remove Strategy', "/games/#{game.id}/roles/#{role}/remove_strategy?strategy=#{strategy}", method: :post, class: 'btn btn-mini btn-warning'

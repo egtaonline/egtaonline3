@@ -6,7 +6,7 @@
     %table
       =render partial: "/deviation_schedulers/deviating_strategy", collection: deviating_role.deviating_strategies, locals: {role: deviating_role.name}
       -if role_owner.available_strategies(deviating_role.name) != []
-        =form_tag role_owner_path + "/roles/#{deviating_role.name}/deviating_strategies", method: :post do
+        =form_tag url_for(action: :add_deviating_strategy, controller: :roles, id: deviating_role.name, scheduler_id: role_owner.id), method: :post do
           %tr
             %td= select_tag "deviating_#{deviating_role.name}_strategy", options_for_select(role_owner.available_strategies(deviating_role.name))
             %td= submit_tag "Add Deviating Strategy", class: 'btn btn-mini btn-info'

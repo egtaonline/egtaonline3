@@ -1,5 +1,5 @@
 class AuthenticatedController < ApplicationController
-  respond_to :html
+  respond_to :html, :js
   before_filter :authenticate_user!
   expose(:flux_connection){ FluxConnection.first }
   expose(:model_name){ params[:controller].singularize }

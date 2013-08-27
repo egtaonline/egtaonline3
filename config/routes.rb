@@ -21,13 +21,19 @@ Egtaonline3::Application.routes.draw do
 
   resources :simulators do
     resources :roles, only: [:create, :destroy] do
-      resources :strategies, only: [:create, :destroy]
+      member do
+        post :add_strategy
+        post :remove_strategy
+      end
     end
   end
 
   resources :games do
     resources :roles, only: [:create, :destroy] do
-      resources :strategies, only: [:create, :destroy]
+      member do
+        post :add_strategy
+        post :remove_strategy
+      end
     end
     collection do
       post :update_configuration
@@ -42,14 +48,16 @@ Egtaonline3::Application.routes.draw do
       post :create_game_to_match
     end
     resources :roles, only: [:create, :destroy] do
-      resources :strategies, only: [:create, :destroy]
-      resources :deviating_strategies, only: [:create, :destroy]
+      member do
+        post :add_strategy
+        post :remove_strategy
+        post :add_deviating_strategy
+        post :remove_deviating_strategy
+      end
     end
   end
 
-  resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers,
-    :deviation_schedulers, :hierarchical_deviation_schedulers,
-    :dpr_deviation_schedulers, :generic_schedulers, except: :delete
+  resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers, :generic_schedulers, :hierarchical_deviation_schedulers, :dpr_deviation_schedulers, :deviation_schedulers, except: :delete
 
   resources :profiles, only: :show
   resources :simulations, only: [:index, :show]

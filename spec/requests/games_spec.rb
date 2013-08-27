@@ -104,23 +104,23 @@ describe "Games" do
   describe "POST /games/:game_id/roles/:role/strategies", type: :feature do
     it "adds the relevant strategy" do
       game = FactoryGirl.create(:game)
-      Simulator.last.add_strategy("Bidder", "Strat1")
+      Simulator.last.add_strategy("Bidder", "A.B")
       game.add_role("Bidder", game.size)
       visit game_path(game.id)
       click_button "Add Strategy"
       page.should have_content("Inspect Game")
-      page.should have_content("Strat1")
+      page.should have_content("A.B")
       Game.last.roles.last.strategies.count.should eql(1)
-      Game.last.roles.last.strategies.last.should eql("Strat1")
+      Game.last.roles.last.strategies.last.should eql("A.B")
     end
   end
 
   describe "DELETE /games/:game_id/roles/:role/strategies/:id", type: :feature do
     it "adds the relevant strategy" do
       game = FactoryGirl.create(:game)
-      Simulator.last.add_strategy("Bidder", "Strat1")
+      Simulator.last.add_strategy("Bidder", "A.B")
       game.add_role("Bidder", game.size)
-      game.add_strategy("Bidder", "Strat1")
+      game.add_strategy("Bidder", "A.B")
       visit game_path(game.id)
       click_on "Remove Strategy"
       page.should have_content("Inspect Game")

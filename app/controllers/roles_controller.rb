@@ -8,6 +8,8 @@ class RolesController < AuthenticatedController
       Game.find(params["game_id"])
     end
   end
+  expose(:role){ params["id"] }
+
 
   def create
     if params["role_count"]
@@ -21,7 +23,27 @@ class RolesController < AuthenticatedController
   end
 
   def destroy
-    parent.remove_role(params["id"])
+    parent.remove_role(role)
+    respond_with(parent)
+  end
+
+  def add_strategy
+    parent.add_strategy(role, params["#{role}_strategy"])
+    respond_with(parent)
+  end
+
+  def remove_strategy
+    parent.remove_strategy(role, params["strategy"])
+    respond_with(parent)
+  end
+
+  def add_deviating_strategy
+    parent.add_deviating_strategy(role, params["deviating_#{role}_strategy"])
+    respond_with(parent)
+  end
+
+  def remove_deviating_strategy
+    parent.remove_deviating_strategy(role, params["strategy"])
     respond_with(parent)
   end
 end

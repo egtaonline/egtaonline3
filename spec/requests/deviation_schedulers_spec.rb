@@ -14,31 +14,29 @@ describe "DeviationSchedulers" do
     context "POST /schedulers/:scheduler_id/roles/:role/deviating_strategies",
       type: :feature do
       before do
-        scheduler.simulator.add_strategy('All', 'DeviousStrategy')
+        scheduler.simulator.add_strategy('All', 'A.B')
         scheduler.add_role('All', scheduler.size)
       end
       it "should add the strategy to the deviating strategy set" do
         visit "/#{klass.tableize}/#{scheduler.id}"
         click_on 'Add Deviating Strategy'
-        page.should have_content("DeviousStrategy")
-        scheduler.reload.roles.first.deviating_strategies.should include(
-          "DeviousStrategy")
-        scheduler.roles.first.strategies.should_not include("DeviousStrategy")
+        page.should have_content("A.B")
+        scheduler.reload.roles.first.deviating_strategies.should include("A.B")
+        scheduler.roles.first.strategies.should_not include("A.B")
       end
     end
 
     context "DELETE /schedulers/:scheduler_id/roles/:role/deviating_strategies",
       type: :feature do
       before do
-        scheduler.simulator.add_strategy('All', 'DeviousStrategy')
+        scheduler.simulator.add_strategy('All', 'A.B')
         scheduler.add_role('All', scheduler.size)
-        scheduler.add_deviating_strategy('All', 'DeviousStrategy')
+        scheduler.add_deviating_strategy('All', 'A.B')
       end
       it "should delete the strategy from the deviating strategy set" do
         visit "/#{klass.tableize}/#{scheduler.id}"
         click_on 'Remove Deviating Strategy'
-        scheduler.reload.roles.first.deviating_strategies.should_not include(
-          "DeviousStrategy")
+        scheduler.reload.roles.first.deviating_strategies.should_not include("A.B")
       end
     end
   end
