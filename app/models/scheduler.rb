@@ -42,7 +42,7 @@ class Scheduler < ActiveRecord::Base
   private
 
   def update_conditions?
-    (simulator_instance_id_changed? && simulator_instance_id_was != nil) || (default_observation_requirement_changed? && default_observation_requirement_was != nil)
+    simulator_instance_id_changed? || default_observation_requirement_changed? || size_changed?
   end
 
   def activated?
