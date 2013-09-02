@@ -50,6 +50,7 @@ shared_examples 'a pattern-based scheduler class' do
         scheduler.add_role('B', 1)
         scheduler.add_strategy('A', 'A1')
         scheduler.add_strategy('B', 'B2')
+        scheduler.reload
         scheduler.invalid_role_partition?.should == false
       end
     end
@@ -58,6 +59,21 @@ shared_examples 'a pattern-based scheduler class' do
   context 'when modifying role configuration with' do
     before do
       scheduler.should_receive(:update_scheduling_requirements)
+    end
+
+    describe 'changing the size' do
+      it 'triggers profile association' do
+        scheduler.size = 8
+        scheduler.save!
+      end
+
+      it 'destroys roles' do
+        scheduler.roles.create!(name: "A", count: 2, reduced_count: 2)
+        scheduler.size = 8
+        scheduler.save!
+        scheduler.reload.roles.count.should == 0
+        Role.count.should == 0
+      end
     end
 
     describe '#remove_role' do

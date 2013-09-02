@@ -18,6 +18,11 @@ class Scheduler < ActiveRecord::Base
 
   after_save :update_scheduling_requirements, on: :update, if: :update_conditions?
   after_save :try_scheduling, on: :update, if: :activated?
+  after_save :reset_roles, on: :update, if: :size_changed?
+
+  def reset_roles
+    self.roles.destroy_all
+  end
 
   def update_scheduling_requirements
     ProfileAssociator.perform_async(id)

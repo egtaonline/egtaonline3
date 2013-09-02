@@ -42,6 +42,7 @@ describe 'Users can make schedulers to schedule profiles' do
         select role, from: 'role'
         fill_in 'role_count', with: 2
         click_button 'Add Role'
+        scheduler.reload
         unless described_class == GenericScheduler
           select strategy, from: "#{role}_strategy"
           click_button 'Add Strategy'

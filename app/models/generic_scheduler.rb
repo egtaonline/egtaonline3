@@ -5,17 +5,13 @@ class GenericScheduler < Scheduler
 
   def add_profile(assignment, observation_count=default_observation_requirement)
     assignment = assignment.assignment_sort
-    profile = Profile.find_or_create_by(
-      simulator_instance_id: self.simulator_instance_id, assignment: assignment)
+    profile = Profile.find_or_create_by(simulator_instance_id: self.simulator_instance_id, assignment: assignment)
     if profile.errors.messages.empty?
       unless role_valid?(assignment)
-        profile.errors.add(:assignment, "cannot be scheduled by this" +
-        " Scheduler due to mismatch on role partition")
+        profile.errors.add(:assignment, "cannot be scheduled by this Scheduler due to mismatch on role partition")
       else
         add_strategies(assignment)
-        SchedulingRequirement.joins(:profile).where(
-          "scheduler_id = ? AND profiles.assignment = ?",
-          id, assignment).destroy_all
+        SchedulingRequirement.joins(:profile).where("scheduler_id = ? AND profiles.assignment = ?", id, assignment).destroy_all
         self.scheduling_requirements.create(profile_id: profile.id, count: observation_count)
       end
     end
@@ -25,9 +21,7 @@ class GenericScheduler < Scheduler
   def remove_profile_by_id(profile_id)
     scheduling_requirements.where(profile_id: profile_id).destroy_all
     roles.each do |role|
-      role.strategies = SymmetryGroup.where(
-        profile_id: scheduling_requirements.pluck(:profile_id),
-        role: role.name).select(:strategy).distinct.pluck(:strategy)
+      role.strategies = SymmetryGroup.where(profile_id: scheduling_requirements.pluck(:profile_id), role: role.name).select(:strategy).distinct.pluck(:strategy)
       role.save!
     end
   end
@@ -56,6 +50,6 @@ class GenericScheduler < Scheduler
   private
 
   def update_conditions?
-    simulator_instance_id_changed? && simulator_instance_id_was != nil
+    simulator_instance_id_changed? || size_changed?
   end
 end

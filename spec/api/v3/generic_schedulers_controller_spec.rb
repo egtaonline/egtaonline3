@@ -54,6 +54,7 @@ describe 'GenericSchedulersController' do
           it "returns the Profile and creates a SchedulingRequirement" do
             post "#{url}.json", query
             response.status.should eql(201)
+            scheduler.reload
             scheduling_requirement = scheduler.scheduling_requirements.last
             scheduling_requirement.count.should == 20
             scheduling_requirement.profile.assignment.should == 'All: 2 A'
@@ -92,6 +93,7 @@ describe 'GenericSchedulersController' do
         post "#{url}.json", auth_token: token, profile_id: @to_be_destroyed.id
         response.status.should eql(204)
         Profile.count.should == 2
+        scheduler.reload
         scheduler.scheduling_requirements.count.should == 1
         scheduler.scheduling_requirements.first.profile.should == @not_destroyed
       end

@@ -12,7 +12,7 @@ shared_examples 'a deviation scheduler' do
       it "triggers the profile_associator after adding the deviating strategy" do
         scheduler.add_role("All", 2)
         scheduler.add_deviating_strategy('All', 'A')
-        scheduler.roles.first.deviating_strategies.should == ['A']
+        scheduler.reload.roles.first.deviating_strategies.should == ['A']
       end
     end
 
@@ -21,7 +21,7 @@ shared_examples 'a deviation scheduler' do
         scheduler.roles.create!(name: 'All', count: 2, reduced_count: 2,
                                 deviating_strategies: ['A', 'B'])
         scheduler.remove_deviating_strategy('All', 'B')
-        scheduler.roles.first.deviating_strategies.should == ['A']
+        scheduler.reload.roles.first.deviating_strategies.should == ['A']
       end
     end
   end
