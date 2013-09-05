@@ -33,7 +33,12 @@ class SchedulersController < ProfileSpacesController
 
   def create_game_to_match
     @scheduler = klass.find(params[:id])
-    respond_with(GameFactory.create_game_to_match(@scheduler))
+    if Game.find_by(simulator_instance_id: scheduler.simulator_instance_id, name: scheduler.name)
+      flash[:alert] = 'A game with that name already exists.'
+      respond_with(@scheduler)
+    else
+      respond_with(GameFactory.create_game_to_match(@scheduler))
+    end
   end
 
   private

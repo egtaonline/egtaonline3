@@ -10,6 +10,18 @@ describe 'Games can be created from schedulers', type: :feature do
     sign_in
   end
 
+  shared_examples 'a scheduler' do
+    describe 'when trying to make a game that already exists' do
+      let!(:game){ FactoryGirl.create(:game, simulator_instance: scheduler.simulator_instance, name: scheduler.name) }
+      it 'alerts the user' do
+        visit "/#{klass.tableize}/#{scheduler.id}"
+        click_on 'Create Game to Match'
+        page.should have_content 'A game with that name already exists.'
+        Game.count.should == 1
+      end
+    end
+  end
+
   shared_examples 'a game scheduler when creating a game' do
     describe 'creating a game from a scheduler' do
       it 'creates a game that matches the scheduler' do
@@ -73,16 +85,20 @@ describe 'Games can be created from schedulers', type: :feature do
   [GameScheduler,HierarchicalScheduler,DprScheduler].each do |s_class|
     describe s_class do
       it_behaves_like 'a game scheduler when creating a game'
+      it_behaves_like 'a scheduler'
     end
   end
 
   DEVIATION_SCHEDULER_CLASSES.each do |s_class|
     describe s_class do
       it_behaves_like 'a deviation scheduler when creating a game'
+      it_behaves_like 'a scheduler'
     end
   end
 
   describe GenericScheduler do
+    it_behaves_like 'a scheduler'
+
     let(:scheduler){ FactoryGirl.create(:generic_scheduler) }
     let!(:profile) do
       FactoryGirl.create(:profile, :with_observations,
