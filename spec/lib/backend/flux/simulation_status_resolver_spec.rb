@@ -18,6 +18,7 @@ describe SimulationStatusResolver do
       before do
         simulation.should_not_receive(:start)
         simulation.should_not_receive(:fail)
+        simulation.should_not_receive(:process)
       end
 
       it{ status_resolver.act_on_status("Q", simulation) }

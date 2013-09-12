@@ -9,19 +9,17 @@ class SimulationStatusResolver
     case status
     when "R"
       simulation.start
-    when "", nil
-      error_message = check_for_errors("#{@data_path}/#{simulation.id}")
-      if error_message
-        simulation.fail(error_message)
+    when "C", "", nil
+      if File.exists?("#{@data_path}/#{simulation.id}/error")
+        error_message = File.open("#{@data_path}/#{simulation.id}/error").read(ERROR_LIMIT)
+        if error_message
+          simulation.fail(error_message)
+        else
+          simulation.process("#{@data_path}/#{simulation.id}")
+        end
       else
-        simulation.process("#{@data_path}/#{simulation.id}")
+        simulation.start
       end
     end
-  end
-
-  private
-
-  def check_for_errors(location)
-    File.exists?(location+'/error') ? File.open(location+"/error").read(ERROR_LIMIT) : 'Files were not found in NFS.'
   end
 end
