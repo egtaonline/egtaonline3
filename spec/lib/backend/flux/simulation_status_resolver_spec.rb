@@ -25,7 +25,7 @@ describe SimulationStatusResolver do
 
     context 'simulation completed successfully' do
       before do
-        File.should_receive(:exists?).with("#{local_data_path}/#{simulation.id}/error").twice.and_return(true)
+        File.should_receive(:exists?).with("#{local_data_path}/#{simulation.id}/error").and_return(true)
         File.should_receive(:open).with(
           "#{local_data_path}/#{simulation.id}/error").and_return(
           double(read: nil))
@@ -33,7 +33,6 @@ describe SimulationStatusResolver do
           "#{local_data_path}/#{simulation.id}")
       end
 
-      it{ status_resolver.act_on_status("C", simulation) }
       it{ status_resolver.act_on_status("", simulation) }
       it{ status_resolver.act_on_status(nil, simulation) }
     end
@@ -47,7 +46,6 @@ describe SimulationStatusResolver do
         simulation.should_receive(:fail).with('I has error')
       end
 
-      it{ status_resolver.act_on_status("C", simulation) }
       it{ status_resolver.act_on_status("", simulation) }
       it{ status_resolver.act_on_status(nil, simulation) }
     end
