@@ -22,6 +22,13 @@ class SimulationStatusResolver
   private
 
   def check_for_errors(location)
+    count = 0
+    # wait on NFS
+    while !File.exists?(location+"/error")
+      count += 1
+      break if count == 5
+      sleep 5
+    end
     File.exists?(location+'/error') ? File.open(location+"/error").read(ERROR_LIMIT) : 'Files were not found in NFS.'
   end
 end
