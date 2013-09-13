@@ -40,7 +40,7 @@ class Simulation < ActiveRecord::Base
   end
 
   def finish
-    if state == 'processing'
+    unless self.state == 'failed'
       logger.debug "Simulation #{id} moving to complete state"
       self.update_attributes(state: 'complete')
       logger.info "Rescheduling profile for simulation #{id}"

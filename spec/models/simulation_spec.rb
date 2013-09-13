@@ -92,7 +92,7 @@ describe Simulation do
   end
 
   describe '#finish' do
-    it 'moves to complete and tries to reschedule if processing' do
+    it 'moves to complete and tries to reschedule' do
       simulation = FactoryGirl.create(:simulation, state: 'processing' )
       ProfileScheduler.should_receive(:perform_in).with(5.minutes,
         simulation.profile_id)
@@ -100,12 +100,12 @@ describe Simulation do
       simulation.state.should == 'complete'
     end
 
-    it 'does nothign otherwise' do
-      simulation = FactoryGirl.create(:simulation, state: 'running' )
+    it 'does nothign if the simulation failed' do
+      simulation = FactoryGirl.create(:simulation, state: 'failed' )
       ProfileScheduler.should_not_receive(:perform_in).with(5.minutes,
         simulation.profile_id)
       simulation.finish
-      simulation.state.should == 'running'
+      simulation.state.should == 'failed'
     end
   end
 
