@@ -32,7 +32,9 @@ class Simulation < ActiveRecord::Base
 
   def process(location)
     if ['queued', 'running'].include?(state)
-      self.update_attributes(state: 'processing')
+      ActiveRecord::Base.transaction do
+        self.update_attributes(state: 'processing')
+      end
       DataParser.perform_async(id, location)
     end
   end
