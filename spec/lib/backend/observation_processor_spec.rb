@@ -4,7 +4,7 @@ describe ObservationProcessor do
   describe 'process_files' do
     let(:symmetry_groups){ double('Criteria') }
     let(:profile){ double(id: 1, symmetry_groups: symmetry_groups) }
-    let(:simulation){ double(profile: profile) }
+    let(:simulation){ double(profile: profile, id: 1) }
     let(:valid_path){ 'some/path.json' }
     let(:invalid_path){ 'some/other/path.json' }
 

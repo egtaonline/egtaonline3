@@ -5,14 +5,14 @@ class ObservationProcessor
     profile = simulation.profile
     validated = get_validated_data(profile, file_paths)
     unless validated == []
-      logger.debug "Simulation #{simulation.id} had the following valid files: #{validated.join(", ")}"
+      puts "Simulation #{simulation.id} had #{validated.size} valid file(s)"
       validated.each do |valid|
         profile.add_observation(valid)
       end
-      logger.info "Finishing simulation #{simulation.id}"
+      puts "Finishing simulation #{simulation.id}"
       simulation.finish
     else
-      logger.debug "Simulation #{simulation.id} had no valid files"
+      puts "Simulation #{simulation.id} had no valid files"
       simulation.fail "No valid observations were found."
     end
   end
