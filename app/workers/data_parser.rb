@@ -9,7 +9,6 @@ class DataParser
       logger.debug "Simulation #{simulation_id} found"
       if simulation.state != 'complete'
         files = Dir.entries(location).keep_if{ |name| name =~ /\A(.*)observation(.)*.json\z/ }.collect{ |f| location + '/' + f }
-        logger.debug "Simulation #{simulation_id} has files: #{file.join(", ")}"
         ObservationProcessor.process_files(simulation, files)
       end
     end
