@@ -70,13 +70,4 @@ describe Profile do
       profile.scheduled?.should == false
     end
   end
-
-  describe '#add_observation' do
-    let(:data){ double('data') }
-    it 'delegates to Observation to create an observation with its id' do
-      Observation.should_receive(:create_from_validated_data).with(
-        profile, data)
-      profile.add_observation(data)
-    end
-  end
 end

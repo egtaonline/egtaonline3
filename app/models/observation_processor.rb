@@ -1,9 +1,9 @@
 class ObservationProcessor
-  def initialize(simulation, file_paths, observation_validator = ObservationValidator.new(simulation.profile))
+  def initialize(simulation, file_paths, observation_validator = ObservationValidator.new(simulation.profile), observation_factory = ObservationFactory.new(simulation.profile))
     @simulation = simulation
-    @profile = simulation.profile
     @file_paths = file_paths
     @observation_validator = observation_validator
+    @observation_factory = observation_factory
   end
 
   def process_files
@@ -19,8 +19,8 @@ class ObservationProcessor
   private
 
   def process_observations(validated)
-    validated.each do |valid|
-      @profile.add_observation(valid)
+    validated.each do |data|
+      @observation_factory.add_observation(data)
     end
   end
 

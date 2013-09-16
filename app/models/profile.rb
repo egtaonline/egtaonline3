@@ -55,8 +55,4 @@ class Profile < ActiveRecord::Base
   def scheduled?
     simulations.scheduled.count > 0
   end
-
-  def add_observation(data)
-    Observation.create_from_validated_data(self, data)
-  end
 end
