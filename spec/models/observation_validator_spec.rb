@@ -1,4 +1,4 @@
-require 'backend/observation_validator'
+require 'spec_helper'
 
 describe ObservationValidator do
   describe 'validate' do
@@ -9,6 +9,7 @@ describe ObservationValidator do
     end
     let(:profile){ double(symmetry_groups: symmetry_groups) }
     let(:path){ 'fake/path' }
+    subject{ ObservationValidator.new(profile) }
 
     before do
       file = double(read: file_contents)
@@ -127,7 +128,7 @@ describe ObservationValidator do
         }
       end
 
-      it { ObservationValidator.validate(profile, path).should eql(outcome) }
+      it { subject.validate(path).should eql(outcome) }
 
       context 'when there are string numeric payoff values' do
         let(:file_contents) do
@@ -183,7 +184,7 @@ describe ObservationValidator do
         end
 
         it 'they get converted to floats' do
-          ObservationValidator.validate(profile, path).should eql(outcome)
+          subject.validate(path).should eql(outcome)
         end
       end
     end
@@ -219,7 +220,7 @@ describe ObservationValidator do
         JSON
       end
 
-      it { ObservationValidator.validate(profile, path).should == nil }
+      it { subject.validate(path).should == nil }
     end
   end
 end
