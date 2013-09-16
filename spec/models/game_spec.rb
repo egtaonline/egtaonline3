@@ -89,8 +89,8 @@ describe Game do
 
       it "only counts profiles and observations from its profiles" do
         profile_counts = game.profile_counts
-        profile_counts["count"].should == 1
-        profile_counts["observations_count"].should == 2
+        profile_counts["count"].to_i.should == 1
+        profile_counts["observations_count"].to_i.should == 2
       end
     end
   end

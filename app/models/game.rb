@@ -27,9 +27,8 @@ class Game < ActiveRecord::Base
           SELECT symmetry_groups.id, symmetry_groups.profile_id, symmetry_groups.role, symmetry_groups.strategy, profiles.observations_count
           FROM symmetry_groups, profiles
           WHERE symmetry_groups.profile_id = profiles.id AND profiles.simulator_instance_id = #{simulator_instance_id} AND profiles.role_configuration @> #{role_configuration} AND profiles.observations_count > 0),
-          in_space AS (SELECT * FROM reasonable_profiles WHERE #{profile_space}),
-          out_space AS ((SELECT * FROM reasonable_profiles) EXCEPT (SELECT * FROM in_space)),
-          result AS (SELECT DISTINCT ON(profile_id) observations_count FROM in_space WHERE profile_id NOT IN (SELECT DISTINCT ON(profile_id) profile_id FROM out_space))
+          out_space AS (SELECT * FROM reasonable_profiles WHERE NOT #{profile_space}),
+          result AS (SELECT DISTINCT ON(profile_id) observations_count FROM reasonable_profiles WHERE profile_id NOT IN (SELECT DISTINCT ON(profile_id) profile_id FROM out_space))
         SELECT COUNT(*) AS count, SUM(observations_count) AS observations_count FROM result
       ")[0]
     end

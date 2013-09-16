@@ -26,10 +26,10 @@ describe ObservationAgg do
       first_agg.payoff_sd.should == nil
       second_agg = ObservationAgg.find_by(symmetry_group_id: second_id)
       second_agg.payoff.should == 15
-      second_agg.payoff_sd.should == Math.sqrt(2)
+      second_agg.payoff_sd.should be_within(0.001).of(Math.sqrt(2))
       third_agg = ObservationAgg.find_by(symmetry_group_id: third_id)
       third_agg.payoff.should == 16
-      third_agg.payoff_sd.should == Math.sqrt(2)
+      third_agg.payoff_sd.should be_within(0.001).of(Math.sqrt(2))
     end
   end
 end
