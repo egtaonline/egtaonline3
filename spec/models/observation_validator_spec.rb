@@ -33,7 +33,7 @@ describe ObservationValidator do
                 "strategy": "BidValue",
                 "payoff": 2992.73,
                 "features": {
-          				"featureA": 0.001,
+          				"featureA": null,
           				"featureB": [2.0, 2.1]
           			}
           		},
@@ -85,7 +85,7 @@ describe ObservationValidator do
                 {
                   "payoff" => 2992.73,
         			    "features" => {
-        				    "featureA" => 0.001,
+        				    "featureA" => nil,
         				    "featureB" => [2.0, 2.1]
         			    }
         			  },
@@ -147,7 +147,7 @@ describe ObservationValidator do
                   "strategy": "BidValue",
                   "payoff": "2992.73",
                   "features": {
-            			  "featureA": 0.001,
+            			  "featureA": null,
             				"featureB": [2.0, 2.1]
             			}
             		},

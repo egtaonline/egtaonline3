@@ -61,7 +61,7 @@ describe ObservationFactory do
       observation_aggs.should_receive(:create!).with(symmetry_group_id: 1)
       observation_aggs.should_receive(:create!).with(symmetry_group_id: 2)
       symmetry_group1.should_receive(:update_attributes!).with(payoff: 2992.73, payoff_sd: nil)
-      symmetry_group2.should_receive(:update_attributes!).with(payoff: 2464.67, payoff_sd: 657.142616027907)
+      symmetry_group2.should_receive(:update_attributes!).with(payoff: 2464.67, payoff_sd: 657.1426160279075)
       subject.add_observation(data)
     end
   end

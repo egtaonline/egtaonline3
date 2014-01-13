@@ -12,6 +12,7 @@ class ObservationValidator
       end
     rescue => e
       Rails.logger.debug "Failure in validating: #{e.message}"
+      nil
     end
   end
 
