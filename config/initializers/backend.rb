@@ -11,6 +11,6 @@ Backend.configure do |config|
   config.connection_class = Connection
   config.connection_options[:proxy] = DRbObject.new_with_uri('druby://localhost:30000')
   config.simulation_interface_class = RemoteSimulationManager
-  config.simulation_interface_options[:flux_active_limit] = 90
+  config.simulation_interface_options[:flux_active_limit] = 200
   config.simulator_interface_class = RemoteSimulatorManager
 end
