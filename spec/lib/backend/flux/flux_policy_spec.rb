@@ -30,8 +30,8 @@ describe FluxPolicy do
         FluxPolicy::Simulation.should_receive(:active_on_other).and_return([])
       end
 
-      it 'does not update the qos to flux and returns the simulation' do
-        simulation.should_not_receive(:update_attributes)
+      it 'updates the simulation for engin_flux and returns the simulation' do
+        simulation.should_receive(:update_attributes).with(qos: 'engin_flux')
         flux_policy.set_queue(simulation).should == simulation
       end
     end
