@@ -42,7 +42,7 @@ gem 'sidekiq-failures'
 gem 'slim'
 gem 'sinatra', :require => nil
 gem 'celluloid'
-gem 'capistrano'
+gem 'capistrano', '~>2.15.5'
 gem 'foreman'
 gem 'clockwork'
 
