@@ -19,7 +19,7 @@ platforms :ruby_20 do
 end
 platforms :jruby do
   gem 'therubyrhino'
-  gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.0.beta2'
+  gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.0'
   gem 'jrjackson'
   gem 'thread_safe', '0.1.2'
 end
@@ -41,8 +41,6 @@ gem 'sidekiq'
 gem 'sidekiq-failures'
 gem 'slim'
 gem 'sinatra', :require => nil
-# temporary
-# gem 'moped', github: 'mongoid/moped'
 gem 'celluloid'
 gem 'capistrano'
 gem 'foreman'
