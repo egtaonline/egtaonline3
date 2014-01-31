@@ -40,7 +40,7 @@ Egtaonline3::Application.routes.draw do
     end
   end
 
-  resources :schedulers do
+  resources :schedulers, except: :show do
     collection do
       post :update_configuration
     end

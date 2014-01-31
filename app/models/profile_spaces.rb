@@ -8,7 +8,8 @@ module ProfileSpaces
   end
 
   def available_strategies(role_name)
-    simulator.role_configuration[role_name] - roles.where(name: role_name).first.strategies
+    role = roles.where(name: role_name).first
+    simulator.role_configuration[role_name] - role.strategies - role.deviating_strategies
   end
 
   def unassigned_player_count
