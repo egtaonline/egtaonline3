@@ -17,8 +17,10 @@ class SimulationStatusResolver
         else
           simulation.process("#{@data_path}/#{simulation.id}")
         end
-      else
+      elsif simulation.state == 'queued'
         simulation.start
+      else
+        simulation.fail('Failed to queue')
       end
     end
   end
