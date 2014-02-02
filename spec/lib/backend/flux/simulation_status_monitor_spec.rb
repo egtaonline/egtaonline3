@@ -12,8 +12,8 @@ describe SimulationStatusMonitor do
   end
 
   describe '#update_simulations' do
-    let(:simulation){ double(id: 123456) }
-    let(:other_simulation){ double(id: 123457) }
+    let(:simulation){ double(job_id: 123456) }
+    let(:other_simulation){ double(job_id: 123457) }
     let(:simulations){ [simulation, other_simulation] }
     let(:proxy){ double('proxy') }
     let(:connection){ double(acquire: proxy) }
@@ -37,7 +37,7 @@ describe SimulationStatusMonitor do
     end
 
     context 'when a simulation is missing from the status update' do
-      let(:other_simulation){ double(id: 123457) }
+      let(:other_simulation){ double(job_id: 123457) }
 
       before do
         proxy.should_receive(:exec!).with(

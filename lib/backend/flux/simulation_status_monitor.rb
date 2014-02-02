@@ -12,7 +12,7 @@ class SimulationStatusMonitor
       status_hash = parse_to_hash(output)
       unless status_hash == nil
         simulations.each do |simulation|
-          @status_resolver.act_on_status(status_hash[simulation.id.to_s], simulation)
+          @status_resolver.act_on_status(status_hash[simulation.job_id.to_s], simulation)
         end
       end
     end
