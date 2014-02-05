@@ -88,7 +88,7 @@ describe "Simulators" do
         click_on "Remove Strategy"
         page.should have_content("Inspect Simulator")
         page.should have_content("All")
-        page.should_not have_content("StratA")
+        page.should_not have_content("B.A")
       end
     end
   end

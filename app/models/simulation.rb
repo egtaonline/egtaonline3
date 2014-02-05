@@ -53,7 +53,7 @@ class Simulation < ActiveRecord::Base
   end
 
   def fail(message)
-    self.update_attributes(error_message: message, state: 'failed')
+    self.update_attributes(error_message: message[0..255], state: 'failed')
     requeue
   end
 
