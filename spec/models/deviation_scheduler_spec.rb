@@ -40,8 +40,8 @@ describe DeviationScheduler do
       scheduler.add_strategy('B', 'S3')
       scheduler.add_strategy('B', 'S1')
       scheduler.add_deviating_strategy('A', 'S4')
-      scheduler.reload.profile_space.should == ['A: 2 S2; B: 1 S3', 'A: 2 S2; B: 1 S1',
-                                         'A: 1 S2, 1 S4; B: 1 S3', 'A: 1 S2, 1 S4; B: 1 S1']
+      scheduler.reload.profile_space.sort.should == ['A: 2 S2; B: 1 S3', 'A: 2 S2; B: 1 S1',
+                                         'A: 1 S2, 1 S4; B: 1 S3', 'A: 1 S2, 1 S4; B: 1 S1'].sort
     end
   end
 end

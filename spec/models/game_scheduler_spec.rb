@@ -10,7 +10,7 @@ describe GameScheduler do
       scheduler.add_strategy('A', 'S2')
       scheduler.add_strategy('B', 'S3')
       scheduler.add_strategy('B', 'S1')
-      scheduler.reload.profile_space.should == ['A: 2 S2; B: 1 S3', 'A: 2 S2; B: 1 S1']
+      scheduler.reload.profile_space.sort.should == ['A: 2 S2; B: 1 S3', 'A: 2 S2; B: 1 S1'].sort
     end
   end
 end

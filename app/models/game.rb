@@ -44,6 +44,7 @@ class Game < ActiveRecord::Base
     if role
       role.strategies += [strategy]
       role.strategies.uniq!
+      role.strategies.sort!
       role.save!
     end
   end

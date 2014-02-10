@@ -42,6 +42,7 @@ class Simulator < ActiveRecord::Base
   def add_strategy(role, strategy)
     self.role_configuration[role] ||= []
     self.role_configuration[role] << strategy
+    self.role_configuration[role].sort!
     self.save!
   end
 

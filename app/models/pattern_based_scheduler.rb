@@ -4,6 +4,7 @@ module PatternBasedScheduler
     if role
       role.strategies += [strategy]
       role.strategies.uniq!
+      role.strategies.sort!
       role.save!
       update_scheduling_requirements
     end
