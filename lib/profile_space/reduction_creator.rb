@@ -13,7 +13,7 @@ class ReductionCreator
       current_count = full_role.values.reduce(:+)
       current_count ||= 0
       while current_count < player_count
-        full_role[full_role.max{ |x, y| reduction_factor*strategy_hash[x[0]]-full_role[x[0]] <=> reduction_factor*strategy_hash[y[0]]-full_role[y[0]] }[0]] += 1
+        full_role[max_key(full_role, reduction_factor, strategy_hash)] += 1
         current_count = full_role.values.reduce(:+)
       end
     end
@@ -31,5 +31,18 @@ class ReductionCreator
       count.times{ strategy_array << strategy }
     end
     strategy_array.sort
+  end
+  
+  private
+  
+  def self.max_key(full_role, reduction_factor, strategy_hash)
+    entry = full_role.max do |x, y|
+      first_check = (reduction_factor*strategy_hash[x[0]]-full_role[x[0]]) <=> (reduction_factor*strategy_hash[y[0]]-full_role[y[0]]) 
+      if first_check == 0
+        first_check = full_role[x[0]] <=> full_role[y[0]]
+      end
+      first_check
+    end
+    entry[0]
   end
 end

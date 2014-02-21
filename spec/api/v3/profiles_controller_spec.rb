@@ -5,8 +5,8 @@ describe 'ProfilesController' do
   let(:token) { user.authentication_token }
 
   describe 'GET /api/v3/profiles/:id' do
-    let!(:profile){ FactoryGirl.create(:profile, id: 1) }
-    let(:url){ '/api/v3/profiles/1' }
+    let!(:profile){ FactoryGirl.create(:profile) }
+    let(:url){ "/api/v3/profiles/#{profile.id}" }
 
     it 'returns the appropriate json from a ProfilePresenter' do
       get "#{url}.json", auth_token: token, granularity: 'full'

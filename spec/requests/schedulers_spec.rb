@@ -21,8 +21,8 @@ describe 'Schedulers' do
 
     describe "POST /schedulers/update_configuration",
       type: :feature, js: true do
-      let(:first_simulator){ FactoryGirl.create(:simulator) }
-      let(:second_simulator){ FactoryGirl.create(:simulator) }
+      let!(:first_simulator){ FactoryGirl.create(:simulator) }
+      let!(:second_simulator){ FactoryGirl.create(:simulator) }
 
       before do
         first_simulator.update_attributes(

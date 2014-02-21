@@ -6,6 +6,7 @@
 development:
   adapter: postgresql
   encoding: unicode
+  host: localhost
   database: egtaonline3_development
   username: egtaonline3
   password:
@@ -31,6 +32,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
+  host: localhost
   database: egtaonline3_test
   username: egtaonline3
   password:
