@@ -18,7 +18,7 @@ describe PbsCreator do
                   "#PBS -e #{remote_data_path}/#{simulation.id}/error\n#PBS -M #{simulator.email}\n" +
                   "umask 0007\nmkdir /tmp/${PBS_JOBID}\ncp -r #{simulators_path}/#{simulator.fullname}/#{simulator.name}/* /tmp/${PBS_JOBID}\n" +
                   "cp -r #{remote_data_path}/#{simulation.id} /tmp/${PBS_JOBID}\ncd /tmp/${PBS_JOBID}\nscript/batch #{simulation.id} #{simulation.size}" }
-    let(:bottom){ "\ncp -r /tmp/${PBS_JOBID}/#{simulation.id} #{remote_data_path}\nrm -rf /tmp/${PBS_JOBID}"}
+    let(:bottom){ "\ncp -r /tmp/${PBS_JOBID}/#{simulation.id} #{remote_data_path}\nrm -rf /tmp/${PBS_JOBID}\n"}
 
     context 'when the simulation is to be scheduled on flux' do
       let(:flux_value){ 'flux' }

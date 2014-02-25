@@ -4,24 +4,26 @@ class PbsFormatter
   end
 
   def format(allocation, nodes, memory, walltime, simulator_tag, email, sim_id, sim_size, extra_args)
-    "#!/bin/bash\n" +
-    "#PBS -S /bin/sh\n" +
-    "#PBS -A #{allocation}\n" +
-    "#PBS -q flux\n" +
-    "#PBS -l nodes=#{nodes},pmem=#{memory}mb,walltime=#{walltime},qos=flux\n" +
-    "#PBS -N #{simulator_tag}\n" +
-    "#PBS -W umask=0007\n" +
-    "#PBS -W group_list=wellman\n" +
-    "#PBS -o #{@path_finder.output_path}\n" +
-    "#PBS -e #{@path_finder.error_path}\n" +
-    "#PBS -M #{email}\n" +
-    "umask 0007\n" +
-    "mkdir /tmp/${PBS_JOBID}\n" +
-    "cp -r #{@path_finder.simulator_path}/* /tmp/${PBS_JOBID}\n" +
-    "cp -r #{@path_finder.simulation_path} /tmp/${PBS_JOBID}\n" +
-    "cd /tmp/${PBS_JOBID}\n" +
-    "script/batch #{sim_id} #{sim_size}#{extra_args}\n" +
-    "cp -r /tmp/${PBS_JOBID}/#{sim_id} #{@path_finder.data_path}\n" +
-    "rm -rf /tmp/${PBS_JOBID}"
+    <<-DOCUMENT
+#!/bin/bash
+#PBS -S /bin/sh
+#PBS -A #{allocation}
+#PBS -q flux
+#PBS -l nodes=#{nodes},pmem=#{memory}mb,walltime=#{walltime},qos=flux
+#PBS -N #{simulator_tag}
+#PBS -W umask=0007
+#PBS -W group_list=wellman
+#PBS -o #{@path_finder.output_path}
+#PBS -e #{@path_finder.error_path}
+#PBS -M #{email}
+umask 0007
+mkdir /tmp/${PBS_JOBID}
+cp -r #{@path_finder.simulator_path}/* /tmp/${PBS_JOBID}
+cp -r #{@path_finder.simulation_path} /tmp/${PBS_JOBID}
+cd /tmp/${PBS_JOBID}
+script/batch #{sim_id} #{sim_size}#{extra_args}
+cp -r /tmp/${PBS_JOBID}/#{sim_id} #{@path_finder.data_path}
+rm -rf /tmp/${PBS_JOBID}
+    DOCUMENT
   end
 end

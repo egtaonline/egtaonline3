@@ -37,7 +37,7 @@ describe PbsFormatter do
                 "cd /tmp/${PBS_JOBID}\n" +
                 "script/batch #{sim_id} #{sim_size}#{extra_args}\n" +
                 "cp -r /tmp/${PBS_JOBID}/#{sim_id} #{path_finder.data_path}\n" +
-                "rm -rf /tmp/${PBS_JOBID}"
+                "rm -rf /tmp/${PBS_JOBID}\n"
     end
   end
 end
