@@ -10,7 +10,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   end
 
   def create
-    @scheduler = SchedulerFactory.create(klass, scheduler_parameters,
+    @scheduler = SchedulerBuilder.create(klass, scheduler_parameters,
       params[:scheduler][:simulator_id], params[:scheduler][:configuration])
     respond_with(@scheduler)
   end

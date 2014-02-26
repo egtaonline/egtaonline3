@@ -16,13 +16,13 @@ class SchedulersController < ProfileSpacesController
   end
 
   def create
-    @scheduler = SchedulerFactory.create(klass, scheduler_parameters, params[:selector][:simulator_id], params[:selector][:configuration])
+    @scheduler = SchedulerBuilder.create(klass, scheduler_parameters, params[:selector][:simulator_id], params[:selector][:configuration])
     respond_with(@scheduler)
   end
 
   def update
     @scheduler = klass.find(params[:id])
-    @scheduler = SchedulerFactory.update(@scheduler, scheduler_parameters, params[:selector][:configuration])
+    @scheduler = SchedulerBuilder.update(@scheduler, scheduler_parameters, params[:selector][:configuration])
     respond_with(@scheduler)
   end
 
@@ -37,7 +37,7 @@ class SchedulersController < ProfileSpacesController
       flash[:alert] = 'A game with that name already exists.'
       respond_with(@scheduler)
     else
-      respond_with(GameFactory.create_game_to_match(@scheduler))
+      respond_with(GameBuilder.create_game_to_match(@scheduler))
     end
   end
 

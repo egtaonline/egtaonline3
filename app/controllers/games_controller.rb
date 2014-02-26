@@ -13,7 +13,7 @@ class GamesController < ProfileSpacesController
   end
 
   def create
-    @game = GameFactory.create(game_parameters, params[:selector][:simulator_id], params[:selector][:configuration])
+    @game = GameBuilder.create(game_parameters, params[:selector][:simulator_id], params[:selector][:configuration])
     respond_with(@game)
   end
 
