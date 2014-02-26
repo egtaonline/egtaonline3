@@ -5,7 +5,7 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 simulator_uploads/*/
-
+/.rbenv-version
 *.DS_Store
 # Ignore bundler config
 /.bundle
