@@ -44,7 +44,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: control_variables; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: control_variables; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE control_variables (
@@ -76,7 +76,7 @@ ALTER SEQUENCE control_variables_id_seq OWNED BY control_variables.id;
 
 
 --
--- Name: games; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: games; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE games (
@@ -109,7 +109,7 @@ ALTER SEQUENCE games_id_seq OWNED BY games.id;
 
 
 --
--- Name: observation_aggs; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: observation_aggs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE observation_aggs (
@@ -141,7 +141,7 @@ ALTER SEQUENCE observation_aggs_id_seq OWNED BY observation_aggs.id;
 
 
 --
--- Name: observations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: observations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE observations (
@@ -174,7 +174,7 @@ ALTER SEQUENCE observations_id_seq OWNED BY observations.id;
 
 
 --
--- Name: player_control_variables; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: player_control_variables; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE player_control_variables (
@@ -206,7 +206,7 @@ ALTER SEQUENCE player_control_variables_id_seq OWNED BY player_control_variables
 
 
 --
--- Name: players; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: players; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE players (
@@ -242,7 +242,7 @@ ALTER SEQUENCE players_id_seq OWNED BY players.id;
 
 
 --
--- Name: profiles; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: profiles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE profiles (
@@ -277,7 +277,7 @@ ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
 
 
 --
--- Name: roles; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: roles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE roles (
@@ -314,7 +314,7 @@ ALTER SEQUENCE roles_id_seq OWNED BY roles.id;
 
 
 --
--- Name: schedulers; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: schedulers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE schedulers (
@@ -354,7 +354,7 @@ ALTER SEQUENCE schedulers_id_seq OWNED BY schedulers.id;
 
 
 --
--- Name: scheduling_requirements; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: scheduling_requirements; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE scheduling_requirements (
@@ -387,7 +387,7 @@ ALTER SEQUENCE scheduling_requirements_id_seq OWNED BY scheduling_requirements.i
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE schema_migrations (
@@ -396,7 +396,7 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: simulations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: simulations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE simulations (
@@ -433,7 +433,7 @@ ALTER SEQUENCE simulations_id_seq OWNED BY simulations.id;
 
 
 --
--- Name: simulator_instances; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: simulator_instances; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE simulator_instances (
@@ -466,7 +466,7 @@ ALTER SEQUENCE simulator_instances_id_seq OWNED BY simulator_instances.id;
 
 
 --
--- Name: simulators; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: simulators; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE simulators (
@@ -502,7 +502,7 @@ ALTER SEQUENCE simulators_id_seq OWNED BY simulators.id;
 
 
 --
--- Name: symmetry_groups; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: symmetry_groups; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE symmetry_groups (
@@ -538,7 +538,7 @@ ALTER SEQUENCE symmetry_groups_id_seq OWNED BY symmetry_groups.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE users (
@@ -684,7 +684,7 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 
 
 --
--- Name: control_variables_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: control_variables_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY control_variables
@@ -692,7 +692,7 @@ ALTER TABLE ONLY control_variables
 
 
 --
--- Name: games_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: games_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY games
@@ -700,7 +700,7 @@ ALTER TABLE ONLY games
 
 
 --
--- Name: observation_aggs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: observation_aggs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY observation_aggs
@@ -708,7 +708,7 @@ ALTER TABLE ONLY observation_aggs
 
 
 --
--- Name: observations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: observations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY observations
@@ -716,7 +716,7 @@ ALTER TABLE ONLY observations
 
 
 --
--- Name: player_control_variables_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: player_control_variables_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY player_control_variables
@@ -724,7 +724,7 @@ ALTER TABLE ONLY player_control_variables
 
 
 --
--- Name: players_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: players_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY players
@@ -732,7 +732,7 @@ ALTER TABLE ONLY players
 
 
 --
--- Name: profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY profiles
@@ -740,7 +740,7 @@ ALTER TABLE ONLY profiles
 
 
 --
--- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY roles
@@ -748,7 +748,7 @@ ALTER TABLE ONLY roles
 
 
 --
--- Name: schedulers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: schedulers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY schedulers
@@ -756,7 +756,7 @@ ALTER TABLE ONLY schedulers
 
 
 --
--- Name: scheduling_requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: scheduling_requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY scheduling_requirements
@@ -764,7 +764,7 @@ ALTER TABLE ONLY scheduling_requirements
 
 
 --
--- Name: simulations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: simulations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY simulations
@@ -772,7 +772,7 @@ ALTER TABLE ONLY simulations
 
 
 --
--- Name: simulator_instances_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: simulator_instances_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY simulator_instances
@@ -780,7 +780,7 @@ ALTER TABLE ONLY simulator_instances
 
 
 --
--- Name: simulators_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: simulators_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY simulators
@@ -788,7 +788,7 @@ ALTER TABLE ONLY simulators
 
 
 --
--- Name: symmetry_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: symmetry_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY symmetry_groups
@@ -796,7 +796,7 @@ ALTER TABLE ONLY symmetry_groups
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
@@ -804,147 +804,147 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: index_games_on_simulator_instance_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_games_on_simulator_instance_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_games_on_simulator_instance_id_and_name ON games USING btree (simulator_instance_id, name);
 
 
 --
--- Name: index_observation_aggs_on_observation_id_and_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_observation_aggs_on_observation_id_and_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_observation_aggs_on_observation_id_and_symmetry_group_id ON observation_aggs USING btree (observation_id, symmetry_group_id);
 
 
 --
--- Name: index_observations_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_observations_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_observations_on_profile_id ON observations USING btree (profile_id);
 
 
 --
--- Name: index_players_on_observation_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_players_on_observation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_players_on_observation_id ON players USING btree (observation_id);
 
 
 --
--- Name: index_players_on_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_players_on_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_players_on_symmetry_group_id ON players USING btree (symmetry_group_id);
 
 
 --
--- Name: index_profiles_on_simulator_instance_id_and_assignment; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_profiles_on_simulator_instance_id_and_assignment; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_profiles_on_simulator_instance_id_and_assignment ON profiles USING btree (simulator_instance_id, assignment);
 
 
 --
--- Name: index_roles_on_role_owner_id_and_role_owner_type_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_roles_on_role_owner_id_and_role_owner_type_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_roles_on_role_owner_id_and_role_owner_type_and_name ON roles USING btree (role_owner_id, role_owner_type, name);
 
 
 --
--- Name: index_schedulers_on_simulator_instance_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_schedulers_on_simulator_instance_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_schedulers_on_simulator_instance_id_and_name ON schedulers USING btree (simulator_instance_id, name);
 
 
 --
--- Name: index_scheduling_requirements_on_profile_id_and_scheduler_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_scheduling_requirements_on_profile_id_and_scheduler_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_scheduling_requirements_on_profile_id_and_scheduler_id ON scheduling_requirements USING btree (profile_id, scheduler_id);
 
 
 --
--- Name: index_scheduling_requirements_on_scheduler_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_scheduling_requirements_on_scheduler_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_scheduling_requirements_on_scheduler_id ON scheduling_requirements USING btree (scheduler_id);
 
 
 --
--- Name: index_simulations_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_simulations_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_simulations_on_profile_id ON simulations USING btree (profile_id);
 
 
 --
--- Name: index_simulator_instances_on_simulator_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_simulator_instances_on_simulator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_simulator_instances_on_simulator_id ON simulator_instances USING btree (simulator_id);
 
 
 --
--- Name: index_simulators_on_name_and_version; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_simulators_on_name_and_version; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_simulators_on_name_and_version ON simulators USING btree (name, version);
 
 
 --
--- Name: index_symmetry_groups_on_profile_id_and_role_and_strategy; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_symmetry_groups_on_profile_id_and_role_and_strategy; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_symmetry_groups_on_profile_id_and_role_and_strategy ON symmetry_groups USING btree (profile_id, role, strategy);
 
 
 --
--- Name: index_users_on_admin; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_admin; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_users_on_admin ON users USING btree (admin);
 
 
 --
--- Name: index_users_on_approved; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_approved; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_users_on_approved ON users USING btree (approved);
 
 
 --
--- Name: index_users_on_authentication_token; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_authentication_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_users_on_authentication_token ON users USING btree (authentication_token);
 
 
 --
--- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
--- Name: profiles_gin_role_configuration; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: profiles_gin_role_configuration; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX profiles_gin_role_configuration ON profiles USING gin (role_configuration);
 
 
 --
--- Name: simulator_instances_gin_configuration; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: simulator_instances_gin_configuration; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX simulator_instances_gin_configuration ON simulator_instances USING gin (configuration);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
@@ -1011,3 +1011,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140228183427');
 INSERT INTO schema_migrations (version) VALUES ('20140403174920');
 
 INSERT INTO schema_migrations (version) VALUES ('20140404182534');
+
+INSERT INTO schema_migrations (version) VALUES ('20140406194649');
