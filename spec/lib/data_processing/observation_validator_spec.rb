@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'data_processing'
 
 describe ObservationValidator do
   describe 'validate' do
@@ -70,8 +70,8 @@ describe ObservationValidator do
       end
       let(:outcome) do
         {
-          "features" => {
-            "featureA" => 34.0,
+          "features" => { "featureA" => 34.0 },
+          "extended_features" => {
             "featureB" => [37, 38],
             "featureC" => {
               "C1" => 40.0, "C2" => 42.0
@@ -84,17 +84,16 @@ describe ObservationValidator do
               "players" => [
                 {
                   "payoff" => 2992.73,
-        			    "features" => {
+                  "features" => {},
+        			    "extended_features" => {
         				    "featureA" => nil,
         				    "featureB" => [2.0, 2.1]
         			    }
         			  },
         			  {
         			    "payoff" => 2990.53,
-          			  "features" => {
-          				  "featureA" => 0.002,
-          				  "featureB" => [2.0, 2.1]
-          			  }
+          			  "features" => { "featureA" => 0.002 },
+          			  "extended_features" => { "featureB" => [2.0, 2.1] }
         			  }
               ]
             },
@@ -104,8 +103,8 @@ describe ObservationValidator do
               "players" => [
                 {
                   "payoff" => 2929.34,
-        			    "features" => {
-        				    "featureA" => 0.003,
+        			    "features" => { "featureA" => 0.003 },
+        			    "extended_features" => {
         				    "featureB" => [1.3, 1.7]
         			    }
         			  }
@@ -117,8 +116,8 @@ describe ObservationValidator do
               "players" => [
                 {
         			    "payoff" => 2924.44,
-        			    "features" => {
-        				    "featureA" => 0.003,
+        			    "features" => { "featureA" => 0.003 },
+        			    "extended_features" => {
         				    "featureB" => [1.4, 1.7]
         			    }
         			  }

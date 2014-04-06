@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'data_processing'
 
 describe ObservationProcessor do
   describe 'process_files' do
@@ -6,8 +6,9 @@ describe ObservationProcessor do
     let(:valid_path){ 'some/path.json' }
     let(:invalid_path){ 'some/other/path.json' }
     let(:observation_validator){ double('ObservationValidator') }
-    let(:observation_factory){ double('ObservationFactory') }
-    subject{ ObservationProcessor.new(simulation, files, observation_validator, observation_factory) }
+    let(:observation_builder){ double('ObservationBuilder') }
+    let(:cv_builder){ double('ControlVariableBuilder') }
+    subject{ ObservationProcessor.new(simulation, files, observation_validator, observation_builder, cv_builder) }
 
     context 'when some of the files are valid' do
       let(:files){ [invalid_path, valid_path] }
@@ -19,7 +20,8 @@ describe ObservationProcessor do
       end
 
       it 'calls for observations to be created and finishes the simulation' do
-        observation_factory.should_receive(:add_observation).with(data)
+        cv_builder.should_receive(:extract_control_variables).with(data)
+        observation_builder.should_receive(:add_observation).with(data)
         simulation.should_receive(:finish)
       end
     end

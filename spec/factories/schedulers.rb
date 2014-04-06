@@ -24,7 +24,7 @@ FactoryGirl.define do
         instance.add_strategy("All", "A")
         instance.add_strategy("All", "B")
         instance.reload.scheduling_requirements.each do |sr|
-          ObservationFactory.new(sr.profile).add_observation("features" => {},
+          ObservationBuilder.new(sr.profile).add_observation("features" => {},
           "symmetry_groups" => sr.profile.symmetry_groups.collect { |s|
             { "role" => s.role, "strategy" => s.strategy, "players" => Array.new(s.count){ { "features" => {}, "payoff" => 100 } } }
           })
@@ -62,7 +62,7 @@ FactoryGirl.define do
           instance.add_profile("All: 2 A")
           instance.add_profile("All: 2 B")
           instance.reload.scheduling_requirements.each do |sr|
-            ObservationFactory.new(sr.profile).add_observation("features" => {},
+            ObservationBuilder.new(sr.profile).add_observation("features" => {},
             "symmetry_groups" => sr.profile.symmetry_groups.collect { |s|
               { "role" => s.role, "strategy" => s.strategy, "players" => Array.new(s.count){ { "features" => {}, "payoff" => 100 } } }
             })

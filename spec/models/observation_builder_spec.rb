@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ObservationFactory do
+describe ObservationBuilder do
   let(:symmetry_groups){ double('Criteria') }
   let(:profile){ double(id: 1, symmetry_groups: symmetry_groups, observations: observations) }
   let(:symmetry_group1){ double(id: 1) }
@@ -9,13 +9,13 @@ describe ObservationFactory do
   let(:observation){ double(id: 1, observation_aggs: observation_aggs) }
   let(:observation_aggs){ double('ObservationAgg') }
   let(:players){ double('Player Criteria') }
-  subject{ ObservationFactory.new(profile) }
+  subject{ ObservationBuilder.new(profile) }
 
   describe '#add_observation' do
-    let(:data) do
+    let(:validated_data) do
       {
-        "features" => {
-          "featureA" => 34.0,
+        "features" => { "featureA" => 34.0 },
+        "extended_features" => {
           "featureB" => [37, 38],
           "featureC" => {
             "C1" => 40.0, "C2" => 42.0
@@ -29,7 +29,9 @@ describe ObservationFactory do
               {
                 "payoff" => 2992.73,
       			    "features" => {
-      				    "featureA" => 0.001,
+      				    "featureA" => 0.001
+      				  },
+      				  "extended_features" => {
       				    "featureB" => [2.0, 2.1]
       			    }
       			  }
@@ -51,18 +53,33 @@ describe ObservationFactory do
       }
     end
 
+    # temporarily ugly
     before do
       symmetry_groups.stub(:find_by).with(role: 'Role1', strategy: 'Strategy1').and_return(symmetry_group1)
       symmetry_groups.stub(:find_by).with(role: 'Role2', strategy: 'Strategy2').and_return(symmetry_group2)
+      criteria1 = double('criteria')
+      criteria2 = double('criteria')
+      ObservationAgg.should_receive(:where).with(symmetry_group_id: 1).and_return(criteria1)
+      ObservationAgg.should_receive(:where).with(symmetry_group_id: 2).and_return(criteria2)
+      ordered_criteria1 = double('criteria')
+      ordered_criteria2 = double('criteria')
+      criteria1.should_receive(:order).with("").and_return(ordered_criteria1)
+      criteria2.should_receive(:order).with("").and_return(ordered_criteria2)
+      payoff_query1 = [{"payoff" => 2992.73, "payoff_sd" => nil}]
+      payoff_query2 = [{"payoff" => 2464.67, "payoff_sd" => nil}]
+      ordered_criteria1.should_receive(:select).with("avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd").and_return(payoff_query1)
+      ordered_criteria2.should_receive(:select).with("avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd").and_return(payoff_query2)
     end
 
+
     it 'creates the observation' do
-      observations.should_receive(:create!).with(features: data["features"]).and_return(observation)
+      observations.should_receive(:create!).with(features: validated_data["features"], extended_features: validated_data["extended_features"]).and_return(observation)
       observation_aggs.should_receive(:create!).with(symmetry_group_id: 1)
       observation_aggs.should_receive(:create!).with(symmetry_group_id: 2)
+
       symmetry_group1.should_receive(:update_attributes!).with(payoff: 2992.73, payoff_sd: nil)
-      symmetry_group2.should_receive(:update_attributes!).with(payoff: 2464.67, payoff_sd: 657.1426160279075)
-      subject.add_observation(data)
+      symmetry_group2.should_receive(:update_attributes!).with(payoff: 2464.67, payoff_sd: nil)
+      subject.add_observation(validated_data)
     end
   end
 end

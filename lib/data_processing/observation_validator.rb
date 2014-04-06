@@ -1,3 +1,6 @@
+require 'multi_json'
+require 'util'
+
 class ObservationValidator
   def initialize(profile)
     @profile = profile
@@ -11,7 +14,7 @@ class ObservationValidator
         filter_content(data_hash)
       end
     rescue => e
-      Rails.logger.debug "Failure in validating: #{e.message}"
+      puts "Failure in validating: #{e.message}"
       nil
     end
   end
@@ -24,7 +27,7 @@ class ObservationValidator
       symmetry_groups[player["role"]] ||= {}
       symmetry_groups[player["role"]][player["strategy"]] ||= []
       symmetry_groups[player["role"]][player["strategy"]] <<
-        { "payoff" => player["payoff"], "features" => player["features"] }
+        { "payoff" => player["payoff"] }.merge(FeatureProcessor.parse(player["features"]))
     end
     new_symmetry_groups = []
     symmetry_groups.each do |role, shash|
@@ -33,7 +36,7 @@ class ObservationValidator
                                  "players" => players }
       end
     end
-    { "features" => data["features"], "symmetry_groups" => new_symmetry_groups }
+    { "symmetry_groups" => new_symmetry_groups }.merge(FeatureProcessor.parse(data["features"]))
   end
 
   def filter_content(data)

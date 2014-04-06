@@ -91,7 +91,7 @@ HEREDOC
       obs = profile_json["observations"].detect do |o|
         flag = true
         observation.players.each do |player|
-          flag = flag && o["players"].include?({ "sid" => player.symmetry_group_id, "p" => player.payoff, "f" => player.features })
+          flag = flag && o["players"].include?({ "sid" => player.symmetry_group_id, "p" => player.payoff, "f" => player.features, "e" => player.extended_features })
         end
         flag && o["features"] == observation.features
       end

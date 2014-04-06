@@ -24,7 +24,7 @@ class Simulator < ActiveRecord::Base
     if File.exists?("#{location}/#{name}/defaults.json")
       begin
         self.configuration = MultiJson.load(File.new("#{location}/#{name}/defaults.json"))["configuration"]
-      rescue MultiJSON::LoadError
+      rescue MultiJson::LoadError
         errors.add(:source, 'defaults.json file is malformed.')
       end
     else

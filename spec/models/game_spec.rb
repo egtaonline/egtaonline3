@@ -81,7 +81,7 @@ describe Game do
 
     describe '#profile_counts' do
       before do
-        ObservationFactory.new(profile).add_observation(
+        ObservationBuilder.new(profile).add_observation(
           { "features" => {}, "symmetry_groups" => [{ "role" => "All",
             "strategy" => "A", "players" => [{ "features" => {},
             "payoff" => 200}, { "features" => {}, "payoff" => 300 }]}]})

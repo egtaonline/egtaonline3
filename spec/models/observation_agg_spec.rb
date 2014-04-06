@@ -4,7 +4,7 @@ describe ObservationAgg do
   describe 'creation' do
     let(:profile){ FactoryGirl.create(:profile, assignment: 'A: 1 B, 2 C; D: 2 E') }
     it 'sets the payoff and payoff_sd' do
-      ObservationFactory.new(profile).add_observation("features" => {}, "symmetry_groups" => [
+      ObservationBuilder.new(profile).add_observation("features" => {}, "symmetry_groups" => [
           { "role" => "A", "strategy" => "B", "players" => [
               { "payoff" => 12, "features" => {} }
             ]},

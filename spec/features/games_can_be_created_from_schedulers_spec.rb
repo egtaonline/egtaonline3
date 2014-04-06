@@ -138,5 +138,5 @@ end
 
 def json_representation(profile)
   profile.reload
- "{\"id\":#{profile.id},\"observations_count\":#{profile.observations_count},\"symmetry_groups\":[#{profile.symmetry_groups.collect{ |s| "{\"id\":#{s.id},\"role\":\"#{s.role}\",\"strategy\":\"#{s.strategy}\",\"count\":#{s.count},\"payoff\":100,\"payoff_sd\":#{s.count > 1 ? 0 : 'null'}}" }.join(',')}]}"
+ "{\"id\":#{profile.id},\"observations_count\":#{profile.observations_count},\"symmetry_groups\":[#{profile.symmetry_groups.collect{ |s| "{\"id\":#{s.id},\"role\":\"#{s.role}\",\"strategy\":\"#{s.strategy}\",\"count\":#{s.count},\"payoff\":100,\"payoff_sd\":null}" }.join(',')}]}"
 end

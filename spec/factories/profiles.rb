@@ -14,7 +14,7 @@ FactoryGirl.define do
 
   trait :with_observations do
     after(:create) do |instance|
-      ObservationFactory.new(instance).add_observation("features" => {},
+      ObservationBuilder.new(instance).add_observation("features" => {},
       "symmetry_groups" => instance.symmetry_groups.collect { |s|
         { "role" => s.role, "strategy" => s.strategy, "players" => Array.new(s.count){ { "features" => {}, "payoff" => 100 } } }
       })
