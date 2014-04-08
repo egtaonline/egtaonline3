@@ -182,7 +182,8 @@ CREATE TABLE player_control_variables (
     simulator_instance_id integer NOT NULL,
     name character varying(255) NOT NULL,
     coefficient double precision DEFAULT 0 NOT NULL,
-    expectation double precision
+    expectation double precision,
+    role character varying(255) NOT NULL
 );
 
 
@@ -804,6 +805,13 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: index_control_variables_on_simulator_instance_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_control_variables_on_simulator_instance_id ON control_variables USING btree (simulator_instance_id);
+
+
+--
 -- Name: index_games_on_simulator_instance_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -930,6 +938,13 @@ CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
+-- Name: pcv_sid_role_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX pcv_sid_role_index ON player_control_variables USING btree (simulator_instance_id, role);
+
+
+--
 -- Name: profiles_gin_role_configuration; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1013,3 +1028,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140403174920');
 INSERT INTO schema_migrations (version) VALUES ('20140404182534');
 
 INSERT INTO schema_migrations (version) VALUES ('20140406194649');
+
+INSERT INTO schema_migrations (version) VALUES ('20140408184236');

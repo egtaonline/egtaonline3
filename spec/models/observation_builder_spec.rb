@@ -3,12 +3,11 @@ require 'spec_helper'
 describe ObservationBuilder do
   let(:symmetry_groups){ double('Criteria') }
   let(:profile){ double(id: 1, symmetry_groups: symmetry_groups, observations: observations) }
-  let(:symmetry_group1){ double(id: 1) }
-  let(:symmetry_group2){ double(id: 2) }
+  let(:symmetry_group1){ double(id: 1, role: 'Role1') }
+  let(:symmetry_group2){ double(id: 2, role: 'Role2') }
   let(:observations){ double('Other Criteria') }
-  let(:observation){ double(id: 1, observation_aggs: observation_aggs) }
+  let(:observation){ double(id: 1, observation_aggs: observation_aggs, simulator_instance_id: 1) }
   let(:observation_aggs){ double('ObservationAgg') }
-  let(:players){ double('Player Criteria') }
   subject{ ObservationBuilder.new(profile) }
 
   describe '#add_observation' do
@@ -69,6 +68,12 @@ describe ObservationBuilder do
       payoff_query2 = [{"payoff" => 2464.67, "payoff_sd" => nil}]
       ordered_criteria1.should_receive(:select).with("avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd").and_return(payoff_query1)
       ordered_criteria2.should_receive(:select).with("avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd").and_return(payoff_query2)
+      validated_data["symmetry_groups"].each do |sgroup|
+        sgroup["players"].each do |player|
+          symmetry_group = sgroup["role"] == 'Role1' ? symmetry_group1 : symmetry_group2
+          PlayerBuilder.should_receive(:build).with(observation, symmetry_group, player)
+        end
+      end
     end
 
 

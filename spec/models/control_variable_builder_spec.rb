@@ -41,7 +41,7 @@ describe ControlVariableBuilder do
             },
             {
     				  "payoff" => 2000.00,
-    				  "features" => {}
+    				  "features" => { "featureA" => 0.96 }
     			  }
           ]
         }
@@ -53,8 +53,9 @@ describe ControlVariableBuilder do
   describe "#extract_control_variables" do
     it 'creates a new control variable for each unique entry' do
       ControlVariable.should_receive(:find_or_create_by).with(name: "featureA", simulator_instance_id: simulator_instance.id)
-      PlayerControlVariable.should_receive(:find_or_create_by).with(name: "featureA", simulator_instance_id: simulator_instance.id)
-      PlayerControlVariable.should_receive(:find_or_create_by).with(name: "featureB", simulator_instance_id: simulator_instance.id)
+      PlayerControlVariable.should_receive(:find_or_create_by).with(name: "featureA", simulator_instance_id: simulator_instance.id, role: 'Role1')
+      PlayerControlVariable.should_receive(:find_or_create_by).with(name: "featureA", simulator_instance_id: simulator_instance.id, role: 'Role2')
+      PlayerControlVariable.should_receive(:find_or_create_by).with(name: "featureB", simulator_instance_id: simulator_instance.id, role: 'Role2')
       cv_builder.extract_control_variables(validated_data)
     end
   end

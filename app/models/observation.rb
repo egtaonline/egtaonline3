@@ -3,4 +3,5 @@ class Observation < ActiveRecord::Base
   validates_presence_of :profile
   has_many :players, inverse_of: :observation, dependent: :destroy
   has_many :observation_aggs, inverse_of: :observation, dependent: :destroy
+  delegate :simulator_instance_id, to: :profile
 end

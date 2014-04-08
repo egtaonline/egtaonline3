@@ -1,7 +1,7 @@
 class CreatePlayerControlVariables < ActiveRecord::Migration
   def change
     create_table :player_control_variables do |t|
-      t.integer :simulator_instance_id, null: false, index: true
+      t.integer :simulator_instance_id, null: false
       t.string :name, null: false
       t.float :coefficient, null: false, default: 0
       t.float :expectation

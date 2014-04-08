@@ -2,26 +2,42 @@ class ControlVariableBuilder
   def initialize(simulator_instance)
     @simulator_instance = simulator_instance
     @observed_cvs = []
-    @observed_player_cvs = []
+    @observed_player_cvs = Hash.new { |hash, key| hash[key] = [] }
   end
 
   def extract_control_variables(data)
     sim_instance_id = @simulator_instance.id
-    cvs_to_add(@observed_cvs, data["features"].keys).each { |k| ControlVariable.find_or_create_by(name: k, simulator_instance_id: sim_instance_id) }
-    keys = data["symmetry_groups"].collect do |sgroup|
-      sgroup["players"].collect do |player|
+    new_cvs(data["features"].keys).each { |k| ControlVariable.find_or_create_by(name: k, simulator_instance_id: sim_instance_id) }
+    key_map = Hash.new { |hash, key| hash[key] = [] }
+    data["symmetry_groups"].each do |sgroup|
+      role = sgroup["role"]
+      keys = sgroup["players"].collect do |player|
         player["features"].keys
       end.flatten
-    end.flatten
-    cvs_to_add(@observed_player_cvs, keys).each { |k| PlayerControlVariable.find_or_create_by(name: k, simulator_instance_id: sim_instance_id) }
+      key_map[role] = key_map[role] + keys
+    end
+    new_player_cvs(key_map).each do |role, names|
+      names.each do |name|
+        PlayerControlVariable.find_or_create_by(name: name, simulator_instance_id: sim_instance_id, role: role)
+      end
+    end
   end
 
   private
 
-  def cvs_to_add(old_keys, keys)
+  def new_cvs(keys)
     keys = keys.uniq
-    new_keys = keys - old_keys
-    old_keys += new_keys
+    new_keys = keys - @observed_cvs
+    @observed_cvs += new_keys
     new_keys
+  end
+
+  def new_player_cvs(key_map)
+    new_key_map = Hash.new { |hash, key| hash[key] = [] }
+    key_map.each do |key, value|
+      new_key_map[key] = value.uniq - @observed_player_cvs[key]
+      @observed_player_cvs[key] = @observed_player_cvs[key] + new_key_map[key]
+    end
+    new_key_map
   end
 end
