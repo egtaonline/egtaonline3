@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe GameBuilder do
   describe 'create' do
-    let(:simulator){ FactoryGirl.create(:simulator, :with_strategies) }
+    let(:simulator){ create(:simulator, :with_strategies) }
     let(:configuration){ { 'fake' => 'variable', 'fake2' => 'other_variable' } }
     let(:params){ { 'name' => 'test', 'size' => 2 } }
 
-    context "when a matching SimulatorInstance exists" do
+    context 'when a matching SimulatorInstance exists' do
       before do
         @simulator_instance = SimulatorInstance.create(simulator_id: simulator.id, configuration: configuration)
         @game = GameBuilder.create(params, simulator.id, configuration)
@@ -16,7 +16,7 @@ describe GameBuilder do
       it{ @game.simulator_instance_id.should == @simulator_instance.id }
     end
 
-    context "when a matching SimulatorInstance does not exist" do
+    context 'when a matching SimulatorInstance does not exist' do
       before do
         @game = GameBuilder.create(params, simulator.id, configuration)
         @simulator_instance = SimulatorInstance.last
@@ -33,7 +33,7 @@ describe GameBuilder do
     SCHEDULER_CLASSES.each do |scheduler_klass|
       context "when using a #{scheduler_klass}" do
         before do
-          @scheduler = FactoryGirl.create(scheduler_klass, :with_profiles)
+          @scheduler = create(scheduler_klass, :with_profiles)
           @game = GameBuilder.create_game_to_match(@scheduler)
         end
 

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Games can be created from schedulers', type: :feature do
   let(:klass){ described_class.to_s }
   let(:scheduler) do
-    FactoryGirl.create(klass.underscore.to_sym, :with_sampled_profiles)
+    create(klass.underscore.to_sym, :with_sampled_profiles)
   end
 
   before do
@@ -12,7 +12,7 @@ describe 'Games can be created from schedulers', type: :feature do
 
   shared_examples 'a scheduler when creating a game' do
     describe 'when trying to make a game that already exists' do
-      let!(:game){ FactoryGirl.create(:game, simulator_instance: scheduler.simulator_instance, name: scheduler.name) }
+      let!(:game){ create(:game, simulator_instance: scheduler.simulator_instance, name: scheduler.name) }
       it 'alerts the user' do
         visit "/#{klass.tableize}/#{scheduler.id}"
         click_on 'Create Game to Match'
@@ -48,7 +48,7 @@ describe 'Games can be created from schedulers', type: :feature do
   shared_examples 'a deviation scheduler when creating a game' do
     describe 'creating a game from a scheduler' do
       let!(:profile) do
-        FactoryGirl.create(:profile, :with_observations,
+        create(:profile, :with_observations,
           simulator_instance: scheduler.simulator_instance,
           assignment: 'All: 1 A, 1 DeviousStrategy')
       end
@@ -99,9 +99,9 @@ describe 'Games can be created from schedulers', type: :feature do
   describe GenericScheduler do
     it_behaves_like 'a scheduler when creating a game'
 
-    let(:scheduler){ FactoryGirl.create(:generic_scheduler) }
+    let(:scheduler){ create(:generic_scheduler) }
     let!(:profile) do
-      FactoryGirl.create(:profile, :with_observations,
+      create(:profile, :with_observations,
         simulator_instance: scheduler.simulator_instance,
         assignment: 'All: 1 A, 1 B')
     end

@@ -2,19 +2,19 @@ require 'spec_helper'
 
 describe ObservationAgg do
   describe 'creation' do
-    let(:profile){ FactoryGirl.create(:profile, assignment: 'A: 1 B, 2 C; D: 2 E') }
+    let(:profile){ create(:profile, assignment: 'A: 1 B, 2 C; D: 2 E') }
     it 'sets the payoff and payoff_sd' do
-      ObservationBuilder.new(profile).add_observation("features" => {}, "symmetry_groups" => [
-          { "role" => "A", "strategy" => "B", "players" => [
-              { "payoff" => 12, "features" => {} }
+      ObservationBuilder.new(profile).add_observation('features' => {}, 'symmetry_groups' => [
+          { 'role' => 'A', 'strategy' => 'B', 'players' => [
+              { 'payoff' => 12, 'features' => {} }
             ]},
-          { "role" => "A", "strategy" => "C", "players" => [
-              { "payoff" => 14, "features" => {} },
-              { "payoff" => 16, "features" => {} },
+          { 'role' => 'A', 'strategy' => 'C', 'players' => [
+              { 'payoff' => 14, 'features' => {} },
+              { 'payoff' => 16, 'features' => {} },
             ]},
-          { "role" => "D", "strategy" => "E", "players" => [
-              { "payoff" => 15, "features" => {} },
-              { "payoff" => 17, "features" => {} },
+          { 'role' => 'D', 'strategy' => 'E', 'players' => [
+              { 'payoff' => 15, 'features' => {} },
+              { 'payoff' => 17, 'features' => {} },
             ]},
         ])
       first_id = profile.symmetry_groups.find_by(role: 'A', strategy: 'B').id

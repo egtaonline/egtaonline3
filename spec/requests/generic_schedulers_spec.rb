@@ -5,39 +5,39 @@ describe 'GenericSchedulers' do
     sign_in
   end
 
-  let!(:scheduler){ FactoryGirl.create(:generic_scheduler) }
+  let!(:scheduler) { create(:generic_scheduler) }
 
-  context "POST /schedulers/:scheduler_id/roles", type: :feature do
-    it "should add the required role" do
-      Simulator.last.add_role("All123")
+  context 'POST /schedulers/:scheduler_id/roles', type: :feature do
+    it 'should add the required role' do
+      Simulator.last.add_role('All123')
       visit "/generic_schedulers/#{scheduler.id}"
       click_on 'Add Role'
-      page.should have_content("All123 #{scheduler.size}")
+      expect(page).to have_content("All123 #{scheduler.size}")
       scheduler.reload.roles.count.should eql(1)
     end
   end
 
-  context "DELETE /schedulers/:scheduler_id/roles/:role", type: :feature do
-    it "removes the relevant role" do
-      Simulator.last.add_strategy("Bidder", "Strat1")
-      scheduler.add_role("Bidder", 1)
+  context 'DELETE /schedulers/:scheduler_id/roles/:role', type: :feature do
+    it 'removes the relevant role' do
+      Simulator.last.add_strategy('Bidder', 'Strat1')
+      scheduler.add_role('Bidder', 1)
       visit "/generic_schedulers/#{scheduler.id}"
-      click_on "Remove Role"
-      page.should_not have_content("Bidder 1")
+      click_on 'Remove Role'
+      expect(page).to_not have_content('Bidder 1')
       scheduler.reload.roles.count.should eql(0)
     end
   end
 
-  describe "generic schedulers should not let users add strategies directly",
-    type: :feature do
-    it "should not show strategies or have an Add Strategy button" do
-      scheduler.simulator.add_strategy("Bidder", "Strat1")
-      scheduler.simulator.add_strategy("Bidder", 'MadeUpStrategy')
-      scheduler.add_role("Bidder", scheduler.size)
+  describe 'generic schedulers should not let users add strategies directly',
+           type: :feature do
+    it 'should not show strategies or have an Add Strategy button' do
+      scheduler.simulator.add_strategy('Bidder', 'Strat1')
+      scheduler.simulator.add_strategy('Bidder', 'MadeUpStrategy')
+      scheduler.add_role('Bidder', scheduler.size)
       scheduler.add_profile('Bidder: 2 MadeUpStrategy')
       visit "/generic_schedulers/#{scheduler.id}"
-      page.should_not have_content("Add Strategy")
-      page.should_not have_content('Strat1')
+      expect(page).to_not have_content('Add Strategy')
+      expect(page).to_not have_content('Strat1')
     end
   end
 end

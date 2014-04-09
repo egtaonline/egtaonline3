@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Profile do
-  let!(:profile){ FactoryGirl.create(:profile,
+  let!(:profile){ create(:profile,
     assignment: 'A: 2 S1, 1 S2; B: 3 S3') }
   describe 'creation events' do
     it 'creates the necessary symmetry groups on creation' do
@@ -23,7 +23,7 @@ describe Profile do
 
   describe '#scheduled?' do
     context 'when an active simulation exists' do
-      let!(:simulation){ FactoryGirl.create(:simulation, state: 'queued',
+      let!(:simulation){ create(:simulation, state: 'queued',
         profile: profile) }
 
       it { profile.scheduled?.should == true }
@@ -35,9 +35,9 @@ describe Profile do
   end
 
   describe '#profile_matches_simulator' do
-    let!(:simulator){ FactoryGirl.create(:simulator) }
+    let!(:simulator){ create(:simulator) }
     let!(:simulator_instance) do
-      FactoryGirl.create(:simulator_instance, simulator: simulator)
+      create(:simulator_instance, simulator: simulator)
     end
     it 'passes only when all the strategies/roles are on the simulator' do
       simulator.add_strategy('All', 'A')
@@ -62,7 +62,7 @@ describe Profile do
 
   describe '#scheduled?' do
     it 'returns true if the profile has scheduled simulations' do
-      FactoryGirl.create(:simulation, profile: profile)
+      create(:simulation, profile: profile)
       profile.reload.scheduled?.should == true
     end
 

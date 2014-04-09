@@ -1,0 +1,34 @@
+%h2= "Edit Control Variables"
+%p= "Note that changes on this page will affect all data associated with the same simulator and configuration, not just the current game."
+=form_tag control_variable_path, method: :put do
+  %h3= "Observation-Level Control Variables"
+  %table.table
+    %thead
+      %tr
+        %th Name
+        %th Expectation
+        %th Coefficient
+    %tbody
+      - control_variables.each do |control_variable|
+        %tr
+          %td= control_variable.name
+          = fields_for "control_variables[]", control_variable do |f|
+            %td= f.number_field :expectation, step: "any"
+            %td= f.number_field :coefficient, step: "any"
+  %h3= "Player-Level Control Variables"
+  %table.table
+    %thead
+      %tr
+        %th Role
+        %th Name
+        %th Expectation
+        %th Coefficient
+    %tbody
+      - player_control_variables.each do |control_variable|
+        %tr
+          %td= control_variable.role
+          %td= control_variable.name
+          = fields_for "player_control_variables[]", control_variable do |f|
+            %td= f.number_field :expectation, step: "any"
+            %td= f.number_field :coefficient, step: "any"
+  = submit_tag "Apply Control Variate Adjustments to Payoffs"

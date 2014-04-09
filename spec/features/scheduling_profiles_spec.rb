@@ -11,8 +11,8 @@ describe 'Users can make schedulers to schedule profiles' do
     describe 'creating a scheduler with modified configurationn',
       js: true do
       it 'makes the expected scheduler' do
-        simulator = FactoryGirl.create(:simulator)
-        other_simulator = FactoryGirl.create(:simulator)
+        simulator = create(:simulator)
+        other_simulator = create(:simulator)
         other_simulator.configuration = {'parm1' => '14', 'parm2' => '6'}
         other_simulator.role_configuration = {'Role1' => ['Strat1', 'Strat2'],
           'Role2' => ['Strat3', 'Strat4']}
@@ -31,10 +31,10 @@ describe 'Users can make schedulers to schedule profiles' do
 
     describe 'adding a strategy or profile' do
       it 'adds a scheduling requirement' do
-        simulator = FactoryGirl.create(:simulator, :with_strategies)
-        simulator_instance = FactoryGirl.create(:simulator_instance,
+        simulator = create(:simulator, :with_strategies)
+        simulator_instance = create(:simulator_instance,
           simulator_id: simulator.id, configuration: { 'fake' => 'value' } )
-        scheduler = FactoryGirl.create(described_class.to_s.underscore.to_sym,
+        scheduler = create(described_class.to_s.underscore.to_sym,
           simulator_instance: simulator_instance)
         role = simulator.role_configuration.keys.last
         strategy = simulator.role_configuration[role].last
@@ -56,11 +56,11 @@ describe 'Users can make schedulers to schedule profiles' do
 
     describe 'removing a strategy or profile' do
       it 'removes a scheduling requirement' do
-        simulator = FactoryGirl.create(:simulator, :with_strategies)
-        simulator_instance = FactoryGirl.create(:simulator_instance,
+        simulator = create(:simulator, :with_strategies)
+        simulator_instance = create(:simulator_instance,
           simulator: simulator,
           configuration: { 'fake' => 'value' } )
-        scheduler = FactoryGirl.create(described_class.to_s.underscore.to_sym,
+        scheduler = create(described_class.to_s.underscore.to_sym,
           simulator_instance: simulator_instance)
         role = simulator.role_configuration.keys.last
         strategy = simulator.role_configuration[role].last
@@ -79,7 +79,7 @@ describe 'Users can make schedulers to schedule profiles' do
     end
 
     context 'when the scheduler has profiles' do
-      let(:scheduler){ FactoryGirl.create(described_class.to_s.underscore.to_sym, :with_profiles)}
+      let(:scheduler){ create(described_class.to_s.underscore.to_sym, :with_profiles)}
       let(:simulator_instance){ scheduler.simulator_instance }
       describe "updating configuration of a scheduler" do
         it "leads to new profiles being created" do

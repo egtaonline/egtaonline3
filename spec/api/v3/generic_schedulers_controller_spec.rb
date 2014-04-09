@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'GenericSchedulersController' do
-  let(:user) { FactoryGirl.create(:approved_user) }
+  let(:user) { create(:approved_user) }
   let(:token) { user.authentication_token }
 
   describe 'POST /api/v3/generic_schedulers/:id/add_profile' do
@@ -18,7 +18,7 @@ describe 'GenericSchedulersController' do
       end
     end
     context 'when the scheduler exists' do
-      let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+      let!(:scheduler){ create(:generic_scheduler, id: 1) }
 
       before do
         scheduler.simulator.add_role('All')
@@ -79,7 +79,7 @@ describe 'GenericSchedulersController' do
     end
 
     context 'when the scheduler does exist' do
-      let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+      let!(:scheduler){ create(:generic_scheduler, id: 1) }
 
       before do
         scheduler.simulator.add_strategy('All', 'A')
@@ -101,8 +101,8 @@ describe 'GenericSchedulersController' do
   end
 
   describe 'GET /api/v3/generic_schedulers' do
-    let!(:scheduler){ FactoryGirl.create(:generic_scheduler) }
-    let!(:scheduler2){ FactoryGirl.create(:generic_scheduler) }
+    let!(:scheduler){ create(:generic_scheduler) }
+    let!(:scheduler2){ create(:generic_scheduler) }
     let(:url){ '/api/v3/generic_schedulers' }
 
     it 'returns summary info for the available schedulers' do
@@ -114,7 +114,7 @@ describe 'GenericSchedulersController' do
 
   describe 'POST /api/v3/generic_schedulers' do
     let(:url){ '/api/v3/generic_schedulers' }
-    let(:simulator){ FactoryGirl.create(:simulator) }
+    let(:simulator){ create(:simulator) }
 
     context "when everything is present as expected" do
       it "responds with the new scheduler" do
@@ -147,7 +147,7 @@ describe 'GenericSchedulersController' do
   end
 
   describe 'GET /api/v3/generic_schedulers/:id' do
-    let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+    let!(:scheduler){ create(:generic_scheduler, id: 1) }
     let(:url){ '/api/v3/generic_schedulers/1' }
 
     it 'returns the appropriate json from a SchedulerPresenter' do
@@ -159,7 +159,7 @@ describe 'GenericSchedulersController' do
   end
 
   describe 'PUT /api/v3/generic_schedulers/:id' do
-    let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+    let!(:scheduler){ create(:generic_scheduler, id: 1) }
     let(:url) { "/api/v3/generic_schedulers/1" }
 
     it "updates normally" do
@@ -172,7 +172,7 @@ describe 'GenericSchedulersController' do
   end
 
   describe 'DELETE /api/v3/generic_schedulers/:id' do
-    let!(:scheduler){ FactoryGirl.create(:generic_scheduler, id: 1) }
+    let!(:scheduler){ create(:generic_scheduler, id: 1) }
     let(:url) { "/api/v3/generic_schedulers/1" }
 
     it 'deletes the scheduler' do

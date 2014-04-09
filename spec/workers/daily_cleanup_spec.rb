@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DailyCleanup do
   let(:stale_simulations) { double('Criteria') }
-  let(:finished) { [ double('first_simulation'), double('second_simulation') ] }
+  let(:finished) { [double('first_simulation'), double('second_simulation')] }
   describe 'perform' do
     before do
       Simulation.should_receive(:stale).and_return(stale_simulations)

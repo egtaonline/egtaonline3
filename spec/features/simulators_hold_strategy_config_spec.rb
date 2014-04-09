@@ -5,7 +5,7 @@ feature 'Users can add roles and strategies to simulator' do
     sign_in
   end
   
-  let(:simulator){ FactoryGirl.create(:simulator) }
+  let(:simulator){ create(:simulator) }
   
   scenario 'simulator with no previous roles or strategies' do
     visit simulator_path(simulator)

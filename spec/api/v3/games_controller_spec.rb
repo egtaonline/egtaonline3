@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'GamesController' do
-  let(:user) { FactoryGirl.create(:approved_user) }
+  let(:user) { create(:approved_user) }
   let(:token) { user.authentication_token }
   let(:role){ 'RoleA' }
   let(:strategy){ 'Strategy1' }

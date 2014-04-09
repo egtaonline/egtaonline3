@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe "DataParser can process observations" do
   context "when all of the observations are valid" do
-    let!(:profile) { FactoryGirl.create(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
-    let!(:simulation){ FactoryGirl.create(:simulation, profile: profile, state: 'running') }
+    let!(:profile) { create(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
+    let!(:simulation){ create(:simulation, profile: profile, state: 'running') }
 
     it "creates all the required objects" do
       DataParser.new.perform(simulation.id, "#{Rails.root}/spec/support/data/3")
@@ -29,9 +29,10 @@ describe "DataParser can process observations" do
 			ControlVariable.count.should == 2
 			ControlVariable.where(simulator_instance_id: profile.simulator_instance_id, name: "featureA").first.coefficient.should == 0
 		  ControlVariable.where(simulator_instance_id: profile.simulator_instance_id, name: "featureC").first.coefficient.should == 0
-		  PlayerControlVariable.count.should == 2
-			PlayerControlVariable.where(simulator_instance_id: profile.simulator_instance_id, name: "featureA").first.coefficient.should == 0
-		  PlayerControlVariable.where(simulator_instance_id: profile.simulator_instance_id, name: "featureC").first.coefficient.should == 0
+		  PlayerControlVariable.count.should == 3
+			PlayerControlVariable.where(simulator_instance_id: profile.simulator_instance_id, role: 'Buyer', name: "featureA").first.coefficient.should == 0
+			PlayerControlVariable.where(simulator_instance_id: profile.simulator_instance_id, role: 'Seller', name: "featureA").first.coefficient.should == 0
+		  PlayerControlVariable.where(simulator_instance_id: profile.simulator_instance_id, role: 'Seller', name: "featureC").first.coefficient.should == 0
     end
   end
 end

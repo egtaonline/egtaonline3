@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GenericScheduler do
-  let(:scheduler){ FactoryGirl.create(:generic_scheduler) }
+  let(:scheduler){ create(:generic_scheduler) }
 
   describe '#add_profile' do
     before do
@@ -19,25 +19,25 @@ describe GenericScheduler do
       end
       context 'when the profile does not already exist' do
         before do
-          scheduler.add_profile("All: 2 A")
+          scheduler.add_profile('All: 2 A')
         end
         it { Profile.where(
           simulator_instance_id: scheduler.simulator_instance_id,
-          assignment: "All: 2 A").count.should == 1 }
+          assignment: 'All: 2 A').count.should == 1 }
         it { scheduler.reload.scheduling_requirements.count.should == 1 }
       end
 
       context 'when the profile already exists' do
         before do
-          @profile = FactoryGirl.create(:profile,
+          @profile = create(:profile,
             simulator_instance_id: scheduler.simulator_instance_id,
-            assignment: "All: 2 A")
-          scheduler.add_profile("All: 2 A")
+            assignment: 'All: 2 A')
+          scheduler.add_profile('All: 2 A')
         end
 
         it { Profile.where(
           simulator_instance_id: scheduler.simulator_instance_id,
-          assignment: "All: 2 A").count.should == 1 }
+          assignment: 'All: 2 A').count.should == 1 }
         it { scheduler.scheduling_requirements.first.profile.should == @profile}
       end
     end
@@ -45,7 +45,7 @@ describe GenericScheduler do
 
   describe '#remove_profile_by_id' do
     let!(:profile) do
-      FactoryGirl.create(:profile,
+      create(:profile,
         simulator_instance: scheduler.simulator_instance,
         assignment: 'R1: 1 B; R2: 1 D')
     end

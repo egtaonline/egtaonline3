@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Role do
   describe '#count_is_acceptable' do
-    let(:role_owner){ FactoryGirl.create(:game_scheduler) }
+    let(:role_owner){ create(:game_scheduler) }
     it 'passes when reduced count <= count <= unassigned_player_count' do
       role = role_owner.roles.build(name: 'All', count: 2, reduced_count: 2)
       role.valid?.should == true

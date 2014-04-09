@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 shared_examples 'a pattern-based scheduler class' do
-  let(:scheduler){ FactoryGirl.create(described_class.to_s.underscore.to_sym) }
+  let(:scheduler){ create(described_class.to_s.underscore.to_sym) }
 
-  it_behaves_like "a scheduler class"
+  it_behaves_like 'a scheduler class'
 
   before do
     scheduler.simulator.update_attributes(role_configuration:
@@ -28,8 +28,8 @@ shared_examples 'a pattern-based scheduler class' do
 
     describe '#remove_strategy' do
       it 'removes the specified strategy from the specified role if possible' do
-        scheduler.roles.create!(name: 'A', "count" => 1, "reduced_count" => 1, "strategies" => ['A1', 'A2'])
-        scheduler.roles.create!(name: 'B', "count" => 1, "reduced_count" => 1, "strategies" => ['B2'])
+        scheduler.roles.create!(name: 'A', 'count' => 1, 'reduced_count' => 1, 'strategies' => ['A1', 'A2'])
+        scheduler.roles.create!(name: 'B', 'count' => 1, 'reduced_count' => 1, 'strategies' => ['B2'])
         scheduler.remove_strategy('A', 'A1')
         scheduler.remove_strategy('B', 'B1')
         scheduler.roles.where(name: 'A').first.strategies.should == ['A2']
@@ -68,7 +68,7 @@ shared_examples 'a pattern-based scheduler class' do
       end
 
       it 'destroys roles' do
-        scheduler.roles.create!(name: "A", count: 2, reduced_count: 2)
+        scheduler.roles.create!(name: 'A', count: 2, reduced_count: 2)
         scheduler.size = 8
         scheduler.save!
         scheduler.reload.roles.count.should == 0
@@ -78,21 +78,21 @@ shared_examples 'a pattern-based scheduler class' do
 
     describe '#remove_role' do
       it 'triggers profile association' do
-        scheduler.roles.create!(name: "A", count: 2, reduced_count: 2)
-        scheduler.remove_role("A")
+        scheduler.roles.create!(name: 'A', count: 2, reduced_count: 2)
+        scheduler.remove_role('A')
       end
     end
 
     describe '#add_strategy' do
       it 'triggers profile association' do
-        scheduler.roles.create!(name: "A", 'count' => 2, 'reduced_count' => 2)
+        scheduler.roles.create!(name: 'A', 'count' => 2, 'reduced_count' => 2)
         scheduler.add_strategy('A', 'A1')
       end
     end
 
     describe '#remove_strategy' do
       it 'triggers profile association' do
-        scheduler.roles.create!(name: "A", 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A1'])
+        scheduler.roles.create!(name: 'A', 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A1'])
         scheduler.remove_strategy('A', 'A1')
       end
     end
@@ -100,7 +100,7 @@ shared_examples 'a pattern-based scheduler class' do
 end
 
 shared_examples 'a scheduler class' do
-  let(:scheduler){ FactoryGirl.create(described_class.to_s.underscore.to_sym) }
+  let(:scheduler){ create(described_class.to_s.underscore.to_sym) }
 
   before do
     scheduler.simulator.update_attributes(role_configuration:
@@ -123,11 +123,11 @@ shared_examples 'a scheduler class' do
     end
 
     describe '#remove_role' do
-      it "removes the role if present" do
-        scheduler.roles.create!(name: "A", 'count' => 2, 'reduced_count' => 2)
-        scheduler.remove_role("B")
+      it 'removes the role if present' do
+        scheduler.roles.create!(name: 'A', 'count' => 2, 'reduced_count' => 2)
+        scheduler.remove_role('B')
         scheduler.roles.count.should == 1
-        scheduler.remove_role("A")
+        scheduler.remove_role('A')
         scheduler.roles.count.should == 0
       end
     end
@@ -151,7 +151,7 @@ shared_examples 'a scheduler class' do
   end
 
   describe '#available_roles' do
-    it "shows the roles defined on simulator that aren't defined on the scheduler" do
+    it 'shows the roles defined on simulator that are not defined on the scheduler' do
       simulator = scheduler.simulator_instance.simulator
       simulator.role_configuration = { 'A' => [], 'B' => [] }
       simulator.save!
@@ -161,14 +161,14 @@ shared_examples 'a scheduler class' do
   end
 
   describe '#available_strategies' do
-    it "shows the strategies defined on the simulator for the role that aren't defined on the scheduler" do
+    it 'shows the strategies defined on the simulator for the role that are not defined on the scheduler' do
       scheduler.roles.create!(name: 'A', 'count' => 2, 'reduced_count' => 2, 'strategies' => ['A2'])
       scheduler.available_strategies('A').should == ['A1']
     end
   end
 
   describe '#schedule_profile' do
-    let(:profile){ FactoryGirl.create(:profile, simulator_instance: scheduler.simulator_instance, observations_count: 3) }
+    let(:profile){ create(:profile, simulator_instance: scheduler.simulator_instance, observations_count: 3) }
 
     context 'when more observations are required' do
       context 'and the requirement is greater than the observation_per_simulation' do
@@ -214,10 +214,10 @@ describe DprScheduler do
 end
 
 describe GenericScheduler do
-  it_behaves_like "a scheduler class"
+  it_behaves_like 'a scheduler class'
 
   describe '#invalid_role_partition?' do
-    let(:scheduler){ FactoryGirl.create(:generic_scheduler) }
+    let(:scheduler){ create(:generic_scheduler) }
 
     it 'returns false when all the players are assigned' do
       scheduler.add_role('A', 1)

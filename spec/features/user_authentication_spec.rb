@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature 'user authentication:' do
   scenario 'a user tries to sign up' do
-    admin = FactoryGirl.create(:admin)
+    admin = create(:admin)
     visit '/users/sign_up'
     fill_in 'Email', with: 'new_user@example.com'
     fill_in 'Password', with: 'fake-pass'
@@ -13,7 +13,7 @@ feature 'user authentication:' do
   end
 
   scenario 'an invalid signup does not email the admin for approval' do
-    admin = FactoryGirl.create(:admin)
+    admin = create(:admin)
     visit '/users/sign_up'
     fill_in 'Email', with: 'new_user@example.com'
     fill_in 'Password', with: 'fake-pass'
@@ -24,7 +24,7 @@ feature 'user authentication:' do
   end
 
   scenario 'an unconfirmed user tries to sign in' do
-    user = FactoryGirl.create(:user)
+    user = create(:user)
     visit '/users/sign_in'
     fill_in 'Email', with: user.email
     fill_in 'Password', with: 'fake-password'
@@ -33,7 +33,7 @@ feature 'user authentication:' do
   end
 
   scenario 'a confirmed user tries to sign in' do
-    user = FactoryGirl.create(:approved_user)
+    user = create(:approved_user)
     visit '/users/sign_in'
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
@@ -44,7 +44,7 @@ feature 'user authentication:' do
   end
 
   scenario 'a signed in user tries to sign out' do
-    user = FactoryGirl.create(:approved_user)
+    user = create(:approved_user)
     visit '/users/sign_in'
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password

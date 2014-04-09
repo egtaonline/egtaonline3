@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DprScheduler do
   describe '#profile_space' do
     it 'returns an array of profiles consistent with the current roles' do
-      scheduler = FactoryGirl.create(:dpr_scheduler, size: 7)
+      scheduler = create(:dpr_scheduler, size: 7)
       ProfileAssociator.stub(:perform_async)
       scheduler.add_role('Role1', 3, 2)
       scheduler.add_role('Role2', 4, 3)
@@ -19,7 +19,7 @@ describe DprScheduler do
     end
 
     it 'returns the right profiles even in tricky cases' do
-      scheduler = FactoryGirl.create(:dpr_scheduler, size: 22)
+      scheduler = create(:dpr_scheduler, size: 22)
       ProfileAssociator.stub(:perform_async)
       scheduler.add_role('Role1', 21, 6)
       scheduler.add_role('Role2', 1, 1)

@@ -5,7 +5,7 @@ FactoryGirl.define do
     qos 'cac'
     size 5
     scheduler do
-      FactoryGirl.create(:game_scheduler,
+      create(:game_scheduler,
         simulator_instance: profile.simulator_instance)
     end
   end

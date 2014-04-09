@@ -1,3 +1,4 @@
+# Module containing email helpers for RSpec
 module MailerMacros
   def last_email
     ActionMailer::Base.deliveries.last

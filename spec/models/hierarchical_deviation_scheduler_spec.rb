@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe HierarchicalDeviationScheduler do
-  let(:scheduler){ FactoryGirl.create(:hierarchical_deviation_scheduler, size: 7) }
+  let(:scheduler){ create(:hierarchical_deviation_scheduler, size: 7) }
 
   describe '#profile_space' do
     it 'returns an array of profiles consistent with the current roles' do

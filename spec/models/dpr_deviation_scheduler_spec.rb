@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DprDeviationScheduler do
-  let(:scheduler){ FactoryGirl.create(:dpr_deviation_scheduler, size: 7) }
+  let(:scheduler){ create(:dpr_deviation_scheduler, size: 7) }
 
   describe '#profile_space' do
     it 'returns an array of profiles consistent with the current roles' do

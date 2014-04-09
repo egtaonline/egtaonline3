@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SchedulerBuilder do
   SCHEDULER_CLASSES.each do |scheduler_klass|
     describe 'create' do
-      let(:simulator){ FactoryGirl.create(:simulator, :with_strategies) }
+      let(:simulator){ create(:simulator, :with_strategies) }
       let(:configuration){ { 'fake' => 'variable', 'fake2' => 'other_variable' } }
       let(:scheduler_details){ { name: 'fake', process_memory: 1000, size: 2, time_per_observation: 40 } }
 
@@ -41,7 +41,7 @@ describe SchedulerBuilder do
 
   NONGENERIC_SCHEDULER_CLASSES.collect{ |klass| klass.to_s.underscore }.each do |scheduler_klass|
     describe 'update' do
-      let(:scheduler){ FactoryGirl.create(scheduler_klass, :with_profiles) }
+      let(:scheduler){ create(scheduler_klass, :with_profiles) }
       let(:simulator_instance){ scheduler.simulator_instance }
 
       context "when updating a #{scheduler_klass} and the run time configuration is not changed" do
@@ -59,11 +59,11 @@ describe SchedulerBuilder do
         let(:new_details){ { name: scheduler.name, process_memory: scheduler.process_memory, size: scheduler.size, time_per_observation: scheduler.time_per_observation } }
 
         before do
-          @scheduler = SchedulerBuilder.update(scheduler, new_details, { "new" => "configuration" })
+          @scheduler = SchedulerBuilder.update(scheduler, new_details, { 'new' => 'configuration' })
         end
 
         it { @scheduler.simulator_instance.should_not == simulator_instance }
-        it { @scheduler.simulator_instance.configuration.should == { "new" => "configuration" } }
+        it { @scheduler.simulator_instance.configuration.should == { 'new' => 'configuration' } }
         it { simulator_instance.profiles.first.scheduling_requirements.count.should == 0 }
         it { SchedulingRequirement.count.should == @scheduler.scheduling_requirements.count }
         it { @scheduler.simulator_instance.profiles.count.should == simulator_instance.profiles.count }

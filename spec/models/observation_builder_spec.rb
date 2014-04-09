@@ -13,38 +13,38 @@ describe ObservationBuilder do
   describe '#add_observation' do
     let(:validated_data) do
       {
-        "features" => { "featureA" => 34.0 },
-        "extended_features" => {
-          "featureB" => [37, 38],
-          "featureC" => {
-            "C1" => 40.0, "C2" => 42.0
+        'features' => { 'featureA' => 34.0 },
+        'extended_features' => {
+          'featureB' => [37, 38],
+          'featureC' => {
+            'C1' => 40.0, 'C2' => 42.0
           }
         },
-        "symmetry_groups" => [
+        'symmetry_groups' => [
           {
-            "role" => 'Role1',
-            "strategy" => 'Strategy1',
-            "players" => [
+            'role' => 'Role1',
+            'strategy' => 'Strategy1',
+            'players' => [
               {
-                "payoff" => 2992.73,
-      			    "features" => {
-      				    "featureA" => 0.001
+                'payoff' => 2992.73,
+      			    'features' => {
+      				    'featureA' => 0.001
       				  },
-      				  "extended_features" => {
-      				    "featureB" => [2.0, 2.1]
+      				  'extended_features' => {
+      				    'featureB' => [2.0, 2.1]
       			    }
       			  }
             ]
           },
           {
-            "role" => 'Role2',
-            "strategy" => 'Strategy2',
-            "players" => [
+            'role' => 'Role2',
+            'strategy' => 'Strategy2',
+            'players' => [
               {
-                "payoff" => 2929.34
+                'payoff' => 2929.34
               },
               {
-      				  "payoff" => 2000.00
+      				  'payoff' => 2000.00
       			  }
             ]
           }
@@ -62,15 +62,15 @@ describe ObservationBuilder do
       ObservationAgg.should_receive(:where).with(symmetry_group_id: 2).and_return(criteria2)
       ordered_criteria1 = double('criteria')
       ordered_criteria2 = double('criteria')
-      criteria1.should_receive(:order).with("").and_return(ordered_criteria1)
-      criteria2.should_receive(:order).with("").and_return(ordered_criteria2)
-      payoff_query1 = [{"payoff" => 2992.73, "payoff_sd" => nil}]
-      payoff_query2 = [{"payoff" => 2464.67, "payoff_sd" => nil}]
-      ordered_criteria1.should_receive(:select).with("avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd").and_return(payoff_query1)
-      ordered_criteria2.should_receive(:select).with("avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd").and_return(payoff_query2)
-      validated_data["symmetry_groups"].each do |sgroup|
-        sgroup["players"].each do |player|
-          symmetry_group = sgroup["role"] == 'Role1' ? symmetry_group1 : symmetry_group2
+      criteria1.should_receive(:order).with('').and_return(ordered_criteria1)
+      criteria2.should_receive(:order).with('').and_return(ordered_criteria2)
+      payoff_query1 = [{'payoff' => 2992.73, 'payoff_sd' => nil}]
+      payoff_query2 = [{'payoff' => 2464.67, 'payoff_sd' => nil}]
+      ordered_criteria1.should_receive(:select).with('avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd').and_return(payoff_query1)
+      ordered_criteria2.should_receive(:select).with('avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd').and_return(payoff_query2)
+      validated_data['symmetry_groups'].each do |sgroup|
+        sgroup['players'].each do |player|
+          symmetry_group = sgroup['role'] == 'Role1' ? symmetry_group1 : symmetry_group2
           PlayerBuilder.should_receive(:build).with(observation, symmetry_group, player)
         end
       end
@@ -78,7 +78,7 @@ describe ObservationBuilder do
 
 
     it 'creates the observation' do
-      observations.should_receive(:create!).with(features: validated_data["features"], extended_features: validated_data["extended_features"]).and_return(observation)
+      observations.should_receive(:create!).with(features: validated_data['features'], extended_features: validated_data['extended_features']).and_return(observation)
       observation_aggs.should_receive(:create!).with(symmetry_group_id: 1)
       observation_aggs.should_receive(:create!).with(symmetry_group_id: 2)
 

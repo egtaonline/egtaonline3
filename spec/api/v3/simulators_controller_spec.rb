@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'SimulatorsController' do
-  let(:user) { FactoryGirl.create(:approved_user) }
+  let(:user) { create(:approved_user) }
   let(:token) { user.authentication_token }
   let(:role){ 'RoleA' }
   let(:strategy){ 'Strategy1' }
@@ -20,7 +20,7 @@ describe 'SimulatorsController' do
       end
     end
     context 'when the simulator exists' do
-      let!(:simulator){ FactoryGirl.create(:simulator, id: 1) }
+      let!(:simulator){ create(:simulator, id: 1) }
       context 'but the role does not exist' do
         it "returns an appropriate 422" do
           post "#{url}.json", query
@@ -58,7 +58,7 @@ describe 'SimulatorsController' do
       end
     end
     context 'when the simulator exists' do
-      let!(:simulator){ FactoryGirl.create(:simulator, id: 1) }
+      let!(:simulator){ create(:simulator, id: 1) }
       context 'but the role does not exist' do
         it "returns an appropriate 422" do
           post "#{url}.json", query
@@ -97,7 +97,7 @@ describe 'SimulatorsController' do
       end
     end
     context 'when the simulator exists' do
-      let!(:simulator){ FactoryGirl.create(:simulator, id: 1) }
+      let!(:simulator){ create(:simulator, id: 1) }
 
       it 'returns an error for misformatted roles' do
         post "#{url}.json", auth_token: token, role: '123.f!3#'
@@ -129,7 +129,7 @@ describe 'SimulatorsController' do
       end
     end
     context 'when the simulator exists' do
-      let!(:simulator){ FactoryGirl.create(:simulator, id: 1) }
+      let!(:simulator){ create(:simulator, id: 1) }
 
       before do
         simulator.add_role(role)
@@ -144,8 +144,8 @@ describe 'SimulatorsController' do
   end
 
   describe 'GET /api/v3/simulators' do
-    let!(:simulator){ FactoryGirl.create(:simulator) }
-    let!(:simulator2){ FactoryGirl.create(:simulator) }
+    let!(:simulator){ create(:simulator) }
+    let!(:simulator2){ create(:simulator) }
     let(:url){ '/api/v3/simulators' }
 
     it 'returns summary info for the available games' do
@@ -156,7 +156,7 @@ describe 'SimulatorsController' do
   end
 
   describe 'GET /api/v3/simulators/:id' do
-    let!(:simulator){ FactoryGirl.create(:simulator, id: 1) }
+    let!(:simulator){ create(:simulator, id: 1) }
     let(:url){ '/api/v3/simulators/1' }
 
     it 'responds with the simulator' do

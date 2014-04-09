@@ -6,8 +6,8 @@ feature 'index pages are sortable' do
   end
 
   scenario 'when on the simulator index page' do
-    simulator1 = FactoryGirl.create(:simulator, version: 'alpha')
-    simulator2 = FactoryGirl.create(:simulator, version: 'beta')
+    simulator1 = create(:simulator, version: 'alpha')
+    simulator2 = create(:simulator, version: 'beta')
     visit simulators_path
     click_on 'Version'
     within(:xpath, "//tbody/tr[1]/td[2]") do
@@ -28,8 +28,8 @@ feature 'index pages are sortable' do
   ['game_scheduler', 'deviation_scheduler', 'dpr_deviation_scheduler', 'dpr_scheduler',
    'generic_scheduler', 'hierarchical_deviation_scheduler', 'hierarchical_scheduler'].each do |scheduler|
     scenario 'some schedulers' do
-      first_name, second_name = [FactoryGirl.create(scheduler.to_sym).simulator_fullname,
-                                 FactoryGirl.create(scheduler.to_sym).simulator_fullname].sort
+      first_name, second_name = [create(scheduler.to_sym).simulator_fullname,
+                                 create(scheduler.to_sym).simulator_fullname].sort
 
       visit "/#{scheduler}s"
       within(".main") do
@@ -54,8 +54,8 @@ feature 'index pages are sortable' do
   end
 
   scenario 'some simulations' do
-    simulation = FactoryGirl.create(:simulation, state: 'queued')
-    simulation2 = FactoryGirl.create(:simulation, state: 'pending')
+    simulation = create(:simulation, state: 'queued')
+    simulation2 = create(:simulation, state: 'pending')
     visit simulations_path
     click_on 'State'
     within(:xpath, "//tbody/tr[1]/td[1]") do

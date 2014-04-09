@@ -76,6 +76,36 @@ ALTER SEQUENCE control_variables_id_seq OWNED BY control_variables.id;
 
 
 --
+-- Name: control_variate_states; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE control_variate_states (
+    id integer NOT NULL,
+    simulator_instance_id integer,
+    state character varying(255) DEFAULT 'none'::character varying NOT NULL
+);
+
+
+--
+-- Name: control_variate_states_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE control_variate_states_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: control_variate_states_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE control_variate_states_id_seq OWNED BY control_variate_states.id;
+
+
+--
 -- Name: games; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -117,7 +147,9 @@ CREATE TABLE observation_aggs (
     observation_id integer NOT NULL,
     symmetry_group_id integer NOT NULL,
     payoff double precision NOT NULL,
-    payoff_sd double precision
+    payoff_sd double precision,
+    adjusted_payoff double precision,
+    adjusted_payoff_sd double precision
 );
 
 
@@ -515,7 +547,9 @@ CREATE TABLE symmetry_groups (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     payoff double precision,
-    payoff_sd double precision
+    payoff_sd double precision,
+    adjusted_payoff double precision,
+    adjusted_payoff_sd double precision
 );
 
 
@@ -584,6 +618,13 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 --
 
 ALTER TABLE ONLY control_variables ALTER COLUMN id SET DEFAULT nextval('control_variables_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY control_variate_states ALTER COLUMN id SET DEFAULT nextval('control_variate_states_id_seq'::regclass);
 
 
 --
@@ -690,6 +731,14 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 
 ALTER TABLE ONLY control_variables
     ADD CONSTRAINT control_variables_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: control_variate_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY control_variate_states
+    ADD CONSTRAINT control_variate_states_pkey PRIMARY KEY (id);
 
 
 --
@@ -809,6 +858,13 @@ ALTER TABLE ONLY users
 --
 
 CREATE INDEX index_control_variables_on_simulator_instance_id ON control_variables USING btree (simulator_instance_id);
+
+
+--
+-- Name: index_control_variate_states_on_simulator_instance_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_control_variate_states_on_simulator_instance_id ON control_variate_states USING btree (simulator_instance_id);
 
 
 --
@@ -1030,3 +1086,7 @@ INSERT INTO schema_migrations (version) VALUES ('20140404182534');
 INSERT INTO schema_migrations (version) VALUES ('20140406194649');
 
 INSERT INTO schema_migrations (version) VALUES ('20140408184236');
+
+INSERT INTO schema_migrations (version) VALUES ('20140409162847');
+
+INSERT INTO schema_migrations (version) VALUES ('20140409191338');

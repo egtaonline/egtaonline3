@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe Game do
-  let(:game){ FactoryGirl.create(:game, size: 2) }
+  let(:game){ create(:game, size: 2) }
   before do
     game.roles.create(name: 'All', count: 2, reduced_count: 2,
       strategies: ['A', 'B'])
   end
 
   describe '#add_strategy' do
-    it "adds the strategy to the role" do
+    it 'adds the strategy to the role' do
       game.add_strategy('All', 'C')
       game.roles.first.strategies.should == ['A', 'B', 'C']
     end
@@ -50,31 +50,31 @@ describe Game do
   end
 
   describe '#profile_space' do
-    it { game.profile_space.should == "((role = 'All' AND (strategy = 'A' OR strategy = 'B')))" }
+    it { game.profile_space.should == '((role = \'All\' AND (strategy = \'A\' OR strategy = \'B\')))' }
   end
 
   context 'some profiles' do
     let!(:profile) do
-      FactoryGirl.create(:profile, :with_observations,
+      create(:profile, :with_observations,
       simulator_instance: game.simulator_instance,
       assignment: 'All: 2 A')
     end
     let!(:profile2) do
-      FactoryGirl.create(:profile,
+      create(:profile,
       simulator_instance: game.simulator_instance,
       assignment: 'All: 1 A, 1 B')
     end
     let!(:profile3) do
-      FactoryGirl.create(:profile, :with_observations,
+      create(:profile, :with_observations,
       simulator_instance: game.simulator_instance,
       assignment: 'All: 2 C')
     end
     let!(:profile4) do
-      FactoryGirl.create(:profile, :with_observations,
+      create(:profile, :with_observations,
       assignment: 'All: 2 B')
     end
     let!(:profile5) do
-      FactoryGirl.create(:profile, :with_observations,
+      create(:profile, :with_observations,
       simulator_instance: game.simulator_instance,
       assignment: 'All: 3 B')
     end
@@ -82,15 +82,15 @@ describe Game do
     describe '#profile_counts' do
       before do
         ObservationBuilder.new(profile).add_observation(
-          { "features" => {}, "symmetry_groups" => [{ "role" => "All",
-            "strategy" => "A", "players" => [{ "features" => {},
-            "payoff" => 200}, { "features" => {}, "payoff" => 300 }]}]})
+          { 'features' => {}, 'symmetry_groups' => [{ 'role' => 'All',
+            'strategy' => 'A', 'players' => [{ 'features' => {},
+            'payoff' => 200}, { 'features' => {}, 'payoff' => 300 }]}]})
       end
 
-      it "only counts profiles and observations from its profiles" do
+      it 'only counts profiles and observations from its profiles' do
         profile_counts = game.profile_counts
-        profile_counts["count"].to_i.should == 1
-        profile_counts["observations_count"].to_i.should == 2
+        profile_counts['count'].to_i.should == 1
+        profile_counts['observations_count'].to_i.should == 2
       end
     end
   end

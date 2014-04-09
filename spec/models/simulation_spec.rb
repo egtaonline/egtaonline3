@@ -5,7 +5,7 @@ describe Simulation do
     before do
       ['pending','queued','running','failed','running','complete',
        'processing'].each do |state|
-        FactoryGirl.create(:simulation, state: state)
+        create(:simulation, state: state)
       end
     end
 
@@ -41,7 +41,7 @@ describe Simulation do
     describe '.queueable' do
       it 'returns no more than simulation limit, in pending, sorting by age' do
         Simulation.should_receive(:simulation_limit).and_return(1)
-        simulation = FactoryGirl.create(:simulation, state: 'pending')
+        simulation = create(:simulation, state: 'pending')
         criteria = Simulation.queueable
         criteria.count.should == 1
         # it should equal the simulation made in the before do
@@ -51,11 +51,11 @@ describe Simulation do
   end
 
   context 'flux' do
-    let!(:in_neither){ FactoryGirl.create(:simulation, state: 'pending') }
+    let!(:in_neither){ create(:simulation, state: 'pending') }
     let!(:active_on_flux) do
-      FactoryGirl.create(:simulation, state: 'running', qos: 'flux')
+      create(:simulation, state: 'running', qos: 'flux')
     end
-    let!(:active_on_other){ FactoryGirl.create(:simulation, state: 'running') }
+    let!(:active_on_other){ create(:simulation, state: 'running') }
 
     it { Simulation.active_on_flux.to_a == [active_on_flux] }
     it { Simulation.active_on_other.to_a == [active_on_other] }
@@ -63,13 +63,13 @@ describe Simulation do
 
   describe '#start' do
     it 'moves the simulation to running if it is queued' do
-      simulation = FactoryGirl.create(:simulation, state: 'queued')
+      simulation = create(:simulation, state: 'queued')
       simulation.start
       simulation.state.should == 'running'
     end
 
     it 'does nothing otherwise' do
-      simulation = FactoryGirl.create(:simulation, state: 'complete')
+      simulation = create(:simulation, state: 'complete')
       simulation.start
       simulation.state.should == 'complete'
     end
@@ -77,14 +77,14 @@ describe Simulation do
 
   describe '#process' do
     it 'updates the state to processing and requests data parsing if active' do
-      simulation = FactoryGirl.create(:simulation, state: 'running' )
+      simulation = create(:simulation, state: 'running' )
       DataParser.should_receive(:perform_async).with(simulation.id, 'fake')
       simulation.process('fake')
       simulation.state.should == 'processing'
     end
 
     it 'does nothing otherwise' do
-      simulation = FactoryGirl.create(:simulation, state: 'complete')
+      simulation = create(:simulation, state: 'complete')
       DataParser.should_not_receive(:perform_async).with(simulation.id, 'fake')
       simulation.process('fake')
       simulation.state.should == 'complete'
@@ -93,7 +93,7 @@ describe Simulation do
 
   describe '#finish' do
     it 'moves to complete and tries to reschedule' do
-      simulation = FactoryGirl.create(:simulation, state: 'processing' )
+      simulation = create(:simulation, state: 'processing' )
       ProfileScheduler.should_receive(:perform_in).with(5.minutes,
         simulation.profile_id)
       simulation.finish
@@ -101,7 +101,7 @@ describe Simulation do
     end
 
     it 'does nothign if the simulation failed' do
-      simulation = FactoryGirl.create(:simulation, state: 'failed' )
+      simulation = create(:simulation, state: 'failed' )
       ProfileScheduler.should_not_receive(:perform_in).with(5.minutes,
         simulation.profile_id)
       simulation.finish
@@ -111,14 +111,14 @@ describe Simulation do
 
   describe '#queue_as' do
     it 'sets the job id and moves to queued if pending' do
-      simulation = FactoryGirl.create(:simulation, state: 'pending' )
+      simulation = create(:simulation, state: 'pending' )
       simulation.queue_as(23)
       simulation.job_id.should == 23
       simulation.state.should == 'queued'
     end
 
     it 'does nothing otherwise' do
-      simulation = FactoryGirl.create(:simulation, state: 'running',
+      simulation = create(:simulation, state: 'running',
         job_id: 11 )
       simulation.queue_as(23)
       simulation.job_id.should == 11
@@ -128,7 +128,7 @@ describe Simulation do
 
   describe '#fail' do
     it 'moves to failed and sets an error_message' do
-      simulation = FactoryGirl.create(:simulation)
+      simulation = create(:simulation)
       simulation.fail('FAILZORS')
       simulation.error_message.should == 'FAILZORS'
       simulation.state.should == 'failed'
@@ -137,7 +137,7 @@ describe Simulation do
 
   describe '#requeue' do
     it 'asks for the profile to try scheduling again' do
-      simulation = FactoryGirl.create(:simulation)
+      simulation = create(:simulation)
       ProfileScheduler.should_receive(:perform_in).with(5.minutes,
         simulation.profile_id)
       simulation.requeue
@@ -167,3 +167,4 @@ describe Simulation do
     end
   end
 end
+

@@ -5,10 +5,10 @@ FactoryGirl.define do
   end
 
   trait :with_simulator_with_strategies do
-    simulator { FactoryGirl.create(:simulator, :with_strategies) }
+    simulator { create(:simulator, :with_strategies) }
   end
 
   trait :with_simulator_with_multi_role_strategies do
-    simulator { FactoryGirl.create(:simulator, :with_multi_role_strategies) }
+    simulator { create(:simulator, :with_multi_role_strategies) }
   end
 end

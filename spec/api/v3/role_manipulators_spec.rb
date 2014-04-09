@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe 'RoleManipulators' do
-  let(:user) { FactoryGirl.create(:approved_user) }
+  let(:user) { create(:approved_user) }
   let(:token) { user.authentication_token }
   let(:role) { 'Role1' }
 
   shared_examples "a RoleManipulator" do
-    let!(:object){ FactoryGirl.create(
+    let!(:object){ create(
       described_class.to_s.underscore.to_sym) }
     describe "POST /api/v3/#{described_class.to_s.tableize}/:id/add_role" do
       let(:size){ 2 }

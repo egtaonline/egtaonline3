@@ -15,7 +15,7 @@ describe "Admins can approve users" do
     end
 
     context 'attempts to update the approval of a user', type: :api do
-      let(:user){ FactoryGirl.create(:user) }
+      let(:user){ create(:user) }
       it "does not change the approval of the user" do
         put "/users/#{user.id}", user: { approved: true }
         user.reload.approved.should == false
@@ -25,15 +25,15 @@ describe "Admins can approve users" do
 
   describe 'when an admin' do
     before do
-      user = FactoryGirl.create(:admin)
+      user = create(:admin)
       visit '/users/sign_in'
       fill_in 'Email', with: user.email
       fill_in 'Password', with: user.password
       click_button 'Sign in'
     end
 
-    let!(:approved_user){ FactoryGirl.create(:approved_user) }
-    let!(:unapproved_user){ FactoryGirl.create(:user) }
+    let!(:approved_user){ create(:approved_user) }
+    let!(:unapproved_user){ create(:user) }
     context 'attempts to view the users page' do
       it "can see the email for unapproved users" do
         visit "/users"

@@ -58,6 +58,7 @@ Egtaonline3::Application.routes.draw do
   end
 
   resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers, :generic_schedulers, :hierarchical_deviation_schedulers, :dpr_deviation_schedulers, :deviation_schedulers, except: :delete
+  resources :control_variables, only: [:edit, :update]
 
   resources :profiles, only: :show
   resources :simulations, only: [:index, :show]
