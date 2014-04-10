@@ -7,9 +7,9 @@ describe ObservationValidator do
        double(role: 'Seller', strategy: 'Shade1', count: 1),
        double(role: 'Seller', strategy: 'Shade2', count: 1)]
     end
-    let(:profile){ double(symmetry_groups: symmetry_groups) }
-    let(:path){ 'fake/path' }
-    subject{ ObservationValidator.new(profile) }
+    let(:profile) { double(symmetry_groups: symmetry_groups) }
+    let(:path) { 'fake/path' }
+    subject { ObservationValidator.new(profile) }
 
     before do
       file = double(read: file_contents)
@@ -33,94 +33,94 @@ describe ObservationValidator do
                 "strategy": "BidValue",
                 "payoff": 2992.73,
                 "features": {
-          				"featureA": null,
-          				"featureB": [2.0, 2.1]
-          			}
-          		},
-            	{
-            		"role": "Buyer",
-            		"strategy": "BidValue",
-            		"payoff": 2990.53,
-              	"features": {
-              		"featureA": 0.002,
-              		"featureB": [2.0, 2.1]
-            		}
+                  "featureA": null,
+                  "featureB": [2.0, 2.1]
+                }
+              },
+              {
+                "role": "Buyer",
+                "strategy": "BidValue",
+                "payoff": 2990.53,
+                "features": {
+                  "featureA": 0.002,
+                  "featureB": [2.0, 2.1]
+                }
               },
               {
                 "role": "Seller",
                 "strategy": "Shade1",
                 "payoff": 2929.34,
-          			"features": {
-          				"featureA": 0.003,
-          				"featureB": [1.3, 1.7]
-          			}
+                "features": {
+                  "featureA": 0.003,
+                  "featureB": [1.3, 1.7]
+                }
               },
               {
                 "role": "Seller",
                 "strategy": "Shade2",
-          			"payoff": 2924.44,
-          			"features": {
-          				"featureA": 0.003,
-          				"featureB": [1.4, 1.7]
-          			}
-          		}
+                "payoff": 2924.44,
+                "features": {
+                  "featureA": 0.003,
+                  "featureB": [1.4, 1.7]
+                }
+              }
             ]
           }
         JSON
       end
       let(:outcome) do
         {
-          "features" => { "featureA" => 34.0 },
-          "extended_features" => {
-            "featureB" => [37, 38],
-            "featureC" => {
-              "C1" => 40.0, "C2" => 42.0
+          'features' => { 'featureA' => 34.0 },
+          'extended_features' => {
+            'featureB' => [37, 38],
+            'featureC' => {
+              'C1' => 40.0, 'C2' => 42.0
             }
           },
-          "symmetry_groups" => [
+          'symmetry_groups' => [
             {
-              "role" => 'Buyer',
-              "strategy" => 'BidValue',
-              "players" => [
+              'role' => 'Buyer',
+              'strategy' => 'BidValue',
+              'players' => [
                 {
-                  "payoff" => 2992.73,
-                  "features" => {},
-        			    "extended_features" => {
-        				    "featureA" => nil,
-        				    "featureB" => [2.0, 2.1]
-        			    }
-        			  },
-        			  {
-        			    "payoff" => 2990.53,
-          			  "features" => { "featureA" => 0.002 },
-          			  "extended_features" => { "featureB" => [2.0, 2.1] }
-        			  }
+                  'payoff' => 2992.73,
+                  'features' => {},
+                  'extended_features' => {
+                    'featureA' => nil,
+                    'featureB' => [2.0, 2.1]
+                  }
+                },
+                {
+                  'payoff' => 2990.53,
+                  'features' => { 'featureA' => 0.002 },
+                  'extended_features' => { 'featureB' => [2.0, 2.1] }
+                }
               ]
             },
             {
-              "role" => 'Seller',
-              "strategy" => 'Shade1',
-              "players" => [
+              'role' => 'Seller',
+              'strategy' => 'Shade1',
+              'players' => [
                 {
-                  "payoff" => 2929.34,
-        			    "features" => { "featureA" => 0.003 },
-        			    "extended_features" => {
-        				    "featureB" => [1.3, 1.7]
-        			    }
-        			  }
+                  'payoff' => 2929.34,
+                  'features' => { 'featureA' => 0.003 },
+                  'extended_features' => {
+                    'featureB' => [1.3, 1.7]
+                  }
+                }
               ]
             },
             {
-              "role" => 'Seller',
-              "strategy" => 'Shade2',
-              "players" => [
+              'role' => 'Seller',
+              'strategy' => 'Shade2',
+              'players' => [
                 {
-        			    "payoff" => 2924.44,
-        			    "features" => { "featureA" => 0.003 },
-        			    "extended_features" => {
-        				    "featureB" => [1.4, 1.7]
-        			    }
-        			  }
+                  'payoff' => 2924.44,
+                  'features' => { 'featureA' => 0.003 },
+                  'extended_features' => {
+                    'featureB' => [1.4, 1.7]
+                  }
+                }
               ]
             }
           ]
@@ -146,36 +146,36 @@ describe ObservationValidator do
                   "strategy": "BidValue",
                   "payoff": "2992.73",
                   "features": {
-            			  "featureA": null,
-            				"featureB": [2.0, 2.1]
-            			}
-            		},
-              	{
-              	  "role": "Buyer",
+                    "featureA": null,
+                    "featureB": [2.0, 2.1]
+                  }
+                },
+                {
+                  "role": "Buyer",
                   "strategy": "BidValue",
-              		"payoff": "2990.53",
-                	"features": {
-                		"featureA": 0.002,
-                		"featureB": [2.0, 2.1]
+                  "payoff": "2990.53",
+                  "features": {
+                    "featureA": 0.002,
+                    "featureB": [2.0, 2.1]
                   }
                 },
                 {
                   "role": "Seller",
                   "strategy": "Shade1",
                   "payoff": "2929.34",
-            			"features": {
-            				"featureA": 0.003,
-            				"featureB": [1.3, 1.7]
-            			}
+                  "features": {
+                    "featureA": 0.003,
+                    "featureB": [1.3, 1.7]
+                  }
                 },
                 {
                   "role": "Seller",
                   "strategy": "Shade2",
-            			"payoff": "2924.44",
-            			"features": {
-            				"featureA": 0.003,
-            				"featureB": [1.4, 1.7]
-            			}
+                  "payoff": "2924.44",
+                  "features": {
+                    "featureA": 0.003,
+                    "featureB": [1.4, 1.7]
+                  }
                 }
               ]
             }
@@ -198,28 +198,28 @@ describe ObservationValidator do
                 "strategy": "BidValue",
                 "count": 2,
                 "payoff": "FAIL"
-          		},
-            	{
-            	  "role": "Buyer",
+              },
+              {
+                "role": "Buyer",
                 "strategy": "BidValue",
-            		"payoff": 2990.53
+                "payoff": 2990.53
               },
               {
                 "role": "Seller",
                 "strategy": "Shade1",
                 "payoff": 2929.34
-          		},
+              },
               {
                 "role": "Seller",
                 "strategy": "Shade2",
-          			"payoff": 2924.44
-          		}
+                "payoff": 2924.44
+              }
             ]
           }
         JSON
       end
 
-      it { subject.validate(path).should == nil }
+      it { expect(subject.validate(path).nil?).to be true }
     end
   end
 end

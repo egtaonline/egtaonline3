@@ -80,7 +80,7 @@ describe 'Schedulers' do
       it "should shows only #{described_class}s" do
         visit "/#{klass}"
         click_on 'Destroy'
-        Scheduler.count.should == 0
+        expect(Scheduler.count).to eq(0)
       end
     end
   end

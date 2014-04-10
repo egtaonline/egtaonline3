@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Games can be created from schedulers', type: :feature do
-  let(:klass){ described_class.to_s }
+  let(:klass) { described_class.to_s }
   let(:scheduler) do
     create(klass.underscore.to_sym, :with_sampled_profiles)
   end
@@ -12,7 +12,10 @@ describe 'Games can be created from schedulers', type: :feature do
 
   shared_examples 'a scheduler when creating a game' do
     describe 'when trying to make a game that already exists' do
-      let!(:game){ create(:game, simulator_instance: scheduler.simulator_instance, name: scheduler.name) }
+      let!(:game) do
+        create(:game, simulator_instance: scheduler.simulator_instance,
+                      name: scheduler.name)
+      end
       it 'alerts the user' do
         visit "/#{klass.tableize}/#{scheduler.id}"
         click_on 'Create Game to Match'
@@ -49,8 +52,8 @@ describe 'Games can be created from schedulers', type: :feature do
     describe 'creating a game from a scheduler' do
       let!(:profile) do
         create(:profile, :with_observations,
-          simulator_instance: scheduler.simulator_instance,
-          assignment: 'All: 1 A, 1 DeviousStrategy')
+               simulator_instance: scheduler.simulator_instance,
+               assignment: 'All: 1 A, 1 DeviousStrategy')
       end
       before do
         scheduler.simulator.add_strategy('All', 'DeviousStrategy')
@@ -82,7 +85,7 @@ describe 'Games can be created from schedulers', type: :feature do
     end
   end
 
-  [GameScheduler,HierarchicalScheduler,DprScheduler].each do |s_class|
+  [GameScheduler, HierarchicalScheduler, DprScheduler].each do |s_class|
     describe s_class do
       it_behaves_like 'a game scheduler when creating a game'
       it_behaves_like 'a scheduler when creating a game'
@@ -99,11 +102,11 @@ describe 'Games can be created from schedulers', type: :feature do
   describe GenericScheduler do
     it_behaves_like 'a scheduler when creating a game'
 
-    let(:scheduler){ create(:generic_scheduler) }
+    let(:scheduler) { create(:generic_scheduler) }
     let!(:profile) do
       create(:profile, :with_observations,
-        simulator_instance: scheduler.simulator_instance,
-        assignment: 'All: 1 A, 1 B')
+             simulator_instance: scheduler.simulator_instance,
+             assignment: 'All: 1 A, 1 B')
     end
 
     describe 'creating a game from a scheduler' do
@@ -138,5 +141,10 @@ end
 
 def json_representation(profile)
   profile.reload
- "{\"id\":#{profile.id},\"observations_count\":#{profile.observations_count},\"symmetry_groups\":[#{profile.symmetry_groups.collect{ |s| "{\"id\":#{s.id},\"role\":\"#{s.role}\",\"strategy\":\"#{s.strategy}\",\"count\":#{s.count},\"payoff\":100,\"payoff_sd\":null}" }.join(',')}]}"
+  "{\"id\":#{profile.id},\"observations_count\":" \
+    "#{profile.observations_count},\"symmetry_groups\":[" +
+    profile.symmetry_groups.map do |s|
+      "{\"id\":#{s.id},\"role\":\"#{s.role}\",\"strategy\":\"#{s.strategy}\"" \
+      ",\"count\":#{s.count},\"payoff\":100,\"payoff_sd\":null}"
+    end.join(',') + ']}'
 end

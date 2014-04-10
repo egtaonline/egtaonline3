@@ -1,7 +1,7 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'database_cleaner'
@@ -13,7 +13,7 @@ Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = 'http://localhost:3000'
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 Rails.logger.level = 4
 
@@ -24,7 +24,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.include FactoryGirl::Syntax::Methods
 
-  config.order = "random"
+  config.order = 'random'
   config.include(MailerMacros)
   config.include(SessionHelpers, type: :feature)
 
@@ -38,8 +38,8 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(:each, :js => true) do
-    DatabaseCleaner.strategy = :truncation, {:pre_count => true}
+  config.before(:each, js: true) do
+    DatabaseCleaner.strategy = :truncation, { pre_count: true }
   end
 
   config.before(:each) do
@@ -51,9 +51,13 @@ RSpec.configure do |config|
   end
 end
 
-SCHEDULER_CLASSES = [GameScheduler, DeviationScheduler, DprDeviationScheduler, DprScheduler, GenericScheduler, HierarchicalDeviationScheduler, HierarchicalScheduler]
-NONGENERIC_SCHEDULER_CLASSES = SCHEDULER_CLASSES-[GenericScheduler]
+SCHEDULER_CLASSES = [GameScheduler, DeviationScheduler, DprDeviationScheduler,
+                     DprScheduler, GenericScheduler,
+                     HierarchicalDeviationScheduler, HierarchicalScheduler]
+NONGENERIC_SCHEDULER_CLASSES = SCHEDULER_CLASSES - [GenericScheduler]
 REDUCTION_SCHEDULER_CLASSES = [DprScheduler, DprDeviationScheduler,
-  HierarchicalScheduler, HierarchicalDeviationScheduler]
+                               HierarchicalScheduler,
+                               HierarchicalDeviationScheduler]
 DEVIATION_SCHEDULER_CLASSES = [DeviationScheduler,
-  HierarchicalDeviationScheduler, DprDeviationScheduler]
+                               HierarchicalDeviationScheduler,
+                               DprDeviationScheduler]

@@ -1,55 +1,60 @@
 require 'spec_helper'
 
 describe Profile do
-  let!(:profile){ create(:profile,
-    assignment: 'A: 2 S1, 1 S2; B: 3 S3') }
+  let!(:profile) do
+    create(:profile, assignment: 'A: 2 S1, 1 S2; B: 3 S3')
+  end
   describe 'creation events' do
     it 'creates the necessary symmetry groups on creation' do
-      SymmetryGroup.where(profile_id: profile.id).count.should == 3
-      profile.role_configuration['A'].should == 3
-      SymmetryGroup.where(role: 'A', strategy: 'S1', count: 2,
-        profile_id: profile.id).count.should == 1
-      SymmetryGroup.where(role: 'A', strategy: 'S2', count: 1,
-        profile_id: profile.id).count.should == 1
-      SymmetryGroup.where(role: 'B', strategy: 'S3', count: 3,
-        profile_id: profile.id).count.should == 1
-      profile.role_configuration['B'].should == 3
+      expect(SymmetryGroup.where(profile_id: profile.id).count).to eq(3)
+      expect(profile.role_configuration['A']).to eq(3)
+      expect(SymmetryGroup.where(
+        role: 'A', strategy: 'S1', count: 2, profile_id: profile.id).count)
+          .to eq(1)
+      expect(SymmetryGroup.where(
+        role: 'A', strategy: 'S2', count: 1, profile_id: profile.id).count)
+          .to eq(1)
+      expect(SymmetryGroup.where(
+        role: 'B', strategy: 'S3', count: 3, profile_id: profile.id).count)
+          .to eq(1)
+      expect(profile.role_configuration['B']).to eq(3)
     end
 
     it 'sets the size correctly' do
-      profile.size.should == 6
+      expect(profile.size).to eq(6)
     end
   end
 
   describe '#scheduled?' do
     context 'when an active simulation exists' do
-      let!(:simulation){ create(:simulation, state: 'queued',
-        profile: profile) }
+      let!(:simulation) do
+        create(:simulation, state: 'queued', profile: profile)
+      end
 
-      it { profile.scheduled?.should == true }
+      it { expect(profile.scheduled?).to be true }
     end
 
     context 'when no active simulation for the profile exists' do
-      it { profile.scheduled?.should == false }
+      it { expect(profile.scheduled?).to be false }
     end
   end
 
   describe '#profile_matches_simulator' do
-    let!(:simulator){ create(:simulator) }
+    let!(:simulator) { create(:simulator) }
     let!(:simulator_instance) do
       create(:simulator_instance, simulator: simulator)
     end
     it 'passes only when all the strategies/roles are on the simulator' do
       simulator.add_strategy('All', 'A')
-      profile = FactoryGirl.build(:profile,
-        simulator_instance: simulator_instance, assignment: 'All: 2 A')
-      profile.valid?.should == true
+      profile = build(:profile, simulator_instance: simulator_instance,
+                                assignment: 'All: 2 A')
+      expect(profile.valid?).to be true
     end
 
     it 'fails when the strategy is not present on the simulator' do
-      profile = FactoryGirl.build(:profile,
-        simulator_instance: simulator_instance, assignment: 'All: 2 A')
-      profile.valid?.should == false
+      profile = build(:profile, simulator_instance: simulator_instance,
+                                assignment: 'All: 2 A')
+      expect(profile.valid?).to be false
     end
   end
 
@@ -63,11 +68,11 @@ describe Profile do
   describe '#scheduled?' do
     it 'returns true if the profile has scheduled simulations' do
       create(:simulation, profile: profile)
-      profile.reload.scheduled?.should == true
+      expect(profile.reload.scheduled?).to be true
     end
 
     it 'returns false is the profile does not have scheduled simulations' do
-      profile.scheduled?.should == false
+      expect(profile.scheduled?).to be false
     end
   end
 end

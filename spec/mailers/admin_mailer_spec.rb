@@ -9,7 +9,7 @@ describe AdminMailer do
     it 'sends user password reset url' do
       mail.subject.should eq('User requires approval')
       mail.to.should eq([admin.email])
-      mail.from.should eq(['egtaonline.eecs.umich.edu'])
+      mail.from.should eq(%w(egtaonline.eecs.umich.edu))
     end
 
     it 'renders the body' do

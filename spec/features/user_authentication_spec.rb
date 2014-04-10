@@ -8,19 +8,20 @@ feature 'user authentication:' do
     fill_in 'Password', with: 'fake-pass'
     fill_in 'Password confirmation', with: 'fake-pass'
     click_button 'Sign up'
-    page.should have_content 'The admin has been emailed to verify your access.'
-    last_email.to.should include(admin.email)
+    expect(page)
+      .to have_content 'The admin has been emailed to verify your access.'
+    expect(last_email.to).to include(admin.email)
   end
 
   scenario 'an invalid signup does not email the admin for approval' do
-    admin = create(:admin)
+    create(:admin)
     visit '/users/sign_up'
     fill_in 'Email', with: 'new_user@example.com'
     fill_in 'Password', with: 'fake-pass'
     fill_in 'Password confirmation', with: 'fake-pass2'
     click_button 'Sign up'
-    page.should have_content "Password confirmation doesn't match Password"
-    last_email.should == nil
+    expect(page).to have_content "Password confirmation doesn't match Password"
+    expect(last_email.nil?).to be true
   end
 
   scenario 'an unconfirmed user tries to sign in' do
@@ -29,7 +30,8 @@ feature 'user authentication:' do
     fill_in 'Email', with: user.email
     fill_in 'Password', with: 'fake-password'
     click_button 'Sign in'
-    page.should have_content 'Your account has not been verified by the admin.'
+    expect(page)
+      .to have_content 'Your account has not been verified by the admin.'
   end
 
   scenario 'a confirmed user tries to sign in' do
@@ -38,9 +40,9 @@ feature 'user authentication:' do
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
     click_button 'Sign in'
-    page.should have_content 'Signed in successfully.'
+    expect(page).to have_content 'Signed in successfully.'
     visit '/simulators'
-    current_path.should == '/simulators'
+    expect(current_path).to eq('/simulators')
   end
 
   scenario 'a signed in user tries to sign out' do
@@ -50,6 +52,6 @@ feature 'user authentication:' do
     fill_in 'Password', with: user.password
     click_button 'Sign in'
     click_on 'Sign out'
-    current_path.should == '/'
+    expect(current_path).to eq('/')
   end
 end

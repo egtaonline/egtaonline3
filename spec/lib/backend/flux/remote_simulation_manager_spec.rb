@@ -1,30 +1,35 @@
 require 'backend/flux/remote_simulation_manager'
 
 describe RemoteSimulationManager do
-  let(:connection){ double('connection') }
-  let(:simulators_path){ 'fake/simulator/path' }
-  let(:local_data_path){ 'fake/local/path' }
-  let(:remote_data_path){ 'fake/remote/path' }
-  let(:simulation_manager){ RemoteSimulationManager.new(connection: connection, simulators_path: simulators_path,
-                      local_data_path: local_data_path, remote_data_path: remote_data_path, flux_active_limit: 90) }
-  let(:simulation){ double(id: 1) }
-  let(:flux_policy){ double('policy') }
-  let(:pbs_creator){ double('pbs creator')}
-  let(:proxy){ double('proxy') }
-  let(:spec_generator){ double('spec generator') }
-  let(:simulation_submitter){ double('simulation submitter') }
-  let(:status_monitor){ double('status monitor') }
+  let(:connection) { double('connection') }
+  let(:simulators_path) { 'fake/simulator/path' }
+  let(:local_data_path) { 'fake/local/path' }
+  let(:remote_data_path) { 'fake/remote/path' }
+  let(:simulation_manager) do
+    RemoteSimulationManager.new(
+      connection: connection, simulators_path: simulators_path,
+      local_data_path: local_data_path, remote_data_path: remote_data_path,
+      flux_active_limit: 90)
+  end
+  let(:simulation) { double(id: 1) }
+  let(:flux_policy) { double('policy') }
+  let(:pbs_creator) { double('pbs creator') }
+  let(:proxy) { double('proxy') }
+  let(:spec_generator) { double('spec generator') }
+  let(:simulation_submitter) { double('simulation submitter') }
+  let(:status_monitor) { double('status monitor') }
 
   before do
     FluxPolicy.should_receive(:new).with(90).and_return(flux_policy)
-    PbsCreator.should_receive(:new).with(simulators_path, local_data_path,
+    PbsCreator.should_receive(:new).with(
+      simulators_path, local_data_path,
       remote_data_path).and_return(pbs_creator)
-    SimulationSubmitter.should_receive(:new).with(remote_data_path).and_return(
-      simulation_submitter)
-    SpecGenerator.should_receive(:new).with(local_data_path).and_return(
-      spec_generator)
-    SimulationStatusMonitor.should_receive(:new).with(
-      local_data_path).and_return(status_monitor)
+    SimulationSubmitter.should_receive(:new).with(remote_data_path)
+      .and_return(simulation_submitter)
+    SpecGenerator.should_receive(:new).with(local_data_path)
+      .and_return(spec_generator)
+    SimulationStatusMonitor.should_receive(:new)
+      .with(local_data_path).and_return(status_monitor)
   end
 
   describe '#prepare_simulation' do
@@ -36,7 +41,8 @@ describe RemoteSimulationManager do
         "#{local_data_path}/#{simulation.id}")
       FileUtils.should_receive(:mkdir).with(
         "#{local_data_path}/#{simulation.id}")
-      FileUtils.should_receive(:chmod_R).with(0775, "#{local_data_path}/#{simulation.id}")
+      FileUtils.should_receive(:chmod_R).with(
+        0775, "#{local_data_path}/#{simulation.id}")
       spec_generator.should_receive(:generate).with(simulation)
       simulation_manager.prepare_simulation(simulation)
     end
@@ -50,7 +56,7 @@ describe RemoteSimulationManager do
   end
 
   describe '#update_simulations' do
-    let(:simulations){ double('Array') }
+    let(:simulations) { double('Array') }
     it 'delegates to SimulationStatusMonitor' do
       status_monitor.should_receive(:update_simulations).with(
         connection, simulations)

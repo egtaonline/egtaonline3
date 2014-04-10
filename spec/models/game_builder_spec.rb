@@ -2,18 +2,21 @@ require 'spec_helper'
 
 describe GameBuilder do
   describe 'create' do
-    let(:simulator){ create(:simulator, :with_strategies) }
-    let(:configuration){ { 'fake' => 'variable', 'fake2' => 'other_variable' } }
-    let(:params){ { 'name' => 'test', 'size' => 2 } }
+    let(:simulator) { create(:simulator, :with_strategies) }
+    let(:configuration) do
+      { 'fake' => 'variable', 'fake2' => 'other_variable' }
+    end
+    let(:params) { { 'name' => 'test', 'size' => 2 } }
 
     context 'when a matching SimulatorInstance exists' do
       before do
-        @simulator_instance = SimulatorInstance.create(simulator_id: simulator.id, configuration: configuration)
+        @simulator_instance = SimulatorInstance.create(
+          simulator_id: simulator.id, configuration: configuration)
         @game = GameBuilder.create(params, simulator.id, configuration)
       end
 
-      it{ @game.name.should == 'test' }
-      it{ @game.simulator_instance_id.should == @simulator_instance.id }
+      it { expect(@game.name).to eq('test') }
+      it { expect(@game.simulator_instance_id).to eq(@simulator_instance.id) }
     end
 
     context 'when a matching SimulatorInstance does not exist' do
@@ -22,10 +25,10 @@ describe GameBuilder do
         @simulator_instance = SimulatorInstance.last
       end
 
-      it{ @game.name.should == 'test' }
-      it{ @game.simulator_instance_id.should == @simulator_instance.id }
-      it{ @simulator_instance.simulator_id.should == simulator.id }
-      it{ @simulator_instance.configuration.should == configuration }
+      it { expect(@game.name).to eq('test') }
+      it { expect(@game.simulator_instance_id).to eq(@simulator_instance.id) }
+      it { expect(@simulator_instance.simulator_id).to eq(simulator.id) }
+      it { expect(@simulator_instance.configuration).to eq(configuration) }
     end
   end
 
@@ -38,11 +41,17 @@ describe GameBuilder do
         end
 
         [:name, :size, :simulator_instance_id].each do |field|
-          it { @game.send(field).should == @scheduler.send(field) }
+          it { expect(@game.send(field)).to eq(@scheduler.send(field)) }
         end
 
-        it{ @game.roles.collect{|role| { name: role.name, count: role.count, strategies: role.strategies} }.should ==
-            @scheduler.roles.collect{|role| { name: role.name, count: role.count, strategies: role.strategies+role.deviating_strategies } } }
+        it do
+          expect(@game.roles.map do |role|
+            { name: role.name, count: role.count, strategies: role.strategies }
+          end).to eq(@scheduler.roles.map do |role|
+            { name: role.name, count: role.count,
+              strategies: role.strategies + role.deviating_strategies }
+          end)
+        end
       end
     end
   end

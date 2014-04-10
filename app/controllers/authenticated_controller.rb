@@ -9,7 +9,7 @@ class AuthenticatedController < ApplicationController
   private
 
   def sort_direction
-    %w[ASC DESC].include?(params[:direction]) ? params[:direction] : "ASC"
+    %w(ASC DESC).include?(params[:direction]) ? params[:direction] : "ASC"
   end
 
   def sort_column

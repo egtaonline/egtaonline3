@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GenericScheduler do
-  let(:scheduler){ create(:generic_scheduler) }
+  let(:scheduler) { create(:generic_scheduler) }
 
   describe '#add_profile' do
     before do
@@ -10,7 +10,7 @@ describe GenericScheduler do
     context 'when the scheduler lacks the necessary roles' do
       it 'returns a profile with an error expressing as much' do
         profile = scheduler.add_profile('All: 2 A')
-        profile.errors.messages.empty?.should == false
+        expect(profile.errors.messages.empty?).to be false
       end
     end
     context 'when the scheduler has the necessary roles' do
@@ -21,24 +21,34 @@ describe GenericScheduler do
         before do
           scheduler.add_profile('All: 2 A')
         end
-        it { Profile.where(
-          simulator_instance_id: scheduler.simulator_instance_id,
-          assignment: 'All: 2 A').count.should == 1 }
-        it { scheduler.reload.scheduling_requirements.count.should == 1 }
+        it do
+          expect(Profile.where(
+            simulator_instance_id: scheduler.simulator_instance_id,
+            assignment: 'All: 2 A').count).to eq(1)
+        end
+        it do
+          expect(scheduler.reload.scheduling_requirements.count)
+            .to eq(1)
+        end
       end
 
       context 'when the profile already exists' do
         before do
-          @profile = create(:profile,
-            simulator_instance_id: scheduler.simulator_instance_id,
-            assignment: 'All: 2 A')
+          @profile = create(
+            :profile, simulator_instance_id: scheduler.simulator_instance_id,
+                      assignment: 'All: 2 A')
           scheduler.add_profile('All: 2 A')
         end
 
-        it { Profile.where(
-          simulator_instance_id: scheduler.simulator_instance_id,
-          assignment: 'All: 2 A').count.should == 1 }
-        it { scheduler.scheduling_requirements.first.profile.should == @profile}
+        it do
+          expect(Profile.where(
+            simulator_instance_id: scheduler.simulator_instance_id,
+            assignment: 'All: 2 A').count).to eq(1)
+        end
+        it do
+          expect(scheduler.scheduling_requirements.first.profile)
+            .to eq(@profile)
+        end
       end
     end
   end
@@ -46,8 +56,8 @@ describe GenericScheduler do
   describe '#remove_profile_by_id' do
     let!(:profile) do
       create(:profile,
-        simulator_instance: scheduler.simulator_instance,
-        assignment: 'R1: 1 B; R2: 1 D')
+             simulator_instance: scheduler.simulator_instance,
+             assignment: 'R1: 1 B; R2: 1 D')
     end
     before do
       scheduler.simulator.add_strategy('R1', 'A')
@@ -64,10 +74,10 @@ describe GenericScheduler do
     it 'removes the scheduling requirement and relevant strategies' do
       scheduler.remove_profile_by_id(profile.id)
       scheduler.reload
-      scheduler.scheduling_requirements.find_by(
-        profile_id: profile.id).should == nil
-      scheduler.roles.find_by(name: 'R1').strategies.should == ['A']
-      scheduler.roles.find_by(name: 'R2').strategies.should == ['C', 'D']
+      expect(scheduler.scheduling_requirements.find_by(
+        profile_id: profile.id)).to eq(nil)
+      expect(scheduler.roles.find_by(name: 'R1').strategies).to eq(%w(A))
+      expect(scheduler.roles.find_by(name: 'R2').strategies).to eq(%w(C D))
     end
   end
 end

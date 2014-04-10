@@ -5,8 +5,9 @@ describe HierarchicalCreator do
     it 'expands assignments consistent with role counts' do
       roles = [stub(name: 'EvenReduction', reduced_count: 1, count: 2),
                stub(name: 'UnevenReduction', reduced_count: 2, count: 5)]
-      assignments = [[['EvenReduction', 'A'], ['UnevenReduction', 'B', 'C']]]
-      HierarchicalCreator.expand_assignments(assignments, roles).should == [[['EvenReduction', 'A', 'A'], ['UnevenReduction', 'B', 'B', 'B', 'C', 'C']]]
+      assignments = [[%w(EvenReduction A), %w(UnevenReduction B C)]]
+      expect(HierarchicalCreator.expand_assignments(assignments, roles))
+        .to eq([[%w(EvenReduction A A), %w(UnevenReduction B B B C C)]])
     end
   end
 end

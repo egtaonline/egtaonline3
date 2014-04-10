@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'users can apply control variates from the game page' do
-  let(:game){ create(:game) }
+  let(:game) { create(:game) }
 
   before do
     sign_in
   end
 
-  describe 'visiting the games page gives a link to editing the control variates' do
+  describe 'visiting the games page gives link to editing control variates' do
     it 'directs to the correct page when you click the link' do
       visit "/games/#{game.id}"
       click_on 'Set Control Variates'
@@ -17,11 +17,31 @@ describe 'users can apply control variates from the game page' do
   end
 
   describe 'updating the control variables updates payoff adjustments' do
-    let!(:profile1){ create(:profile, :with_observations, simulator_instance: game.simulator_instance, assignment: 'R1: 1 S1; R2: 1 S2') }
-    let!(:profile2){ create(:profile, :with_observations, simulator_instance: game.simulator_instance, assignment: 'R1: 1 S1; R2: 1 S3') }
-    let!(:control_variable){ ControlVariable.create!(simulator_instance_id: game.simulator_instance_id, name: 'feature1', expectation: 0.5) }
-    let!(:pcontrol_variable1){ PlayerControlVariable.create!(simulator_instance_id: game.simulator_instance_id, role: 'R1', name: 'pfeature1', expectation: 0.4) }
-    let!(:pcontrol_variable2){ PlayerControlVariable.create!(simulator_instance_id: game.simulator_instance_id, role: 'R2', name: 'pfeature2', expectation: 0.6) }
+    let!(:profile1) do
+      create(:profile, :with_observations,
+             simulator_instance: game.simulator_instance,
+             assignment: 'R1: 1 S1; R2: 1 S2')
+    end
+    let!(:profile2) do
+      create(:profile, :with_observations,
+             simulator_instance: game.simulator_instance,
+             assignment: 'R1: 1 S1; R2: 1 S3')
+    end
+    let!(:control_variable) do
+      ControlVariable.create!(
+        simulator_instance_id: game.simulator_instance_id,
+        name: 'feature1', expectation: 0.5)
+    end
+    let!(:pcontrol_variable1) do
+      PlayerControlVariable.create!(
+        simulator_instance_id: game.simulator_instance_id, role: 'R1',
+        name: 'pfeature1', expectation: 0.4)
+    end
+    let!(:pcontrol_variable2) do
+      PlayerControlVariable.create!(
+        simulator_instance_id: game.simulator_instance_id, role: 'R2',
+        name: 'pfeature2', expectation: 0.6)
+    end
 
     before do
       [profile1, profile2].each do |profile|
