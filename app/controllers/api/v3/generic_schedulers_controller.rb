@@ -1,7 +1,8 @@
 class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   include Api::V3::RoleManipulator
 
-  before_filter :find_object, only: [:show, :update, :destroy, :add_profile,
+  before_filter :find_object, only: [
+    :show, :update, :destroy, :add_profile,
     :remove_profile, :add_role, :remove_role]
   before_filter :role_exists, only: :add_role
 
@@ -28,7 +29,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   def add_profile
     profile = @object.add_profile(params[:assignment], params[:count])
     respond_with(profile, status: (profile.errors.messages.empty? ? 201 : 422),
-      location: nil)
+                          location: nil)
   end
 
   def remove_profile

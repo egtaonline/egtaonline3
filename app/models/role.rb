@@ -3,10 +3,12 @@ class Role < ActiveRecord::Base
   validates_presence_of :role_owner
   validates :count, numericality: { only_integer: true }, presence: true
   validate :count_is_acceptable
-  validates :name, presence: true, uniqueness: {
-    scope: [:role_owner_id, :role_owner_type] },
-    format: { with:  /\A\w+\z/, message: 'only letters, numbers, or' +
-    ' underscores allowed.' }
+  validates :name,
+            presence: true,
+            uniqueness: { scope: [:role_owner_id, :role_owner_type] },
+            format: {
+              with: /\A\w+\z/, message: 'only letters, numbers, or' \
+              ' underscores allowed.' }
 
   before_validation(on: :create) do
     self.strategies ||= []

@@ -11,21 +11,6 @@ AllCops:
     - config/**
     - script/**
 
-# Offense count: 2
-AccessorMethodName:
-  Enabled: false
-
-# Offense count: 3
-# Cop supports --auto-correct.
-AlignArray:
-  Enabled: false
-
-# Offense count: 21
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle, SupportedLastArgumentHashStyles.
-AlignHash:
-  Enabled: false
-
 # Offense count: 23
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -144,30 +129,3 @@ NonNilCheck:
 # Cop supports --auto-correct.
 NumericLiterals:
   MinDigits: 15
-
-# Offense count: 1
-# Configuration parameters: CountKeywordArgs.
-ParameterLists:
-  Max: 9
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowSafeAssignment.
-ParenthesesAroundCondition:
-  Enabled: false
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-PercentLiteralDelimiters:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-PerlBackrefs:
-  Enabled: false
-
-# Offense count: 4
-RedundantBegin:
-  Enabled: false
-

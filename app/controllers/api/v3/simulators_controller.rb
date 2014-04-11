@@ -1,7 +1,7 @@
 class Api::V3::SimulatorsController < Api::V3::BaseController
   include Api::V3::StrategyManipulator
-  before_filter :find_object, only: [:show, :add_strategy, :remove_strategy,
-    :add_role, :remove_role]
+  before_filter :find_object, only: [
+    :show, :add_strategy, :remove_strategy, :add_role, :remove_role]
   before_filter :find_role, only: [:add_strategy, :remove_strategy]
 
   def index

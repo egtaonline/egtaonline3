@@ -9,7 +9,7 @@ class SimulationSubmitter
       begin
         response = proxy.exec!("qsub -V -r n #{@data_path}/#{simulation.id}/wrapper")
         if response =~ /\A(\d+)/
-          simulation.queue_as $1.to_i
+          simulation.queue_as Regexp.last_match[0].to_i
         else
           simulation.fail "Submission failed: #{response}"
         end

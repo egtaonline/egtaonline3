@@ -17,12 +17,10 @@ class Api::V3::BaseController < ActionController::Base
   end
 
   def find_object
-    begin
-      @object = klass.find(params[:id])
-    rescue
-      render json: { error:
-        "the #{model_name} you were looking for could not be found" }.to_json,
-        status: 404
-    end
+    @object = klass.find(params[:id])
+  rescue
+    render json: { error:
+      "the #{model_name} you were looking for could not be found" }.to_json,
+           status: 404
   end
 end

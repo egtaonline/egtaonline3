@@ -7,16 +7,14 @@ class ObservationValidator
   end
 
   def validate(file_path)
-    begin
-      json = File.open(file_path).read
-      data_hash = extract_symmetry_groups(MultiJson.load(json))
-      if matches_profile?(data_hash) && payoffs_are_valid?(data_hash)
-        filter_content(data_hash)
-      end
-    rescue => e
-      puts "Failure in validating: #{e.message}"
-      nil
+    json = File.open(file_path).read
+    data_hash = extract_symmetry_groups(MultiJson.load(json))
+    if matches_profile?(data_hash) && payoffs_are_valid?(data_hash)
+      filter_content(data_hash)
     end
+  rescue => e
+    puts "Failure in validating: #{e.message}"
+    nil
   end
 
   private

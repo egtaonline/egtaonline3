@@ -4,11 +4,9 @@ class Connection
   end
 
   def authenticate(options)
-    begin
-      @flux_proxy.authenticate(options[:uniqname], options[:verification_number], options[:password])
-    rescue
-      false
-    end
+    @flux_proxy.authenticate(options[:uniqname], options[:verification_number], options[:password])
+  rescue
+    false
   end
 
   def authenticated?

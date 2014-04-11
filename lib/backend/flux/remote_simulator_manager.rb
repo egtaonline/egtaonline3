@@ -9,11 +9,9 @@ class RemoteSimulatorManager
   end
 
   def prepare_simulator(simulator)
-    begin
-      @cleaner.clean(@connection, simulator)
-      @uploader.upload(@connection, simulator)
-    rescue => e
-      simulator.errors.add(:source, "#{e.message} Try again later.")
-    end
+    @cleaner.clean(@connection, simulator)
+    @uploader.upload(@connection, simulator)
+  rescue => e
+    simulator.errors.add(:source, "#{e.message} Try again later.")
   end
 end

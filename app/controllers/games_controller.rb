@@ -8,7 +8,10 @@ class GamesController < ProfileSpacesController
   def show
     respond_to do |format|
       format.html
-      format.json { file_name = GamePresenter.new(game).to_json(granularity: params[:granularity]); send_file file_name, type: 'text/json' }
+      format.json do
+        file_name = GamePresenter.new(game).to_json(granularity: params[:granularity])
+        send_file file_name, type: 'text/json'
+      end
     end
   end
 
