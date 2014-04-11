@@ -3,7 +3,7 @@ class ProfilePresenter
     @profile = profile
   end
 
-  def to_json(options={})
+  def to_json(options = {})
     case options[:granularity]
     when 'structure'
       @profile.to_json
@@ -17,7 +17,7 @@ class ProfilePresenter
   end
 
   def explain(query)
-    DB.execute('explain analyze '+query)
+    DB.execute('explain analyze ' + query)
   end
 
   def summary

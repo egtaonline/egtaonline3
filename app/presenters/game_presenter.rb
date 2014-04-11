@@ -3,7 +3,7 @@ class GamePresenter
     @game = game
   end
 
-  def to_json(options={})
+  def to_json(options = {})
     case options[:granularity]
     when 'structure'
       File.open("#{Rails.root}/public/games/#{@game.id}-structure.json", 'w') do |f|
@@ -23,7 +23,7 @@ class GamePresenter
   end
 
   def explain(query)
-    DB.execute('explain analyze '+query)
+    DB.execute('explain analyze ' + query)
   end
 
   def summary

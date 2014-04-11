@@ -65,8 +65,8 @@ class ObservationValidator
     pdata = @profile.symmetry_groups.map do |sgroup|
       signature_of_symmetry_group(sgroup)
     end
-    data = data.sort { |x,y| x[:role]+x[:strategy] <=> y[:role]+y[:strategy] }
-    pdata = pdata.sort { |x,y| x[:role]+x[:strategy] <=> y[:role]+y[:strategy] }
+    data = data.sort { |x, y| x[:role] + x[:strategy] <=> y[:role] + y[:strategy] }
+    pdata = pdata.sort { |x, y| x[:role] + x[:strategy] <=> y[:role] + y[:strategy] }
     data == pdata
   end
 

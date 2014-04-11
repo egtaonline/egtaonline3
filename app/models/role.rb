@@ -14,7 +14,7 @@ class Role < ActiveRecord::Base
   end
 
   def count_is_acceptable
-    self.reduced_count ||= self.count
+    self.reduced_count ||= count
     unless unassigned_player_count >= count
       errors.add(:count,
         'can\'t be larger than the owner\'s unassigned player count')
@@ -31,11 +31,11 @@ class Role < ActiveRecord::Base
   private
 
   def unassigned_player_count
-    roles = role_owner.roles.where.not(id: self.id)
+    roles = role_owner.roles.where.not(id: id)
     if roles.count == 0
       role_owner.size
     else
-      role_owner.size-roles.collect { |r| r.count }.reduce(:+)
+      role_owner.size - roles.collect { |r| r.count }.reduce(:+)
     end
   end
 end

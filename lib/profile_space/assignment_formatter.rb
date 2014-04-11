@@ -4,7 +4,7 @@ class AssignmentFormatter
   end
 
   def self.format_assignment(assignment)
-    assignment.sort { |x,y| x[0] <=> y[0] }.collect { |rc| format_role_combination(rc) }.join('; ')
+    assignment.sort { |x, y| x[0] <=> y[0] }.collect { |rc| format_role_combination(rc) }.join('; ')
   end
 
   def self.format_role_combination(role_combination)

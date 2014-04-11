@@ -43,13 +43,13 @@ class Profile < ActiveRecord::Base
       role, strategy_string = role_string.split(': ')
       strategy_string.split(', ').each do |strategy|
         count, strategy = strategy.split(' ')
-        self.symmetry_groups.create!(role: role, strategy: strategy, count: count.to_i)
+        symmetry_groups.create!(role: role, strategy: strategy, count: count.to_i)
       end
     end
   end
 
   def try_scheduling
-    ProfileScheduler.perform_in(5.minutes, self.id)
+    ProfileScheduler.perform_in(5.minutes, id)
   end
 
   def scheduled?

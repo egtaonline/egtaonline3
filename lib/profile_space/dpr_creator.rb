@@ -21,7 +21,7 @@ class DprCreator < ReductionCreator
   def self.expand_for_target_strategy(strategy, strategies, role)
     other_players = strategies.dup
     other_players[strategy] -= 1
-    new_strategies = expand_role(other_players, role.count-1)
+    new_strategies = expand_role(other_players, role.count - 1)
     new_strategies[strategy] ||= 0
     new_strategies[strategy] += 1
     new_strategies

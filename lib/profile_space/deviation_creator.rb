@@ -23,7 +23,7 @@ class DeviationCreator
 
   def self.deviation_role_combinations(role)
     combinations = []
-    RoleCombinationGenerator.combinations(role.name, role.strategies, role.reduced_count-1).each do |combination|
+    RoleCombinationGenerator.combinations(role.name, role.strategies, role.reduced_count - 1).each do |combination|
       role.deviating_strategies.each { |s| combinations << fill_last_strategy(combination, s) }
     end
     combinations.uniq

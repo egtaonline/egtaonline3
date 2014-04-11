@@ -13,7 +13,7 @@ class SimulationSubmitter
         else
           simulation.fail "Submission failed: #{response}"
         end
-      rescue Exception => e
+      rescue => e
         simulation.fail "Submission failed: #{e}"
       end
     end

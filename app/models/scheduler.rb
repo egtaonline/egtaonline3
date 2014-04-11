@@ -21,7 +21,7 @@ class Scheduler < ActiveRecord::Base
   after_save :reset_roles, on: :update, if: :size_changed?
 
   def reset_roles
-    self.roles.destroy_all
+    roles.destroy_all
   end
 
   def update_scheduling_requirements
@@ -34,8 +34,8 @@ class Scheduler < ActiveRecord::Base
   end
 
   def schedule_profile(profile, required_count)
-    observations_to_schedule = [observations_per_simulation, required_count-profile.observations_count].min
-    self.simulations.create!(size: observations_to_schedule, state: 'pending', profile_id: profile.id) if observations_to_schedule > 0
+    observations_to_schedule = [observations_per_simulation, required_count - profile.observations_count].min
+    simulations.create!(size: observations_to_schedule, state: 'pending', profile_id: profile.id) if observations_to_schedule > 0
   end
 
   def try_scheduling

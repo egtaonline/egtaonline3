@@ -11,10 +11,10 @@ class RemoteSimulatorUploader
       if outcome =~ /^exists/
         proxy.exec!("cd #{@simulators_path} && unzip -uqq #{simulator.name}.zip -d #{simulator.fullname} && chmod -R ug+rwx #{simulator.fullname}")
       else
-        raise 'Upload failed.'
+        fail 'Upload failed.'
       end
     else
-      raise 'Connection broken.'
+      fail 'Connection broken.'
     end
   end
 end

@@ -27,33 +27,33 @@ class Simulation < ActiveRecord::Base
   end
 
   def start
-    self.update_attributes(state: 'running') if self.state == 'queued'
+    update_attributes(state: 'running') if state == 'queued'
   end
 
   def process(location)
     if %w(queued running).include?(state)
       ActiveRecord::Base.transaction do
-        self.update_attributes(state: 'processing')
+        update_attributes(state: 'processing')
       end
       DataParser.perform_async(id, location)
     end
   end
 
   def finish
-    unless self.state == 'failed'
+    unless state == 'failed'
       logger.debug "Simulation #{id} moving to complete state"
-      self.update_attributes(state: 'complete')
+      update_attributes(state: 'complete')
       logger.info "Rescheduling profile for simulation #{id}"
       requeue
     end
   end
 
   def queue_as(jid)
-    self.update_attributes(job_id: jid, state: 'queued') if state == 'pending'
+    update_attributes(job_id: jid, state: 'queued') if state == 'pending'
   end
 
   def fail(message)
-    self.update_attributes(error_message: message[0..255], state: 'failed')
+    update_attributes(error_message: message[0..255], state: 'failed')
     requeue
   end
 
@@ -61,14 +61,14 @@ class Simulation < ActiveRecord::Base
     ProfileScheduler.perform_in(5.minutes, profile_id)
   end
 
-  def self.stale(age=300000)
+  def self.stale(age = 300000)
     where('state IN (?) AND updated_at < ?',
-      %w(queued complete failed), Time.current-age)
+      %w(queued complete failed), Time.current - age)
   end
 
-  def self.recently_finished(age=86400)
+  def self.recently_finished(age = 86400)
     where('state IN (?) AND updated_at > ?',
-      %w(complete failed), Time.current-age)
+      %w(complete failed), Time.current - age)
   end
 
   def self.queueable
@@ -77,6 +77,6 @@ class Simulation < ActiveRecord::Base
 
   def self.simulation_limit
     [[Backend.queue_quantity,
-      Backend.queue_max-Simulation.active.count].min, 0].max
+      Backend.queue_max - Simulation.active.count].min, 0].max
   end
 end

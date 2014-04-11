@@ -1,6 +1,6 @@
 module PatternBasedScheduler
   def add_strategy(role_name, strategy)
-    role = self.roles.where(name: role_name).first
+    role = roles.where(name: role_name).first
     if role
       role.strategies += [strategy]
       role.strategies.uniq!
@@ -11,7 +11,7 @@ module PatternBasedScheduler
   end
 
   def remove_strategy(role_name, strategy)
-    role = self.roles.where(name: role_name).first
+    role = roles.where(name: role_name).first
     if role && role.strategies.include?(strategy)
       role.strategies -= [strategy]
       role.save!

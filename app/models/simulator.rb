@@ -40,26 +40,26 @@ class Simulator < ActiveRecord::Base
   end
 
   def add_strategy(role, strategy)
-    self.role_configuration[role] ||= []
-    self.role_configuration[role] << strategy
-    self.role_configuration[role].sort!
+    role_configuration[role] ||= []
+    role_configuration[role] << strategy
+    role_configuration[role].sort!
     self.save!
   end
 
   def remove_strategy(role, strategy)
-    self.role_configuration[role].delete(strategy)
+    role_configuration[role].delete(strategy)
     self.save!
   end
 
   def add_role(role)
     if role =~ /\A\w+\z/
-      self.role_configuration[role] ||= []
+      role_configuration[role] ||= []
       self.save!
     end
   end
 
   def remove_role(role)
-    self.role_configuration.delete(role)
+    role_configuration.delete(role)
     self.save!
   end
 

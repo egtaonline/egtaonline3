@@ -12,7 +12,7 @@ class RemoteSimulatorManager
     begin
       @cleaner.clean(@connection, simulator)
       @uploader.upload(@connection, simulator)
-    rescue Exception => e
+    rescue => e
       simulator.errors.add(:source, "#{e.message} Try again later.")
     end
   end

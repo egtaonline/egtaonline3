@@ -13,16 +13,16 @@ module ProfileSpaces
   end
 
   def unassigned_player_count
-    roles.count == 0 ? size : size-roles.collect { |r| r.count }.reduce(:+)
+    roles.count == 0 ? size : size - roles.collect { |r| r.count }.reduce(:+)
   end
 
-  def add_role(role, count, reduced_count=count)
-    if !self.roles.where(name: role).first
-      self.roles.create(name: role, count: count, reduced_count: reduced_count)
+  def add_role(role, count, reduced_count = count)
+    if !roles.where(name: role).first
+      roles.create(name: role, count: count, reduced_count: reduced_count)
     end
   end
 
   def remove_role(role)
-    self.roles.where(name: role).destroy_all
+    roles.where(name: role).destroy_all
   end
 end

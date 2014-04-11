@@ -27,7 +27,7 @@ describe Connection do
     context 'when it raise an error' do
       before do
         flux_proxy.should_receive(:authenticate).with(
-          uniqname, verification_number, password).and_raise(Exception)
+          uniqname, verification_number, password).and_raise(IOError)
       end
 
       it do

@@ -34,7 +34,7 @@ describe RemoteSimulationManager do
 
   describe '#prepare_simulation' do
     it 'sets the simulation queue flag and requests' do
-      flux_policy.should_receive(:set_queue).with(
+      flux_policy.should_receive(:assign_queue).with(
         simulation).and_return(simulation)
       pbs_creator.should_receive(:prepare).with(simulation)
       FileUtils.should_receive(:rm_rf).with(

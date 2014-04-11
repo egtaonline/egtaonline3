@@ -11,7 +11,7 @@ describe FluxPolicy do
   let(:simulation) { double('simulation') }
 
   # not testing all edge cases because it's a mathematical statement
-  describe '#set_queue' do
+  describe '#assign_queue' do
     context 'when there are no active simulations' do
       before do
         FluxPolicy::Simulation.should_receive(:active_on_flux).and_return([])
@@ -20,7 +20,7 @@ describe FluxPolicy do
 
       it 'updates qos of the simulation to flux and returns the simulation' do
         simulation.should_receive(:update_attributes).with(qos: 'flux')
-        expect(flux_policy.set_queue(simulation)).to eq(simulation)
+        expect(flux_policy.assign_queue(simulation)).to eq(simulation)
       end
     end
 
@@ -34,7 +34,7 @@ describe FluxPolicy do
 
       it 'updates the simulation for engin_flux and returns the simulation' do
         simulation.should_receive(:update_attributes).with(qos: 'engin_flux')
-        expect(flux_policy.set_queue(simulation)).to eq(simulation)
+        expect(flux_policy.assign_queue(simulation)).to eq(simulation)
       end
     end
   end

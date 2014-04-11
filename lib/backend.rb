@@ -1,4 +1,4 @@
-Dir[File.dirname(__FILE__)+'/backend/*.rb'].each { |file| require file }
+Dir[File.dirname(__FILE__) + '/backend/*.rb'].each { |file| require file }
 
 module Backend
   extend SingleForwardable

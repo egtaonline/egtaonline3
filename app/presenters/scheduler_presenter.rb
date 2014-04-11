@@ -3,7 +3,7 @@ class SchedulerPresenter
     @scheduler = scheduler
   end
 
-  def to_json(options={})
+  def to_json(options = {})
     case options[:granularity]
     when 'with_requirements'
       DB.select_value(with_requirements)

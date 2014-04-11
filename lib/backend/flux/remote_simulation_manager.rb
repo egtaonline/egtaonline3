@@ -16,7 +16,7 @@ class RemoteSimulationManager
   end
 
   def prepare_simulation(simulation)
-    simulation = @flux_policy.set_queue(simulation)
+    simulation = @flux_policy.assign_queue(simulation)
     FileUtils.rm_rf("#{@local_path}/#{simulation.id}")
     FileUtils.mkdir("#{@local_path}/#{simulation.id}")
     @pbs_creator.prepare(simulation)
