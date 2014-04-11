@@ -12,10 +12,10 @@ class PbsCreator
     simulator = scheduler.simulator
     path_finder = PbsPathFinder.new(simulation, simulator, @simulators_path, @remote_data_path)
     walltime = PbsClockTime.walltime(simulation.size*scheduler.time_per_observation)
-    document = PbsFormatter.new(path_finder).format(allocation(simulation), scheduler.nodes, 
+    document = PbsFormatter.new(path_finder).format(allocation(simulation), scheduler.nodes,
                                                     scheduler.process_memory, walltime, simulator_tag(simulator),
                                                     simulator.email, simulation.id, simulation.size, extra_args(scheduler))
-    File.open("#{@local_data_path}/#{simulation.id}/wrapper", 'w'){ |f| f.write(document) }
+    File.open("#{@local_data_path}/#{simulation.id}/wrapper", 'w') { |f| f.write(document) }
   end
 
   def simulator_tag(simulator)
@@ -27,6 +27,6 @@ class PbsCreator
   end
 
   def extra_args(scheduler)
-    scheduler.nodes > 1 ? " ${PBS_NODEFILE}" : ""
+    scheduler.nodes > 1 ? ' ${PBS_NODEFILE}' : ''
   end
 end

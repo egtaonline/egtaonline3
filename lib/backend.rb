@@ -1,4 +1,4 @@
-Dir[File.dirname(__FILE__)+'/backend/*.rb'].each{ |file| require file }
+Dir[File.dirname(__FILE__)+'/backend/*.rb'].each { |file| require file }
 
 module Backend
   extend SingleForwardable
@@ -46,7 +46,7 @@ module Backend
       @simulation_interface = @simulation_interface_class.new(
         { connection: @connection, simulators_path: @simulators_path,
           local_data_path: @local_data_path,
-          remote_data_path: @remote_data_path}.merge(
+          remote_data_path: @remote_data_path }.merge(
           @simulation_interface_options))
       @simulator_interface = @simulator_interface_class.new(
         connection: @connection, simulators_path: @simulators_path)

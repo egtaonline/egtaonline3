@@ -1,6 +1,6 @@
 class GameBuilder
   def self.create(params, simulator_id, configuration)
-    params[:simulator_instance_id] = SimulatorInstance.find_or_create_for(simulator_id, 
+    params[:simulator_instance_id] = SimulatorInstance.find_or_create_for(simulator_id,
                                         configuration).id if params
     Game.create(params)
   end

@@ -18,12 +18,12 @@ class Simulator < ActiveRecord::Base
       return
     end
     if !File.exists?("#{location}/#{name}/script/batch")
-      errors.add(:source, "did not find script/batch within" +
+      errors.add(:source, 'did not find script/batch within' +
         " #{location}/#{name}")
     end
     if File.exists?("#{location}/#{name}/defaults.json")
       begin
-        self.configuration = MultiJson.load(File.new("#{location}/#{name}/defaults.json"))["configuration"]
+        self.configuration = MultiJson.load(File.new("#{location}/#{name}/defaults.json"))['configuration']
       rescue MultiJson::LoadError
         errors.add(:source, 'defaults.json file is malformed.')
       end

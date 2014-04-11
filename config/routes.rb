@@ -1,10 +1,10 @@
 Egtaonline3::Application.routes.draw do
   resources :users, only: [:index, :update]
-  devise_for :users, :controllers => { :registrations => "registrations" }
+  devise_for :users, controllers: { registrations: 'registrations' }
 
   namespace :api do
     namespace :v3 do
-      resources :generic_schedulers, except: ["new", "edit"] do
+      resources :generic_schedulers, except: %w(new edit) do
         member do
           post :add_profile, :remove_profile, :add_role, :remove_role
         end
@@ -69,6 +69,6 @@ Egtaonline3::Application.routes.draw do
 
   require 'sidekiq/web'
   authenticate :user do
-    mount Sidekiq::Web, at: "/background_workers"
+    mount Sidekiq::Web, at: '/background_workers'
   end
 end

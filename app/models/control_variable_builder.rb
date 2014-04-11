@@ -7,12 +7,12 @@ class ControlVariableBuilder
 
   def extract_control_variables(data)
     sim_instance_id = @simulator_instance.id
-    new_cvs(data["features"].keys).each { |k| ControlVariable.find_or_create_by(name: k, simulator_instance_id: sim_instance_id) }
+    new_cvs(data['features'].keys).each { |k| ControlVariable.find_or_create_by(name: k, simulator_instance_id: sim_instance_id) }
     key_map = Hash.new { |hash, key| hash[key] = [] }
-    data["symmetry_groups"].each do |sgroup|
-      role = sgroup["role"]
-      keys = sgroup["players"].collect do |player|
-        player["features"].keys
+    data['symmetry_groups'].each do |sgroup|
+      role = sgroup['role']
+      keys = sgroup['players'].collect do |player|
+        player['features'].keys
       end.flatten
       key_map[role] = key_map[role] + keys
     end

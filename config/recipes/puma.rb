@@ -1,19 +1,19 @@
-after "deploy:stop", "puma:stop"
-after "deploy:start", "puma:start"
-after "deploy:restart", "puma:restart"
+after 'deploy:stop', 'puma:stop'
+after 'deploy:start', 'puma:start'
+after 'deploy:restart', 'puma:restart'
 
 namespace :puma do
-  desc "Start puma"
+  desc 'Start puma'
   task :start do
-    run "cd #{current_path} && RAILS_ENV=production bundle exec puma -e production -b 'unix://#{shared_path}/sockets/puma.sock' -S #{shared_path}/sockets/puma.state --control 'unix://#{shared_path}/sockets/pumactl.sock' >> #{shared_path}/log/puma.log 2>&1 &", :pty => false
+    run "cd #{current_path} && RAILS_ENV=production bundle exec puma -e production -b 'unix://#{shared_path}/sockets/puma.sock' -S #{shared_path}/sockets/puma.state --control 'unix://#{shared_path}/sockets/pumactl.sock' >> #{shared_path}/log/puma.log 2>&1 &", pty: false
   end
 
-  desc "Stop puma"
+  desc 'Stop puma'
   task :stop do
     run "cd #{current_path} && RAILS_ENV=production bundle exec pumactl -S #{shared_path}/sockets/puma.state stop"
   end
 
-  desc "Restart puma"
+  desc 'Restart puma'
   task :restart do
     run "cd #{current_path} && RAILS_ENV=production bundle exec pumactl -S #{shared_path}/sockets/puma.state restart"
   end

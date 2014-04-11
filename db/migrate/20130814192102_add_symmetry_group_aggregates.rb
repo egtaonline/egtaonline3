@@ -9,7 +9,7 @@ class AddSymmetryGroupAggregates < ActiveRecord::Migration
 
   def down
     unless Rails.env == 'test'
-      execute "UPDATE symmetry_groups SET payoff = null, payoff_sd = null;"
+      execute 'UPDATE symmetry_groups SET payoff = null, payoff_sd = null;'
     end
   end
 end

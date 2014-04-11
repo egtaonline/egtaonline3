@@ -4,22 +4,22 @@ namespace :foreman do
   #   run "cd /home/#{user}/#{application}/current && rbenv #{sudo} bundle exec foreman export upstart /etc/init -a sidekiq -u #{user} -l /var/#{application}/log"
   # end
 
-  desc "Start the application services"
-  task :start, :roles => :app do
+  desc 'Start the application services'
+  task :start, roles: :app do
     run "#{sudo} start sidekiq"
   end
 
-  desc "Stop the application services"
-  task :stop, :roles => :app do
+  desc 'Stop the application services'
+  task :stop, roles: :app do
     run "#{sudo} stop sidekiq"
   end
 
-  desc "Restart the application services"
-  task :restart, :roles => :app do
+  desc 'Restart the application services'
+  task :restart, roles: :app do
     run "#{sudo} stop sidekiq"
     run "#{sudo} start sidekiq"
   end
 end
 
 # after "deploy:update", "foreman:export"
-after "deploy:update", "foreman:restart"
+after 'deploy:update', 'foreman:restart'

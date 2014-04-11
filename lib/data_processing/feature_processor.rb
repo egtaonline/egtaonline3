@@ -6,6 +6,6 @@ class FeatureProcessor
     feature_map.each do |key, value|
       value.numeric? ? features[key] = value : extended_features[key] = value
     end
-    { "features" => features, "extended_features" => extended_features}
+    { 'features' => features, 'extended_features' => extended_features }
   end
 end

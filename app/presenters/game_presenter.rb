@@ -5,15 +5,15 @@ class GamePresenter
 
   def to_json(options={})
     case options[:granularity]
-    when "structure"
-      File.open("#{Rails.root}/public/games/#{@game.id}-structure.json", "w") do |f|
+    when 'structure'
+      File.open("#{Rails.root}/public/games/#{@game.id}-structure.json", 'w') do |f|
         f.write(MultiJson.dump(@game.to_json))
       end
       "#{Rails.root}/public/games/#{@game.id}-structure.json"
-    when "full"
+    when 'full'
       DB.execute(full)
       "#{Rails.root}/public/games/#{@game.id}-full.json"
-    when "observations"
+    when 'observations'
       DB.execute(observations)
       "#{Rails.root}/public/games/#{@game.id}-observations.json"
     else
@@ -23,11 +23,11 @@ class GamePresenter
   end
 
   def explain(query)
-    DB.execute("explain analyze "+query)
+    DB.execute('explain analyze '+query)
   end
 
   def summary
-    "COPY (" +
+    'COPY (' +
     profile_set +
       "select row_to_json(t)
       from (
@@ -65,7 +65,7 @@ class GamePresenter
   end
 
   def observations
-    "COPY (" +
+    'COPY (' +
     profile_set + "
       select row_to_json(t)
       from (
@@ -118,7 +118,7 @@ class GamePresenter
   end
 
   def full
-    "COPY (" +
+    'COPY (' +
     profile_set + "
       select row_to_json(t)
       from (
@@ -174,7 +174,7 @@ class GamePresenter
 
   def profile_set
     if @game.invalid_role_partition?
-      "WITH result AS (SELECT id as profile_id FROM profiles WHERE id = 0)"
+      'WITH result AS (SELECT id as profile_id FROM profiles WHERE id = 0)'
     else
       "WITH reasonable_profiles AS (
         SELECT symmetry_groups.id, symmetry_groups.profile_id, symmetry_groups.role, symmetry_groups.strategy, profiles.observations_count

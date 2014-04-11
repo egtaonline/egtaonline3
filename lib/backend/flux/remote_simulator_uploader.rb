@@ -14,7 +14,7 @@ class RemoteSimulatorUploader
         raise 'Upload failed.'
       end
     else
-      raise "Connection broken."
+      raise 'Connection broken.'
     end
   end
 end

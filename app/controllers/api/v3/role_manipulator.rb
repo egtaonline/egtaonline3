@@ -13,8 +13,8 @@ module Api::V3::RoleManipulator
 
   def role_exists
     unless @object.simulator.role_configuration[params[:role]]
-      respond_with({ error: "the Role you wished to add was not found" +
-        " on the #{model_name}'s Simulator"}, status: 422, location: nil)
+      respond_with({ error: 'the Role you wished to add was not found' +
+        " on the #{model_name}'s Simulator" }, status: 422, location: nil)
     end
   end
 end

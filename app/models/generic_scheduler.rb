@@ -7,12 +7,12 @@ class GenericScheduler < Scheduler
     assignment = assignment.assignment_sort
     profile = Profile.find_or_create_by(simulator_instance_id: self.simulator_instance_id, assignment: assignment)
     if profile.errors.messages.empty?
-      unless role_valid?(assignment)
-        profile.errors.add(:assignment, "cannot be scheduled by this Scheduler due to mismatch on role partition")
-      else
+      if role_valid?(assignment)
         add_strategies(assignment)
-        SchedulingRequirement.joins(:profile).where("scheduler_id = ? AND profiles.assignment = ?", id, assignment).destroy_all
+        SchedulingRequirement.joins(:profile).where('scheduler_id = ? AND profiles.assignment = ?', id, assignment).destroy_all
         self.scheduling_requirements.create(profile_id: profile.id, count: observation_count)
+      else
+        profile.errors.add(:assignment, 'cannot be scheduled by this Scheduler due to mismatch on role partition')
       end
     end
     profile
@@ -37,10 +37,10 @@ class GenericScheduler < Scheduler
   end
 
   def add_strategies(assignment)
-    assignment.split("; ").each do |role_string|
-      role, strategy_string = role_string.split(": ")
+    assignment.split('; ').each do |role_string|
+      role, strategy_string = role_string.split(': ')
       grole = roles.find_by(name: role)
-      strategies = strategy_string.split(", ").collect{ |s| s.split(" ")[1] }
+      strategies = strategy_string.split(', ').collect { |s| s.split(' ')[1] }
       grole.strategies += strategies
       grole.strategies.uniq!
       grole.save!

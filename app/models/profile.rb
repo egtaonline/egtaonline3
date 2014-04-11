@@ -15,10 +15,10 @@ class Profile < ActiveRecord::Base
   delegate :simulator_fullname, to: :simulator_instance
 
   def profile_matches_simulator
-    assignment.split("; ").each do |role_string|
-      role, strategy_string = role_string.split(": ")
-      strategy_string.split(", ").each do |count_strategy|
-        strategy = count_strategy.split(" ")[1]
+    assignment.split('; ').each do |role_string|
+      role, strategy_string = role_string.split(': ')
+      strategy_string.split(', ').each do |count_strategy|
+        strategy = count_strategy.split(' ')[1]
         unless simulator.role_configuration[role].try(:include?, strategy)
           errors.add(:assignment, "#{strategy} is not present in the Simulator")
         end
@@ -29,20 +29,20 @@ class Profile < ActiveRecord::Base
   before_validation(on: :create) do
     self.size = assignment.role_counts.values.reduce(:+)
     self.role_configuration = {}
-    assignment.split("; ").each do |role_string|
-      role, strategy_string = role_string.split(": ")
+    assignment.split('; ').each do |role_string|
+      role, strategy_string = role_string.split(': ')
       role_configuration[role] = 0
-      strategy_string.split(", ").each do |strategy|
-        role_configuration[role] += strategy.split(" ")[0].to_i
+      strategy_string.split(', ').each do |strategy|
+        role_configuration[role] += strategy.split(' ')[0].to_i
       end
     end
   end
 
   after_create do
-    assignment.split("; ").each do |role_string|
-      role, strategy_string = role_string.split(": ")
-      strategy_string.split(", ").each do |strategy|
-        count, strategy = strategy.split(" ")
+    assignment.split('; ').each do |role_string|
+      role, strategy_string = role_string.split(': ')
+      strategy_string.split(', ').each do |strategy|
+        count, strategy = strategy.split(' ')
         self.symmetry_groups.create!(role: role, strategy: strategy, count: count.to_i)
       end
     end

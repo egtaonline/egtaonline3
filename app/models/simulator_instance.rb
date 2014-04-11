@@ -16,10 +16,10 @@ class SimulatorInstance < ActiveRecord::Base
 
   def self.find_or_create_for(simulator_id, configuration)
     configuration ||= {}
-    configuration = configuration.collect{ |key, value| "\"#{key}\" => \"#{value}\"" }.join(", ")
-    simulator_instance = SimulatorInstance.where("simulator_id = ? AND configuration = (?)",
+    configuration = configuration.collect { |key, value| "\"#{key}\" => \"#{value}\"" }.join(', ')
+    simulator_instance = SimulatorInstance.where('simulator_id = ? AND configuration = (?)',
                                                  simulator_id, configuration).first
-    simulator_instance ||= SimulatorInstance.create!(simulator_id: simulator_id,
+    simulator_instance || SimulatorInstance.create!(simulator_id: simulator_id,
                                                     configuration: configuration)
   end
 end

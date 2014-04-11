@@ -7,9 +7,9 @@ class SimulationStatusResolver
 
   def act_on_status(status, simulation)
     case status
-    when "R"
+    when 'R'
       simulation.start
-    when "C", "", nil
+    when 'C', '', nil
       if File.exists?("#{@data_path}/#{simulation.id}/error")
         error_message = File.open("#{@data_path}/#{simulation.id}/error").read(ERROR_LIMIT)
         if error_message

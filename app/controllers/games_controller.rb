@@ -1,9 +1,9 @@
 class GamesController < ProfileSpacesController
-  expose(:games){ Game.includes(:simulator_instance => :simulator).order("#{sort_column} #{sort_direction}").page(params[:page]) }
+  expose(:games) { Game.includes(simulator_instance: :simulator).order("#{sort_column} #{sort_direction}").page(params[:page]) }
   expose(:game, attributes: :game_parameters)
-  expose(:role_owner){ game }
-  expose(:role_owner_path){ "/games/#{game.id}" }
-  expose(:profile_counts){ game.profile_counts }
+  expose(:role_owner) { game }
+  expose(:role_owner_path) { "/games/#{game.id}" }
+  expose(:profile_counts) { game.profile_counts }
 
   def show
     respond_to do |format|

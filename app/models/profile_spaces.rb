@@ -1,10 +1,10 @@
 module ProfileSpaces
   def invalid_role_partition?
-    roles.collect{ |role| role.count }.reduce(:+) != size
+    roles.collect { |role| role.count }.reduce(:+) != size
   end
 
   def available_roles
-    simulator.role_configuration.keys - roles.collect{ |r| r.name }
+    simulator.role_configuration.keys - roles.collect { |r| r.name }
   end
 
   def available_strategies(role_name)
@@ -13,7 +13,7 @@ module ProfileSpaces
   end
 
   def unassigned_player_count
-    roles.count == 0 ? size : size-roles.collect{ |r| r.count }.reduce(:+)
+    roles.count == 0 ? size : size-roles.collect { |r| r.count }.reduce(:+)
   end
 
   def add_role(role, count, reduced_count=count)

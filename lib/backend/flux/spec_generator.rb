@@ -8,13 +8,13 @@ class SpecGenerator
   def generate(simulation)
     spec = {}
     profile = simulation.profile
-    spec["assignment"] = Hash.new{ |hash, key| hash[key] = [] }
+    spec['assignment'] = Hash.new { |hash, key| hash[key] = [] }
     simulation.profile.symmetry_groups.each do |symmetry_group|
       symmetry_group.count.times do
-        spec["assignment"][symmetry_group.role] << symmetry_group.strategy
+        spec['assignment'][symmetry_group.role] << symmetry_group.strategy
       end
     end
-    spec["configuration"] = profile.simulator_instance.configuration.to_hash
-    file = File.open("#{@path}/#{simulation.id}/simulation_spec.json", 'w') { |f| f.write(MultiJson.dump(spec.to_hash)) }
+    spec['configuration'] = profile.simulator_instance.configuration.to_hash
+    File.open("#{@path}/#{simulation.id}/simulation_spec.json", 'w') { |f| f.write(MultiJson.dump(spec.to_hash)) }
   end
 end

@@ -9,7 +9,7 @@ class UsersController < AuthenticatedController
     @user = User.find(params[:id])
     @user.update_attributes(user_params)
     if current_user.admin?
-      redirect_to "/users"
+      redirect_to '/users'
     else
       respond_with(@user)
     end

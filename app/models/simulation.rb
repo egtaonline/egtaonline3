@@ -1,6 +1,6 @@
 class Simulation < ActiveRecord::Base
   validates_numericality_of :size, only_integer: true, greater_than: 0
-  validates_inclusion_of :state, in: ['pending', 'queued', 'running', 'failed', 'processing', 'complete']
+  validates_inclusion_of :state, in: %w(pending queued running failed processing complete)
 
   belongs_to :profile, inverse_of: :simulations
   belongs_to :scheduler, inverse_of: :simulations
@@ -19,11 +19,11 @@ class Simulation < ActiveRecord::Base
   end
 
   def self.active
-    where(state: ['queued', 'running'])
+    where(state: %w(queued running))
   end
 
   def self.scheduled
-    where(state: ['pending', 'queued', 'running'])
+    where(state: %w(pending queued running))
   end
 
   def start
@@ -31,7 +31,7 @@ class Simulation < ActiveRecord::Base
   end
 
   def process(location)
-    if ['queued', 'running'].include?(state)
+    if %w(queued running).include?(state)
       ActiveRecord::Base.transaction do
         self.update_attributes(state: 'processing')
       end
@@ -62,13 +62,13 @@ class Simulation < ActiveRecord::Base
   end
 
   def self.stale(age=300000)
-    where("state IN (?) AND updated_at < ?",
-      ['queued', 'complete', 'failed'], Time.current-age)
+    where('state IN (?) AND updated_at < ?',
+      %w(queued complete failed), Time.current-age)
   end
 
   def self.recently_finished(age=86400)
-    where("state IN (?) AND updated_at > ?",
-      ['complete', 'failed'], Time.current-age)
+    where('state IN (?) AND updated_at > ?',
+      %w(complete failed), Time.current-age)
   end
 
   def self.queueable

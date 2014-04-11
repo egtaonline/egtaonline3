@@ -90,12 +90,6 @@ FinalNewline:
 FormatString:
   Enabled: false
 
-# Offense count: 126
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-HashSyntax:
-  Enabled: false
-
 # Offense count: 5
 # Configuration parameters: MaxLineLength.
 IfUnlessModifier:
@@ -216,59 +210,3 @@ SpaceAroundEqualsInParameterDefault:
 # Cop supports --auto-correct.
 SpaceAroundOperators:
   Enabled: false
-
-# Offense count: 56
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-SpaceBeforeBlockBraces:
-  Enabled: false
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-SpaceInsideBlockBraces:
-  Enabled: false
-
-# Offense count: 6
-# Cop supports --auto-correct.
-SpaceInsideBrackets:
-  Enabled: false
-
-# Offense count: 20
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-SpaceInsideHashLiteralBraces:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-SpaceInsideParens:
-  Enabled: false
-
-# Offense count: 568
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-StringLiterals:
-  Enabled: false
-
-# Offense count: 9
-# Cop supports --auto-correct.
-TrailingWhitespace:
-  Enabled: false
-
-# Offense count: 3
-UnlessElse:
-  Enabled: false
-
-# Offense count: 4
-UselessAccessModifier:
-  Enabled: false
-
-# Offense count: 10
-UselessAssignment:
-  Enabled: false
-
-# Offense count: 17
-# Cop supports --auto-correct.
-WordArray:
-  MinSize: 6

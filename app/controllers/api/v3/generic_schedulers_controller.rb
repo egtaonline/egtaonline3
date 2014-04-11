@@ -6,7 +6,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   before_filter :role_exists, only: :add_role
 
   def index
-    render json: {generic_schedulers: GenericScheduler.order("id ASC")}, status: 200
+    render json: { generic_schedulers: GenericScheduler.order('id ASC') }, status: 200
   end
 
   def create

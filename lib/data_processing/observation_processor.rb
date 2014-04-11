@@ -10,11 +10,11 @@ class ObservationProcessor
 
   def process_files
     validated = get_validated_data
-    unless validated == []
+    if validated == []
+      @simulation.fail 'No valid observations were found.'
+    else
       process_observations(validated)
       @simulation.finish
-    else
-      @simulation.fail "No valid observations were found."
     end
   end
 
@@ -28,6 +28,6 @@ class ObservationProcessor
   end
 
   def get_validated_data
-    @file_paths.collect{ |file_path| @observation_validator.validate(file_path) }.compact
+    @file_paths.collect { |file_path| @observation_validator.validate(file_path) }.compact
   end
 end

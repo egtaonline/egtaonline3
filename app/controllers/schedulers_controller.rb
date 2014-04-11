@@ -1,5 +1,5 @@
 class SchedulersController < ProfileSpacesController
-  expose(:schedulers){ klass.includes(:simulator_instance).order("#{sort_column} #{sort_direction}#{secondary_column}").page(params[:page]) }
+  expose(:schedulers) { klass.includes(:simulator_instance).order("#{sort_column} #{sort_direction}#{secondary_column}").page(params[:page]) }
   expose(:scheduler, attributes: :scheduler_parameters) do
     if id = params["#{model_name}_id"] || params[:id]
       klass.find(id)
@@ -8,8 +8,8 @@ class SchedulersController < ProfileSpacesController
     end
   end
 
-  expose(:role_owner){ scheduler }
-  expose(:role_owner_path){ "/schedulers/#{scheduler.id}" }
+  expose(:role_owner) { scheduler }
+  expose(:role_owner_path) { "/schedulers/#{scheduler.id}" }
 
   expose(:scheduling_requirements) do
     SchedulingRequirement.where(scheduler_id: params[:id]).includes(:profile).order("#{sort_column} #{sort_direction}").page(params[:page])
@@ -50,13 +50,13 @@ class SchedulersController < ProfileSpacesController
 
   def sort_column
     if params[:id]
-      params[:sort] ||= "profiles.assignment"
+      params[:sort] ||= 'profiles.assignment'
     else
       super
     end
   end
 
   def default_secondary
-    ", name ASC"
+    ', name ASC'
   end
 end

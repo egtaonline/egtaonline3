@@ -1,12 +1,12 @@
 class Role < ActiveRecord::Base
-  belongs_to :role_owner, :polymorphic => true
+  belongs_to :role_owner, polymorphic: true
   validates_presence_of :role_owner
   validates :count, numericality: { only_integer: true }, presence: true
   validate :count_is_acceptable
   validates :name, presence: true, uniqueness: {
     scope: [:role_owner_id, :role_owner_type] },
-    format: { with:  /\A\w+\z/, message: "only letters, numbers, or" +
-    " underscores allowed." }
+    format: { with:  /\A\w+\z/, message: 'only letters, numbers, or' +
+    ' underscores allowed.' }
 
   before_validation(on: :create) do
     self.strategies ||= []
@@ -25,7 +25,7 @@ class Role < ActiveRecord::Base
   end
 
   def strategy_query
-    "(" + strategies.collect { |strat| "strategy = '#{strat}'" }.join(" OR ") + ")"
+    '(' + strategies.collect { |strat| "strategy = '#{strat}'" }.join(' OR ') + ')'
   end
 
   private
@@ -35,7 +35,7 @@ class Role < ActiveRecord::Base
     if roles.count == 0
       role_owner.size
     else
-      role_owner.size-roles.collect{ |r| r.count }.reduce(:+)
+      role_owner.size-roles.collect { |r| r.count }.reduce(:+)
     end
   end
 end

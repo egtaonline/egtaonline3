@@ -20,6 +20,6 @@ module PatternBasedScheduler
   end
 
   def invalid_role_partition?
-    super || roles.detect{ |r| r.strategies.count == 0 } != nil
+    super || roles.detect { |r| r.strategies.count == 0 } != nil
   end
 end

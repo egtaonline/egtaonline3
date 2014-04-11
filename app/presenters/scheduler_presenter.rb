@@ -5,7 +5,7 @@ class SchedulerPresenter
 
   def to_json(options={})
     case options[:granularity]
-    when "with_requirements"
+    when 'with_requirements'
       DB.select_value(with_requirements)
     else
       @scheduler.to_json
@@ -13,7 +13,7 @@ class SchedulerPresenter
   end
 
   def with_requirements
-    sql = <<-SQL
+    <<-SQL
       select row_to_json(t)
       from (
         select schedulers.id, name, type, active, process_memory,

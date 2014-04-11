@@ -1,1 +1,1 @@
-Dir[File.dirname(__FILE__)+'/data_processing/*.rb'].each{ |file| require file }
+Dir[File.dirname(__FILE__)+'/data_processing/*.rb'].each { |file| require file }

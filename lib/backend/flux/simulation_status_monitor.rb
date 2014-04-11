@@ -8,7 +8,7 @@ class SimulationStatusMonitor
   def update_simulations(connection, simulations)
     proxy = connection.acquire
     if proxy
-      output = proxy.exec!("qstat -a | grep egta-")
+      output = proxy.exec!('qstat -a | grep egta-')
       status_hash = parse_to_hash(output)
       unless status_hash == nil
         simulations.each do |simulation|
@@ -23,12 +23,10 @@ class SimulationStatusMonitor
   def parse_to_hash(output)
     unless output =~ /^failure/
       parsed_output = {}
-      if output != "" && output != nil
-        output.split("\n").each{|line| parsed_output[line.split(".").first] = line.split(/\s+/)[9]}
+      if output != '' && output != nil
+        output.split("\n").each { |line| parsed_output[line.split('.').first] = line.split(/\s+/)[9] }
       end
       parsed_output
-    else
-      nil
     end
   end
 end

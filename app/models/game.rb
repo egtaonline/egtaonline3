@@ -12,16 +12,16 @@ class Game < ActiveRecord::Base
   delegate :simulator, to: :simulator_instance
 
   def profile_space
-    "(" + roles.collect{ |r| "(role = '#{r.name}' AND #{r.strategy_query})"}.join(" OR ") + ")"
+    '(' + roles.collect { |r| "(role = '#{r.name}' AND #{r.strategy_query})" }.join(' OR ') + ')'
   end
 
   def invalid_role_partition?
-    super || roles.detect{ |r| r.strategies.count == 0 } != nil
+    super || roles.detect { |r| r.strategies.count == 0 } != nil
   end
 
   def profile_counts
     if invalid_role_partition?
-      { "count" => 0, "observations_count" => 0}
+      { 'count' => 0, 'observations_count' => 0 }
     else
       Game.connection.select_all("WITH reasonable_profiles AS (
           SELECT symmetry_groups.id, symmetry_groups.profile_id, symmetry_groups.role, symmetry_groups.strategy, profiles.observations_count
@@ -35,8 +35,8 @@ class Game < ActiveRecord::Base
   end
 
   def observation_count
-    Profile.where("profiles.simulator_instance_id = ? AND profiles.role_configuration @> (?) AND profiles.assignment SIMILAR TO (?) AND" +
-      " observations_count > 0", simulator_instance_id, role_configuration, profile_space).sum(:observations_count)
+    Profile.where('profiles.simulator_instance_id = ? AND profiles.role_configuration @> (?) AND profiles.assignment SIMILAR TO (?) AND' +
+      ' observations_count > 0', simulator_instance_id, role_configuration, profile_space).sum(:observations_count)
   end
 
   def add_strategy(role_name, strategy)
@@ -58,6 +58,6 @@ class Game < ActiveRecord::Base
   end
 
   def role_configuration
-    "('" + roles.collect{ |role| "\"#{role.name}\" => #{role.count}" }.join(", ") + "')"
+    "('" + roles.collect { |role| "\"#{role.name}\" => #{role.count}" }.join(', ') + "')"
   end
 end

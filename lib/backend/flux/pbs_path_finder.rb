@@ -1,5 +1,5 @@
 class PbsPathFinder
-  
+
   attr_reader :data_path
 
   def initialize(simulation, simulator, simulators_path, data_path)

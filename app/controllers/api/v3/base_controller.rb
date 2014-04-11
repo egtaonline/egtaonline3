@@ -20,8 +20,8 @@ class Api::V3::BaseController < ActionController::Base
     begin
       @object = klass.find(params[:id])
     rescue
-      render json: {error:
-        "the #{model_name} you were looking for could not be found"}.to_json,
+      render json: { error:
+        "the #{model_name} you were looking for could not be found" }.to_json,
         status: 404
     end
   end
