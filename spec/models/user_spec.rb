@@ -15,9 +15,9 @@ describe User do
   describe '#active_for_authentication?' do
     it 'only returns true for approved users' do
       user = build(:user)
-      expect(user.active_for_authentication?).to eq(false)
+      expect(user.active_for_authentication?).to be_false
       user.approved = true
-      expect(user.active_for_authentication?).to eq(true)
+      expect(user.active_for_authentication?).to be_true
     end
   end
 

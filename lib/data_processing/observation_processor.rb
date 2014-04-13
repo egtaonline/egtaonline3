@@ -1,6 +1,10 @@
 class ObservationProcessor
-  def initialize(simulation, file_paths, observation_validator = ObservationValidator.new(simulation.profile),
-      observation_builder = ObservationBuilder.new(simulation.profile), cv_builder = ControlVariableBuilder.new(simulation.profile.simulator_instance))
+  def initialize(
+        simulation, file_paths,
+        observation_validator = ObservationValidator.new(simulation.profile),
+        observation_builder = ObservationBuilder.new(simulation.profile),
+        cv_builder = ControlVariableBuilder.new(
+          simulation.profile.simulator_instance))
     @simulation = simulation
     @file_paths = file_paths
     @observation_validator = observation_validator
@@ -28,6 +32,6 @@ class ObservationProcessor
   end
 
   def validated_data
-    @file_paths.collect { |file_path| @observation_validator.validate(file_path) }.compact
+    @file_paths.map { |path| @observation_validator.validate(path) }.compact
   end
 end

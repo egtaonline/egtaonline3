@@ -9,7 +9,8 @@ class RemoteSimulationManager
     @flux_policy = FluxPolicy.new(options[:flux_active_limit])
     @connection = options[:connection]
     @local_path = options[:local_data_path]
-    @pbs_creator = PbsCreator.new(options[:simulators_path], @local_path, options[:remote_data_path])
+    @pbs_creator = PbsCreator.new(options[:simulators_path], @local_path,
+                                  options[:remote_data_path])
     @simulation_submitter = SimulationSubmitter.new(options[:remote_data_path])
     @status_monitor = SimulationStatusMonitor.new(@local_path)
     @spec_generator = SpecGenerator.new(@local_path)

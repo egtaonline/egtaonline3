@@ -1,23 +1,24 @@
 module ProfileSpaces
   def invalid_role_partition?
-    roles.collect { |role| role.count }.reduce(:+) != size
+    roles.map { |role| role.count }.reduce(:+) != size
   end
 
   def available_roles
-    simulator.role_configuration.keys - roles.collect { |r| r.name }
+    simulator.role_configuration.keys - roles.map { |r| r.name }
   end
 
   def available_strategies(role_name)
     role = roles.where(name: role_name).first
-    (simulator.role_configuration[role_name] - role.strategies - role.deviating_strategies).sort
+    (simulator.role_configuration[role_name] -
+      role.strategies - role.deviating_strategies).sort
   end
 
   def unassigned_player_count
-    roles.count == 0 ? size : size - roles.collect { |r| r.count }.reduce(:+)
+    roles.count == 0 ? size : size - roles.map { |r| r.count }.reduce(:+)
   end
 
   def add_role(role, count, reduced_count = count)
-    if !roles.where(name: role).first
+    unless roles.where(name: role).first
       roles.create(name: role, count: count, reduced_count: reduced_count)
     end
   end

@@ -33,7 +33,7 @@ describe Connection do
       it do
         expect(connection.authenticate(
           uniqname: uniqname, verification_number: verification_number,
-          password: password)).to be false
+          password: password)).to be_false
       end
     end
   end
@@ -48,7 +48,7 @@ describe Connection do
         flux_proxy.should_receive(:authenticated?).and_return(false)
       end
 
-      it { expect(connection.acquire.nil?).to be true }
+      it { expect(connection.acquire.nil?).to be_true }
     end
 
     context 'when the connection is open' do

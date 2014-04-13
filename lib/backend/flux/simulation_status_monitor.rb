@@ -10,9 +10,10 @@ class SimulationStatusMonitor
     if proxy
       output = proxy.exec!('qstat -a | grep egta-')
       status_hash = parse_to_hash(output)
-      unless status_hash == nil
+      if status_hash
         simulations.each do |simulation|
-          @status_resolver.act_on_status(status_hash[simulation.job_id.to_s], simulation)
+          @status_resolver.act_on_status(
+            status_hash[simulation.job_id.to_s], simulation)
         end
       end
     end
@@ -23,8 +24,10 @@ class SimulationStatusMonitor
   def parse_to_hash(output)
     unless output =~ /^failure/
       parsed_output = {}
-      if output != '' && output != nil
-        output.split("\n").each { |line| parsed_output[line.split('.').first] = line.split(/\s+/)[9] }
+      if output && output != ''
+        output.split("\n").each do |line|
+          parsed_output[line.split('.').first] = line.split(/\s+/)[9]
+        end
       end
       parsed_output
     end

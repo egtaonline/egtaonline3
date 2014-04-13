@@ -1,6 +1,7 @@
 class Simulation < ActiveRecord::Base
   validates_numericality_of :size, only_integer: true, greater_than: 0
-  validates_inclusion_of :state, in: %w(pending queued running failed processing complete)
+  validates_inclusion_of :state, in:
+    %w(pending queued running failed processing complete)
 
   belongs_to :profile, inverse_of: :simulations
   belongs_to :scheduler, inverse_of: :simulations
@@ -61,14 +62,14 @@ class Simulation < ActiveRecord::Base
     ProfileScheduler.perform_in(5.minutes, profile_id)
   end
 
-  def self.stale(age = 300000)
+  def self.stale(age = 300_000)
     where('state IN (?) AND updated_at < ?',
-      %w(queued complete failed), Time.current - age)
+          %w(queued complete failed), Time.current - age)
   end
 
-  def self.recently_finished(age = 86400)
+  def self.recently_finished(age = 86_400)
     where('state IN (?) AND updated_at > ?',
-      %w(complete failed), Time.current - age)
+          %w(complete failed), Time.current - age)
   end
 
   def self.queueable

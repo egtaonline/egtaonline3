@@ -16,7 +16,7 @@ class Api::V3::SimulatorsController < Api::V3::BaseController
     if @object.add_role(params[:role])
       render json: nil, status: 204, location: nil
     else
-      respond_with({ error: 'only letters, numbers, or' +
+      respond_with({ error: 'only letters, numbers, or' \
         ' underscores are allowed in Role name' }, status: 422, location: nil)
     end
   end
@@ -30,7 +30,7 @@ class Api::V3::SimulatorsController < Api::V3::BaseController
 
   def find_role
     unless @object.role_configuration[params[:role]]
-      respond_with({ error: 'the Role you were looking for could not' +
+      respond_with({ error: 'the Role you were looking for could not' \
         ' be found' }, status: 422, location: nil)
     end
   end

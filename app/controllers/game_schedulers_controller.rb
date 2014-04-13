@@ -1,3 +1,2 @@
 class GameSchedulersController < SchedulersController
-
 end

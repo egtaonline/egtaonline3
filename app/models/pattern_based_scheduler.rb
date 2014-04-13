@@ -6,7 +6,7 @@ module PatternBasedScheduler
       role.strategies.uniq!
       role.strategies.sort!
       role.save!
-      update_scheduling_requirements
+      update_requirements
     end
   end
 
@@ -15,11 +15,11 @@ module PatternBasedScheduler
     if role && role.strategies.include?(strategy)
       role.strategies -= [strategy]
       role.save!
-      update_scheduling_requirements
+      update_requirements
     end
   end
 
   def invalid_role_partition?
-    super || roles.detect { |r| r.strategies.count == 0 } != nil
+    super || roles.find { |r| r.strategies.count == 0 }
   end
 end

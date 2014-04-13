@@ -7,7 +7,8 @@ class SimulationSubmitter
     proxy = connection.acquire
     if proxy
       begin
-        response = proxy.exec!("qsub -V -r n #{@data_path}/#{simulation.id}/wrapper")
+        response = proxy.exec!(
+          "qsub -V -r n #{@data_path}/#{simulation.id}/wrapper")
         if response =~ /\A(\d+)/
           simulation.queue_as Regexp.last_match[0].to_i
         else

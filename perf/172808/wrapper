@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -S /bin/sh
+#PBS -A wellman_flux
+#PBS -q flux
+#PBS -l nodes=1,pmem=3600mb,walltime=03:28:20,qos=flux
+#PBS -N egta-market_maker_sim
+#PBS -W umask=0007
+#PBS -W group_list=wellman
+#PBS -o /nfs/wellman_ls/egtaonline/simulations/172808/out
+#PBS -e /nfs/wellman_ls/egtaonline/simulations/172808/error
+#PBS -M ewah@umich.edu
+umask 0007
+mkdir /tmp/${PBS_JOBID}
+cp -r /home/wellmangroup/many-agent-simulations/market_maker_sim-2.0/market_maker_sim/* /tmp/${PBS_JOBID}
+cp -r /nfs/wellman_ls/egtaonline/simulations/172808 /tmp/${PBS_JOBID}
+cd /tmp/${PBS_JOBID}
+script/batch 172808 25
+cp -r /tmp/${PBS_JOBID}/172808 /nfs/wellman_ls/egtaonline/simulations
+rm -rf /tmp/${PBS_JOBID}

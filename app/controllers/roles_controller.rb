@@ -10,12 +10,11 @@ class RolesController < AuthenticatedController
   end
   expose(:role) { params['id'] }
 
-
   def create
     if params['role_count']
       params['reduced_count'] ||= params['role_count']
       parent.add_role(params['role'], params['role_count'].to_i,
-        params['reduced_count'].to_i)
+                      params['reduced_count'].to_i)
     else
       parent.add_role(params['role'])
     end

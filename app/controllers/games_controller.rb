@@ -1,5 +1,9 @@
 class GamesController < ProfileSpacesController
-  expose(:games) { Game.includes(simulator_instance: :simulator).order("#{sort_column} #{sort_direction}").page(params[:page]) }
+  expose(:games) do
+    Game.includes(simulator_instance: :simulator)
+      .order("#{sort_column} #{sort_direction}")
+      .page(params[:page])
+  end
   expose(:game, attributes: :game_parameters)
   expose(:role_owner) { game }
   expose(:role_owner_path) { "/games/#{game.id}" }
@@ -9,14 +13,17 @@ class GamesController < ProfileSpacesController
     respond_to do |format|
       format.html
       format.json do
-        file_name = GamePresenter.new(game).to_json(granularity: params[:granularity])
+        file_name = GamePresenter.new(game)
+          .to_json(granularity: params[:granularity])
         send_file file_name, type: 'text/json'
       end
     end
   end
 
   def create
-    @game = GameBuilder.create(game_parameters, params[:selector][:simulator_id], params[:selector][:configuration])
+    @game = GameBuilder.create(game_parameters,
+                               params[:selector][:simulator_id],
+                               params[:selector][:configuration])
     respond_with(@game)
   end
 

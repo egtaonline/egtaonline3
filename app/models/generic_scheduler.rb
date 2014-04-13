@@ -1,18 +1,30 @@
 class GenericScheduler < Scheduler
-  def update_scheduling_requirements
+  def update_requirements
     scheduling_requirements.destroy_all
   end
 
-  def add_profile(assignment, observation_count = default_observation_requirement)
+  def add_profile(assignment,
+                  observation_count = default_observation_requirement)
     assignment = assignment.assignment_sort
-    profile = Profile.find_or_create_by(simulator_instance_id: simulator_instance_id, assignment: assignment)
+    profile = Profile.find_or_create_by(
+      simulator_instance_id: simulator_instance_id, assignment: assignment)
     if profile.errors.messages.empty?
       if role_valid?(assignment)
         add_strategies(assignment)
-        SchedulingRequirement.joins(:profile).where('scheduler_id = ? AND profiles.assignment = ?', id, assignment).destroy_all
-        scheduling_requirements.create(profile_id: profile.id, count: observation_count)
+        exec_sql(
+          'DELETE FROM scheduling_requirements ' \
+          'USING profiles ' \
+          'WHERE profile_id = profiles.id ' \
+          'AND scheduler_id = ? ' \
+          'AND assignment = ?' \
+          'AND simulator_instance_id != ?',
+          id, assignment, simulator_instance_id)
+        scheduling_requirements.create(
+          profile_id: profile.id, count: observation_count)
       else
-        profile.errors.add(:assignment, 'cannot be scheduled by this Scheduler due to mismatch on role partition')
+        profile.errors.add(
+          :assignment, 'cannot be scheduled by this Scheduler due ' \
+          'to mismatch on role partition')
       end
     end
     profile
@@ -21,7 +33,9 @@ class GenericScheduler < Scheduler
   def remove_profile_by_id(profile_id)
     scheduling_requirements.where(profile_id: profile_id).destroy_all
     roles.each do |role|
-      role.strategies = SymmetryGroup.where(profile_id: scheduling_requirements.pluck(:profile_id), role: role.name).select(:strategy).distinct.pluck(:strategy)
+      role.strategies = SymmetryGroup.where(
+        profile_id: scheduling_requirements.pluck(:profile_id),
+        role: role.name).select(:strategy).distinct.pluck(:strategy)
       role.save!
     end
   end
@@ -40,7 +54,7 @@ class GenericScheduler < Scheduler
     assignment.split('; ').each do |role_string|
       role, strategy_string = role_string.split(': ')
       grole = roles.find_by(name: role)
-      strategies = strategy_string.split(', ').collect { |s| s.split(' ')[1] }
+      strategies = strategy_string.split(', ').map { |s| s.split(' ')[1] }
       grole.strategies += strategies
       grole.strategies.uniq!
       grole.save!

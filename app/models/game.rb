@@ -2,7 +2,8 @@ class Game < ActiveRecord::Base
   include ProfileSpaces
 
   validates_presence_of :size
-  validates :name, presence: true, uniqueness: { scope: :simulator_instance_id }
+  validates :name, presence: true,
+                   uniqueness: { scope: :simulator_instance_id }
 
   belongs_to :simulator_instance, inverse_of: :games
   validates_presence_of :simulator_instance
@@ -12,11 +13,13 @@ class Game < ActiveRecord::Base
   delegate :simulator, to: :simulator_instance
 
   def profile_space
-    '(' + roles.collect { |r| "(role = '#{r.name}' AND #{r.strategy_query})" }.join(' OR ') + ')'
+    '(' +
+      roles.map { |r| "(role = '#{r.name}' AND #{r.strategy_query})" }
+      .join(' OR ') + ')'
   end
 
   def invalid_role_partition?
-    super || roles.detect { |r| r.strategies.count == 0 } != nil
+    super || roles.find { |r| r.strategies.count == 0 }
   end
 
   def profile_counts
@@ -24,19 +27,33 @@ class Game < ActiveRecord::Base
       { 'count' => 0, 'observations_count' => 0 }
     else
       Game.connection.select_all("WITH reasonable_profiles AS (
-          SELECT symmetry_groups.id, symmetry_groups.profile_id, symmetry_groups.role, symmetry_groups.strategy, profiles.observations_count
+          SELECT symmetry_groups.id, symmetry_groups.profile_id,
+            symmetry_groups.role, symmetry_groups.strategy,
+            profiles.observations_count
           FROM symmetry_groups, profiles
-          WHERE symmetry_groups.profile_id = profiles.id AND profiles.simulator_instance_id = #{simulator_instance_id} AND profiles.role_configuration @> #{role_configuration} AND profiles.observations_count > 0),
-          out_space AS (SELECT * FROM reasonable_profiles WHERE NOT #{profile_space}),
-          result AS (SELECT DISTINCT ON(profile_id) observations_count FROM reasonable_profiles WHERE profile_id NOT IN (SELECT DISTINCT ON(profile_id) profile_id FROM out_space))
-        SELECT COUNT(*) AS count, SUM(observations_count) AS observations_count FROM result
+          WHERE symmetry_groups.profile_id = profiles.id
+          AND profiles.simulator_instance_id = #{simulator_instance_id}
+          AND profiles.role_configuration @> #{role_configuration}
+          AND profiles.observations_count > 0),
+          out_space AS (
+            SELECT * FROM reasonable_profiles WHERE NOT #{profile_space}),
+          result AS (SELECT DISTINCT ON(profile_id) observations_count
+            FROM reasonable_profiles
+            WHERE profile_id NOT IN (
+              SELECT DISTINCT ON(profile_id) profile_id FROM out_space))
+        SELECT COUNT(*) AS count, SUM(observations_count) AS observations_count
+        FROM result
       ")[0]
     end
   end
 
   def observation_count
-    Profile.where('profiles.simulator_instance_id = ? AND profiles.role_configuration @> (?) AND profiles.assignment SIMILAR TO (?) AND' +
-      ' observations_count > 0', simulator_instance_id, role_configuration, profile_space).sum(:observations_count)
+    Profile.where(
+      'profiles.simulator_instance_id = ?
+      AND profiles.role_configuration @> (?)
+      AND profiles.assignment SIMILAR TO (?) AND observations_count > 0',
+      simulator_instance_id, role_configuration, profile_space)
+      .sum(:observations_count)
   end
 
   def add_strategy(role_name, strategy)
@@ -58,6 +75,8 @@ class Game < ActiveRecord::Base
   end
 
   def role_configuration
-    "('" + roles.collect { |role| "\"#{role.name}\" => #{role.count}" }.join(', ') + "')"
+    "('" +
+      roles.map { |role| "\"#{role.name}\" => #{role.count}" }
+      .join(', ') + "')"
   end
 end

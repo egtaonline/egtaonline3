@@ -23,6 +23,7 @@ class DeviationScheduler < Scheduler
     return [] if invalid_role_partition?
     subgame_assignments = SubgameCreator.subgame_assignments(roles)
     deviation_assignments = DeviationCreator.deviation_assignments(roles)
-    AssignmentFormatter.format_assignments((subgame_assignments + deviation_assignments).uniq)
+    AssignmentFormatter.format_assignments(
+      (subgame_assignments + deviation_assignments).uniq)
   end
 end

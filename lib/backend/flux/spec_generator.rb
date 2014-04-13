@@ -15,6 +15,8 @@ class SpecGenerator
       end
     end
     spec['configuration'] = profile.simulator_instance.configuration.to_hash
-    File.open("#{@path}/#{simulation.id}/simulation_spec.json", 'w') { |f| f.write(MultiJson.dump(spec.to_hash)) }
+    File.open("#{@path}/#{simulation.id}/simulation_spec.json", 'w') do |f|
+      f.write(MultiJson.dump(spec.to_hash))
+    end
   end
 end

@@ -37,7 +37,7 @@ describe RemoteSimulatorManager do
         end
 
         it do
-          expect(simulator_manager.prepare_simulator(simulator)).to be true
+          expect(simulator_manager.prepare_simulator(simulator)).to be_true
         end
       end
 

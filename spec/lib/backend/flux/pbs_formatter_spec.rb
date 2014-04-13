@@ -8,7 +8,7 @@ describe PbsFormatter do
              output_path: 'output/path', error_path: 'error/path',
              data_path: 'data/path')
     end
-    let(:allocation) { 'flux' }
+    let(:allocation) { 'wellman_flux' }
     let(:nodes) { 1 }
     let(:memory) { 1000 }
     let(:walltime) { '01:06:40' }
@@ -17,11 +17,14 @@ describe PbsFormatter do
     let(:sim_id) { 1 }
     let(:sim_size) { 10 }
     let(:extra_args) { '' }
-    subject { PbsFormatter.new(path_finder) }
+    let(:scheduler) { double(process_memory: memory, nodes: nodes) }
+    let(:simulation) { double(id: sim_id, size: sim_size, qos: 'flux') }
+    let(:simulator) { double(email: email, name: 'sim') }
+    subject do
+      PbsFormatter.new(path_finder, scheduler, simulation, simulator, walltime)
+    end
     it 'formats appropriately' do
-      expect(subject.format(
-        allocation, nodes, memory, walltime,
-        simulation_tag, email, sim_id, sim_size, extra_args))
+      expect(subject.format)
         .to eq("#!/bin/bash\n" \
                "#PBS -S /bin/sh\n" \
                "#PBS -A #{allocation}\n" \

@@ -5,7 +5,8 @@ class Simulator < ActiveRecord::Base
 
   validates_presence_of :email, :name, :version, :source
   validates_uniqueness_of :version, scope: :name
-  validates_format_of :name, with: /\A\w+\z/, message: 'can contain only letters, numbers, and underscores'
+  validates_format_of :name, with: /\A\w+\z/, message: 'can contain only ' \
+    'letters, numbers, and underscores'
 
   before_validation :setup_simulator, if: :source_changed?
 
@@ -17,22 +18,21 @@ class Simulator < ActiveRecord::Base
       errors.add(:source, 'Upload could not be unzipped')
       return
     end
-    if !File.exists?("#{location}/#{name}/script/batch")
-      errors.add(:source, 'did not find script/batch within' +
+    unless File.exist?("#{location}/#{name}/script/batch")
+      errors.add(:source, 'did not find script/batch within' \
         " #{location}/#{name}")
     end
-    if File.exists?("#{location}/#{name}/defaults.json")
+    if File.exist?("#{location}/#{name}/defaults.json")
       begin
-        self.configuration = MultiJson.load(File.new("#{location}/#{name}/defaults.json"))['configuration']
+        self.configuration = MultiJson.load(
+          File.new("#{location}/#{name}/defaults.json"))['configuration']
       rescue MultiJson::LoadError
         errors.add(:source, 'defaults.json file is malformed.')
       end
     else
       errors.add(:source, "did not have defaults.json in folder #{name}")
     end
-    if errors.messages.empty?
-      Backend.prepare_simulator(self)
-    end
+    Backend.prepare_simulator(self) if errors.messages.empty?
   end
 
   def fullname
@@ -68,5 +68,4 @@ class Simulator < ActiveRecord::Base
   def location
     File.join(Rails.root, 'simulator_uploads', fullname)
   end
-
 end

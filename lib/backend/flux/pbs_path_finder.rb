@@ -1,9 +1,11 @@
 class PbsPathFinder
-
   attr_reader :data_path
 
   def initialize(simulation, simulator, simulators_path, data_path)
-    @simulation, @simulator, @simulators_path, @data_path = simulation, simulator, simulators_path, data_path
+    @simulation = simulation
+    @simulator = simulator
+    @simulators_path = simulators_path
+    @data_path = data_path
   end
 
   def simulator_path

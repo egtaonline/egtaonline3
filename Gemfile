@@ -48,12 +48,12 @@ gem 'clockwork'
 
 group :development do
   gem 'quiet_assets'
-  gem 'bullet'
   gem 'better_errors', github: 'charliesome/better_errors'
 end
 
 group :test, :development do
   gem 'rspec-rails'
+  gem 'bullet'
 end
 
 group :test do

@@ -6,9 +6,7 @@ class User < ActiveRecord::Base
   before_save :ensure_authentication_token
 
   def send_admin_mail
-    if !admin?
-      AdminMailer.user_waiting_for_approval(self).deliver
-    end
+    AdminMailer.user_waiting_for_approval(self).deliver unless admin?
   end
 
   def active_for_authentication?
@@ -16,10 +14,10 @@ class User < ActiveRecord::Base
   end
 
   def inactive_message
-    if !approved?
-      :not_approved
-    else
+    if approved?
       super
+    else
+      :not_approved
     end
   end
 

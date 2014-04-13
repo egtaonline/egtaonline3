@@ -33,19 +33,19 @@ describe Game do
 
   describe '#invalid_role_partition?' do
     it 'returns false when the role partition is valid' do
-      expect(game.invalid_role_partition?).to eq(false)
+      expect(game.invalid_role_partition?).to be_false
     end
 
     it 'returns true if there are unassigned players' do
       game.remove_role('All')
       game.add_role('All', 1)
-      expect(game.invalid_role_partition?).to eq(true)
+      expect(game.invalid_role_partition?).to be_true
     end
 
     it 'returns true if a role is missing strategies' do
       game.remove_strategy('All', 'A')
       game.remove_strategy('All', 'B')
-      expect(game.invalid_role_partition?).to eq(true)
+      expect(game.invalid_role_partition?).to be_true
     end
   end
 

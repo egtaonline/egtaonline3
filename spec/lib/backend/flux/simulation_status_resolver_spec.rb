@@ -26,7 +26,7 @@ describe SimulationStatusResolver do
 
     context 'simulation completed successfully' do
       before do
-        File.should_receive(:exists?).with(
+        File.should_receive(:exist?).with(
           "#{local_data_path}/#{simulation.id}/error").and_return(true)
         File.should_receive(:open).with(
           "#{local_data_path}/#{simulation.id}/error").and_return(
@@ -41,7 +41,7 @@ describe SimulationStatusResolver do
 
     context 'simulation did not complete successfully' do
       before do
-        File.stub(:exists?).with(
+        File.stub(:exist?).with(
           "#{local_data_path}/#{simulation.id}/error").and_return(true)
         File.should_receive(:open).with(
           "#{local_data_path}/#{simulation.id}/error").and_return(

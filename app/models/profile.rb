@@ -1,5 +1,8 @@
 class Profile < ActiveRecord::Base
-  validates :assignment, presence: true, format: { with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/ },
+  validates :assignment, presence: true,
+                         format: { with:
+                           /\A(\w+:(\s\d+\s[\w:.-]+,)*\s\d+\s[\w:.-]+;\s)*
+                             \w+:(\s\d+\s[\w:.-]+,)*\s\d+\s[\w:.-]+\z/x },
                          uniqueness: { scope: :simulator_instance_id }
   validates :size, presence: true, numericality: { only_integer: true }
   validate :profile_matches_simulator
@@ -18,9 +21,9 @@ class Profile < ActiveRecord::Base
     assignment.split('; ').each do |role_string|
       role, strategy_string = role_string.split(': ')
       strategy_string.split(', ').each do |count_strategy|
-        strategy = count_strategy.split(' ')[1]
-        unless simulator.role_configuration[role].try(:include?, strategy)
-          errors.add(:assignment, "#{strategy} is not present in the Simulator")
+        strat = count_strategy.split(' ')[1]
+        unless simulator.role_configuration[role].try(:include?, strat)
+          errors.add(:assignment, "#{strat} is not present in the Simulator")
         end
       end
     end
@@ -43,7 +46,8 @@ class Profile < ActiveRecord::Base
       role, strategy_string = role_string.split(': ')
       strategy_string.split(', ').each do |strategy|
         count, strategy = strategy.split(' ')
-        symmetry_groups.create!(role: role, strategy: strategy, count: count.to_i)
+        symmetry_groups.create!(
+          role: role, strategy: strategy, count: count.to_i)
       end
     end
   end

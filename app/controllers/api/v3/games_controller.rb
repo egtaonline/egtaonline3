@@ -23,16 +23,16 @@ class Api::V3::GamesController < Api::V3::BaseController
   def find_role
     @role = @object.roles.find_by(name: params[:role])
     unless @role
-      respond_with({ error: 'the Role you were looking for could not' \
-                       ' be found' },
-                     status: 422, location: nil)
+      respond_with(
+        { error: 'the Role you were looking for could not be found' },
+        status: 422, location: nil)
     end
   end
 
   def find_strategy
     unless @object.simulator.role_configuration[@role.name].include?(
       params[:strategy])
-      respond_with({ error: 'the Strategy you wished to add was not found' +
+      respond_with({ error: 'the Strategy you wished to add was not found' \
         " on the Game's Simulator" }, status: 422, location: nil)
     end
   end

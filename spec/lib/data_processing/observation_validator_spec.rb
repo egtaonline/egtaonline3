@@ -219,7 +219,7 @@ describe ObservationValidator do
         JSON
       end
 
-      it { expect(subject.validate(path).nil?).to be true }
+      it { expect(subject.validate(path).nil?).to be_true }
     end
   end
 end

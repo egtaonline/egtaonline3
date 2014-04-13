@@ -2,16 +2,18 @@ require_relative 'reduction_creator'
 
 class DprCreator < ReductionCreator
   def self.expand_assignment(assignment, roles)
-    assignment.collect do |role_combination|
+    assignment.map do |role_combination|
       role_name = role_combination[0]
       strategies = hasherize(role_combination.drop(1))
-      strategies.collect do |strategy, count|
-        roles.collect do |role|
+      strategies.map do |strategy, count|
+        roles.map do |role|
           if role.name == role_name
-            [role.name].concat(strategy_dehasherize(expand_for_target_strategy(strategy, strategies, role)))
+            [role.name].concat(strategy_dehasherize(expand_for_target_strategy(
+              strategy, strategies, role)))
           else
-            combination = assignment.detect { |rc| rc[0] == role.name }
-            [role.name].concat(strategy_dehasherize(expand_role(hasherize(combination.drop(1)), role.count)))
+            combination = assignment.find { |rc| rc[0] == role.name }
+            [role.name].concat(strategy_dehasherize(expand_role(hasherize(
+              combination.drop(1)), role.count)))
           end
         end
       end

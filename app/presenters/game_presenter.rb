@@ -6,10 +6,10 @@ class GamePresenter
   def to_json(options = {})
     case options[:granularity]
     when 'structure'
-      File.open("#{Rails.root}/public/games/#{@game.id}-structure.json", 'w') do |f|
+      File.open("#{Rails.root}/public/games/#{@game.id}-strc.json", 'w') do |f|
         f.write(MultiJson.dump(@game.to_json))
       end
-      "#{Rails.root}/public/games/#{@game.id}-structure.json"
+      "#{Rails.root}/public/games/#{@game.id}-strc.json"
     when 'full'
       DB.execute(full)
       "#{Rails.root}/public/games/#{@game.id}-full.json"
@@ -49,7 +49,8 @@ class GamePresenter
           select profiles.id, observations_count, (
             select array_to_json(array_agg(symmetry_group))
             from (
-              select symmetry_groups.id, role, strategy, count, symmetry_groups.payoff, symmetry_groups.payoff_sd
+              select symmetry_groups.id, role, strategy, count,
+                symmetry_groups.payoff, symmetry_groups.payoff_sd
               from symmetry_groups
               where profile_id = profiles.id
             ) symmetry_group
@@ -60,7 +61,8 @@ class GamePresenter
         ) as profile
       ) as profiles
       from games, simulator_instances
-      where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
+      where games.id = #{@game.id}
+      and games.simulator_instance_id = simulator_instances.id
       ) t) to '#{Rails.root}/public/games/#{@game.id}-summary.json';"
   end
 
@@ -113,7 +115,8 @@ class GamePresenter
         ) as profile
       ) as profiles
       from games, simulator_instances
-      where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
+      where games.id = #{@game.id}
+      and games.simulator_instance_id = simulator_instances.id
       ) t) to '#{Rails.root}/public/games/#{@game.id}-observations.json';"
   end
 
@@ -151,7 +154,8 @@ class GamePresenter
               select features, extended_features, (
                 select array_to_json(array_agg(player))
                 from (
-                  select payoff as p, features as f, extended_features as e, symmetry_group_id as sid
+                  select payoff as p, features as f, extended_features as e,
+                    symmetry_group_id as sid
                   from players
                   where observation_id = observations.id
                 ) player
@@ -166,7 +170,8 @@ class GamePresenter
         ) as profile
       ) as profiles
       from games, simulator_instances
-      where games.id = #{@game.id} and games.simulator_instance_id = simulator_instances.id
+      where games.id = #{@game.id}
+      and games.simulator_instance_id = simulator_instances.id
       ) t) to '#{Rails.root}/public/games/#{@game.id}-full.json';"
   end
 
@@ -177,11 +182,20 @@ class GamePresenter
       'WITH result AS (SELECT id as profile_id FROM profiles WHERE id = 0)'
     else
       "WITH reasonable_profiles AS (
-        SELECT symmetry_groups.id, symmetry_groups.profile_id, symmetry_groups.role, symmetry_groups.strategy, profiles.observations_count
+        SELECT symmetry_groups.id, symmetry_groups.profile_id,
+          symmetry_groups.role, symmetry_groups.strategy,
+          profiles.observations_count
         FROM symmetry_groups, profiles
-        WHERE symmetry_groups.profile_id = profiles.id AND profiles.simulator_instance_id = #{@game.simulator_instance_id} AND profiles.role_configuration @> #{@game.role_configuration} AND profiles.observations_count > 0),
-        out_space AS (SELECT * FROM reasonable_profiles WHERE NOT #{@game.profile_space}),
-        result AS (SELECT DISTINCT ON(profile_id) profile_id FROM reasonable_profiles WHERE profile_id NOT IN (SELECT DISTINCT ON(profile_id) profile_id FROM out_space))"
+        WHERE symmetry_groups.profile_id = profiles.id
+        AND profiles.simulator_instance_id = #{@game.simulator_instance_id}
+        AND profiles.role_configuration @> #{@game.role_configuration}
+        AND profiles.observations_count > 0),
+        out_space AS (SELECT * FROM reasonable_profiles
+          WHERE NOT #{@game.profile_space}),
+        result AS (SELECT DISTINCT ON(profile_id) profile_id
+          FROM reasonable_profiles
+          WHERE profile_id NOT IN (
+            SELECT DISTINCT ON(profile_id) profile_id FROM out_space))"
     end
   end
 end

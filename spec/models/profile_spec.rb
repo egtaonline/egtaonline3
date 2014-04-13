@@ -31,11 +31,11 @@ describe Profile do
         create(:simulation, state: 'queued', profile: profile)
       end
 
-      it { expect(profile.scheduled?).to be true }
+      it { expect(profile.scheduled?).to be_true }
     end
 
     context 'when no active simulation for the profile exists' do
-      it { expect(profile.scheduled?).to be false }
+      it { expect(profile.scheduled?).to be_false }
     end
   end
 
@@ -48,13 +48,13 @@ describe Profile do
       simulator.add_strategy('All', 'A')
       profile = build(:profile, simulator_instance: simulator_instance,
                                 assignment: 'All: 2 A')
-      expect(profile.valid?).to be true
+      expect(profile.valid?).to be_true
     end
 
     it 'fails when the strategy is not present on the simulator' do
       profile = build(:profile, simulator_instance: simulator_instance,
                                 assignment: 'All: 2 A')
-      expect(profile.valid?).to be false
+      expect(profile.valid?).to be_false
     end
   end
 
@@ -68,11 +68,11 @@ describe Profile do
   describe '#scheduled?' do
     it 'returns true if the profile has scheduled simulations' do
       create(:simulation, profile: profile)
-      expect(profile.reload.scheduled?).to be true
+      expect(profile.reload.scheduled?).to be_true
     end
 
     it 'returns false is the profile does not have scheduled simulations' do
-      expect(profile.scheduled?).to be false
+      expect(profile.scheduled?).to be_false
     end
   end
 end

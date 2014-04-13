@@ -10,7 +10,7 @@ describe GenericScheduler do
     context 'when the scheduler lacks the necessary roles' do
       it 'returns a profile with an error expressing as much' do
         profile = scheduler.add_profile('All: 2 A')
-        expect(profile.errors.messages.empty?).to be false
+        expect(profile.errors.messages.empty?).to be_false
       end
     end
     context 'when the scheduler has the necessary roles' do

@@ -3,9 +3,12 @@ class SimulatorInstance < ActiveRecord::Base
   has_many :schedulers, dependent: :destroy, inverse_of: :simulator_instance
   has_many :profiles, dependent: :destroy, inverse_of: :simulator_instance
   has_many :games, dependent: :destroy, inverse_of: :simulator_instance
-  has_many :control_variables, dependent: :delete_all, inverse_of: :simulator_instance
-  has_many :player_control_variables, dependent: :delete_all, inverse_of: :simulator_instance
-  has_one :control_variate_state, dependent: :destroy, inverse_of: :simulator_instance
+  has_many :control_variables, dependent: :delete_all,
+                               inverse_of: :simulator_instance
+  has_many :player_control_variables, dependent: :delete_all,
+                                      inverse_of: :simulator_instance
+  has_one :control_variate_state, dependent: :destroy,
+                                  inverse_of: :simulator_instance
   validates_presence_of :simulator_fullname, :simulator
   validates_uniqueness_of :configuration, scope: :simulator_id
 
@@ -14,12 +17,12 @@ class SimulatorInstance < ActiveRecord::Base
     self.control_variate_state = ControlVariateState.new(state: 'none')
   end
 
-  def self.find_or_create_for(simulator_id, configuration)
-    configuration ||= {}
-    configuration = configuration.collect { |key, value| "\"#{key}\" => \"#{value}\"" }.join(', ')
-    simulator_instance = SimulatorInstance.where('simulator_id = ? AND configuration = (?)',
-                                                 simulator_id, configuration).first
+  def self.find_or_create_for(simulator_id, configuration_map)
+    configuration_map ||= {}
+    config = configuration_map.map { |k, v| "\"#{k}\" => \"#{v}\"" }.join(', ')
+    simulator_instance = SimulatorInstance.where(
+      'simulator_id = ? AND configuration = (?)', simulator_id, config).first
     simulator_instance || SimulatorInstance.create!(simulator_id: simulator_id,
-                                                    configuration: configuration)
+                                                    configuration: config)
   end
 end

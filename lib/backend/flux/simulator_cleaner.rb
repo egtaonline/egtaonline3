@@ -5,6 +5,11 @@ class SimulatorCleaner
 
   def clean(connection, simulator)
     proxy = connection.acquire
-    proxy ? proxy.exec!("rm -rf #{@simulators_path}/#{simulator.fullname}*; rm -rf #{@simulators_path}/#{simulator.name}.zip") : fail('Connection broken.')
+    if proxy
+      proxy.exec!("rm -rf #{@simulators_path}/#{simulator.fullname}*; " \
+                  "rm -rf #{@simulators_path}/#{simulator.name}.zip")
+    else
+      fail('Connection broken.')
+    end
   end
 end

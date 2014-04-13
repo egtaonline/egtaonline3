@@ -4,7 +4,7 @@ class DailyCleanup
 
   def perform
     ActiveRecord::Base.transaction do
-      Simulation.stale.destroy_all
+      Simulation.stale.delete_all
       Simulation.recently_finished.each { |s| s.requeue }
       FileUtils.rm_rf(Dir.glob("#{Rails.root}/public/games/*"), secure: true)
     end

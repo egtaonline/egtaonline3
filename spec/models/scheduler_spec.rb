@@ -12,7 +12,7 @@ shared_examples 'a pattern-based scheduler class' do
 
   context 'stubbed out' do
     before do
-      scheduler.stub(:update_scheduling_requirements)
+      scheduler.stub(:update_requirements)
     end
 
     describe '#add_strategy' do
@@ -48,7 +48,7 @@ shared_examples 'a pattern-based scheduler class' do
         scheduler.add_role('A', 1)
         scheduler.add_role('B', 1)
         scheduler.add_strategy('A', 'A1')
-        expect(scheduler.invalid_role_partition?).to eq(true)
+        expect(scheduler.invalid_role_partition?).to be_true
       end
 
       it 'returns false when all players assigned & each role has strategy' do
@@ -57,14 +57,14 @@ shared_examples 'a pattern-based scheduler class' do
         scheduler.add_strategy('A', 'A1')
         scheduler.add_strategy('B', 'B2')
         scheduler.reload
-        expect(scheduler.invalid_role_partition?).to eq(false)
+        expect(scheduler.invalid_role_partition?).to be_false
       end
     end
   end
 
   context 'when modifying role configuration with' do
     before do
-      scheduler.should_receive(:update_scheduling_requirements)
+      scheduler.should_receive(:update_requirements)
     end
 
     describe 'changing the size' do
@@ -126,7 +126,7 @@ shared_examples 'a scheduler class' do
 
   context 'stubbed out' do
     before do
-      scheduler.stub(:update_scheduling_requirements)
+      scheduler.stub(:update_requirements)
     end
 
     describe '#remove_role' do
@@ -142,7 +142,7 @@ shared_examples 'a scheduler class' do
     describe '#invalid_role_partition?' do
       it 'returns true if the insufficient players have been assigned' do
         scheduler.add_role('A', 1)
-        expect(scheduler.invalid_role_partition?).to eq(true)
+        expect(scheduler.invalid_role_partition?).to be_true
       end
     end
   end
@@ -234,7 +234,7 @@ describe GenericScheduler do
     it 'returns false when all the players are assigned' do
       scheduler.add_role('A', 1)
       scheduler.add_role('B', 1)
-      expect(scheduler.invalid_role_partition?).to eq(false)
+      expect(scheduler.invalid_role_partition?).to be_false
     end
   end
 end

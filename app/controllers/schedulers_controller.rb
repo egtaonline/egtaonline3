@@ -1,7 +1,12 @@
 class SchedulersController < ProfileSpacesController
-  expose(:schedulers) { klass.includes(:simulator_instance).order("#{sort_column} #{sort_direction}#{secondary_column}").page(params[:page]) }
+  expose(:schedulers) do
+    klass.includes(:simulator_instance)
+      .order("#{sort_column} #{sort_direction}#{secondary_column}")
+      .page(params[:page])
+  end
   expose(:scheduler, attributes: :scheduler_parameters) do
-    if id = params["#{model_name}_id"] || params[:id]
+    id = params["#{model_name}_id"] || params[:id]
+    if id
       klass.find(id)
     else
       klass.new(params[model_name])
@@ -12,17 +17,22 @@ class SchedulersController < ProfileSpacesController
   expose(:role_owner_path) { "/schedulers/#{scheduler.id}" }
 
   expose(:scheduling_requirements) do
-    SchedulingRequirement.where(scheduler_id: params[:id]).includes(:profile).order("#{sort_column} #{sort_direction}").page(params[:page])
+    SchedulingRequirement.where(scheduler_id: params[:id])
+      .includes(:profile).order("#{sort_column} #{sort_direction}")
+      .page(params[:page])
   end
 
   def create
-    @scheduler = SchedulerBuilder.create(klass, scheduler_parameters, params[:selector][:simulator_id], params[:selector][:configuration])
+    @scheduler = SchedulerBuilder.create(
+      klass, scheduler_parameters, params[:selector][:simulator_id],
+      params[:selector][:configuration])
     respond_with(@scheduler)
   end
 
   def update
     @scheduler = klass.find(params[:id])
-    @scheduler = SchedulerBuilder.update(@scheduler, scheduler_parameters, params[:selector][:configuration])
+    @scheduler = SchedulerBuilder.update(
+      @scheduler, scheduler_parameters, params[:selector][:configuration])
     respond_with(@scheduler)
   end
 
@@ -33,7 +43,8 @@ class SchedulersController < ProfileSpacesController
 
   def create_game_to_match
     @scheduler = klass.find(params[:id])
-    if Game.find_by(simulator_instance_id: scheduler.simulator_instance_id, name: scheduler.name)
+    if Game.find_by(simulator_instance_id: scheduler.simulator_instance_id,
+                    name: scheduler.name)
       flash[:alert] = 'A game with that name already exists.'
       respond_with(@scheduler)
     else
@@ -44,8 +55,10 @@ class SchedulersController < ProfileSpacesController
   private
 
   def scheduler_parameters
-    params.require(model_name.to_sym).permit(:active, :name, :nodes, :process_memory, :observations_per_simulation, :size, :time_per_observation,
-                    :default_observation_requirement, :simulator_instance_id)
+    params.require(model_name.to_sym).permit(
+      :active, :name, :nodes, :process_memory, :observations_per_simulation,
+      :size, :time_per_observation,
+      :default_observation_requirement, :simulator_instance_id)
   end
 
   def sort_column

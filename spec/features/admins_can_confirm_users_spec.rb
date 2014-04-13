@@ -19,7 +19,7 @@ describe 'Admins can approve users' do
       let(:user) { create(:user) }
       it 'does not change the approval of the user' do
         put "/users/#{user.id}", user: { approved: true }
-        expect(user.reload.approved).to eq(false)
+        expect(user.reload.approved).to be_false
       end
     end
   end
@@ -47,7 +47,7 @@ describe 'Admins can approve users' do
       it 'updates the approval of the user and redirects to the index' do
         visit '/users'
         click_on 'Approve'
-        expect(unapproved_user.reload.approved).to eq(true)
+        expect(unapproved_user.reload.approved).to be_true
         expect(page).to_not have_content(unapproved_user.email)
         expect(current_path).to eq('/users')
       end

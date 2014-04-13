@@ -21,7 +21,7 @@ feature 'user authentication:' do
     fill_in 'Password confirmation', with: 'fake-pass2'
     click_button 'Sign up'
     expect(page).to have_content "Password confirmation doesn't match Password"
-    expect(last_email.nil?).to be true
+    expect(last_email.nil?).to be_true
   end
 
   scenario 'an unconfirmed user tries to sign in' do

@@ -1,7 +1,7 @@
 class String
   def assignment_sort
-    roles = split('; ').collect { |role| role.split(': ') }
-    roles.sort.collect { |role| role[0] + ': ' + role[1].strategy_sort }.join('; ')
+    roles = split('; ').map { |role| role.split(': ') }
+    roles.sort.map { |role| role[0] + ': ' + role[1].strategy_sort }.join('; ')
   end
 
   def strategy_sort

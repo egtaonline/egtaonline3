@@ -7,12 +7,14 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   before_filter :role_exists, only: :add_role
 
   def index
-    render json: { generic_schedulers: GenericScheduler.order('id ASC') }, status: 200
+    render json: { generic_schedulers: GenericScheduler.order('id ASC') },
+           status: 200
   end
 
   def create
-    @scheduler = SchedulerBuilder.create(klass, scheduler_parameters,
-      params[:scheduler][:simulator_id], params[:scheduler][:configuration])
+    @scheduler = SchedulerBuilder.create(
+      klass, scheduler_parameters, params[:scheduler][:simulator_id],
+      params[:scheduler][:configuration])
     respond_with(@scheduler)
   end
 
@@ -40,7 +42,8 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   private
 
   def scheduler_parameters
-    params.require(:scheduler).permit(:active, :name, :nodes, :process_memory,
+    params.require(:scheduler).permit(
+      :active, :name, :nodes, :process_memory,
       :observations_per_simulation, :size, :time_per_observation,
       :default_observation_requirement)
   end

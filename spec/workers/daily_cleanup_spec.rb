@@ -10,7 +10,7 @@ describe DailyCleanup do
     end
 
     it 'deletes old simulations and requeues recently finished' do
-      stale_simulations.should_receive(:destroy_all)
+      stale_simulations.should_receive(:delete_all)
       finished.each do |sim|
         sim.should_receive(:requeue)
       end

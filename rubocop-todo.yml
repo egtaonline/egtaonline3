@@ -11,26 +11,9 @@ AllCops:
     - config/**
     - script/**
 
-# Offense count: 23
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-AlignParameters:
-  Enabled: false
-
-# Offense count: 1
-# Configuration parameters: AllowSafeAssignment.
-AssignmentInCondition:
-  Enabled: false
-
 # Offense count: 2
 BlockNesting:
   Max: 4
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-BracesAroundHashParameters:
-  Enabled: false
 
 # Offense count: 8
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -42,90 +25,15 @@ ClassAndModuleChildren:
 ClassLength:
   Max: 178
 
-# Offense count: 31
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredMethods.
-CollectionMethods:
-  Enabled: false
-
 # Offense count: 2
 CyclomaticComplexity:
   Max: 11
-
-# Offense count: 4
-# Cop supports --auto-correct.
-DeprecatedClassMethods:
-  Enabled: false
 
 # Offense count: 122
 Documentation:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-EmptyLines:
-  Enabled: false
-
-# Offense count: 7
-# Cop supports --auto-correct.
-EmptyLinesAroundBody:
-  Enabled: false
-
-# Offense count: 94
-# Cop supports --auto-correct.
-FinalNewline:
-  Enabled: false
-
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-FormatString:
-  Enabled: false
-
-# Offense count: 5
-# Configuration parameters: MaxLineLength.
-IfUnlessModifier:
-  Enabled: false
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-IndentHash:
-  Enabled: false
-
-# Offense count: 1
-Lambda:
-  Enabled: false
-
-# Offense count: 10
-# Cop supports --auto-correct.
-LineEndConcatenation:
-  Enabled: false
-
-# Offense count: 294
-LineLength:
-  Max: 273
-
 # Offense count: 30
 # Configuration parameters: CountComments.
 MethodLength:
   Max: 50
-
-# Offense count: 3
-# Cop supports --auto-correct.
-NegatedIf:
-  Enabled: false
-
-# Offense count: 4
-# Cop supports --auto-correct.
-NilComparison:
-  Enabled: false
-
-# Offense count: 4
-# Cop supports --auto-correct.
-NonNilCheck:
-  Enabled: false
-
-# Offense count: 3
-# Cop supports --auto-correct.
-NumericLiterals:
-  MinDigits: 15
