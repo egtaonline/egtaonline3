@@ -25,7 +25,11 @@ describe ObservationProcessor do
 
       it 'calls for observations to be created & finishes the simulation' do
         cv_builder.should_receive(:extract_control_variables).with(data)
+        observation = double('observation')
         observation_builder.should_receive(:add_observation).with(data)
+          .and_return(observation)
+        AggregateUpdater.should_receive(:update).with(
+          [observation], simulation.profile)
         simulation.should_receive(:finish)
       end
     end

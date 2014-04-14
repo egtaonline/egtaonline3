@@ -28,7 +28,7 @@ FactoryGirl.define do
         instance.add_strategy('All', 'A')
         instance.add_strategy('All', 'B')
         instance.reload.scheduling_requirements.each do |sr|
-          ObservationBuilder.new(sr.profile).add_observation(
+          observation = ObservationBuilder.new(sr.profile).add_observation(
             'features' => {},
             'symmetry_groups' => sr.profile.symmetry_groups.map do |s|
               { 'role' => s.role, 'strategy' => s.strategy,
@@ -37,6 +37,7 @@ FactoryGirl.define do
                 end
               }
             end)
+          AggregateUpdater.update([observation], sr.profile)
         end
       end
     end
@@ -75,7 +76,7 @@ FactoryGirl.define do
           instance.add_profile('All: 2 A')
           instance.add_profile('All: 2 B')
           instance.reload.scheduling_requirements.each do |sr|
-            ObservationBuilder.new(sr.profile).add_observation(
+            observation = ObservationBuilder.new(sr.profile).add_observation(
               'features' => {},
               'symmetry_groups' => sr.profile.symmetry_groups.map do |s|
                 { 'role' => s.role, 'strategy' => s.strategy,
@@ -84,6 +85,7 @@ FactoryGirl.define do
                   end
                 }
               end)
+            AggregateUpdater.update([observation], sr.profile)
           end
         end
       end

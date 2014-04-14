@@ -24,11 +24,14 @@ describe PlayerBuilder do
       CVPayoffAdjuster.should_receive(:adjust).with(
           player_data['payoff'], observation.features, cv_query.to_a,
           player_data['features'], player_cv_query.to_a).and_return(75)
-      Player.should_receive(:create!).with(
-        observation_id: observation.id, symmetry_group_id: symmetry_group.id,
-        payoff: 23, adjusted_payoff: 75, features: { 'first' => 1 },
-        extended_features: { 'other' => 'false' })
-      PlayerBuilder.build(observation, symmetry_group, player_data)
+
+      player = PlayerBuilder.build(observation, symmetry_group, player_data)
+      expect(player.observation_id).to eq(observation.id)
+      expect(player.symmetry_group_id).to eq(symmetry_group.id)
+      expect(player.payoff).to eq(23)
+      expect(player.adjusted_payoff).to eq(75)
+      expect(player.features).to eq('first' => 1)
+      expect(player.extended_features).to eq('other' => 'false')
     end
   end
 end

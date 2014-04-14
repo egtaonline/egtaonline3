@@ -14,7 +14,7 @@ FactoryGirl.define do
 
   trait :with_observations do
     after(:create) do |instance|
-      ObservationBuilder.new(instance).add_observation(
+      observation = ObservationBuilder.new(instance).add_observation(
         'features' => {},
         'symmetry_groups' => instance.symmetry_groups.map do |s|
           { 'role' => s.role, 'strategy' => s.strategy,
@@ -23,6 +23,7 @@ FactoryGirl.define do
             end
           }
         end)
+      AggregateUpdater.update([observation], instance)
       instance.reload
     end
   end

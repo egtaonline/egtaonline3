@@ -49,6 +49,7 @@ module Egtaonline3
     config.assets.version = '1.0'
     config.active_record.schema_format = :sql
 
+    I18n.enforce_available_locales = false
     config.generators do |g|
       g.assets false
       g.helper false

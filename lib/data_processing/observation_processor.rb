@@ -25,10 +25,13 @@ class ObservationProcessor
   private
 
   def process_observations(validated)
+    observations = []
     validated.each do |data|
       @cv_builder.extract_control_variables(data)
-      @observation_builder.add_observation(data)
+      observations << @observation_builder.add_observation(data)
     end
+    AggregateUpdater.update(
+      observations, @simulation.profile) unless observations == []
   end
 
   def validated_data

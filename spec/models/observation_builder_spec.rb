@@ -5,13 +5,11 @@ describe ObservationBuilder do
   let(:profile) do
     double(id: 1, symmetry_groups: symmetry_groups, observations: observations)
   end
-  let(:symmetry_group1) { double(id: 1, role: 'Role1') }
-  let(:symmetry_group2) { double(id: 2, role: 'Role2') }
+  let(:symmetry_group1) { double(id: 1, role: 'Role1', count: 1) }
+  let(:symmetry_group2) { double(id: 2, role: 'Role2', count: 2) }
   let(:observations) { double('Other Criteria') }
-  let(:observation) do
-    double(id: 1, observation_aggs: observation_aggs, simulator_instance_id: 1)
-  end
-  let(:observation_aggs) { double('ObservationAgg') }
+  let(:observation) { double(id: 1, simulator_instance_id: 1) }
+  let(:player){ double('player') }
   subject { ObservationBuilder.new(profile) }
 
   describe '#add_observation' do
@@ -62,32 +60,6 @@ describe ObservationBuilder do
         .and_return(symmetry_group1)
       symmetry_groups.stub(:find_by).with(role: 'Role2', strategy: 'Strategy2')
         .and_return(symmetry_group2)
-      criteria1 = double('criteria')
-      criteria2 = double('criteria')
-      ObservationAgg.should_receive(:where).with(symmetry_group_id: 1)
-        .and_return(criteria1)
-      ObservationAgg.should_receive(:where).with(symmetry_group_id: 2)
-        .and_return(criteria2)
-      ordered_criteria1 = double('criteria')
-      ordered_criteria2 = double('criteria')
-      criteria1.should_receive(:order).with('').and_return(ordered_criteria1)
-      criteria2.should_receive(:order).with('').and_return(ordered_criteria2)
-      payoff_query1 = [{ 'payoff' => 2992.73, 'payoff_sd' => nil }]
-      payoff_query2 = [{ 'payoff' => 2464.67, 'payoff_sd' => nil }]
-      ordered_criteria1.should_receive(:select).with(
-        'avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd')
-          .and_return(payoff_query1)
-      ordered_criteria2.should_receive(:select).with(
-        'avg(payoff) as payoff, stddev_samp(payoff) as payoff_sd')
-          .and_return(payoff_query2)
-      validated_data['symmetry_groups'].each do |sgroup|
-        sgroup['players'].each do |player|
-          symmetry_group = (
-            sgroup['role'] == 'Role1' ? symmetry_group1 : symmetry_group2)
-          PlayerBuilder.should_receive(:build).with(
-            observation, symmetry_group, player)
-        end
-      end
     end
 
     it 'creates the observation' do
@@ -95,13 +67,8 @@ describe ObservationBuilder do
         features: validated_data['features'],
         extended_features: validated_data['extended_features'])
           .and_return(observation)
-      observation_aggs.should_receive(:create!).with(symmetry_group_id: 1)
-      observation_aggs.should_receive(:create!).with(symmetry_group_id: 2)
-
-      symmetry_group1.should_receive(:update_attributes!).with(
-        payoff: 2992.73, payoff_sd: nil)
-      symmetry_group2.should_receive(:update_attributes!).with(
-        payoff: 2464.67, payoff_sd: nil)
+      PlayerBuilder.stub(:build).and_return(player)
+      Player.should_receive(:import).with([player, player, player])
       subject.add_observation(validated_data)
     end
   end

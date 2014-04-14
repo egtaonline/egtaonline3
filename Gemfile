@@ -24,7 +24,7 @@ platforms :jruby do
   gem 'thread_safe', '0.1.2'
 end
 gem 'uglifier', '>= 1.3.0'
-gem 'activerecord-import', '~> 0.4.0'
+gem 'activerecord-import', '~> 0.5.0'
 gem 'jquery-rails'
 gem 'haml-rails'
 gem 'decent_exposure'

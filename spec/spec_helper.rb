@@ -15,7 +15,7 @@ Capybara.asset_host = 'http://localhost:3000'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
-Rails.logger.level = 4
+Rails.logger.level = 0
 
 RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your

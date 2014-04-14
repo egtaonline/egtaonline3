@@ -4,7 +4,7 @@ describe ObservationAgg do
   describe 'creation' do
     let(:profile) { create(:profile, assignment: 'A: 1 B, 2 C; D: 2 E') }
     it 'sets the payoff and payoff_sd' do
-      ObservationBuilder.new(profile).add_observation(
+      observation = ObservationBuilder.new(profile).add_observation(
         'features' => {},
         'symmetry_groups' => [
           { 'role' => 'A', 'strategy' => 'B', 'players' => [
@@ -19,6 +19,7 @@ describe ObservationAgg do
             { 'payoff' => 17, 'features' => {} }
           ] }
         ])
+      AggregateUpdater.update([observation], profile)
       first_id = profile.symmetry_groups.find_by(role: 'A', strategy: 'B').id
       second_id = profile.symmetry_groups.find_by(role: 'A', strategy: 'C').id
       third_id = profile.symmetry_groups.find_by(role: 'D', strategy: 'E').id
