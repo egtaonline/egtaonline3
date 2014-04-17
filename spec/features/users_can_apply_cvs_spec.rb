@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'users can apply control variates from the game page' do
-  let(:game) { create(:game) }
+  let!(:game) { create(:game) }
 
   before do
     sign_in
@@ -11,8 +11,8 @@ describe 'users can apply control variates from the game page' do
     it 'directs to the correct page when you click the link' do
       visit "/games/#{game.id}"
       click_on 'Set Control Variates'
-      page.should have_content 'Edit Control Variables'
-      page.should have_content 'Player-Level Control Variables'
+      expect(page).to have_content 'Edit Control Variables'
+      expect(page).to have_content 'Player-Level Control Variables'
     end
   end
 
@@ -46,12 +46,15 @@ describe 'users can apply control variates from the game page' do
     before do
       [profile1, profile2].each do |profile|
         profile.observations.each do |observation|
-          observation.update_attributes(features: { 'feature1' => "#{rand}" })
+          observation.update_attributes(
+            features: { 'feature1' => "#{20*rand}" })
           observation.players.each do |player|
             if player.symmetry_group.role == 'R1'
-              player.update_attributes(features: { 'pfeature1' => "#{rand}" })
+              player.update_attributes(
+                features: { 'pfeature1' => "#{20*rand}" })
             else
-              player.update_attributes(features: { 'pfeature2' => "#{rand}" })
+              player.update_attributes(
+                features: { 'pfeature2' => "#{20*rand}" })
             end
           end
         end
@@ -59,7 +62,31 @@ describe 'users can apply control variates from the game page' do
     end
 
     it 'performs the correct payoff adjustments' do
-      visit "/control_variables/#{game.simulator_instance_id}/edit"
+      visit "games/#{game.id}"
+      click_on 'Set Control Variates'
+      expect(page).to have_selector('#control_variables_1_coefficient')
+      fill_in 'control_variables[1][coefficient]', with: 0.6
+      fill_in 'player_control_variables_1_coefficient', with: 0.3
+      fill_in 'player_control_variables_2_coefficient', with: -0.4
+      click_on 'Apply Control Variate Adjustments to Payoffs'
+      expect(page).to have_content('Control variates applied at: ')
+      [profile1, profile2].each do |profile|
+        profile.symmetry_groups.each do |sgroup|
+          sgroup.players.each do |p|
+            if sgroup.role == 'R1'
+              expect(p.adjusted_payoff).to be_within(0.001).of(
+                p.payoff +
+                0.6 * (Float(p.observation.features['feature1']) - 0.5) +
+                0.3 * (Float(p.features['pfeature1']) - 0.4))
+            else
+              expect(p.adjusted_payoff).to be_within(0.001).of(
+                p.payoff +
+                0.6 * (Float(p.observation.features['feature1']) - 0.5) -
+                0.4 * (Float(p.features['pfeature2']) - 0.6))
+            end
+          end
+        end
+      end
     end
   end
 end

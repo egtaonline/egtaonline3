@@ -53,6 +53,7 @@ class GamePresenter
                 symmetry_groups.payoff, symmetry_groups.payoff_sd
               from symmetry_groups
               where profile_id = profiles.id
+              order by symmetry_groups.id
             ) symmetry_group
           ) as symmetry_groups
           from profiles, result

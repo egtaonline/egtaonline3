@@ -52,7 +52,9 @@ CREATE TABLE control_variables (
     simulator_instance_id integer NOT NULL,
     name character varying(255) NOT NULL,
     coefficient double precision DEFAULT 0 NOT NULL,
-    expectation double precision
+    expectation double precision,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -82,7 +84,9 @@ ALTER SEQUENCE control_variables_id_seq OWNED BY control_variables.id;
 CREATE TABLE control_variate_states (
     id integer NOT NULL,
     simulator_instance_id integer,
-    state character varying(255) DEFAULT 'none'::character varying NOT NULL
+    state character varying(255) DEFAULT 'none'::character varying NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -181,7 +185,6 @@ CREATE TABLE observations (
     profile_id integer NOT NULL,
     extended_features json,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone,
     features hstore
 );
 
@@ -215,7 +218,9 @@ CREATE TABLE player_control_variables (
     name character varying(255) NOT NULL,
     coefficient double precision DEFAULT 0 NOT NULL,
     expectation double precision,
-    role character varying(255) NOT NULL
+    role character varying(255) NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -249,7 +254,6 @@ CREATE TABLE players (
     observation_id integer NOT NULL,
     symmetry_group_id integer NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone,
     adjusted_payoff double precision,
     features hstore
 );
@@ -395,8 +399,7 @@ CREATE TABLE scheduling_requirements (
     count integer NOT NULL,
     scheduler_id integer NOT NULL,
     profile_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone
 );
 
 
@@ -474,8 +477,7 @@ CREATE TABLE simulator_instances (
     configuration hstore,
     simulator_id integer NOT NULL,
     simulator_fullname character varying(255) NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone
 );
 
 
@@ -1090,3 +1092,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140408184236');
 INSERT INTO schema_migrations (version) VALUES ('20140409162847');
 
 INSERT INTO schema_migrations (version) VALUES ('20140409191338');
+
+INSERT INTO schema_migrations (version) VALUES ('20140416155148');

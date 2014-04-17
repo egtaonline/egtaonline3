@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ControlVariableBuilder do
-  let(:simulator_instance) { double(id: 1) }
+  let(:simulator_instance) { create(:simulator_instance) }
   let(:cv_builder) { ControlVariableBuilder.new(simulator_instance) }
   let(:validated_data) do
     {
@@ -49,21 +49,21 @@ describe ControlVariableBuilder do
     }
   end
 
-  # For now, making many requests to database.  Check for performance issues
   describe '#extract_control_variables' do
     it 'creates a new control variable for each unique entry' do
-      ControlVariable.should_receive(:find_or_create_by).with(
-        name: 'featureA', simulator_instance_id: simulator_instance.id)
-      PlayerControlVariable.should_receive(:find_or_create_by).with(
-        name: 'featureA', simulator_instance_id: simulator_instance.id,
-        role: 'Role1')
-      PlayerControlVariable.should_receive(:find_or_create_by).with(
-        name: 'featureA', simulator_instance_id: simulator_instance.id,
-        role: 'Role2')
-      PlayerControlVariable.should_receive(:find_or_create_by).with(
-        name: 'featureB', simulator_instance_id: simulator_instance.id,
-        role: 'Role2')
       cv_builder.extract_control_variables(validated_data)
+      expect(ControlVariable.count).to eq(1)
+      expect(ControlVariable.first.name).to eq('featureA')
+      expect(PlayerControlVariable.count).to eq(3)
+      expect(PlayerControlVariable.where(
+        simulator_instance_id: simulator_instance.id, name: 'featureA',
+        role: 'Role1').count).to eq(1)
+      expect(PlayerControlVariable.where(
+        simulator_instance_id: simulator_instance.id, name: 'featureA',
+        role: 'Role2').count).to eq(1)
+      expect(PlayerControlVariable.where(
+        simulator_instance_id: simulator_instance.id, name: 'featureB',
+        role: 'Role2').count).to eq(1)
     end
   end
 end

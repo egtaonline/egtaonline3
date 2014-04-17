@@ -11,6 +11,7 @@ class Game < ActiveRecord::Base
   delegate :simulator_fullname, to: :simulator_instance
   delegate :configuration, to: :simulator_instance
   delegate :simulator, to: :simulator_instance
+  delegate :control_variate_state, to: :simulator_instance
 
   def profile_space
     '(' +

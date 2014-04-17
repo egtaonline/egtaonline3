@@ -8,6 +8,18 @@ class GamesController < ProfileSpacesController
   expose(:role_owner) { game }
   expose(:role_owner_path) { "/games/#{game.id}" }
   expose(:profile_counts) { game.profile_counts }
+  expose(:control_variate_statement) do
+    control_variate_state = game.control_variate_state
+    case control_variate_state.state
+    when 'applying'
+      'Currently applying control variates.'
+    when 'complete'
+      'Control variates applied at: ' \
+      "#{control_variate_state.updated_at.localtime}"
+    else
+      'No applied control variates.'
+    end
+  end
 
   def show
     respond_to do |format|
