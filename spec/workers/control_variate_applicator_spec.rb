@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ControlVariateUpdater do
+describe ControlVariateApplicator do
   describe '#perform' do
     it 'acquires a lock, updates the CVs and payoff adjustments' do
 

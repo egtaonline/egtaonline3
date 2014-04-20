@@ -51,7 +51,6 @@ CREATE TABLE control_variables (
     id integer NOT NULL,
     simulator_instance_id integer NOT NULL,
     name character varying(255) NOT NULL,
-    coefficient double precision DEFAULT 0 NOT NULL,
     expectation double precision,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
@@ -311,6 +310,37 @@ CREATE SEQUENCE profiles_id_seq
 --
 
 ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
+
+
+--
+-- Name: role_coefficients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE role_coefficients (
+    id integer NOT NULL,
+    control_variable_id integer NOT NULL,
+    role text NOT NULL,
+    coefficient double precision DEFAULT 0.0
+);
+
+
+--
+-- Name: role_coefficients_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE role_coefficients_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: role_coefficients_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE role_coefficients_id_seq OWNED BY role_coefficients.id;
 
 
 --
@@ -675,6 +705,13 @@ ALTER TABLE ONLY profiles ALTER COLUMN id SET DEFAULT nextval('profiles_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY role_coefficients ALTER COLUMN id SET DEFAULT nextval('role_coefficients_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regclass);
 
 
@@ -789,6 +826,14 @@ ALTER TABLE ONLY players
 
 ALTER TABLE ONLY profiles
     ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: role_coefficients_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY role_coefficients
+    ADD CONSTRAINT role_coefficients_pkey PRIMARY KEY (id);
 
 
 --
@@ -909,6 +954,13 @@ CREATE INDEX index_players_on_symmetry_group_id ON players USING btree (symmetry
 --
 
 CREATE UNIQUE INDEX index_profiles_on_simulator_instance_id_and_assignment ON profiles USING btree (simulator_instance_id, assignment);
+
+
+--
+-- Name: index_role_coefficients_on_control_variable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_role_coefficients_on_control_variable_id ON role_coefficients USING btree (control_variable_id);
 
 
 --
@@ -1094,3 +1146,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140409162847');
 INSERT INTO schema_migrations (version) VALUES ('20140409191338');
 
 INSERT INTO schema_migrations (version) VALUES ('20140416155148');
+
+INSERT INTO schema_migrations (version) VALUES ('20140420181254');

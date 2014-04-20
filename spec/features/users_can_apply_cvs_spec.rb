@@ -44,6 +44,8 @@ describe 'users can apply control variates from the game page' do
     end
 
     before do
+      control_variable.role_coefficients.create(role: 'R1')
+      control_variable.role_coefficients.create(role: 'R2')
       [profile1, profile2].each do |profile|
         profile.observations.each do |observation|
           observation.update_attributes(
@@ -64,8 +66,10 @@ describe 'users can apply control variates from the game page' do
     it 'performs the correct payoff adjustments' do
       visit "games/#{game.id}"
       click_on 'Set Control Variates'
-      expect(page).to have_selector('#control_variables_1_coefficient')
-      fill_in 'control_variables[1][coefficient]', with: 0.6
+      fill_in 'control_variables[1][role_coefficients][1][coefficient]',
+              with: 0.6
+      fill_in 'control_variables[1][role_coefficients][2][coefficient]',
+              with: 0.7
       fill_in 'player_control_variables_1_coefficient', with: 0.3
       fill_in 'player_control_variables_2_coefficient', with: -0.4
       click_on 'Apply Control Variate Adjustments to Payoffs'
@@ -81,7 +85,7 @@ describe 'users can apply control variates from the game page' do
             else
               expect(p.adjusted_payoff).to be_within(0.001).of(
                 p.payoff +
-                0.6 * (Float(p.observation.features['feature1']) - 0.5) -
+                0.7 * (Float(p.observation.features['feature1']) - 0.5) -
                 0.4 * (Float(p.features['pfeature2']) - 0.6))
             end
           end

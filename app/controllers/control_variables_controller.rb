@@ -8,9 +8,9 @@ class ControlVariablesController < AuthenticatedController
   end
 
   def update
-    ControlVariateUpdater.perform_async(
-      params[:id], params[:control_variables].values,
-      params[:player_control_variables].values)
+    ControlVariateApplicator.perform_async(
+      params[:id], params[:control_variables],
+      params[:player_control_variables])
     respond_with(Game.find(params[:game_id]))
   end
 end

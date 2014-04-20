@@ -6,8 +6,10 @@ describe 'GenericSchedulersController' do
   let(:missing_sched) do
     'the GenericScheduler you were looking for could not be found'
   end
+  let(:scheduler) { double(id: 1000) }
+
   describe 'POST /api/v3/generic_schedulers/:id/add_profile' do
-    let(:url) { '/api/v3/generic_schedulers/1/add_profile' }
+    let(:url) { "/api/v3/generic_schedulers/#{scheduler.id}/add_profile" }
     let(:query) { { auth_token: token, assignment: 'All: 2 A', count: 20 } }
 
     context 'when the scheduler does not exist' do
@@ -18,7 +20,7 @@ describe 'GenericSchedulersController' do
       end
     end
     context 'when the scheduler exists' do
-      let!(:scheduler) { create(:generic_scheduler, id: 1) }
+      let(:scheduler) { create(:generic_scheduler) }
 
       before do
         scheduler.simulator.add_role('All')
@@ -68,7 +70,7 @@ describe 'GenericSchedulersController' do
   end
 
   describe 'POST /api/v3/generic_schedulers/:id/remove_profile' do
-    let(:url) { '/api/v3/generic_schedulers/1/remove_profile' }
+    let(:url) { "/api/v3/generic_schedulers/#{scheduler.id}/remove_profile" }
     let(:query) { { auth_token: token, profile_id: 1 } }
 
     context 'when the scheduler does not exist' do
@@ -80,8 +82,7 @@ describe 'GenericSchedulersController' do
     end
 
     context 'when the scheduler does exist' do
-      let!(:scheduler) { create(:generic_scheduler, id: 1) }
-
+      let(:scheduler) { create(:generic_scheduler) }
       before do
         scheduler.simulator.add_strategy('All', 'A')
         scheduler.simulator.add_strategy('All', 'B')
@@ -166,8 +167,8 @@ describe 'GenericSchedulersController' do
   end
 
   describe 'PUT /api/v3/generic_schedulers/:id' do
-    let!(:scheduler) { create(:generic_scheduler, id: 1) }
-    let(:url) { '/api/v3/generic_schedulers/1' }
+    let!(:scheduler) { create(:generic_scheduler) }
+    let(:url) { "/api/v3/generic_schedulers/#{scheduler.id}" }
 
     it 'updates normally' do
       put "#{url}.json", auth_token: token, scheduler: {
@@ -179,8 +180,8 @@ describe 'GenericSchedulersController' do
   end
 
   describe 'DELETE /api/v3/generic_schedulers/:id' do
-    let!(:scheduler) { create(:generic_scheduler, id: 1) }
-    let(:url) { '/api/v3/generic_schedulers/1' }
+    let!(:scheduler) { create(:generic_scheduler) }
+    let(:url) { "/api/v3/generic_schedulers/#{scheduler.id}" }
 
     it 'deletes the scheduler' do
       delete "#{url}.json", auth_token: token

@@ -14,9 +14,13 @@ describe PlayerBuilder do
     let(:player_cv_query) { double(to_a: []) }
 
     it 'builds the player by invoking a control variable calculator' do
-      ControlVariable.should_receive(:where).with(
-        'simulator_instance_id = ? AND coefficient != 0',
-        observation.simulator_instance_id).and_return(cv_query)
+      joined = double('criteria')
+      ControlVariable.should_receive(:joins).with(:role_coefficients)
+        .and_return(joined)
+      joined.should_receive(:where).with(
+        'simulator_instance_id = ? AND role = ? AND coefficient != 0',
+        observation.simulator_instance_id, symmetry_group.role)
+        .and_return(cv_query)
       PlayerControlVariable.should_receive(:where).with(
         'simulator_instance_id = ? AND role = ? AND coefficient != 0',
         observation.simulator_instance_id, symmetry_group.role)

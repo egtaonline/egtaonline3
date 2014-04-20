@@ -7,14 +7,19 @@
       %tr
         %th Name
         %th Expectation
-        %th Coefficient
+        %th Coefficients
     %tbody
       - control_variables.each do |control_variable|
         %tr
           = fields_for "control_variables[]", control_variable do |f|
-            %td= f.text_field :name, readonly: true
+            %td= control_variable.name
             %td= f.number_field :expectation, step: "any"
-            %td= f.number_field :coefficient, step: "any"
+            %td
+              - control_variable.role_coefficients.each do |role_coef|
+                = f.fields_for 'role_coefficients[]', role_coef do |rf|
+                  .control-group
+                    %b= role_coef.role
+                    = rf.number_field :coefficient, step: "any"
   %h3= "Player-Level Control Variables"
   %table.table
     %thead
@@ -27,8 +32,8 @@
       - player_control_variables.each do |control_variable|
         %tr
           = fields_for "player_control_variables[]", control_variable do |f|
-            %td= f.text_field :role, readonly: true
-            %td= f.text_field :name, readonly: true
+            %td= control_variable.role
+            %td= control_variable.name
             %td= f.number_field :expectation, step: "any"
             %td= f.number_field :coefficient, step: "any"
   = submit_tag "Apply Control Variate Adjustments to Payoffs"

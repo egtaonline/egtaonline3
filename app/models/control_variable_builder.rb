@@ -4,17 +4,23 @@ class ControlVariableBuilder
   end
 
   def extract_control_variables(data)
-    cvs = control_variables(data['features'].keys)
-    ControlVariable.import(cvs)
+    cvs = control_variables(data['features'].keys,
+                            data['symmetry_groups'].map { |s| s['role'] }.uniq)
     player_cvs = player_control_variables(data['symmetry_groups'])
     PlayerControlVariable.import(player_cvs)
   end
 
   private
 
-  def control_variables(keys)
-    cvs = new_cvs(keys).map do |k|
-      ControlVariable.new(name: k, simulator_instance_id: @instance_id)
+  def control_variables(keys, roles)
+    ControlVariable.transaction do
+      cvs = new_cvs(keys).map do |k|
+        cv = ControlVariable.new(name: k, simulator_instance_id: @instance_id)
+        roles.each do |role|
+          cv.role_coefficients.build(role: role)
+        end
+        cv.save!
+      end
     end
   end
 

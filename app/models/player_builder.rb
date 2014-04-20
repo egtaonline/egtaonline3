@@ -1,8 +1,8 @@
 class PlayerBuilder
   def self.build(observation, symmetry_group, player_data)
-    observation_cvs = ControlVariable.where(
-      'simulator_instance_id = ? AND coefficient != 0',
-      observation.simulator_instance_id).to_a
+    observation_cvs = ControlVariable.joins(:role_coefficients).where(
+      'simulator_instance_id = ? AND role = ? AND coefficient != 0',
+      observation.simulator_instance_id, symmetry_group.role).to_a
     player_cvs = PlayerControlVariable.where(
       'simulator_instance_id = ? AND role = ? AND coefficient != 0',
       observation.simulator_instance_id, symmetry_group.role).to_a

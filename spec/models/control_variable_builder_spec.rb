@@ -54,6 +54,8 @@ describe ControlVariableBuilder do
       cv_builder.extract_control_variables(validated_data)
       expect(ControlVariable.count).to eq(1)
       expect(ControlVariable.first.name).to eq('featureA')
+      expect(ControlVariable.first.role_coefficients.pluck(:role).sort)
+        .to eq(%w(Role1 Role2))
       expect(PlayerControlVariable.count).to eq(3)
       expect(PlayerControlVariable.where(
         simulator_instance_id: simulator_instance.id, name: 'featureA',

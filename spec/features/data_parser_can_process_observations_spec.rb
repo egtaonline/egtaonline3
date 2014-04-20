@@ -34,10 +34,13 @@ describe 'DataParser can process observations' do
       expect(ControlVariable.count).to eq(2)
       expect(ControlVariable.where(
         simulator_instance_id: profile.simulator_instance_id, name: 'featureA')
-        .first.coefficient).to eq(0)
+        .first.role_coefficients.find_by(role: 'Buyer').coefficient).to eq(0)
+      expect(ControlVariable.where(
+        simulator_instance_id: profile.simulator_instance_id, name: 'featureA')
+        .first.role_coefficients.find_by(role: 'Seller').coefficient).to eq(0)
       expect(ControlVariable.where(
         simulator_instance_id: profile.simulator_instance_id, name: 'featureC')
-        .first.coefficient).to eq(0)
+        .count).to eq(1)
       expect(PlayerControlVariable.count).to eq(3)
       expect(PlayerControlVariable.where(
         simulator_instance_id: profile.simulator_instance_id,
