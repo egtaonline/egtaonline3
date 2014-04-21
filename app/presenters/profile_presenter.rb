@@ -4,15 +4,17 @@ class ProfilePresenter
   end
 
   def to_json(options = {})
+    payoff, payoff_sd = options[:adjusted] ?
+      %w(adjusted_payoff adjusted_payoff_sd) : %w(payoff payoff_sd)
     case options[:granularity]
     when 'structure'
       @profile.to_json
     when 'full'
-      DB.select_value(full)
+      DB.select_value(full(payoff, payoff_sd))
     when 'observations'
-      DB.select_value(observations)
+      DB.select_value(observations(payoff, payoff_sd))
     else
-      DB.select_value(summary)
+      DB.select_value(summary(payoff, payoff_sd))
     end
   end
 
@@ -20,14 +22,15 @@ class ProfilePresenter
     DB.execute('explain analyze ' + query)
   end
 
-  def summary
+  def summary(payoff, payoff_sd)
     <<-SQL
       select row_to_json(t)
       from (
         select profiles.id, observations_count, simulator_instance_id, (
           select array_to_json(array_agg(symmetry_group))
           from (
-            select symmetry_groups.id, role, strategy, count, payoff, payoff_sd
+            select symmetry_groups.id, role, strategy, count,
+              #{payoff} as payoff, #{payoff_sd} as payoff_sd
             from symmetry_groups
             where symmetry_groups.profile_id = profiles.id
             order by symmetry_groups.id
@@ -39,7 +42,7 @@ class ProfilePresenter
     SQL
   end
 
-  def observations
+  def observations(payoff, payoff_sd)
     <<-SQL
       select row_to_json(t)
       from (
@@ -58,7 +61,8 @@ class ProfilePresenter
             select features, extended_features, (
               select array_to_json(array_agg(sg))
               from (
-                select symmetry_group_id as id, payoff, payoff_sd
+                select symmetry_group_id as id,
+                  #{payoff} as payoff, #{payoff_sd} as payoff_sd
                 from observation_aggs
                 where observation_id = observations.id
                 order by symmetry_group_id
@@ -74,7 +78,7 @@ class ProfilePresenter
     SQL
   end
 
-  def full
+  def full(payoff, payoff_sd)
     <<-SQL
       select row_to_json(t)
       from (
@@ -92,7 +96,7 @@ class ProfilePresenter
             select features, extended_features, (
               select array_to_json(array_agg(player))
               from (
-                select symmetry_group_id as sid, payoff as p, features as f,
+                select symmetry_group_id as sid, #{payoff} as p, features as f,
                   extended_features as e
                 from players
                 where observation_id = observations.id

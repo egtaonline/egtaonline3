@@ -4,6 +4,8 @@ class GamePresenter
   end
 
   def to_json(options = {})
+    payoff, payoff_sd = options[:adjusted] ?
+      %w(adjusted_payoff adjusted_payoff_sd) : %w(payoff payoff_sd)
     case options[:granularity]
     when 'structure'
       File.open("#{Rails.root}/public/games/#{@game.id}-strc.json", 'w') do |f|
@@ -11,13 +13,13 @@ class GamePresenter
       end
       "#{Rails.root}/public/games/#{@game.id}-strc.json"
     when 'full'
-      DB.execute(full)
+      DB.execute(full(payoff, payoff_sd))
       "#{Rails.root}/public/games/#{@game.id}-full.json"
     when 'observations'
-      DB.execute(observations)
+      DB.execute(observations(payoff, payoff_sd))
       "#{Rails.root}/public/games/#{@game.id}-observations.json"
     else
-      DB.execute(summary)
+      DB.execute(summary(payoff, payoff_sd))
       "#{Rails.root}/public/games/#{@game.id}-summary.json"
     end
   end
@@ -26,7 +28,7 @@ class GamePresenter
     DB.execute('explain analyze ' + query)
   end
 
-  def summary
+  def summary(payoff, payoff_sd)
     'COPY (' +
     profile_set +
       "select row_to_json(t)
@@ -50,7 +52,8 @@ class GamePresenter
             select array_to_json(array_agg(symmetry_group))
             from (
               select symmetry_groups.id, role, strategy, count,
-                symmetry_groups.payoff, symmetry_groups.payoff_sd
+                symmetry_groups.#{payoff} as payoff,
+                symmetry_groups.#{payoff_sd} as payoff_sd
               from symmetry_groups
               where profile_id = profiles.id
               order by symmetry_groups.id
@@ -67,7 +70,7 @@ class GamePresenter
       ) t) to '#{Rails.root}/public/games/#{@game.id}-summary.json';"
   end
 
-  def observations
+  def observations(payoff, payoff_sd)
     'COPY (' +
     profile_set + "
       select row_to_json(t)
@@ -101,7 +104,8 @@ class GamePresenter
               select features, extended_features, (
                 select array_to_json(array_agg(sg))
                 from (
-                  select symmetry_group_id as id, payoff, payoff_sd
+                  select symmetry_group_id as id, #{payoff} as payoff,
+                    #{payoff_sd} as payoff_sd
                   from observation_aggs
                   where observation_id = observations.id
                 ) sg
@@ -121,7 +125,7 @@ class GamePresenter
       ) t) to '#{Rails.root}/public/games/#{@game.id}-observations.json';"
   end
 
-  def full
+  def full(payoff, payoff_sd)
     'COPY (' +
     profile_set + "
       select row_to_json(t)
@@ -155,7 +159,7 @@ class GamePresenter
               select features, extended_features, (
                 select array_to_json(array_agg(player))
                 from (
-                  select payoff as p, features as f, extended_features as e,
+                  select #{payoff} as p, features as f, extended_features as e,
                     symmetry_group_id as sid
                   from players
                   where observation_id = observations.id

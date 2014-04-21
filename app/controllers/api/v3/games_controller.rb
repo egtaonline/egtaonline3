@@ -14,7 +14,8 @@ class Api::V3::GamesController < Api::V3::BaseController
 
   def show
     render json: GamePresenter.new(@object)
-             .to_json(granularity: params[:granularity]),
+             .to_json(granularity: params[:granularity],
+                      adjusted: params[:adjusted] == 'true'),
            status: 200
   end
 

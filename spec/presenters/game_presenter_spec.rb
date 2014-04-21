@@ -23,6 +23,17 @@ describe GamePresenter do
         validate_profile(json, profile, 'summary')
         validate_profile(json, profile2, 'summary')
       end
+
+      it 'provides the adjusted data when requested' do
+        profile.symmetry_groups.update_all(adjusted_payoff: rand,
+                                           adjusted_payoff_sd: rand)
+        profile2.symmetry_groups.update_all(adjusted_payoff: rand,
+                                            adjusted_payoff_sd: rand)
+        location = subject.to_json(granularity: 'summary', adjusted: true)
+        json = MultiJson.load(File.open(location).read)
+        validate_adjustments(json, profile, 'summary')
+        validate_adjustments(json, profile2, 'summary')
+      end
     end
 
     context 'when granularity is specified as observations' do
@@ -32,6 +43,20 @@ describe GamePresenter do
         validate_basics(json, game)
         validate_profile(json, profile, 'observations')
         validate_profile(json, profile2, 'observations')
+      end
+
+      it 'provides the adjusted data when requested' do
+        [profile, profile2].each do |prof|
+          prof.symmetry_groups.each do |s|
+            s.observation_aggs.update_all(adjusted_payoff: rand,
+                                          adjusted_payoff_sd: rand)
+          end
+        end
+        [profile, profile2].each { |prof| prof.reload }
+        location = subject.to_json(granularity: 'observations', adjusted: true)
+        json = MultiJson.load(File.open(location).read)
+        validate_adjustments(json, profile, 'observations')
+        validate_adjustments(json, profile2, 'observations')
       end
     end
 
@@ -43,10 +68,69 @@ describe GamePresenter do
         validate_profile(json, profile, 'full')
         validate_profile(json, profile2, 'full')
       end
+
+      it 'provides the adjusted data when requested' do
+        Player.update_all(adjusted_payoff: rand)
+        [profile, profile2].each { |prof| prof.reload }
+        location = subject.to_json(granularity: 'full', adjusted: true)
+        json = MultiJson.load(File.open(location).read)
+        validate_adjustments(json, profile, 'full')
+        validate_adjustments(json, profile2, 'full')
+      end
     end
   end
 
   private
+
+  def validate_adjustments(json, profile, gran)
+    p_json = json['profiles'].find { |p| p['id'] == profile.id }
+    case gran
+    when 'summary'
+      symmetry_adjustments(p_json['symmetry_groups'], profile.symmetry_groups)
+    when 'observations'
+      observation_adjustments(p_json['observations'], profile.observations)
+    when 'full'
+      player_adjustments(p_json['observations'], profile.observations)
+    end
+  end
+
+  def symmetry_adjustments(symmetry_json, symmetry_groups)
+    symmetry_groups.each do |symmetry_group|
+      test_map = { 'id' => symmetry_group.id, 'role' => symmetry_group.role,
+                   'strategy' => symmetry_group.strategy,
+                   'count' => symmetry_group.count,
+                   'payoff' => symmetry_group.adjusted_payoff,
+                   'payoff_sd' => symmetry_group.adjusted_payoff_sd }
+      expect(symmetry_json).to include(test_map)
+    end
+  end
+
+  def observation_adjustments(o_json, observations)
+    observations.each do |observation|
+      obs = o_json.find do |o|
+        observation.observation_aggs.each do |agg|
+          flag &&= o['symmetry_groups'].include?(
+          'id' => agg.symmetry_group_id, 'payoff' => agg.adjusted_payoff,
+          'payoff_sd' => agg.adjusted_payoff_sd)
+        end
+      end
+      expect(obs.nil?).to equal(false)
+    end
+  end
+
+  def player_adjustments(o_json, observations)
+    observations.each do |observation|
+      obs = o_json.find do |o|
+        flag = o['features'] == observation.features
+        observation.players.each do |player|
+          flag &&= o['players'].include?(
+            'sid' => player.symmetry_group_id, 'p' => player.adjusted_payoff,
+            'f' => player.features, 'e' => player.extended_features)
+        end
+      end
+      expect(obs.nil?).to equal(false)
+    end
+  end
 
   def validate_basics(json, game)
     expect(json['id']).to equal(game.id)
