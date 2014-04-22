@@ -2,8 +2,11 @@ require 'spec_helper'
 
 describe ObservationBuilder do
   let(:symmetry_groups) { double('Criteria') }
+  let(:cv_state) { double(state: 'none') }
+  let(:simulator_instance) { double(control_variate_state: cv_state) }
   let(:profile) do
-    double(id: 1, symmetry_groups: symmetry_groups, observations: observations)
+    double(id: 1, symmetry_groups: symmetry_groups, observations: observations,
+           simulator_instance: simulator_instance)
   end
   let(:symmetry_group1) { double(id: 1, role: 'Role1', count: 1) }
   let(:symmetry_group2) { double(id: 2, role: 'Role2', count: 2) }
@@ -63,11 +66,13 @@ describe ObservationBuilder do
     end
 
     it 'creates the observation' do
+      player_builder = double(build: player)
+      PlayerBuilder.stub(:new).and_return(player_builder)
       observations.should_receive(:create!).with(
         features: validated_data['features'],
         extended_features: validated_data['extended_features'])
           .and_return(observation)
-      PlayerBuilder.stub(:build).and_return(player)
+      player_builder.stub(:build).and_return(player)
       Player.should_receive(:import).with([player, player, player])
       subject.add_observation(validated_data)
     end

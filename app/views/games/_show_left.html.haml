@@ -9,3 +9,6 @@
 = link_to "Download JSON", url_for(action: "show", format: "json"), class: 'btn btn-primary'
 = link_to "Download JSON with Aggregated Observations", url_for(action: "show", format: "json", granularity: 'observations'), class: 'btn btn-primary'
 = link_to "Download JSON with Unaggregated Observations", url_for(action: "show", format: "json", granularity: 'full'), class: 'btn btn-primary'
+= link_to "Download CV-Adjusted JSON", url_for(action: "show", format: "json", granularity: 'summary', adjusted: true), class: 'btn btn-primary'
+= link_to "Download CV-Adjusted JSON with Aggregated Observations", url_for(action: "show", format: "json", granularity: 'observations', adjusted: true), class: 'btn btn-primary'
+= link_to "Download CV-Adjusted JSON with Unaggregated Observations", url_for(action: "show", format: "json", granularity: 'full', adjusted: true), class: 'btn btn-primary'
