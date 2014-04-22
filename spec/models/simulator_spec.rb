@@ -72,6 +72,15 @@ describe Simulator do
       simulator.add_role('All')
       expect(simulator.reload.role_configuration).to eq('All' => [])
     end
+
+    it 'adds a role coefficient if a control variable exists' do
+      simulator_instance = create(:simulator_instance, simulator: simulator)
+      cv = create(:control_variable, simulator_instance: simulator_instance)
+      simulator.add_role('All')
+      role_coef = RoleCoefficient.last
+      expect(role_coef.role).to eq('All')
+      expect(role_coef.control_variable_id).to eq(cv.id)
+    end
   end
 
   describe '#remove_role' do

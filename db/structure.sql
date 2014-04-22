@@ -911,7 +911,7 @@ CREATE INDEX index_control_variables_on_simulator_instance_id ON control_variabl
 -- Name: index_control_variate_states_on_simulator_instance_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_control_variate_states_on_simulator_instance_id ON control_variate_states USING btree (simulator_instance_id);
+CREATE UNIQUE INDEX index_control_variate_states_on_simulator_instance_id ON control_variate_states USING btree (simulator_instance_id);
 
 
 --
@@ -926,27 +926,6 @@ CREATE UNIQUE INDEX index_games_on_simulator_instance_id_and_name ON games USING
 --
 
 CREATE UNIQUE INDEX index_observation_aggs_on_observation_id_and_symmetry_group_id ON observation_aggs USING btree (observation_id, symmetry_group_id);
-
-
---
--- Name: index_observations_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_observations_on_profile_id ON observations USING btree (profile_id);
-
-
---
--- Name: index_players_on_observation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_players_on_observation_id ON players USING btree (observation_id);
-
-
---
--- Name: index_players_on_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_players_on_symmetry_group_id ON players USING btree (symmetry_group_id);
 
 
 --
@@ -1048,10 +1027,24 @@ CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
+-- Name: obs_feat_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX obs_feat_idx ON observations USING gin (features);
+
+
+--
 -- Name: pcv_sid_role_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX pcv_sid_role_index ON player_control_variables USING btree (simulator_instance_id, role);
+
+
+--
+-- Name: player_feat_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX player_feat_idx ON players USING gin (features);
 
 
 --
@@ -1133,6 +1126,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140227181135');
 
 INSERT INTO schema_migrations (version) VALUES ('20140228183427');
 
+INSERT INTO schema_migrations (version) VALUES ('20140228184020');
+
 INSERT INTO schema_migrations (version) VALUES ('20140403174920');
 
 INSERT INTO schema_migrations (version) VALUES ('20140404182534');
@@ -1148,3 +1143,7 @@ INSERT INTO schema_migrations (version) VALUES ('20140409191338');
 INSERT INTO schema_migrations (version) VALUES ('20140416155148');
 
 INSERT INTO schema_migrations (version) VALUES ('20140420181254');
+
+INSERT INTO schema_migrations (version) VALUES ('20140422175449');
+
+INSERT INTO schema_migrations (version) VALUES ('20140422190753');

@@ -51,6 +51,8 @@ describe ControlVariableBuilder do
 
   describe '#extract_control_variables' do
     it 'creates a new control variable for each unique entry' do
+      simulator_instance.simulator.add_role('Role1')
+      simulator_instance.simulator.add_role('Role2')
       cv_builder.extract_control_variables(validated_data)
       expect(ControlVariable.count).to eq(1)
       expect(ControlVariable.first.name).to eq('featureA')

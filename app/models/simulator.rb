@@ -54,6 +54,12 @@ class Simulator < ActiveRecord::Base
   def add_role(role)
     if role =~ /\A\w+\z/
       role_configuration[role] ||= []
+      simulator_instances.each do |si|
+        si.control_variables.each do |cv|
+          RoleCoefficient.find_or_create_by(control_variable_id: cv.id,
+                                            role: role)
+        end
+      end
       self.save!
     end
   end

@@ -1,11 +1,11 @@
 class ControlVariableBuilder
   def initialize(simulator_instance)
     @instance_id = simulator_instance.id
+    @roles = simulator_instance.simulator.role_configuration.keys
   end
 
   def extract_control_variables(data)
-    cvs = control_variables(data['features'].keys,
-                            data['symmetry_groups'].map { |s| s['role'] }.uniq)
+    cvs = control_variables(data['features'].keys, @roles)
     player_cvs = player_control_variables(data['symmetry_groups'])
     PlayerControlVariable.import(player_cvs)
   end
