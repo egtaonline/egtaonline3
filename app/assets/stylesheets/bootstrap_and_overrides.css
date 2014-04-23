@@ -14,7 +14,7 @@
 }
 
 .table {
-  table-layout:auto; word-break: break-all;
+  table-layout:auto; word-break: break-word;
 }
 
 .table th, .table td {
@@ -31,4 +31,12 @@ p .navbar-text {
 
 .btn {
   word-break: normal;
+}
+
+th {
+  word-break: normal;
+}
+
+td {
+  word-break: break-all;
 }
