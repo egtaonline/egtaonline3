@@ -14,11 +14,13 @@ class ControlVariableBuilder
   def control_variables(keys, roles)
     ControlVariable.transaction do
       cvs = new_cvs(keys).map do |k|
-        cv = ControlVariable.find_or_initialize(name: k, simulator_instance_id: @instance_id)
-        roles.each do |role|
-          cv.role_coefficients.build(role: role)
+        unless ControlVariable.where(name: k, simulator_instance_id: @instance_id).first
+          cv = ControlVariable.create!(name: k, simulator_instance_id: @instance_id)
+          roles.each do |role|
+            cv.role_coefficients.build(role: role)
+          end
+          cv.save!
         end
-        cv.save!
       end
     end
   end
@@ -31,7 +33,7 @@ class ControlVariableBuilder
     end
     new_player_cvs(key_map).flat_map do |role, names|
       names.map do |name|
-        PlayerControlVariable.find_or_create!(
+        PlayerControlVariable.find_or_create_by(
           name: name, simulator_instance_id: @instance_id, role: role)
       end
     end
