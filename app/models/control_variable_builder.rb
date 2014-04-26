@@ -5,9 +5,8 @@ class ControlVariableBuilder
   end
 
   def extract_control_variables(data)
-    cvs = control_variables(data['features'].keys, @roles)
-    player_cvs = player_control_variables(data['symmetry_groups'])
-    PlayerControlVariable.import(player_cvs)
+    control_variables(data['features'].keys, @roles)
+    player_control_variables(data['symmetry_groups'])
   end
 
   private
@@ -15,7 +14,7 @@ class ControlVariableBuilder
   def control_variables(keys, roles)
     ControlVariable.transaction do
       cvs = new_cvs(keys).map do |k|
-        cv = ControlVariable.new(name: k, simulator_instance_id: @instance_id)
+        cv = ControlVariable.find_or_initialize(name: k, simulator_instance_id: @instance_id)
         roles.each do |role|
           cv.role_coefficients.build(role: role)
         end
@@ -32,7 +31,7 @@ class ControlVariableBuilder
     end
     new_player_cvs(key_map).flat_map do |role, names|
       names.map do |name|
-        PlayerControlVariable.new(
+        PlayerControlVariable.find_or_create!(
           name: name, simulator_instance_id: @instance_id, role: role)
       end
     end
