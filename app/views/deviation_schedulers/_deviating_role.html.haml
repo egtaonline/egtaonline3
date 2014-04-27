@@ -1,7 +1,7 @@
 %tr
   %td= deviating_role.name
-  %td= deviating_role.count
-  %td= deviating_role.reduced_count
+  %td.fixed= deviating_role.count
+  %td.fixed= deviating_role.reduced_count
   %td
     %table
       =render partial: "/deviation_schedulers/deviating_strategy", collection: deviating_role.deviating_strategies, locals: {role: deviating_role.name}

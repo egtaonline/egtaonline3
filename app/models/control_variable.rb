@@ -6,4 +6,10 @@ class ControlVariable < ActiveRecord::Base
 
   has_many :role_coefficients, inverse_of: :control_variable,
                                dependent: :delete_all
+
+  before_create do
+    simulator_instance.simulator.role_configuration.keys.each do |role|
+      self.role_coefficients.build(role: role)
+    end
+  end
 end

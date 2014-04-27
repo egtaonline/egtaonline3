@@ -18,6 +18,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 Rails.logger.level = 0
 
 RSpec.configure do |config|
+  config.backtrace_clean_patterns = []
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.

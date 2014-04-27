@@ -2,18 +2,12 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.0.0'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-
-# gem 'pg'
-
 gem 'sass-rails',   '~> 4.0.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'twitter-bootstrap-rails'
 gem 'jquery-migrate-rails'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-platforms :ruby_20 do
+
+platforms :ruby_20, :ruby_21 do
   gem 'pg'
   gem 'oj'
 end
@@ -53,7 +47,6 @@ end
 
 group :test, :development do
   gem 'rspec-rails'
-  gem 'bullet'
 end
 
 group :test do

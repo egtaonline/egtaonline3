@@ -8,9 +8,8 @@ FactoryGirl.define do
   trait :with_role_coefficients do
     after(:create) do |instance|
       assignment = instance.simulator_instance.profiles.first.assignment
-      assignment.split('; ').each do |role_strings|
-        instance.role_coefficients.create!(
-          role: role_strings.split(': ')[0], coefficient: rand)
+      instance.role_coefficients.each do |r|
+        r.update_attributes(coefficient: rand)
       end
     end
   end

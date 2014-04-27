@@ -25,4 +25,6 @@ default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 set :normalize_asset_timestamps, false
 
+set :shared_children, shared_children + %w{public/uploads}
+
 after 'deploy', 'deploy:cleanup'

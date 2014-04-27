@@ -1,6 +1,6 @@
 %tr
   %td= role.name
-  %td= role.count
+  %td.fixed= role.count
   %td
     %table
       =render partial: "strategy", collection: role.strategies, locals: {role: role.name}

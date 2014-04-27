@@ -40,3 +40,7 @@ th {
 td {
   word-break: break-all;
 }
+
+td .fixed {
+  word-break: normal;
+}

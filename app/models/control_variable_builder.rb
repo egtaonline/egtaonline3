@@ -12,16 +12,9 @@ class ControlVariableBuilder
   private
 
   def control_variables(keys, roles)
-    ControlVariable.transaction do
-      cvs = new_cvs(keys).map do |k|
-        unless ControlVariable.where(name: k, simulator_instance_id: @instance_id).first
-          cv = ControlVariable.create!(name: k, simulator_instance_id: @instance_id)
-          roles.each do |role|
-            cv.role_coefficients.build(role: role)
-          end
-          cv.save!
-        end
-      end
+    new_cvs(keys).map do |k|
+      ControlVariable.find_or_create_by(name: k,
+                                        simulator_instance_id: @instance_id)
     end
   end
 
