@@ -41,6 +41,6 @@ td {
   word-break: break-all;
 }
 
-td .fixed {
+.fixed {
   word-break: normal;
 }
