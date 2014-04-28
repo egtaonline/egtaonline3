@@ -583,7 +583,8 @@ CREATE TABLE symmetry_groups (
     adjusted_payoff double precision,
     adjusted_payoff_sd double precision,
     sum_sq_diff double precision,
-    adj_sum_sq_diff double precision
+    adj_sum_sq_diff double precision,
+    observation_aggs_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1170,3 +1171,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140422175449');
 INSERT INTO schema_migrations (version) VALUES ('20140422190753');
 
 INSERT INTO schema_migrations (version) VALUES ('20140427163152');
+
+INSERT INTO schema_migrations (version) VALUES ('20140428171305');

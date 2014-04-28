@@ -1,6 +1,7 @@
 class ObservationAgg < ActiveRecord::Base
-  belongs_to :observation
-  belongs_to :symmetry_group
+  belongs_to :observation, inverse_of: :observation_aggs
+  belongs_to :symmetry_group, inverse_of: :observation_aggs,
+                              counter_cache: true
   validates_presence_of :observation, :symmetry_group
   before_validation(on: :create) do
     payoffs = Player.where(
@@ -16,7 +17,8 @@ class ObservationAgg < ActiveRecord::Base
   end
 
   after_create do
-    total_count = self.symmetry_group.observation_aggs.count
+    sgroup = self.symmetry_group
+    total_count = sgroup.observation_aggs_count + 1
     if total_count == 1
       symmetry_group.update_attributes(
         payoff: payoff,
@@ -25,10 +27,6 @@ class ObservationAgg < ActiveRecord::Base
         adj_sum_sq_diff: 0
       )
     else
-      t = Time.now
-      sgroup = self.symmetry_group
-      puts "Spent #{Time.now-t} acquiring sgroup"
-      t = Time.now
       old_payoff = sgroup.payoff
       old_adj_payoff = sgroup.adjusted_payoff
       new_payoff = old_payoff + (payoff - old_payoff) / total_count
@@ -39,7 +37,6 @@ class ObservationAgg < ActiveRecord::Base
       adj_sum_of_sq = sgroup.adj_sum_sq_diff +
                       (adjusted_payoff - old_adj_payoff) *
                       (adjusted_payoff - new_adj_payoff)
-      puts "Spent #{Time.now-t} doing math"
       sgroup.update_attributes(
         payoff: new_payoff,
         payoff_sd: Math.sqrt(sum_of_sq / (total_count - 1)),
