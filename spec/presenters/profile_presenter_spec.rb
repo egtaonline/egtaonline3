@@ -28,8 +28,8 @@ describe ProfilePresenter do
       end
 
       it 'returns the json with adjusted payoffs when requested' do
-        profile.symmetry_groups.update_all(adjusted_payoff: rand,
-                                           adjusted_payoff_sd: rand)
+        profile.symmetry_groups.update_all(adjusted_payoff: rand.to_f,
+                                           adjusted_payoff_sd: rand.to_f)
         profile_json = MultiJson.load(
           presenter.to_json(granularity: 'summary', adjusted: true))
         profile.symmetry_groups.each do |symmetry_group|
