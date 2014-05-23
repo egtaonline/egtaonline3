@@ -13,6 +13,7 @@ class ObservationAgg < ActiveRecord::Base
     self.payoff = payoffs['payoff']
     self.payoff_sd = payoffs['payoff_sd']
     self.adjusted_payoff = payoffs['adjusted_payoff']
+    self.adjusted_payoff ||= 0
     self.adjusted_payoff_sd = payoffs['adjusted_payoff_sd']
   end
 

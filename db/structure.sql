@@ -932,27 +932,6 @@ CREATE UNIQUE INDEX index_observation_aggs_on_observation_id_and_symmetry_group_
 
 
 --
--- Name: index_observations_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_observations_on_profile_id ON observations USING btree (profile_id);
-
-
---
--- Name: index_players_on_observation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_players_on_observation_id ON players USING btree (observation_id);
-
-
---
--- Name: index_players_on_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_players_on_symmetry_group_id ON players USING btree (symmetry_group_id);
-
-
---
 -- Name: index_profiles_on_simulator_instance_id_and_assignment; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1149,6 +1128,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140226200433');
 INSERT INTO schema_migrations (version) VALUES ('20140227181135');
 
 INSERT INTO schema_migrations (version) VALUES ('20140228183427');
+
+INSERT INTO schema_migrations (version) VALUES ('20140228184020');
 
 INSERT INTO schema_migrations (version) VALUES ('20140403174920');
 
