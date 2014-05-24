@@ -30,13 +30,25 @@ class ObservationAgg < ActiveRecord::Base
     else
       old_payoff = sgroup.payoff
       old_adj_payoff = sgroup.adjusted_payoff
-      old_adj_payoff ||= 0
+      old_adj_sum_of_sq = sgroup.adj_sum_sq_diff
+      if old_adj_payoff == nil
+        sgroup.observation_aggs.where('adjusted_payoff IS NULL').each do |o|
+          o.update_attributes(adjusted_payoff: o.payoff)
+        end
+        old_adj_payoff = sgroup.observation_aggs.where('id != ?', self.id)
+          .average(:adjusted_payoff)
+        old_adj_sum_of_sq = ObservationAgg.connection.select_all(
+          "SELECT regr_sxx(adjusted_payoff, adjusted_payoff)
+           FROM observation_aggs
+           WHERE symmetry_group_id = #{sgroup.id}
+           AND observation_aggs.id != #{self.id}")[0]["regr_sxx"].to_f
+      end
       new_payoff = old_payoff + (payoff - old_payoff) / total_count
       sum_of_sq = sgroup.sum_sq_diff +
                   (payoff - old_payoff) * (payoff - new_payoff)
       new_adj_payoff = old_adj_payoff +
                        (adjusted_payoff - old_adj_payoff) / total_count
-      adj_sum_of_sq = sgroup.adj_sum_sq_diff +
+      adj_sum_of_sq = old_adj_sum_of_sq +
                       (adjusted_payoff - old_adj_payoff) *
                       (adjusted_payoff - new_adj_payoff)
       sgroup.update_attributes(
