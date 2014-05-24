@@ -30,6 +30,7 @@ class ObservationAgg < ActiveRecord::Base
     else
       old_payoff = sgroup.payoff
       old_adj_payoff = sgroup.adjusted_payoff
+      old_adj_payoff ||= 0
       new_payoff = old_payoff + (payoff - old_payoff) / total_count
       sum_of_sq = sgroup.sum_sq_diff +
                   (payoff - old_payoff) * (payoff - new_payoff)
