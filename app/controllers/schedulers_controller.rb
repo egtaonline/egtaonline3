@@ -7,9 +7,21 @@ class SchedulersController < ProfileSpacesController
   expose(:scheduler, attributes: :scheduler_parameters) do
     id = params["#{model_name}_id"] || params[:id]
     if id
-      klass.find(id)
+      s = klass.find(id)
+      if params[:action] == 'update'
+        simulator_id = s.simulator_instance.simulator_id
+        simulator_instance_id = SimulatorInstance.find_or_create_for(
+          simulator_id, params[:selector][:configuration]).id
+        s.assign_attributes(scheduler_parameters.merge(
+          simulator_instance_id: simulator_instance_id))
+      end
+      s
+    elsif params[model_name]
+      SchedulerBuilder.new_scheduler(
+        klass, scheduler_parameters, params[:selector][:simulator_id],
+        params[:selector][:configuration])
     else
-      klass.new(params[model_name])
+      klass.new
     end
   end
 
@@ -23,17 +35,13 @@ class SchedulersController < ProfileSpacesController
   end
 
   def create
-    @scheduler = SchedulerBuilder.create(
-      klass, scheduler_parameters, params[:selector][:simulator_id],
-      params[:selector][:configuration])
-    respond_with(@scheduler)
+    scheduler.save
+    respond_with(scheduler)
   end
 
   def update
-    @scheduler = klass.find(params[:id])
-    @scheduler = SchedulerBuilder.update(
-      @scheduler, scheduler_parameters, params[:selector][:configuration])
-    respond_with(@scheduler)
+    scheduler.save
+    respond_with(scheduler)
   end
 
   def destroy
@@ -42,13 +50,12 @@ class SchedulersController < ProfileSpacesController
   end
 
   def create_game_to_match
-    @scheduler = klass.find(params[:id])
     if Game.find_by(simulator_instance_id: scheduler.simulator_instance_id,
                     name: scheduler.name)
       flash[:alert] = 'A game with that name already exists.'
-      respond_with(@scheduler)
+      respond_with(scheduler)
     else
-      respond_with(GameBuilder.create_game_to_match(@scheduler))
+      respond_with(GameBuilder.create_game_to_match(scheduler))
     end
   end
 

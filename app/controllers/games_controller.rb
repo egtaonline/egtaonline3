@@ -4,7 +4,21 @@ class GamesController < ProfileSpacesController
       .order("#{sort_column} #{sort_direction}")
       .page(params[:page])
   end
-  expose(:game, attributes: :game_parameters)
+  expose(:game, attributes: :game_parameters)  do
+    id = params['game_id'] || params[:id]
+    if id
+      g = Game.find(id)
+      if params[:action] == 'update'
+        g.assign_attributes(game_parameters)
+      end
+      g
+    elsif params[:game]
+      GameBuilder.new_game(game_parameters, params[:selector][:simulator_id],
+                           params[:selector][:configuration])
+    else
+      Game.new
+    end
+  end
   expose(:role_owner) { game }
   expose(:role_owner_path) { "/games/#{game.id}" }
   expose(:profile_counts) { game.profile_counts }
@@ -33,10 +47,8 @@ class GamesController < ProfileSpacesController
   end
 
   def create
-    @game = GameBuilder.create(game_parameters,
-                               params[:selector][:simulator_id],
-                               params[:selector][:configuration])
-    respond_with(@game)
+    game.save
+    respond_with(game)
   end
 
   def update

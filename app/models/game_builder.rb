@@ -1,8 +1,14 @@
 class GameBuilder
-  def self.create(params, simulator_id, configuration)
+  def self.new_game(params, simulator_id, configuration)
     params[:simulator_instance_id] = SimulatorInstance.find_or_create_for(
       simulator_id, configuration).id if params
-    Game.create(params)
+    Game.new(params)
+  end
+
+  def self.create(params, simulator_id, configuration)
+    game = new_game(params, simulator_id, configuration)
+    game.save
+    game
   end
 
   def self.create_game_to_match(scheduler)
