@@ -35,6 +35,10 @@ class GamesController < ProfileSpacesController
     end
   end
 
+  expose(:title) do
+    game.name || 'EGTAOnline'
+  end
+
   def show
     respond_to do |format|
       format.html

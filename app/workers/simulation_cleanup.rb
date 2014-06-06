@@ -4,7 +4,7 @@ class SimulationCleanup
 
   def perform(simulation_id)
     ActiveRecord::Base.transaction do
-      Backend.cleanup_simulation(simulation_id)
+      Backend.clean_simulation(simulation_id)
     end
   end
 end

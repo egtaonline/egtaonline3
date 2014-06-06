@@ -24,7 +24,9 @@ class SchedulersController < ProfileSpacesController
       klass.new
     end
   end
-
+  expose(:title) do
+    scheduler.name || 'EGTAOnline'
+  end
   expose(:role_owner) { scheduler }
   expose(:role_owner_path) { "/schedulers/#{scheduler.id}" }
 
