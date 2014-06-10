@@ -28,7 +28,7 @@ describe ObservationProcessor do
         observation = double('observation')
         observation_builder.should_receive(:add_observation).with(data)
           .and_return(observation)
-        AggregateUpdater.should_receive(:update).with(
+        AggregateManager.should_receive(:create_aggregates).with(
           [observation], simulation.profile)
         simulation.should_receive(:finish)
       end

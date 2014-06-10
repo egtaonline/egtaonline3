@@ -80,4 +80,17 @@ class Simulation < ActiveRecord::Base
     [[Backend.queue_quantity,
       Backend.queue_max - Simulation.active.count].min, 0].max
   end
+
+  # The asynchrony and parallelism in the background workers means duplicates
+  # may arise due to weird timing issues
+  def self.remove_pending_duplicates
+    profile_counter = {}
+    where(state: 'pending').each do |s|
+      if profile_counter[s.profile_id] == 1
+        s.delete
+      else
+        profile_counter[s.profile_id] == 1
+      end
+    end
+  end
 end

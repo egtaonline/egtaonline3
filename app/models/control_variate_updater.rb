@@ -1,3 +1,8 @@
+# Updating ControlVariables and PlayerControlVariables means that affected
+# adjusted payoffs need to be updated to match.  The locking and isolation here
+# is because new data could be arriving while the update occurs, and we want to
+# make sure that all data gets the update.
+
 class ControlVariateUpdater
   def self.update(control_vars, player_control_vars)
     binds = []

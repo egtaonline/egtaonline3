@@ -19,7 +19,7 @@ describe 'missing adjusted payoffs' do
             end
           }
         end)
-      AggregateUpdater.update([observation], profile)
+      AggregateManager.create_aggregates([observation], profile)
       profile.reload
       profile.symmetry_groups.each do |s|
         expect(s.adjusted_payoff).to eq(105)

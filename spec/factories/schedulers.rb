@@ -37,7 +37,7 @@ FactoryGirl.define do
                 end
               }
             end)
-          AggregateUpdater.update([observation], sr.profile)
+          AggregateManager.create_aggregates([observation], sr.profile)
         end
       end
     end
@@ -85,7 +85,7 @@ FactoryGirl.define do
                   end
                 }
               end)
-            AggregateUpdater.update([observation], sr.profile)
+            AggregateManager.create_aggregates([observation], sr.profile)
           end
         end
       end

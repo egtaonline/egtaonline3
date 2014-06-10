@@ -23,7 +23,7 @@ FactoryGirl.define do
             end
           }
         end)
-      AggregateUpdater.update([observation], instance)
+      AggregateManager.create_aggregates([observation], instance)
       instance.reload
     end
   end

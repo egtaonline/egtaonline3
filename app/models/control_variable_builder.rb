@@ -1,3 +1,8 @@
+# The ControlVariableBuilder tracks the ControlVariables and
+# PlayerControlVariables associated with a SimulatorInstance, and when
+# observation data shows up that has previously unseen features, creates new
+# ControlVariables and PlayerControlVariables to match.
+
 class ControlVariableBuilder
   def initialize(simulator_instance)
     @instance_id = simulator_instance.id

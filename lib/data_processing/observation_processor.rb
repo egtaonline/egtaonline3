@@ -30,7 +30,7 @@ class ObservationProcessor
       @cv_builder.extract_control_variables(data)
       observations << @observation_builder.add_observation(data)
     end
-    AggregateUpdater.update(
+    AggregateManager.create_aggregates(
       observations, @simulation.profile) unless observations == []
   end
 

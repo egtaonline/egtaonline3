@@ -4,6 +4,7 @@ class SimulationQueuer
 
   def perform
     ActiveRecord::Base.transaction do
+      Simulation.remove_pending_duplicates
       to_be_queued = Simulation.queueable.to_a
       to_be_queued.each { |sim| Backend.prepare_simulation(sim) }
       to_be_queued.each { |sim| Backend.schedule_simulation(sim) }

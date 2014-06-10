@@ -19,7 +19,7 @@ describe ObservationAgg do
             { 'payoff' => 17, 'features' => {} }
           ] }
         ])
-      AggregateUpdater.update([observation], profile)
+      AggregateManager.create_aggregates([observation], profile)
       first_id = profile.symmetry_groups.find_by(role: 'A', strategy: 'B').id
       second_id = profile.symmetry_groups.find_by(role: 'A', strategy: 'C').id
       third_id = profile.symmetry_groups.find_by(role: 'D', strategy: 'E').id

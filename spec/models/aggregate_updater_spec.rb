@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe AggregateUpdater do
+describe AggregateManager do
   describe '.update' do
     let(:profile){ create(:profile) }
     let(:observation){ Observation.create(profile_id: profile.id) }
@@ -15,7 +15,7 @@ describe AggregateUpdater do
     end
 
     it 'creates ObservationAggs and updates symmetry groups to agg the aggs' do
-      AggregateUpdater.update([observation], profile)
+      AggregateManager.create_aggregates([observation], profile)
       expect(ObservationAgg.count).to eq(profile.symmetry_groups.count)
       profile.reload.symmetry_groups.each do |s|
         expect(s.payoff)

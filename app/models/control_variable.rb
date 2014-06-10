@@ -1,3 +1,10 @@
+# A control variable is a random variable with known expectation that covaries
+# with a variable of interest, in our case payoff.  Control variables are
+# associated with coefficients that are used to adjust payoffs as a result of
+# the realization of the control variable in simulation.  Since players in
+# different roles may have vastly different payoffs which covary differently
+# with the control variable, each role has its own coefficient.
+
 class ControlVariable < ActiveRecord::Base
   belongs_to :simulator_instance, inverse_of: :control_variables
 
