@@ -1,0 +1,13 @@
+#processing{
+	display: none
+}
+form {
+	padding: 2px;
+}
+form div label,input{
+	display: inline
+}
+form div{
+	margin: 4px;
+}
+

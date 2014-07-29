@@ -1,0 +1,13 @@
+$(document).ready(function( ) {
+  $("input[name='enable_reduced']").click(function(){
+    if ($(this).is(':checked')) {                       
+      $('.reduced_input').attr("disabled", false);              
+    }              
+    else if ($(this).not(':checked')) {   
+      $('.reduced_input ').attr("disabled", true);                          
+    }          
+  }); 
+
+  // $("#analysis input").attr("disabled", true)
+  // $("#analysis .enable").attr("disabled", false)
+});

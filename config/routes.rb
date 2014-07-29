@@ -1,9 +1,12 @@
 Egtaonline3::Application.routes.draw do
   resources :users, only: [:index, :update]
   devise_for :users, controllers: { registrations: 'registrations' }
+  
+  #get '/api/v3/games/:id/create_process', to: "games#create_process", as: :create_process
 
   namespace :api do
     namespace :v3 do
+     
       resources :generic_schedulers, except: %w(new edit) do
         member do
           post :add_profile, :remove_profile, :add_role, :remove_role
@@ -29,10 +32,15 @@ Egtaonline3::Application.routes.draw do
   end
 
   resources :games do
+    #########################
+    post :create_process, on: :member
+    post :analyze, on: :member
+    #########################
     resources :roles, only: [:create, :destroy] do
       member do
         post :add_strategy
         post :remove_strategy
+
       end
     end
     resources :control_variables, only: [:edit, :update]
