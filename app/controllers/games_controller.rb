@@ -50,6 +50,7 @@ class GamesController < ProfileSpacesController
   def show
     respond_to do |format|
       format.html do
+        #create folder if it doesn't exist, move everything in the output folder 
         FileUtils::mkdir_p "#{Rails.root}/analysis/#{game.id}"
         FileUtils.cp_r(Dir["/mnt/nfs/home/egtaonline/analysis/#{game.id}/out/*"],"#{Rails.root}/analysis/#{game.id}")
       end
@@ -98,6 +99,7 @@ class GamesController < ProfileSpacesController
     end
 
     ###############################################
+
     ######Set Analysis Script Arguments############
 
     @analysis_script_arg = "-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c  #{params[:converge]} -i #{params[:iters]}"
@@ -170,9 +172,9 @@ class GamesController < ProfileSpacesController
       cd /tmp/${PBS_JOBID}
 
       export PYTHONPATH=$PYTHONPATH:/nfs/wellman_ls/GameAnalysis
-      $mode = "#{@reduced}"
-      $enable = "enable_reduced"
-      if [ "$mode" = "$enable"]; then
+      $mode="#{@reduced}"
+      $enable="enable_reduced"
+      if [ "$mode" == "$enable" ]; then
         python Reductions.py -input #{@game.id}-analysis-#{@time}.json -output #{@game.id}-reduced-#{@time}.json #{@reduced_script_arg}
         python AnalysisScript.py #{@analysis_script_arg} #{@game.id}-reduced-#{@time}.json > #{@game.id}-analysis-#{@time}.out
       else

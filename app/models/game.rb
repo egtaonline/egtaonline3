@@ -1,6 +1,5 @@
 class Game < ActiveRecord::Base
   include ProfileSpaces
-  attr_accessor :time
   validates_presence_of :size
   validates :name, presence: true,
                    uniqueness: { scope: :simulator_instance_id }
