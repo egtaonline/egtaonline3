@@ -110,7 +110,7 @@ class GamesController < ProfileSpacesController
     #######Write PBS script and submit the job##############
     @document = run_pbs
     
-    File.open("#{@local_data_path}/wrapper", 'w') do |f|
+    File.open("#{@local_data_path}/wrapper", 'w', 0770) do |f|
       f.write(@document)
     end
 
