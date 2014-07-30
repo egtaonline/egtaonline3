@@ -51,8 +51,8 @@ class GamesController < ProfileSpacesController
     respond_to do |format|
       format.html do
         #create folder if it doesn't exist, move everything in the output folder 
-        FileUtils::mkdir_p "#{Rails.root}/analysis/#{game.id}"
-        FileUtils.cp_r(Dir["/mnt/nfs/home/egtaonline/analysis/#{game.id}/out/*"],"#{Rails.root}/analysis/#{game.id}")
+        FileUtils::mkdir_p "#{Rails.root}/public/analysis/#{game.id}"
+        FileUtils.cp_r(Dir["/mnt/nfs/home/egtaonline/analysis/#{game.id}/out/*"],"#{Rails.root}/public/analysis/#{game.id}")
       end
       format.json do
         file_name = GamePresenter.new(game)
