@@ -44,7 +44,7 @@ class GamesController < ProfileSpacesController
 
   expose(:analysis_path) do
    
-    "#{Rails.root}/analysis/#{game.id}"
+    "analysis/#{game.id}"
   end
 
   def show
