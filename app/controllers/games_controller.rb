@@ -84,8 +84,8 @@ class GamesController < ProfileSpacesController
 
     @local_path = "/mnt/nfs/home/egtaonline"
     # @local_path = "#{Rails.root}"
-    FileUtils::mkdir_p "#{@local_path}/analysis/#{game.id}/out"
-    FileUtils::mkdir_p "#{@local_path}/analysis/#{game.id}/in"
+    FileUtils::mkdir_p "#{@local_path}/analysis/#{game.id}/out", mode: 0770
+    FileUtils::mkdir_p "#{@local_path}/analysis/#{game.id}/in", mode: 0770
     @local_data_path = "#{@local_path}/analysis/#{game.id}"
     @remote_path = "/nfs/wellman_ls/egtaonline/analysis/#{game.id}"
 
@@ -172,8 +172,8 @@ class GamesController < ProfileSpacesController
       cd /tmp/${PBS_JOBID}
 
       export PYTHONPATH=$PYTHONPATH:/nfs/wellman_ls/GameAnalysis
-      $mode="#{@reduced}"
-      $enable="enable_reduced"
+      mode="#{@reduced}"
+      enable="enable_reduced"
       if [ "$mode" == "$enable" ]; then
         python Reductions.py -input #{@game.id}-analysis-#{@time}.json -output #{@game.id}-reduced-#{@time}.json #{@reduced_script_arg}
         python AnalysisScript.py #{@analysis_script_arg} #{@game.id}-reduced-#{@time}.json > #{@game.id}-analysis-#{@time}.out
