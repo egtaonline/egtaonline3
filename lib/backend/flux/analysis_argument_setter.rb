@@ -11,7 +11,6 @@ class AnalysisArgumentSetter
     @iters = options[:iters]
   end 
   def acquire
-    # "python AnalysisScript.py #{@analysis_script_arg} #{@game.id}-reduced-#{@time}.json > #{@game.id}-analysis-#{@time}.out"
     "python AnalysisScript.py -r #{@regret} -d #{@dist} -s #{@support} -c #{@converge} -i #{@iters} #{@input_file} > #{@output_file}"
   end
 end

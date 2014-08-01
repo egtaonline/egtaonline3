@@ -13,5 +13,4 @@ Backend.configure do |config|
   config.simulation_interface_class = RemoteSimulationManager
   config.simulation_interface_options[:flux_active_limit] = 200
   config.simulator_interface_class = RemoteSimulatorManager
-  config.analysis_interface_class = AnalysisManager
 end

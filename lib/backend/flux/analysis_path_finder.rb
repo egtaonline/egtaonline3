@@ -1,6 +1,6 @@
 
 class AnalysisPathFinder
-  attr_reader :scripts_path
+  # attr_reader :scripts_path
   def initialize(game_id,time,local_path,remote_path)
     @game_id = game_id
     @remote_data_path = File.join(remote_path,'egtaonline','analysis',@game_id)
@@ -9,7 +9,9 @@ class AnalysisPathFinder
     @time = time
   end
 
-
+  def scripts_path
+    @scripts_path
+  end
   def local_input_path
     File.join(@local_data_path, 'in')
   end
@@ -39,7 +41,7 @@ class AnalysisPathFinder
   end
 
   def analysis_script_path
-    File.join(@scripts_path,"scripts","AnalysisScript.py" )
+    File.join(@scripts_path,"AnalysisScript.py" )
   end
 
   def reduction_script_path
@@ -50,7 +52,7 @@ class AnalysisPathFinder
     "#{@game_id}-analysis-#{@time}.json"
   end
 
-  def ouput_file_name
+  def output_file_name
     "#{@game_id}-analysis-#{@time}.out"
   end
 

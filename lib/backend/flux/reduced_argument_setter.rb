@@ -1,5 +1,5 @@
 class ReducedArgumentSetter
-	def initialize(reduced_num_array,roles_count,input,output)
+	def initialize(reduced_mode, reduced_num_array,roles_count,input,output)
 		# input_file, mode, roles, params,output_file)
 		@input_file = input
 		@mode = reduced_mode

@@ -81,14 +81,19 @@ class GamesController < ProfileSpacesController
   def analyze
     analysis_argument = params.select {|key, value| [:regret, :dist, :support, :converge, :iters].include?(key) }
     #could pass the whole hash and join values together, revise later
+    reduced_num_array = Array.new  
     if params[:enable_reduced] != nil
-      roles.each do |role|
+      game.roles.each do |role|
         reduced_num_array << params["#{role.name}"]
       end
     end
     #no need to pass enable_reduced, revise later
     #not sure if initialization works
-    Backend.AnalysisManager.new(game.id,params[:enable_reduced],analysis_argument,reduced_num_array,game.roles.count)
+    analysis = AnalysisManager.new(game.id.to_s,params[:enable_reduced],analysis_argument,reduced_num_array,game.roles.count, params[:reduced_mode],"#{current_user.email}")
+    analysis.prepare_data
+    analysis.set_script_arguments
+    analysis.create_pbs
+
   end
 
   private
