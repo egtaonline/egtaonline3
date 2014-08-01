@@ -7,6 +7,14 @@ describe Game do
       name: 'All', count: 2, reduced_count: 2, strategies: %w(A B))
   end
 
+  describe 'testing json' do
+    it 'stores and retrieves json' do
+      game.subgames = "{\"All\": [\"A\",\"B\"]}"
+      game.save!
+      expect(game.reload.subgames.to_json).to eql("{\"All\":[\"A\",\"B\"]}")
+    end
+  end
+
   describe '#add_strategy' do
     it 'adds the strategy to the role' do
       game.add_strategy('All', 'C')

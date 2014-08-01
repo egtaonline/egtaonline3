@@ -118,7 +118,8 @@ CREATE TABLE games (
     size integer NOT NULL,
     simulator_instance_id integer NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    subgames json
 );
 
 
@@ -932,6 +933,20 @@ CREATE UNIQUE INDEX index_observation_aggs_on_observation_id_and_symmetry_group_
 
 
 --
+-- Name: index_players_on_observation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_players_on_observation_id ON players USING btree (observation_id);
+
+
+--
+-- Name: index_players_on_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_players_on_symmetry_group_id ON players USING btree (symmetry_group_id);
+
+
+--
 -- Name: index_profiles_on_simulator_instance_id_and_assignment; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1154,3 +1169,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140422190753');
 INSERT INTO schema_migrations (version) VALUES ('20140427163152');
 
 INSERT INTO schema_migrations (version) VALUES ('20140428171305');
+
+INSERT INTO schema_migrations (version) VALUES ('20140801150459');
