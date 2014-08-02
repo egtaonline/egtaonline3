@@ -79,7 +79,8 @@ class GamesController < ProfileSpacesController
   end
   
   def analyze
-    analysis_argument = params.select {|key, value| [:regret, :dist, :support, :converge, :iters].include?(key) }
+    # analysis_argument = params.select {|key, value| [:regret, :dist, :support, :converge, :iters].include?(key) }
+    # analysis_argument = {"regret" => params[:regret], "dist" => params[:dist], "support" => params[:support], "converge" => params[:converge] }
     #could pass the whole hash and join values together, revise later
     reduced_num_array = Array.new  
     if params[:enable_reduced] != nil
@@ -89,7 +90,9 @@ class GamesController < ProfileSpacesController
     end
     #no need to pass enable_reduced, revise later
     #not sure if initialization works
-    analysis = AnalysisManager.new(game.id.to_s,params[:enable_reduced],analysis_argument,reduced_num_array,game.roles.count, params[:reduced_mode],"#{current_user.email}",params[:day], params[:hour], params[:min])
+    # analysis = AnalysisManager.new(game.id.to_s,params[:enable_reduced],analysis_argument,reduced_num_array,game.roles.count, params[:reduced_mode],"#{current_user.email}",params[:day], params[:hour], params[:min])
+    analysis = AnalysisManager.new(game.id.to_s,params[:enable_reduced],params[:regret],params[:dist],params[:support],params[:converge],params[:iters],reduced_num_array,game.roles.count, params[:reduced_mode],"#{current_user.email}",params[:day], params[:hour], params[:min])
+
     @time = analysis.time
     analysis.prepare_data
     analysis.set_script_arguments

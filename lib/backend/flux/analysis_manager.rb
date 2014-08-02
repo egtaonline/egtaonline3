@@ -6,7 +6,9 @@ require_relative 'analysis_submitter'
 
 class AnalysisManager 
   attr_reader :time
-  def initialize(game_id,enable_reduced,analysis_hash,reduced_num_array,roles_count,reduced_mode, email, day, hour, min)
+  # def initialize(game_id,enable_reduced,analysis_hash,reduced_num_array,roles_count,reduced_mode, email, day, hour, min)
+  def initialize(game_id,enable_reduced,regret,dist,support,converge,iters,reduced_num_array,roles_count,reduced_mode, email, day, hour, min)
+
     # local_data_path, remote_data_path, time, game_id)
     # @local_data_path = options[:local_data_path]
     # @remote_data_path = options[:remote_data_path]
@@ -14,7 +16,12 @@ class AnalysisManager
     @time = Time.now.strftime('%Y%d%m%H%M%S%Z')
     @game_id = game_id
     @enable_reduced = enable_reduced
-    @analysis_hash = analysis_hash
+    # @analysis_hash = analysis_hash
+    @regret = regret
+    @dist = dist
+    @support = support
+    @converge = converge
+    @iters = iters
     @reduced_num_array = reduced_num_array
     @roles_count = roles_count
     @email = email
@@ -33,7 +40,7 @@ class AnalysisManager
   end
 
   def set_script_arguments
-    @running_script_command = ScriptsArgumentSetter.scriptCommand(@enable_reduced, @analysis_hash,@reduced_num_array, @roles_count,@reduced_mode,@path_finder)
+    @running_script_command = ScriptsArgumentSetter.scriptCommand(@enable_reduced,@reduced_num_array, @roles_count,@reduced_mode,@path_finder, @regret, @dist, @support, @converge, @iters)
   end
 
   def create_pbs

@@ -50,7 +50,7 @@ export PYTHONPATH=$PYTHONPATH:#{@path_finder.scripts_path }
 
 cp -r /tmp/${PBS_JOBID}/#{@path_finder.output_file_name} #{@path_finder.remote_output_path}
 rm -rf /tmp/${PBS_JOBID}
-DOCUMENT
+   DOCUMENT
     end
 
 

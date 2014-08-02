@@ -1,0 +1,35 @@
+#!/bin/bash
+#PBS -N analysis
+
+#PBS -A wellman_flux
+#PBS -q flux
+#PBS -l qos=flux
+#PBS -W group_list=wellman
+
+#PBS -l walltime=06:00:00
+#PBS -l nodes=1:ppn=1,pmem=4000mb
+
+#PBS -M liuyaoly@umich.edu
+#PBS -m abe
+#PBS -V
+#PBS -W umask=0007
+
+umask 0007
+
+module load python/2.7.5
+
+mkdir /tmp/${PBS_JOBID}
+cp -r /Users/yaoliu/Desktop/egtaonline3/public/egtaonline/analysis/15/in/15-analysis-20140208115500EDT.json /tmp/${PBS_JOBID}
+      
+cp -r /Users/yaoliu/Desktop/egtaonline3/public/GameAnalysis/scripts/Reductions.py /tmp/${PBS_JOBID}
+cp -r /Users/yaoliu/Desktop/egtaonline3/public/GameAnalysis/AnalysisScript.py /tmp/${PBS_JOBID}
+cd /tmp/${PBS_JOBID}
+
+export PYTHONPATH=$PYTHONPATH:/Users/yaoliu/Desktop/egtaonline3/public/GameAnalysis    
+      
+python Reductions.py -input 15-analysis-20140208115500EDT.json -output 15-reduced-20140208115500EDT.json DPR 2 
+python AnalysisScript.py -r  -d  -s  -c  -i  15-reduced-20140208115500EDT.json > 15-analysis-20140208115500EDT.out
+
+
+cp -r /tmp/${PBS_JOBID}/15-analysis-20140208115500EDT.out /Users/yaoliu/Desktop/egtaonline3/public/egtaonline/analysis/15/out
+rm -rf /tmp/${PBS_JOBID}
