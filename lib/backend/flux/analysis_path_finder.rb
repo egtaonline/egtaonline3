@@ -41,11 +41,11 @@ class AnalysisPathFinder
   end
 
   def analysis_script_path
-    File.join(@scripts_path,"AnalysisScript.py" )
+    File.join(@scripts_path, 'scripts', 'AnalysisScript.py' )
   end
 
   def reduction_script_path
-    File.join(@scripts_path,"scripts","Reductions.py" )
+    File.join(@scripts_path, 'Reductions.py' )
   end
 
   def input_file_name

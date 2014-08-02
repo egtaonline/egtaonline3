@@ -89,7 +89,6 @@ class GamesController < ProfileSpacesController
       end
     end
     #no need to pass enable_reduced, revise later
-    #not sure if initialization works
     # analysis = AnalysisManager.new(game.id.to_s,params[:enable_reduced],analysis_argument,reduced_num_array,game.roles.count, params[:reduced_mode],"#{current_user.email}",params[:day], params[:hour], params[:min])
     analysis = AnalysisManager.new(game.id.to_s,params[:enable_reduced],params[:regret],params[:dist],params[:support],params[:converge],params[:iters],reduced_num_array,game.roles.count, params[:reduced_mode],"#{current_user.email}",params[:day], params[:hour], params[:min])
 
