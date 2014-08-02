@@ -1,6 +1,12 @@
 <div id = "set">
 	<h1>Set Arguments</h1>
-	<%= form_tag(analyze_game_path, remote: true) do%>		
+	<%= form_tag(analyze_game_path, remote: true) do%>
+		<fieldset id = "runtime">
+			<legend>Set Script Running Time:</legend>
+			<%= select_tag "day", options_for_select((0..7).step(1)) %>day(s)
+	 		<%= select_tag "hour", options_for_select((0..23).step(1), 6) %>hour(s)
+	 		<%= select_tag "min", options_for_select((0..59).step(1)) %>minutue(s)
+ 		</fieldset>
 		<fieldset id = "reduced"><!--Reduced Scripts' Arguments -->
 			<div>
 				<%= label_tag('enable_reduced', 'Enable Reduced Script') %>

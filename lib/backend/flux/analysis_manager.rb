@@ -5,7 +5,8 @@ require_relative  'analysis_pbs_formatter.rb'
 require_relative 'analysis_submitter'
 
 class AnalysisManager 
-  def initialize(game_id,enable_reduced,analysis_hash,reduced_num_array,roles_count,reduced_mode, email)
+  attr_reader :time
+  def initialize(game_id,enable_reduced,analysis_hash,reduced_num_array,roles_count,reduced_mode, email, day, hour, min)
     # local_data_path, remote_data_path, time, game_id)
     # @local_data_path = options[:local_data_path]
     # @remote_data_path = options[:remote_data_path]
@@ -19,7 +20,9 @@ class AnalysisManager
     @email = email
     @path_finder = AnalysisPathFinder.new(@game_id, @time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
     # @path_finder = AnalysisPathFinder.new(@game_id, @time, "#{Rails.root}/app","#{Rails.root}/public")
-
+    
+    hours = hour.to_i + day.to_i * 24
+    @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00"
   end
 
   def prepare_data
@@ -34,10 +37,10 @@ class AnalysisManager
   end
 
   def create_pbs
-     @pbs = AnalysisPbsFormatter.new(@path_finder, @running_script_command,@email).write_pbs
+     @pbs = AnalysisPbsFormatter.new(@path_finder, @running_script_command,@email, @walltime).write_pbs
   end
   def submit_job
-    AnalysisSubmitter.submit("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}")
+    AnalysisSubmitter.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
   end
 
   def clean

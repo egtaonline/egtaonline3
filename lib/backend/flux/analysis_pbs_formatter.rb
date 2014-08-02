@@ -1,7 +1,7 @@
 class AnalysisPbsFormatter
    
-   def initialize(path_finder,running_script_command,email)
-      @walltime = "0:10:00"
+   def initialize(path_finder,running_script_command,email, walltime)
+      @walltime = walltime
       @email = email
       @running_script_command = running_script_command
       @path_finder = path_finder      
