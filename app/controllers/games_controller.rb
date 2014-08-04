@@ -1,3 +1,4 @@
+
 class GamesController < ProfileSpacesController
 
   helper_method :download_output
