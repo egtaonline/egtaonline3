@@ -37,7 +37,7 @@ class AnalysisManager
     FileUtils::mkdir_p "#{@path_finder.local_output_path}", mode: 0770
     FileUtils::mkdir_p "#{@path_finder.local_input_path}", mode: 0770
     FileUtils::mkdir_p "#{@path_finder.local_pbs_path}", mode: 0770
-    # FileUtils.mv("#{GamePresenter.new(Game.find(@game_id)).to_json()}",File.join("#{@path_finder.local_input_path}","#{@path_finder.input_file_name}"), mode: 0755)
+    FileUtils.mv("#{GamePresenter.new(Game.find(@game_id)).to_json()}",File.join("#{@path_finder.local_input_path}","#{@path_finder.input_file_name}"))
   end
 
   def set_script_arguments
