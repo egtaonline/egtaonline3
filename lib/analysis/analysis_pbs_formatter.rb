@@ -31,9 +31,9 @@ class AnalysisPbsFormatter
 #PBS -M #{@email}
 #PBS -m abe
 #PBS -V
-#PBS -W umask=0007
+#PBS -W umask=0022
 
-umask 0007
+umask 0022
 
 module load python/2.7.5
 

@@ -1,9 +1,0 @@
-# Working with this code
-
-## Rubies
-As of now, this code is tested using Ruby 2.1.1 and JRuby 1.7.10.  SRG's production deployment of EGTAOnline currently runs on JRuby 1.7.10 because it supports true parallelism via multi-threading.  This capability is primarily used for background processing, and because running a multi-threaded application server doesn't require holding multiple copies of the application in memory when serving multiple requests.  I also test with Ruby 2.1.1 (MRI) because JRuby is slow to launch a JVM, and for running unit tests and doing work in the rails console in development, it's really annoying waiting for a JVM to load.  I switch between these two rubies using [rbenv](https://github.com/sstephenson/rbenv).
-
-Supporting these two flavors of Ruby means that for some functionality, such as JSON parsing, I need to install a different library for each Ruby.  See the [Gemfile](https://github.com/bcassell/egtaonline3/blob/master/Gemfile) to understand what I'm talking about here.
-
-## Libraries
-I've made extensive use of open source libraries to pull this project together.  Please read through the [Gemfile](https://github.com/bcassell/egtaonline3/blob/master/Gemfile) which is annotated to explain what each library is doing.  Nearly all of the libraries have their source and documentation on github.  Some of the libraries such as decent\_exposure and haml were convenience choices that make this project look a little different than a lot of the Rails tutorials out there.  I apologize for this, and if I had time I would definitely pull out decent_exposure, because it seems more confusing than necessary, especially for the games and schedulers controllers.  [Haml](http://haml.info/), however, probably has saved me a bunch of time over writing HTML.
