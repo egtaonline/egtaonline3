@@ -27,10 +27,8 @@ class AnalysisManager
     
     ###For Debug######
     # @path_finder = AnalysisPathFinder.new(@game_id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
-
-    
-    hours = hour.to_i + day.to_i * 24
-    @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00"
+  
+   
   end
 
   def prepare_data
@@ -45,6 +43,8 @@ class AnalysisManager
   end
 
   def create_pbs
+     hours = hour.to_i + day.to_i * 24
+     @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00"
      @pbs = AnalysisPbsFormatter.new(@path_finder, @running_script_command,@email, @walltime).write_pbs
   end
   def submit_job
