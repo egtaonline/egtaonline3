@@ -24,6 +24,14 @@ class AnalysisPathFinder
   	File.join(@local_data_path, 'pbs')
   end
 
+  def local_subgame_path
+    File.join(@local_data_path, 'subgame')
+  end
+
+  def remote_subgame_path
+    File.join(@remote_data_path, 'subgame')
+  end
+
   def remote_pbs_path
   	File.join(@remote_data_path, 'pbs')
   end
@@ -36,16 +44,24 @@ class AnalysisPathFinder
     File.join(@remote_data_path, 'out')
   end
 
-  def remote_reduction_path
-    File.join(@remote_data_path, 'reduced_game')
-  end
+  # def remote_reduction_path
+  #   File.join(@remote_data_path, 'reduced_game')
+  # end
 
   def analysis_script_path
-    File.join(@scripts_path, 'scripts', 'AnalysisScript.py' )
+    File.join(@scripts_path, 'scripts')
   end
 
   def reduction_script_path
-    File.join(@scripts_path, 'Reductions.py' )
+    @scripts_path
+  end
+
+  def subgame_script_path
+    @scripts_path
+  end
+
+  def working_dir 
+    "/tmp/${PBS_JOBID}"
   end
 
   def input_file_name
@@ -58,6 +74,10 @@ class AnalysisPathFinder
 
   def reduction_file_name
     "#{@game_id}-reduced-#{@time}.json"
+  end
+
+  def subgame_json_file_name
+    "#{@game_id}-subgame.json"
   end
 
   def pbs_file_name

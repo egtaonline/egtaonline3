@@ -117,3 +117,6 @@ group :test do
   # Simulates the passage of time
   gem 'timecop'
 end
+
+# Library for building bootstrap-style forms
+gem 'bootstrap_form'

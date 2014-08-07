@@ -50,8 +50,8 @@
 			<%= number_field_tag("iters", 10000, {step:1, class: "enable"})%>
 
 			<!--Subgame argument -->
-			<!-- <%= label_tag("known", "Name of file containing known subgames:") %>
-			<%= text_field_tag("known","")%> -->
+			<%= label_tag("subgame", "Run analysis with subgames") %>			
+			<%= check_box_tag('enable_subgame', 'enable_subgame', true)%>
 			<!-- 		"Will be overwritten with new subgames."-->	
 		</fieldset><!-- End of Analysis Scripts' Arguments -->	
 		<br />

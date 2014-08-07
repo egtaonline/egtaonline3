@@ -1,21 +1,34 @@
 class AnalysisPbsFormatter
    
-   def initialize(path_finder,running_script_command,email, walltime)
-      @walltime = walltime
+   def initialize(email, day, hour, min)      
+      hours = hour.to_i + day.to_i * 24
       @email = email
-      @running_script_command = running_script_command
-      @path_finder = path_finder      
+      @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00"
+      # @running_script_command = running_script_command
+      # @path_finder = path_finder      
    end
 
-   def write_pbs
-      File.open("#{File.join(@path_finder.local_pbs_path,@path_finder.pbs_file_name)}", 'w', 0770) do |f|
-         f.write(prepare_pbs)
+   def write_pbs(pbs, path)
+      File.open("#{path}", 'w', 0770) do |f|
+         f.write(pbs)
       end
    end
-    
-   private 
+   
+   def submit(pbs_path)
+      proxy = Backend.connection.acquire      
+       if proxy
+         begin
+           response = proxy.exec!("qsub -V -r n #{pbs_path}")       
+             flash[:alert] = "Submission failed: #{response}" unless response =~ /\A(\d+)/
+         rescue => e
+             flash[:alert] = "Submission failed: #{e}"
+         end
+       end
+   end
 
-   def prepare_pbs
+
+
+   def prepare_pbs(set_up_remote_command, running_script_command, clean_up_command)
       <<-DOCUMENT
 #!/bin/bash
 #PBS -N analysis
@@ -35,23 +48,14 @@ class AnalysisPbsFormatter
 
 umask 0022
 
-module load python/2.7.5
-
-mkdir /tmp/${PBS_JOBID}
-cp -r #{File.join(@path_finder.remote_input_path, @path_finder.input_file_name)} /tmp/${PBS_JOBID}
+#{set_up_remote_command}
       
-cp -r #{@path_finder.reduction_script_path} /tmp/${PBS_JOBID}
-cp -r #{@path_finder.analysis_script_path} /tmp/${PBS_JOBID}
-cd /tmp/${PBS_JOBID}
+#{running_script_command}
 
-export PYTHONPATH=$PYTHONPATH:#{@path_finder.scripts_path }    
-      
-#{@running_script_command}
-
-cp -r /tmp/${PBS_JOBID}/#{@path_finder.output_file_name} #{@path_finder.remote_output_path}
-rm -rf /tmp/${PBS_JOBID}
+#{clean_up_command}
    DOCUMENT
     end
+
 
 
 end 

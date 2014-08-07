@@ -2,53 +2,54 @@
 require_relative 'analysis_path_finder.rb'
 require_relative 'scripts_argument_setter.rb'
 require_relative  'analysis_pbs_formatter.rb'
-require_relative 'analysis_submitter'
 
 class AnalysisManager 
   attr_reader :time
-  # def initialize(game_id,enable_reduced,analysis_hash,reduced_num_array,roles_count,reduced_mode, email, day, hour, min)
-  def initialize(game_id,enable_reduced,regret,dist,support,converge,iters,reduced_num_array,roles_count,reduced_mode, email, day, hour, min)
 
-
-    @reduced_mode = reduced_mode
+  def initalize(game, scripts_argument_setter_obj, pbs_formatter_obj)
+    @game = game
     @time = Time.now.strftime('%Y%d%m%H%M%S%Z')
-    @game_id = game_id
-    @enable_reduced = enable_reduced
+    @scripts_argument_setter_obj = scripts_argument_setter_obj
+    @pbs_formatter_obj = pbs_formatter_obj
 
-    @regret = regret
-    @dist = dist
-    @support = support
-    @converge = converge
-    @iters = iters
-    @reduced_num_array = reduced_num_array
-    @roles_count = roles_count
-    @email = email
-    @path_finder = AnalysisPathFinder.new(@game_id, @time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
+    # @path_finder = AnalysisPathFinder.new(@game_id, @time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
     
     ###For Debug######
-    # @path_finder = AnalysisPathFinder.new(@game_id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
-  
-   
+    @path_finder = AnalysisPathFinder.new(@game.id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
+
+    @scripts_argument_setter_obj.set_path(@path_finder) 
   end
 
-  def prepare_data
+  def launch_analysis
+    self.created_folder
+    self.prepare_input
+    self.set_script_arguments
+    self.submit_job
+  end
+
+  private
+
+  def created_folder
     FileUtils::mkdir_p "#{@path_finder.local_output_path}", mode: 0770
     FileUtils::mkdir_p "#{@path_finder.local_input_path}", mode: 0770
     FileUtils::mkdir_p "#{@path_finder.local_pbs_path}", mode: 0770
-    FileUtils.mv("#{GamePresenter.new(Game.find(@game_id)).to_json()}",File.join("#{@path_finder.local_input_path}","#{@path_finder.input_file_name}"))
+    FileUtils::mkdir_p "#{@path_finder.local_subgame_path}", mode: 0770
   end
 
+  def prepare_input
+    @scripts_argument_setter_obj.prepare_input(@game)
+  end 
+                                                                                                                                                                                                                                                                                                                                                                                                                                    
   def set_script_arguments
-    @running_script_command = ScriptsArgumentSetter.scriptCommand(@enable_reduced,@reduced_num_array, @roles_count,@reduced_mode,@path_finder, @regret, @dist, @support, @converge, @iters)
+    @set_up_remote_command = @scripts_argument_setter_obj.set_up_remote_command
+    @running_script_command = @scripts_argument_setter_obj.get_script_command
+    @clean_up_command = @scripts_argument_setter_obj.clean_up_remote_command
   end
 
-  def create_pbs
-     hours = hour.to_i + day.to_i * 24
-     @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00"
-     @pbs = AnalysisPbsFormatter.new(@path_finder, @running_script_command,@email, @walltime).write_pbs
-  end
   def submit_job
-    AnalysisSubmitter.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
+    pbs_file = @pbs_formatter_obj.prepare_pbs(@set_up_remote_command, @running_script_command, @clean_up_command)
+    @pbs_formatter_obj.write_pbs(pbs_file, File.join("#{@path_finder.local_pbs_path}","#{@path_finder.pbs_file_name}"))
+    @pbs_formatter_obj.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
   end
 
   def clean

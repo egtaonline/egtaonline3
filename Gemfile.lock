@@ -61,6 +61,7 @@ GEM
     atomic (1.1.16-java)
     bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-java)
+    bootstrap_form (2.1.1)
     builder (3.1.4)
     capistrano (2.15.5)
       highline
@@ -279,6 +280,7 @@ DEPENDENCIES
   activerecord-jdbcpostgresql-adapter (~> 1.3.0)
   airbrake
   better_errors!
+  bootstrap_form
   capistrano (~> 2.15.5)
   capybara
   carrierwave
