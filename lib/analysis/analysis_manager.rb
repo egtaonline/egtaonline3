@@ -6,25 +6,25 @@ require_relative  'analysis_pbs_formatter.rb'
 class AnalysisManager 
   attr_reader :time
 
-  def initalize(game, scripts_argument_setter_obj, pbs_formatter_obj)
+  def initialize(game, scripts_argument_setter_obj, pbs_formatter_obj)
     @game = game
     @time = Time.now.strftime('%Y%d%m%H%M%S%Z')
     @scripts_argument_setter_obj = scripts_argument_setter_obj
     @pbs_formatter_obj = pbs_formatter_obj
-
+    @game_id = game.id.to_s
     # @path_finder = AnalysisPathFinder.new(@game_id, @time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
     
     ###For Debug######
-    @path_finder = AnalysisPathFinder.new(@game.id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
+    @path_finder = AnalysisPathFinder.new(@game_id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
 
     @scripts_argument_setter_obj.set_path(@path_finder) 
   end
 
   def launch_analysis
-    self.created_folder
-    self.prepare_input
-    self.set_script_arguments
-    self.submit_job
+    created_folder
+    prepare_input
+    set_script_arguments
+    submit_job
   end
 
   private
@@ -49,7 +49,7 @@ class AnalysisManager
   def submit_job
     pbs_file = @pbs_formatter_obj.prepare_pbs(@set_up_remote_command, @running_script_command, @clean_up_command)
     @pbs_formatter_obj.write_pbs(pbs_file, File.join("#{@path_finder.local_pbs_path}","#{@path_finder.pbs_file_name}"))
-    @pbs_formatter_obj.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
+    # @pbs_formatter_obj.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
   end
 
   def clean

@@ -1,6 +1,6 @@
-class AnalysisArgumentSetter < ScriptHandler
-  def initialize(script_name, required_argument_list)
-    @script_name = script_name
+class AnalysisArgumentSetter 
+  def initialize(required_argument_list)
+    @script_name = "AnalysisScript.py"
     @required_argument_list = required_argument_list
     # @optional_argument_hash = optional_argument_hash
     # @argument_list = ""
@@ -13,7 +13,7 @@ class AnalysisArgumentSetter < ScriptHandler
     # argument_list += @required_argument_hash.map{|k,v| "-#{k} #{v}"}.join(' ')
     #throw when optional argument input is blank
     # optional_argument.each{|option| argument_list += " -#{option} #{optional_argument_hash[option]} "}
-    "python #{@script_name} @required_argument_list optional_argument #{input_file_name} > #{output_file_name}"
+    "python #{@script_name} #{@required_argument_list} #{optional_argument} #{input_file_name} > #{output_file_name}"
   end
 
   def set_up_remote_script(script_path, work_dir)

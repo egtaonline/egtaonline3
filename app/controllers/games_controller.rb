@@ -54,14 +54,13 @@ class GamesController < ProfileSpacesController
         FileUtils::mkdir_p "#{Rails.root}/public/analysis/#{game.id}"
         FileUtils.cp_r(Dir["/mnt/nfs/home/egtaonline/analysis/#{game.id}/out/*"],"#{Rails.root}/public/analysis/#{game.id}")
         if(File.exist?("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json"))
-          file = File.open("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json", "rb")
-          # File.open("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#{@game_id}-subgame.json", "r") do |f|
-          game.subgames = file.read
-          respond = game.save
-          if(!respond)
-
-          end 
-          # end
+          subgame_json = File.open("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json", "rb")
+          game.subgames = subgame_json.read
+          if game.save
+            FileUtils.rm "/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json"
+          else
+            flash[:alert] = game.errors.full_messages.first 
+          end
         end
       end
       format.json do
@@ -91,46 +90,29 @@ class GamesController < ProfileSpacesController
   end
   
   def analyze
-    # analysis_argument = params.select {|key, value| [:regret, :dist, :support, :converge, :iters].include?(key) }
-    # analysis_argument = {"regret" => params[:regret], "dist" => params[:dist], "support" => params[:support], "converge" => params[:converge] }
-    #could pass the whole hash and join values together, revise later
-    
-    if params[:enable_reduced] != nil
-      game.roles.each do |role|
-        reduced_num_array << params["#{role.name}"]
-      end
-    end
-    #no need to pass enable_reduced, revise later
-    # analysis = AnalysisManager.new(game.id.to_s,params[:enable_reduced],analysis_argument,reduced_num_array,game.roles.count, params[:reduced_mode],"#{current_user.email}",params[:day], params[:hour], params[:min])
-    
-    # analysis = AnalysisManager.new(game.id.to_s,params[:enable_reduced],reduced_num_array,game.roles.count, params[:reduced_mode],params[:enable_subgame],"#{current_user.email}",params[:day], params[:hour], params[:min])
 
-    #######To Do:Move script name to setter's control
-    #######To Do:reset argument list
-
-    analysis_obj = AnalysisArgumentSetter.new("AnalysisScript.py", "-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]}")
+    analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]}")
     
     if params[:enable_reduced] != nil
       reduced_num_array = Array.new  
       game.roles.each do |role|
         reduced_num_array << params["#{role.name}"]
       end
-      reduction_obj = ReducedArgumentSetter.new("Reductions.py", params[:reduced_mode], reduced_num_array)
+      reduction_obj = ReducedArgumentSetter.new(params[:reduced_mode], reduced_num_array)
     end
     
-    if params[:subgame] != nil
-      reduction_obj = SubgameArgumentSetter.new("Subgames.py")
+    if params[:enable_subgame] != nil
+      subgame_obj = SubgameArgumentSetter.new
     end
 
-    ##########To Do :: move into manager
 
     scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis_obj,reduction_obj,subgame_obj)
-
+    pbs_formatter_obj = AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min])
+    
     analysis = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)
-    @time = analysis.time
 
     analysis.launch_analysis
-
+    @time = analysis.time
   end
 
   private

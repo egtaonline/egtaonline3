@@ -1,6 +1,6 @@
-class ReducedArgumentSetter < ScriptHandler
-	def initialize(script_name, reduction_mode, reduced_num_array)
-		@script_name = script_name
+class ReducedArgumentSetter 
+	def initialize(reduction_mode, reduced_num_array)
+		@script_name = "Reductions.py"
 		@reduction_mode = reduction_mode
 		@reduced_num_array = reduced_num_array
 	end
