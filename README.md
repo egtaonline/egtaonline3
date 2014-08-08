@@ -19,7 +19,11 @@ There are some quirks to working with JRuby.  For one, you may at some point get
 export JRUBY_OPTS="-J-Xmx8g -J-XX:MaxPermSize=128M"
 ```
 
-# Getting the code and installing libraries
+## Libraries
+I've made extensive use of open source libraries to pull this project together.  Please read through the [Gemfile](https://github.com/bcassell/egtaonline3/blob/master/Gemfile) which is annotated to explain what each library is doing.  Nearly all of the libraries have their source and documentation on github.  Some of the libraries such as decent\_exposure and haml were convenience choices that make this project look a little different than a lot of the Rails tutorials out there.  I apologize for this, and if I had time I would definitely pull out decent_exposure, because it seems more confusing than necessary, especially for the games and schedulers controllers.  [Haml](http://haml.info/), however, probably has saved me a bunch of time over writing HTML.
+
+# Getting Started
+## Getting the code and installing libraries
 First things first, clone this repository:
 
 ```
@@ -40,7 +44,7 @@ bundle install
 
 to install all the required libraries.  Throughout these instructions, you will see commands that start with `bundle exec`.  This is to ensure the appropriate versions of libraries are loaded, in case you have installed other versions of these libraries in your system.
 
-# Setting up the database
+## Setting up the database
 The simplest way to make everything work is to create a superuser in the database matching the application name.  Doing this will vary somewhat based on your operating system and Postgres install.  The key command is:
 
 ```
@@ -73,5 +77,5 @@ bundle exec rspec spec
 
 This indicates that rspec should run all of the tests in the spec folder.  If everything is green after you run the tests you are good to go!  If you have 1 or 2 errors, particularly errors having to do with float precision, you are probably still fine (though we should fix this eventually).
 
-## Libraries
-I've made extensive use of open source libraries to pull this project together.  Please read through the [Gemfile](https://github.com/bcassell/egtaonline3/blob/master/Gemfile) which is annotated to explain what each library is doing.  Nearly all of the libraries have their source and documentation on github.  Some of the libraries such as decent\_exposure and haml were convenience choices that make this project look a little different than a lot of the Rails tutorials out there.  I apologize for this, and if I had time I would definitely pull out decent_exposure, because it seems more confusing than necessary, especially for the games and schedulers controllers.  [Haml](http://haml.info/), however, probably has saved me a bunch of time over writing HTML.
+# Deploying and Maintaining the System
+[Here.](https://github.com/egtaonline/egtaonline3/wiki/Deploying-and-Maintaining-the-System)
