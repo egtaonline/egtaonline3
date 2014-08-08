@@ -1,9 +1,10 @@
 class AnalysisPbsFormatter
    
-   def initialize(email, day, hour, min)      
+   def initialize(email, day, hour, min, memory, unit)      
       hours = hour.to_i + day.to_i * 24
       @email = email
-      @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00"    
+      @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00" 
+      @memory = memory + unit
    end
 
    def write_pbs(pbs, path)
@@ -37,7 +38,7 @@ class AnalysisPbsFormatter
 #PBS -W group_list=wellman
 
 #PBS -l walltime=#{@walltime}
-#PBS -l nodes=1:ppn=1,pmem=4000mb
+#PBS -l nodes=1:ppn=1,pmem=#{@memory}
 
 #PBS -e #{pbs_error_file}
 #PBS -o #{pbs_output_file}

@@ -47,7 +47,7 @@ class AnalysisManager
   end
 
   def submit_job
-    pbs_file = @pbs_formatter_obj.prepare_pbs(@path_finder.pbs_error_file, @path_finder.pbs_output_file, @set_up_remote_command, @running_script_command, @clean_up_command)
+    pbs_file = @pbs_formatter_obj.prepare_pbs(File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file), File.join(@path_finder.remote_pbs_path,@path_finder.pbs_output_file), @set_up_remote_command, @running_script_command, @clean_up_command)
     @pbs_formatter_obj.write_pbs(pbs_file, File.join("#{@path_finder.local_pbs_path}","#{@path_finder.pbs_file_name}"))
     
     ####Comment with no access to flux
