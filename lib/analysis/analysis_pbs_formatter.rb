@@ -28,7 +28,7 @@ class AnalysisPbsFormatter
 
 
 
-   def prepare_pbs(set_up_remote_command, running_script_command, clean_up_command)
+   def prepare_pbs(pbs_error_file, pbs_output_file, set_up_remote_command, running_script_command, clean_up_command)
       <<-DOCUMENT
 #!/bin/bash
 #PBS -N analysis
@@ -40,6 +40,9 @@ class AnalysisPbsFormatter
 
 #PBS -l walltime=#{@walltime}
 #PBS -l nodes=1:ppn=1,pmem=4000mb
+
+#PBS -e #{pbs_error_file}
+#PBS -o #{pbs_output_file}
 
 #PBS -M #{@email}
 #PBS -m abe
@@ -53,6 +56,7 @@ umask 0022
 #{running_script_command}
 
 #{clean_up_command}
+   
    DOCUMENT
     end
 

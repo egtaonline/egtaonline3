@@ -25,6 +25,7 @@ class AnalysisManager
     prepare_input
     set_script_arguments
     submit_job
+    clean
   end
 
   private
@@ -47,13 +48,26 @@ class AnalysisManager
   end
 
   def submit_job
-    pbs_file = @pbs_formatter_obj.prepare_pbs(@set_up_remote_command, @running_script_command, @clean_up_command)
+    pbs_file = @pbs_formatter_obj.prepare_pbs(@path_finder.pbs_error_file, @path_finder.pbs_output_file, @set_up_remote_command, @running_script_command, @clean_up_command)
     @pbs_formatter_obj.write_pbs(pbs_file, File.join("#{@path_finder.local_pbs_path}","#{@path_finder.pbs_file_name}"))
     # @pbs_formatter_obj.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
   end
 
   def clean
+    error_file = File.join(@path_finder.local_pbs_path, @path_finder.pbs_error_file)
+    pbs_file =  File.join(@path_finder.local_pbs_path, @path_finder.pbs_file_name)
+    out_file = File.join(@path_finder.local_pbs_path,  @path_finder.pbs_output_file)
     
+    if File.zero?(error_file)
+       FileUtils.mv(error_file, "#{Rails.root}/public/analysis/#{@game_id}")
+       FileUtils.mv(pbs_file,"#{Rails.root}/public/analysis/#{@game_id}")
+       FileUtils.mv(out_file,"#{Rails.root}/public/analysis/#{@game_id}")
+    else
+       FileUtils.rm error_file
+       FileUtils.rm pbs_file
+       FileUtils.rm out_file
+    end
+  
   end
  
 end

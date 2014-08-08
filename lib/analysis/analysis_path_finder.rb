@@ -56,6 +56,14 @@ class AnalysisPathFinder
     @scripts_path
   end
 
+  def pbs_error_file
+    "#{@game_id}-analysis-#{@time}-pbs.e"
+  end
+
+  def pbs_output_file
+    "#{@game_id}-analysis-#{@time}-pbs.o"
+  end
+
   def working_dir 
     "/tmp/${PBS_JOBID}"
   end
