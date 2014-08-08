@@ -2,6 +2,7 @@ require 'backend/flux/remote_simulation_manager'
 
 describe RemoteSimulationManager do
   let(:connection) { double('connection') }
+  let(:simulators_path) { 'fake/simulator/path' }
   let(:local_data_path) { 'fake/local/path' }
   let(:remote_data_path) { 'fake/remote/path' }
   let(:simulation_manager) do
