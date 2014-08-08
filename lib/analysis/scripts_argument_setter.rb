@@ -68,7 +68,7 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 #{@analysis_obj.run_with_option(@path_obj.input_file_name, @path_obj.output_file_name,"-sg #{@path_obj.subgame_json_file_name}")}
 			DOCUMENT
 
-		elsif reduction_obj !=nil && @subgame_obj == nil 
+		elsif @reduction_obj !=nil && @subgame_obj == nil 
 			<<-DOCUMENT
 #{@reduction_obj.run_with_option(@path_obj.input_file_name, @path_obj.reduction_file_name)}
 #{@analysis_obj.run_with_option(@path_obj.reduction_file_name, @path_obj.output_file_name)}		

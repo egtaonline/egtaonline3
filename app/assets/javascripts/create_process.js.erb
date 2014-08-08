@@ -8,33 +8,33 @@ $(document).ready(function( ) {
     }          
   }); 
 
-  // $("input[type='number']")
-  $("#reduced input[type='number']").attr("data-toggle","popover").attr("data-replacement","right").attr("trigger","manual").attr("title",function(){
+  $("input[type='number']")
+  $("#reduced input[type='number']").attr("data-toggle","popover").attr("data-replacement","bottom").attr("trigger","manual").attr("title",function(){
     return "Reduced number should be in range " + $(this).attr("min") + "-" + $(this).attr("max");
   });
 
   $("#reduced input[type='number']").change(function(){
     var val = parseInt($(this).val());
-    if(val < $(this).attr("min") || val > $(this).attr("max")){
+    if(val < $(this).attr("min") || val > $(this).attr("max") || val != $(this).val()){
       $(this).popover("show");
-      $(this).addClass('alert alert-error')
+      // $(this).addClass('alert alert-error')
     }
     if(val >= $(this).attr("min") && val <= $(this).attr("max")){
-      $(this).popover("hide");
-      $(this).removeClass('alert alert-error');
+      $(this).popover("destroy");
+      // $(this).removeClass('alert alert-error');
     }
   });
 
-  $("#analysis input[type='number']").attr("data-toggle","popover").attr("data-replacement","right").attr("trigger","manual").attr("title","Analysis Argument should be positive number ");
+  $("#analysis input[type='number']").attr("data-toggle","popover").attr("data-replacement","bottom").attr("trigger","manual").attr("title","Analysis Argument should be positive number ");
 
   $("#analysis input[type='number']").change(function(){
     var val = parseInt($(this).val());
-    if(val <= 0){
+    if(val <= 0 ){
       $(this).popover("show");
-      $(this).addClass('alert alert-error')
+      // $(this).addClass('alert alert-error')
     } else {
-      $(this).popover("hide");
-      $(this).removeClass('alert alert-error');
+       $(this).popover("destroy");
+      // $(this).removeClass('alert alert-error');
     }
   });
 

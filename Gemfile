@@ -118,5 +118,3 @@ group :test do
   gem 'timecop'
 end
 
-# Library for building bootstrap-style forms
-gem 'bootstrap_form'
