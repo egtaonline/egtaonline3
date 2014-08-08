@@ -49,27 +49,39 @@ class GamesController < ProfileSpacesController
 
   def show
     respond_to do |format|
-      format.html do       
-        #create folder if it doesn't exist, move everything in the output folder 
-        FileUtils::mkdir_p "#{Rails.root}/public/analysis/#{game.id}"
-        FileUtils.cp_r(Dir["/mnt/nfs/home/egtaonline/analysis/#{game.id}/out/*"],"#{Rails.root}/public/analysis/#{game.id}")
-        # if(File.exist?("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#{game.id}-subgame.json"))
+      format.html do
+        orgin_path = "/mnt/nfs/home/egtaonline/analysis/#{game.id}"
         
-        #debug
-        if(File.exist?("#{Rails.root}/app/analysis/#{game.id}/subgame/#{game.id}-subgame.json"))
-          # subgame_json = File.open("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json", "rb")
-          subgame_json = File.open("#{Rails.root}/app/analysis/#{game.id}/subgame/#{game.id}-subgame.json", "rb")
+        #DEBUG##########################
+        # orgin_path = "#{Rails.root}/app/analysis/#{game.id}"
 
+        dest_path = "#{Rails.root}/public/analysis/#{game.id}" 
+        #create folder if it doesn't exist, move everything in the output folder 
+        FileUtils::mkdir_p dest_path
+        FileUtils.mv(Dir["#{orgin_path}/out/*"],dest_path)
+        
+        #move subgame json files 
+        if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))
+          subgame_json = File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", "rb")
           game.subgames = subgame_json.read
           if game.save
-            # FileUtils.rm "/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json"
-            FileUtils.rm "#{Rails.root}/app/analysis/#{game.id}/subgame/#{game.id}-subgame.json"
-
+            FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json"
           else
             flash[:alert] = game.errors.full_messages.first 
           end
         end
+
+        #move error files 
+        Dir["#{orgin_path}/pbs/*.e"].each do |error_file|
+          if File.zero?(error_file)
+            FileUtils.rm error_file
+          else
+            FileUtils.mv(error_file,dest_path)
+          end
+        end
+
       end
+
       format.json do
         file_name = GamePresenter.new(game)
         .to_json(granularity: params[:granularity])

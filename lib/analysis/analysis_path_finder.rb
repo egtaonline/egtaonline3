@@ -1,6 +1,5 @@
 
 class AnalysisPathFinder
-  # attr_reader :scripts_path
   def initialize(game_id,time,local_path,remote_path)
     @game_id = game_id
     @remote_data_path = File.join(remote_path,'egtaonline','analysis',@game_id)
@@ -12,6 +11,7 @@ class AnalysisPathFinder
   def scripts_path
     @scripts_path
   end
+  
   def local_input_path
     File.join(@local_data_path, 'in')
   end

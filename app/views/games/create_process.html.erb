@@ -1,12 +1,12 @@
 <div id = "set">
 	<h1>Set Arguments</h1>
 	<%= form_tag(analyze_game_path, remote: true, role: "form") do%>
-		<fieldset id = "runtime">
+		<fieldset id = "runtime"><!--Run Time Paramater-->
 			<legend>Set Script Running Time:</legend>
 			<%= select_tag "day", options_for_select((0..7).step(1)) %>day(s)
 			<%= select_tag "hour", options_for_select((0..23).step(1), 6) %>hour(s)
 			<%= select_tag "min", options_for_select((0..59).step(1)) %>minutue(s)
-		</fieldset>
+		</fieldset><!--End of run time paramater-->
 		
 		<fieldset id = "reduced"><!--Reduced Scripts' Arguments -->
 			<div>
@@ -37,11 +37,12 @@
 		
 		<fieldset id = "analysis"><!-- Analysis Scripts' Arguments -->	
 			<legend>Analysis Script Arguments:</legend>
-			<!--Subgame argument -->
-			<div>
+			
+			<div><!--Subgame argument --><!-- "Will be overwritten with new subgames."-->	
 				<%= label_tag("enable_subgame", "Run analysis with subgames") %>	
 				<%= check_box_tag('enable_subgame', 'enable_subgame', true)%>
-			</div>
+			</div><!--End of subgame argument -->
+
 			<hr>
 			<%= label_tag("regret", "Max allowed regret for approximate Nash equilibria:") %>
 			<%= number_field_tag("regret", 1e-3, {step:0.001, min:0})%>
@@ -54,7 +55,6 @@
 			<%= label_tag("iters", "Max replicator dynamics iterations:") %>
 			<%= number_field_tag("iters", 10000, {step:1, min:0, class: "enable"})%>
 			
-			<!-- "Will be overwritten with new subgames."-->	
 		</fieldset><!-- End of Analysis Scripts' Arguments -->	
 		<br />
 	<%= submit_tag("Set Arguments")%>

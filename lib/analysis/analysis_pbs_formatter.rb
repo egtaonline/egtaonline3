@@ -3,9 +3,7 @@ class AnalysisPbsFormatter
    def initialize(email, day, hour, min)      
       hours = hour.to_i + day.to_i * 24
       @email = email
-      @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00"
-      # @running_script_command = running_script_command
-      # @path_finder = path_finder      
+      @walltime = "#{sprintf('%02d',hours)}:#{sprintf('%02d',min)}:00"    
    end
 
    def write_pbs(pbs, path)
