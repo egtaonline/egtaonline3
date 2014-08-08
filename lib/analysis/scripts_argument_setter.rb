@@ -5,7 +5,6 @@ require_relative 'analysis_path_finder.rb'
 
 class ScriptsArgumentSetter
 	def initialize( analysis_obj,reduction_obj = nil,subgame_obj = nil)
-		# @path_obj = path_obj
 		@analysis_obj = analysis_obj
 		@reduction_obj = reduction_obj
 		@subgame_obj = subgame_obj
@@ -18,11 +17,10 @@ class ScriptsArgumentSetter
 	def prepare_input(game)
 		@analysis_obj.prepare_input(game, @path_obj.local_input_path, @path_obj.input_file_name)
 		if @subgame_obj != nil
-			@subgame_obj.prepare_input(game, @path_obj.local_input_path, @path_obj.subgame_json_file_name)
+			@subgame_obj.prepare_input(game, @path_obj.local_subgame_path, @path_obj.subgame_json_file_name)
 		end
 	end
 
-#############To do: Move subgame exist? control to subgame class ##################
 	def set_up_remote_command
 		work_dir = @path_obj.working_dir
 		analysis_set_up_command = <<-DOCUMENT
@@ -34,10 +32,6 @@ class ScriptsArgumentSetter
 		end
 		if @subgame_obj != nil
 			subgame_set_up_command = "#{@subgame_obj.set_up_remote(File.join(@path_obj.remote_subgame_path, @path_obj.subgame_json_file_name),@path_obj.subgame_script_path, work_dir)}"
-			
-			# if @subgame_obj.subgame_exist
-			# 	subgame_set_up_command += "\n#{@subgame_obj.set_up_remote_input(, work_dir)}"
-			# end
 			
 		end
 
@@ -80,10 +74,10 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 	end
 
 	def clean_up_remote_command
-		analysis_clean_up = @analysis_obj.get_output(@path_obj.working_dir, @path_obj.output_file_name, @path_obj.local_output_path)
+		analysis_clean_up = @analysis_obj.get_output(@path_obj.working_dir, @path_obj.output_file_name, @path_obj.remote_output_path)
 		
 		if @subgame_obj != nil
-			subgame_clean_up = @subgame_obj.get_output(@path_obj.working_dir, @path_obj.subgame_json_file_name, @path_obj.local_subgame_path)
+			subgame_clean_up = @subgame_obj.get_output(@path_obj.working_dir, @path_obj.subgame_json_file_name, @path_obj.remote_subgame_path)
 		end
 
 		<<-DOCUMENT

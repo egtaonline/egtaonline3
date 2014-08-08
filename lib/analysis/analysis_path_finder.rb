@@ -5,7 +5,7 @@ class AnalysisPathFinder
     @game_id = game_id
     @remote_data_path = File.join(remote_path,'egtaonline','analysis',@game_id)
     @local_data_path = File.join(local_path,'analysis',@game_id)
-    @scripts_path = File.join(remote_path,'GameAnalysis')
+    @scripts_path = File.join(remote_path, 'GameAnalysis')
     @time = time
   end
 
@@ -44,12 +44,8 @@ class AnalysisPathFinder
     File.join(@remote_data_path, 'out')
   end
 
-  # def remote_reduction_path
-  #   File.join(@remote_data_path, 'reduced_game')
-  # end
-
   def analysis_script_path
-    File.join(@scripts_path, 'scripts')
+    @scripts_path
   end
 
   def reduction_script_path

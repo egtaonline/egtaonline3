@@ -2,7 +2,7 @@ class SubgameArgumentSetter
 	def initialize
 		@script_name = "Subgames.py"
 	end
-	def prepare_input(game, input_dir,input_file)
+	def prepare_input(game, input_dir, input_file)
 		
 		subgame_json = game.subgames
 		if subgame_json.blank?
@@ -15,12 +15,12 @@ class SubgameArgumentSetter
 		end
 	end
 
-	def run_with_option(input_file_name,output_file_name, subgame_file_name = nil)
+	def run_with_option(input_file_name, output_file_name, subgame_file_name = nil)
 		# argument_list += @required_argument_hash.map{|k,v| "-#{k} #{v}"}.join(' ')
 		#throw when optional argument input is blank
 		# optional_argument.each{|option| argument_list += " -#{option} #{optional_argument_hash[option]} "}
 		if @subgame_exist
-			"python #{@script_name} detect  -k subgame_file_name < #{input_file_name} > #{output_file_name}"
+			"python #{@script_name} detect  -k #{subgame_file_name} < #{input_file_name} > #{output_file_name}"
 		else
 			"python #{@script_name} detect  < #{input_file_name} > #{output_file_name}"
 

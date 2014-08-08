@@ -53,11 +53,18 @@ class GamesController < ProfileSpacesController
         #create folder if it doesn't exist, move everything in the output folder 
         FileUtils::mkdir_p "#{Rails.root}/public/analysis/#{game.id}"
         FileUtils.cp_r(Dir["/mnt/nfs/home/egtaonline/analysis/#{game.id}/out/*"],"#{Rails.root}/public/analysis/#{game.id}")
-        if(File.exist?("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json"))
-          subgame_json = File.open("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json", "rb")
+        # if(File.exist?("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#{game.id}-subgame.json"))
+        
+        #debug
+        if(File.exist?("#{Rails.root}/app/analysis/#{game.id}/subgame/#{game.id}-subgame.json"))
+          # subgame_json = File.open("/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json", "rb")
+          subgame_json = File.open("#{Rails.root}/app/analysis/#{game.id}/subgame/#{game.id}-subgame.json", "rb")
+
           game.subgames = subgame_json.read
           if game.save
-            FileUtils.rm "/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json"
+            # FileUtils.rm "/mnt/nfs/home/egtaonline/analysis/#{game.id}/subgame/#game.id}-subgame.json"
+            FileUtils.rm "#{Rails.root}/app/analysis/#{game.id}/subgame/#{game.id}-subgame.json"
+
           else
             flash[:alert] = game.errors.full_messages.first 
           end
