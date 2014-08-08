@@ -1,6 +1,6 @@
 $('#set').fadeOut();
 $('#processing').fadeIn();
-$('#processing').append('<p>Your file name will be <%= "#{game.id}-analysis-#{@time}.out" %>. Error file <%= "#{game.id}-analysis-#{@time}.e" %> will be shown if your scheduled job gets terminanted wrongly.</p>')
+$('#processing').append('<p>Your file name will be <%= "#{game.id}-analysis-#{@time}.out" %>. Error file <%= "#{game.id}-analysis-#{@time}.e" %> will be shown if your scheduled job gets terminanted wrongly. Note: You need to refresh the game page to get output/error files </p>')
 // $('#processing').append('<%= link_to "Analysis Folder" , "#{@local_data_path}/out" %>');
 // $('#processing a').click(function(event) {
 // 	event.preventDefault();
