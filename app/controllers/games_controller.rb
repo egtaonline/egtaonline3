@@ -59,26 +59,34 @@ class GamesController < ProfileSpacesController
         #create folder if it doesn't exist, move everything in the output folder 
         FileUtils::mkdir_p dest_path
         FileUtils.mv(Dir["#{orgin_path}/out/*"],dest_path)
-        
+       
+        # move error files 
+        # FileUtils.cp_r("#{orgin_path}/pbs/185-error",dest_path)
+
+        # Dir["#{orgin_path}/pbs/*.e"].each do |error_file|         
+        #     FileUtils.cp_r("#{error_file}", dest_path) unless File.zero?(error_file)             
+        #     FileUtils.rm error_file
+        # end
+
         #move subgame json files 
         if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))
-          subgame_json = File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", "rb")
-          game.subgames = subgame_json.read
-          if game.save
-            FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json"
+          if File.zero("#{orgin_path}/subgame/#{game.id}-subgame.json")
+            FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json" 
           else
-            flash[:alert] = game.errors.full_messages.first 
+            subgame_json = File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", "rb")
+            game.subgames = subgame_json.read 
+
+            if game.save
+              FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json"
+            else
+              flash[:alert] = game.errors.full_messages.first 
+            end   
+          
           end
+          
+          
         end
 
-        #move error files 
-        Dir["#{orgin_path}/pbs/*.e"].each do |error_file|
-          if File.zero?(error_file)
-            FileUtils.rm error_file
-          else
-            FileUtils.mv(error_file,dest_path)
-          end
-        end
 
       end
 
