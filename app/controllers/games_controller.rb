@@ -70,7 +70,7 @@ class GamesController < ProfileSpacesController
 
         #move subgame json files 
         if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))
-          if File.zero("#{orgin_path}/subgame/#{game.id}-subgame.json")
+          if File.zero?("#{orgin_path}/subgame/#{game.id}-subgame.json")
             FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json" 
           else
             subgame_json = File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", "rb")
