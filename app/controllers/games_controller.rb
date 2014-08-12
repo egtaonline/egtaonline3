@@ -80,12 +80,9 @@ class GamesController < ProfileSpacesController
               FileUtils.cp_r "#{orgin_path}/subgame/#{game.id}-subgame.json", dest_path
             else
               flash[:alert] = game.errors.full_messages.first 
-            end   
-          
+            end             
           end          
         end
-
-
       end
 
       format.json do
