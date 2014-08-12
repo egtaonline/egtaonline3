@@ -61,7 +61,7 @@ describe SubgameArgumentSetter do
 			end
 		end
 		context "when subgame json file exits" do 
-			it "runs with argument k and subgame json file name" do
+			it "renames the original subgame json file and runs with argument k with new subgame json file" do
 				input_file_name = "foo"
 				output_file_name = "bar"
 				subgame_json_file_name = "subgame.json"
@@ -76,8 +76,8 @@ describe SubgameArgumentSetter do
 		        File.stub(:open).with(
 		          "#{input_dir}/#{input_file}", 'w', 0770).and_yield(f)
      			@setter.prepare_input(non_empty_game, input_dir, input_file)
-
-				expect(@setter.run_with_option(input_file_name,output_file_name, subgame_json_file_name)).to eq("python Subgames.py detect -k subgame.json < foo > bar")
+				expect(@setter.run_with_option(input_file_name,output_file_name, subgame_json_file_name)).to eq("mv subgame.json old_subgame.json\n" \
+               "python Subgames.py detect -k old_subgame.json < foo > bar\n")
 			end
 		end
 	end

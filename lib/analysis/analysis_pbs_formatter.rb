@@ -25,8 +25,6 @@ class AnalysisPbsFormatter
        end
    end
 
-
-
    def prepare_pbs(pbs_error_file, pbs_output_file, set_up_remote_command, running_script_command, clean_up_command)
       <<-DOCUMENT
 #!/bin/bash

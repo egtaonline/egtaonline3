@@ -68,22 +68,22 @@ class GamesController < ProfileSpacesController
         #     FileUtils.rm error_file
         # end
 
-        #move subgame json files 
-        # if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))
-        #   if File.zero?("#{orgin_path}/subgame/#{game.id}-subgame.json")
-        #     FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json" 
-        #   else
-        #     subgame_json = File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", "rb")
-        #     game.subgames = subgame_json.read 
+        move subgame json files 
+        if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))
+          if File.zero?("#{orgin_path}/subgame/#{game.id}-subgame.json")
+            FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json" 
+          else
+            subgame_json = File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", "rb")
+            game.subgames = subgame_json.read 
 
-        #     if game.save
-        #       FileUtils.cp_r "#{orgin_path}/subgame/#{game.id}-subgame.json", dest_path
-        #     else
-        #       flash[:alert] = game.errors.full_messages.first 
-        #     end   
+            if game.save
+              FileUtils.cp_r "#{orgin_path}/subgame/#{game.id}-subgame.json", dest_path
+            else
+              flash[:alert] = game.errors.full_messages.first 
+            end   
           
-        #   end          
-        # end
+          end          
+        end
 
 
       end

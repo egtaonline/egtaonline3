@@ -31,8 +31,7 @@ class ScriptsArgumentSetter
 			reduction_set_up_command = "#{@reduction_obj.set_up_remote_script(@path_obj.reduction_script_path,work_dir)}"
 		end
 		if @subgame_obj != nil
-			subgame_set_up_command = "#{@subgame_obj.set_up_remote(File.join(@path_obj.remote_subgame_path, @path_obj.subgame_json_file_name),@path_obj.subgame_script_path, work_dir)}"
-			
+			subgame_set_up_command = "#{@subgame_obj.set_up_remote(File.join(@path_obj.remote_subgame_path, @path_obj.subgame_json_file_name),@path_obj.subgame_script_path, work_dir)}"			
 		end
 
 		<<-DOCUMENT
