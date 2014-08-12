@@ -1,5 +1,7 @@
 require 'analysis'
 describe ReducedArgumentSetter do
+
+	
 	let(:reduction_mode) {  "foo" }
 	let(:reduced_num_array) { [1, 2, 3]}
 	before(:each) do
