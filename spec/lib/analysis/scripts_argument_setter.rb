@@ -1,17 +1,81 @@
-# require_relative 'analysis.rb'
+# require 'analysis'
 
 # describe ScriptsArgumentSetter do
-# 	let(:analysis_obj) { doulbe ("analysis_obj") }
-# 	let(:reduction_obj) { doulbe ("reduction_obj")}
-# 	let(:subgame_obj) {  doulbe ("reduction_obj") }
-	
+# 	let(:analysis_obj){double("analysis_obj")}
+# 	let(:reduction_obj){double ("reduction_obj")}
+# 	let(:subgame_obj){double("subgame_obj")}
+# 	let(:game){ double ("game")}
+# 	let(:path_obj){double("path object")}
 # 	context "when reduction and subgame options are checked" do
 # 		before(:each) do
-# 			@setter = ScriptsArgumentSetter.new()
+# 			@setter = ScriptsArgumentSetter.new(analysis_obj,reduction_obj,subgame_obj)				
+# 			@setter.set_path(path_obj)
 # 		end
-# 		# describe "set_path" do
-# 		# 	pending
-# 		# end
+
+# 		describe "#set_path" do
+# 			it "sets the right paht_finder object" do
+# 				@setter = ScriptsArgumentSetter.new(analysis_obj,reduction_obj,subgame_obj)				
+# 				@setter.set_path(path_obj).should == path_obj
+# 			end
+# 		end
+
+# 		describe "#prepare_input" do
+# 			local_input_path = "local/analysis/game-id/in"
+# 			input_file_name = "game-id-analysis-time.json"
+# 			local_subgame_path = "local/analysis/game-id/subgame"
+# 			subgame_json_file_name = "subgame.json"
+
+# 			it "prepares the analysis script input" do
+				
+# 				path_obj.should_receive(:local_input_path).and_return(local_input_path)
+# 				path_obj.should_receive(:input_file_name).and_return(input_file_name)
+# 				analysis_obj.should_receive(:prepare_input).with(game,local_input_path,input_file_name)
+
+# 				path_obj.stub(:local_subgame_path).and_return(local_subgame_path)
+# 				path_obj.stub(:subgame_json_file_name).and_return(subgame_json_file_name)
+# 				subgame_obj.stub(:prepare_input).with(game,local_subgame_path, subgame_json_file_name)
+# 				@setter.prepare_input(game)
+# 			end
+			
+# 			it "prepares the subgame script input" do
+				
+# 				path_obj.stub(:local_input_path).and_return(local_input_path)
+# 				path_obj.stub(:input_file_name).and_return(input_file_name)
+# 				analysis_obj.stub(:prepare_input).with(game,local_input_path,input_file_name)
+
+# 				path_obj.should_receive(:local_subgame_path).and_return(local_subgame_path)
+# 				path_obj.should_receive(:subgame_json_file_name).and_return(subgame_json_file_name)
+# 				subgame_obj.should_receive(:prepare_input).with(game,local_subgame_path, subgame_json_file_name)
+				
+# 				@setter.prepare_input(game)
+# 			end
+
+# 		end
+
+# 		descrit "#set_up_remote_command" do
+# 			it "sets up the remote for each of the script" do
+# 				work_dir = "$JOB_ID"
+# 				remote_input_path = "remote_input_path"
+# 				input_file_name = "input_file_name"
+# 				reduction_script_path = "reduction_script_path"
+# 				remote_subgame_path = "remote_subgame_path"
+# 				subgame_json_file_name = "subgame_json_file_name"
+# 				subgame_script_path = "subgame_script_path"
+# 				analysis_script_path = "analysis_script_path"
+
+# 				analysis_set_up_remote_script_command = "analysis_set_up_remote_script_command"
+# 				analysis_set_up_remote_input_command = "analysis_set_up_remote_input_command"
+# 				reduction_set_up_command = "reduction_set_up_command"
+# 				subgame_set_up_command = "subgame_set_up_command"
+
+# 				path_obj.stub(:analysis_script_path).and_return(analysis_script_path)
+# 				path_obj.stub(:remote_input_path).and_return(remote_input_path)
+# 				path_obj.stub(:input_file_name).and_return(input_file_name)
+# 				path_obj.stub(:reduction_script_path).and_return(reduction_script_path)
+# 				path_obj.stub
+
+# 			end
+# 		end
 # 	end			
 	
 	

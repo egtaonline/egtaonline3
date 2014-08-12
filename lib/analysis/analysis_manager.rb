@@ -24,7 +24,7 @@ class AnalysisManager
     created_folder
     prepare_input
     set_script_arguments
-    # submit_job
+    submit_job
   end
 
   private

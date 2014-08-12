@@ -12,9 +12,7 @@ describe SubgameArgumentSetter do
 	before(:each) do
 		@setter = SubgameArgumentSetter.new
 	end
-	describe "#prepare_input" do
-		
-
+	describe "#prepare_input" do	
 		context "when the subgame json field is empty" do			
 			it "sets the subgame exist var to false" do				
 				game.should_receive(:subgames).and_return(subgame)
