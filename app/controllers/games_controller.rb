@@ -68,7 +68,7 @@ class GamesController < ProfileSpacesController
         #     FileUtils.rm error_file
         # end
 
-        move subgame json files 
+        # move subgame json files 
         if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))
           if File.zero?("#{orgin_path}/subgame/#{game.id}-subgame.json")
             FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json" 
