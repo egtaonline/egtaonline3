@@ -19,10 +19,11 @@ class SubgameArgumentSetter
 		# argument_list += @required_argument_hash.map{|k,v| "-#{k} #{v}"}.join(' ')
 		#throw when optional argument input is blank
 		# optional_argument.each{|option| argument_list += " -#{option} #{optional_argument_hash[option]} "}
+		# mv #{subgame_file_name} old_#{subgame_file_name}
+
 		if @subgame_exist
 			<<-DOCUMENT
-mv #{subgame_file_name} old_#{subgame_file_name}
-python #{@script_name} detect -k old_#{subgame_file_name} < #{input_file_name} > #{output_file_name}
+python #{@script_name} detect -k #{subgame_file_name} < #{input_file_name} > #{output_file_name}
 			DOCUMENT
 		else
 			"python #{@script_name} detect < #{input_file_name} > #{output_file_name}"
