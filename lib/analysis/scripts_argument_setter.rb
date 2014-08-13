@@ -75,13 +75,12 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 	def clean_up_remote_command
 		analysis_clean_up = @analysis_obj.get_output(@path_obj.working_dir, @path_obj.output_file_name, @path_obj.remote_output_path)
 		
-		if @subgame_obj != nil
-			subgame_clean_up = @subgame_obj.get_output(@path_obj.working_dir, @path_obj.subgame_json_file_name, @path_obj.remote_subgame_path)
-		end
+		# if @subgame_obj != nil
+		# 	subgame_clean_up = @subgame_obj.get_output(@path_obj.working_dir, @path_obj.subgame_json_file_name, @path_obj.remote_subgame_path)
+		# end
 
 		<<-DOCUMENT
 #{analysis_clean_up}
-#{subgame_clean_up}
 rm -rf #{@path_obj.working_dir}
 		DOCUMENT
 
