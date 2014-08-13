@@ -77,7 +77,8 @@ class GamesController < ProfileSpacesController
             game.subgames = subgame_json.read 
 
             if game.save
-              FileUtils.cp_r "#{orgin_path}/subgame/#{game.id}-subgame.json", dest_path
+              # FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json", dest_path
+              FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json"
             else
               flash[:alert] = game.errors.full_messages.first 
             end             
