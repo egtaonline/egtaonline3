@@ -1,0 +1,46 @@
+#!/bin/bash
+#PBS -N analysis
+
+#PBS -A wellman_flux
+#PBS -q flux
+#PBS -l qos=flux
+#PBS -W group_list=wellman
+
+#PBS -l walltime=00:10:00
+#PBS -l nodes=1:ppn=1,pmem=4000mb
+
+#PBS -e /nfs/wellman_ls/egtaonline/analysis/14/pbs/14-analysis-20141308155705EDT-pbs.e
+#PBS -o /nfs/wellman_ls/egtaonline/analysis/14/pbs/14-analysis-20141308155705EDT-pbs.o
+
+#PBS -M liuyaoly@umich.edu
+#PBS -m abe
+#PBS -V
+#PBS -W umask=0022
+
+umask 0022
+
+module load python/2.7.5
+mkdir /tmp/${PBS_JOBID}
+cp -r /nfs/wellman_ls/egtaonline/GameAnalysis/AnalysisScript.py /tmp/${PBS_JOBID}
+cp -r /nfs/wellman_ls/egtaonline/analysis/14/in/14-analysis-20141308155705EDT.json /tmp/${PBS_JOBID}
+
+cp -r /nfs/wellman_ls/egtaonline/GameAnalysis/Reductions.py /tmp/${PBS_JOBID}
+cp -r /nfs/wellman_ls/egtaonline/GameAnalysis/Subgames.py /tmp/${PBS_JOBID}
+cp -r /nfs/wellman_ls/egtaonline/analysis/14/subgame/14-subgame.json /tmp/${PBS_JOBID}
+
+cd /tmp/${PBS_JOBID}
+export PYTHONPATH=$PYTHONPATH:/nfs/wellman_ls/egtaonline/GameAnalysis
+
+      
+python Reductions.py -input 14-analysis-20141308155705EDT.json -output 14-reduced-20141308155705EDT.json DPR 2
+mv 14-subgame.json old_14-subgame.json
+python Subgames.py detect -k old_14-subgame.json < 14-reduced-20141308155705EDT.json > 14-subgame.json
+
+python AnalysisScript.py -r 0.001 -d 0.001 -s 0.001 -c 1.0e-08  -i 10000 -sg 14-subgame.json 14-reduced-20141308155705EDT.json > 14-analysis-20141308155705EDT.out
+
+
+cp -r /tmp/${PBS_JOBID}/14-analysis-20141308155705EDT.out /nfs/wellman_ls/egtaonline/analysis/14/out
+cp -r /tmp/${PBS_JOBID}/14-subgame.json /nfs/wellman_ls/egtaonline/analysis/14/subgame
+rm -rf /tmp/${PBS_JOBID}
+
+   

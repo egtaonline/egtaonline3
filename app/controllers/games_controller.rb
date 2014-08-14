@@ -1,4 +1,3 @@
-
 class GamesController < ProfileSpacesController
 
   helper_method :download_output
@@ -63,10 +62,10 @@ class GamesController < ProfileSpacesController
         # move error files 
         # FileUtils.cp_r("#{orgin_path}/pbs/185-error",dest_path)
 
-        # Dir["#{orgin_path}/pbs/*.e"].each do |error_file|         
-        #     FileUtils.cp_r("#{error_file}", dest_path) unless File.zero?(error_file)             
-        #     FileUtils.rm error_file
-        # end
+        Dir["#{orgin_path}/pbs/*.e"].each do |error_file|         
+            FileUtils.cp_r("#{error_file}", dest_path) unless File.zero?(error_file)             
+            FileUtils.rm error_file
+        end
 
         # move subgame json files 
         if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))

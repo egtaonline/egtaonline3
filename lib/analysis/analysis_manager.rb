@@ -1,4 +1,3 @@
-
 require_relative 'analysis_path_finder.rb'
 require_relative 'scripts_argument_setter.rb'
 require_relative  'analysis_pbs_formatter.rb'
