@@ -17,7 +17,7 @@ describe ReducedArgumentSetter do
 		let(:script_path) { "bar_s_p"}
 		let(:work_dir) { "bar_work"}
 		it "copies the  script to the right remote directory" do
-			@setter.run_with_option(script_path,work_dir).should == "cp -r bar_s_p/Reductions.py bar_work"
+			@setter.set_up_remote_script(script_path,work_dir).should == "cp -r bar_s_p/Reductions.py bar_work"
 		end
 	end
 end

@@ -29,10 +29,10 @@ describe SubgameArgumentSetter do
         		non_empty_subgame_json = double("json")
         		non_empty_subgame.stub(:to_json).and_return(non_empty_subgame_json)
         		f = double('file')
-
 		        f.stub(:write).with(non_empty_subgame_json)
 		        File.stub(:open).with(
 		          "#{input_dir}/#{input_file}", 'w', 0770).and_yield(f)
+		        f.stub(:chmod).with(0770)
      			@setter.prepare_input(non_empty_game, input_dir, input_file).should be_true
      		end
 
@@ -46,6 +46,7 @@ describe SubgameArgumentSetter do
 		        f.should_receive(:write).with(non_empty_subgame_json)
 		        File.should_receive(:open).with(
 		          "#{input_dir}/#{input_file}", 'w', 0770).and_yield(f)
+		        f.should_receive(:chmod).with(0770)
      			@setter.prepare_input(non_empty_game, input_dir, input_file)
      		end
 		end
@@ -73,6 +74,7 @@ describe SubgameArgumentSetter do
 		        f.stub(:write).with(non_empty_subgame_json)
 		        File.stub(:open).with(
 		          "#{input_dir}/#{input_file}", 'w', 0770).and_yield(f)
+		        f.stub(:chmod).with(0770)
      			@setter.prepare_input(non_empty_game, input_dir, input_file)
 				expect(@setter.run_with_option(input_file_name,output_file_name, subgame_json_file_name)).to eq("mv subgame.json old_subgame.json\n" \
                "python Subgames.py detect -k old_subgame.json < foo > bar\n")
@@ -103,6 +105,7 @@ describe SubgameArgumentSetter do
 		        f.stub(:write).with(non_empty_subgame_json)
 		        File.stub(:open).with(
 		          "#{input_dir}/#{input_file}", 'w', 0770).and_yield(f)
+     			f.stub(:chmod).with(0770)
      			@setter.prepare_input(non_empty_game, input_dir, input_file)
 
 				expect(@setter.set_up_remote(input_file_path,script_path, work_dir)).to eq(("cp -r script_path/Subgames.py work_dir\n" \
