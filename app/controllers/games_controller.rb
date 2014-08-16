@@ -60,8 +60,6 @@ class GamesController < ProfileSpacesController
         FileUtils.mv(Dir["#{orgin_path}/out/*"],dest_path)
        
         # move error files 
-        # FileUtils.cp_r("#{orgin_path}/pbs/185-error",dest_path)
-
         Dir["#{orgin_path}/pbs/*.e"].each do |error_file|         
             FileUtils.cp_r("#{error_file}", dest_path) unless File.zero?(error_file)             
             FileUtils.rm error_file
@@ -133,7 +131,12 @@ class GamesController < ProfileSpacesController
     
     analysis = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)
 
-    analysis.launch_analysis
+
+    response = analysis.launch_analysis
+    unless response =~ /\A(\d+)/ 
+      flash[:flux_error] = "Submission failed: #{response}" 
+    end
+
     @time = analysis.time
   end
 

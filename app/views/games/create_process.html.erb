@@ -1,3 +1,6 @@
+<div class="fluxError alert alert-error">
+</div>
+
 <div id = "set">
 	<h1>Set Arguments</h1>
 	<%= form_tag(analyze_game_path, remote: true, role: "form") do%>
@@ -72,6 +75,7 @@
 	<%= submit_tag("Set Arguments")%>
 	<% end %>
 </div>
+
 <div id = "processing">
 	<h1>Analyzing...</h1>
 	<p>We will send you an email when the anlyasis output is ready. Please click the link at the game page to download your file.</p>

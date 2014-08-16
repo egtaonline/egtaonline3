@@ -2,8 +2,6 @@ Egtaonline3::Application.routes.draw do
   resources :users, only: [:index, :update]
   devise_for :users, controllers: { registrations: 'registrations' }
   
-  #get '/api/v3/games/:id/create_process', to: "games#create_process", as: :create_process
-
   namespace :api do
     namespace :v3 do
      

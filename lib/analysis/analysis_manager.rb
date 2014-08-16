@@ -11,10 +11,10 @@ class AnalysisManager
     @scripts_argument_setter_obj = scripts_argument_setter_obj
     @pbs_formatter_obj = pbs_formatter_obj
     @game_id = game.id.to_s
-    @path_finder = AnalysisPathFinder.new(@game_id, @time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
+    # @path_finder = AnalysisPathFinder.new(@game_id, @time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
     
     ###For Local Debug######
-    # @path_finder = AnalysisPathFinder.new(@game_id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
+    @path_finder = AnalysisPathFinder.new(@game_id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
     
     @scripts_argument_setter_obj.set_path(@path_finder) 
   end

@@ -14,14 +14,19 @@ class AnalysisPbsFormatter
    end
    
    def submit(pbs_path)
+        # proxy = nil
       proxy = Backend.connection.acquire      
+       
        if proxy
          begin
            response = proxy.exec!("qsub -V -r n #{pbs_path}")       
-             flash[:alert] = "Submission failed: #{response}" unless response =~ /\A(\d+)/
+           return response
+            
          rescue => e
-             flash[:alert] = "Submission failed: #{e}"
+            return e
          end
+       else
+          return "Lost connection to flux"
        end
    end
 

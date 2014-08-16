@@ -1,6 +1,12 @@
-$('#set').fadeOut();
-$('#processing').fadeIn();
-$('#processing').append('<p>Your file name will be <%= "#{game.id}-analysis-#{@time}.out" %>. Error file <%= "#{game.id}-analysis-#{@time}-pbs.e" %> will be shown if your scheduled job gets terminanted wrongly. </p>')
-
-
+<% if flash[:flux_error] %>
+	window.scrollTo(0, 0);
+	$('.fluxError').empty();
+	$('.fluxError').append('<%= flash[:flux_error] %>');
+	$('.fluxError').fadeIn();
+	<% flash[:flux_error] = nil %>
+<% else  %>
+	$('#set').fadeOut();
+	$('#processing').fadeIn();
+	$('#processing').append('<p>Your file name will be <%= "#{game.id}-analysis-#{@time}.out" %>. Error file <%= "#{game.id}-analysis-#{@time}-pbs.e" %> will be shown if your scheduled job gets terminanted wrongly. </p>')
+<% end %>
 
