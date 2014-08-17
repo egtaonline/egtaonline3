@@ -4,7 +4,6 @@ require_relative  'analysis_pbs_formatter.rb'
 
 class AnalysisManager 
   attr_reader :time
-
   def initialize(game, scripts_argument_setter_obj, pbs_formatter_obj)
     @game = game
     @time = Time.now.strftime('%Y%d%m%H%M%S%Z')
@@ -51,8 +50,5 @@ class AnalysisManager
     
     ####Comment with no access to flux
     @pbs_formatter_obj.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
-  end
-
- 
- 
+  end 
 end
