@@ -23,7 +23,7 @@ class AnalysisPbsFormatter
            return response
             
          rescue => e
-            return e
+            return e.message
          end
        else
           return "Lost connection to flux"
@@ -54,15 +54,10 @@ class AnalysisPbsFormatter
 umask 0022
 
 #{set_up_remote_command}
-      
 #{running_script_command}
-
 #{clean_up_command}
-   
-   DOCUMENT
+    DOCUMENT
     end
-
-
 
 end 
 

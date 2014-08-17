@@ -338,18 +338,15 @@ describe ScriptsArgumentSetter do
 			it "runs analysis and reduction scripts" do
 				input_file_name = "input_file_name"
 				reduction_file_name = "reduction_file_name"
-				# subgame_json_file_name = "subgame_json_file_name"
 				output_file_name = "output_file_name"
 				running_reduction_command = "running_reduction_command"
 				running_analysis_command = "running_analysis_command"
 
 				path_obj.stub(input_file_name).and_return(input_file_name)
 				path_obj.stub(reduction_file_name).exactly(3).times.and_return(reduction_file_name)
-				# path_obj.stub(subgame_json_file_name).exactly(3).times.and_return(subgame_json_file_name)
 				path_obj.stub(output_file_name).and_return(output_file_name)
 				
 				reduction_obj.should_receive(:run_with_option).with(input_file_name,reduction_file_name).and_return(running_reduction_command)
-				# subgame_obj.should_not_receive(:run_with_option).with(reduction_file_name,subgame_json_file_name,subgame_json_file_name)
 				analysis_obj.should_receive(:run_with_option).with(reduction_file_name, output_file_name).and_return(running_analysis_command)
 
 				expect(@setter.get_script_command).to eq("running_reduction_command\n" \
@@ -671,33 +668,26 @@ describe ScriptsArgumentSetter do
 				remote_input_path = "remote_input_path"
 				input_file_name = "input_file_name"
 				reduction_script_path = "reduction_script_path"
-				# remote_subgame_path = "remote_subgame_path"
-				# subgame_json_file_name = "subgame_json_file_name"
-				# subgame_script_path = "subgame_script_path"
+
 				analysis_script_path = "analysis_script_path"
 				scripts_path = "scripts_path"
 
 				analysis_set_up_remote_script_command = "analysis_set_up_remote_script_command"
 				analysis_set_up_remote_input_command = "analysis_set_up_remote_input_command"
-				# reduction_set_up_command = "reduction_set_up_command"
-				# subgame_set_up_command = "subgame_set_up_command"
+			
 
 				path_obj.stub(:analysis_script_path).and_return(analysis_script_path)
 				path_obj.stub(:remote_input_path).and_return(remote_input_path)
 				path_obj.stub(:input_file_name).and_return(input_file_name)
 				path_obj.stub(:reduction_script_path).and_return(reduction_script_path)
-				# path_obj.stub(:remote_subgame_path).and_return(remote_subgame_path)
-				# path_obj.stub(:subgame_json_file_name).and_return(subgame_json_file_name)
-				# path_obj.stub(:subgame_script_path).and_return(subgame_script_path)
+			
 				path_obj.stub(:scripts_path).and_return(scripts_path)
 				path_obj.stub(:working_dir).and_return(work_dir)
 
 				File.stub(:join).with(remote_input_path, input_file_name).and_return("remote_input_path/input_file_name")
-				# File.stub(:join).with(remote_subgame_path,subgame_json_file_name).and_return("remote_subgame_path/subgame_json_file_name")
 				analysis_obj.stub(:set_up_remote_script).with(analysis_script_path,work_dir).and_return(analysis_set_up_remote_script_command)
 				analysis_obj.stub(:set_up_remote_input).with("remote_input_path/input_file_name",work_dir).and_return(analysis_set_up_remote_input_command)
 				reduction_obj.should_not_receive(:set_up_remote_script).with(reduction_script_path, work_dir)
-				# subgame_obj.should_receive(:set_up_remote).with("remote_subgame_path/subgame_json_file_name",subgame_script_path, work_dir ).and_return(subgame_set_up_command)
 				@setter.set_up_remote_command		
 			end
 
