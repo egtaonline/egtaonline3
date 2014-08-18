@@ -44,6 +44,83 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: analyses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE analyses (
+    id integer NOT NULL,
+    game_id integer,
+    status text,
+    job_id integer,
+    output text,
+    error_message text,
+    pbs_id integer,
+    analysis_script_id integer,
+    reduction_script_id integer,
+    subgame_script_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: analyses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE analyses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analyses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE analyses_id_seq OWNED BY analyses.id;
+
+
+--
+-- Name: analysis_scripts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE analysis_scripts (
+    id integer NOT NULL,
+    "verbose" boolean,
+    regret numeric,
+    dist numeric,
+    support numeric,
+    converge numeric,
+    iters integer,
+    points integer,
+    analysis_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: analysis_scripts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE analysis_scripts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analysis_scripts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE analysis_scripts_id_seq OWNED BY analysis_scripts.id;
+
+
+--
 -- Name: control_variables; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -314,6 +391,39 @@ ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
 
 
 --
+-- Name: reduction_scripts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE reduction_scripts (
+    id integer NOT NULL,
+    mode text,
+    reduced_number text,
+    analysis_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: reduction_scripts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE reduction_scripts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: reduction_scripts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE reduction_scripts_id_seq OWNED BY reduction_scripts.id;
+
+
+--
 -- Name: role_coefficients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -568,6 +678,39 @@ ALTER SEQUENCE simulators_id_seq OWNED BY simulators.id;
 
 
 --
+-- Name: subgame_scripts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE subgame_scripts (
+    id integer NOT NULL,
+    subgame text,
+    reduced_number text,
+    analysis_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: subgame_scripts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE subgame_scripts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: subgame_scripts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE subgame_scripts_id_seq OWNED BY subgame_scripts.id;
+
+
+--
 -- Name: symmetry_groups; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -653,6 +796,20 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY analyses ALTER COLUMN id SET DEFAULT nextval('analyses_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY analysis_scripts ALTER COLUMN id SET DEFAULT nextval('analysis_scripts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY control_variables ALTER COLUMN id SET DEFAULT nextval('control_variables_id_seq'::regclass);
 
 
@@ -709,6 +866,13 @@ ALTER TABLE ONLY profiles ALTER COLUMN id SET DEFAULT nextval('profiles_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY reduction_scripts ALTER COLUMN id SET DEFAULT nextval('reduction_scripts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY role_coefficients ALTER COLUMN id SET DEFAULT nextval('role_coefficients_id_seq'::regclass);
 
 
@@ -758,6 +922,13 @@ ALTER TABLE ONLY simulators ALTER COLUMN id SET DEFAULT nextval('simulators_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY subgame_scripts ALTER COLUMN id SET DEFAULT nextval('subgame_scripts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY symmetry_groups ALTER COLUMN id SET DEFAULT nextval('symmetry_groups_id_seq'::regclass);
 
 
@@ -766,6 +937,22 @@ ALTER TABLE ONLY symmetry_groups ALTER COLUMN id SET DEFAULT nextval('symmetry_g
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: analyses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY analyses
+    ADD CONSTRAINT analyses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analysis_scripts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY analysis_scripts
+    ADD CONSTRAINT analysis_scripts_pkey PRIMARY KEY (id);
 
 
 --
@@ -833,6 +1020,14 @@ ALTER TABLE ONLY profiles
 
 
 --
+-- Name: reduction_scripts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY reduction_scripts
+    ADD CONSTRAINT reduction_scripts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: role_coefficients_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -889,6 +1084,14 @@ ALTER TABLE ONLY simulators
 
 
 --
+-- Name: subgame_scripts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY subgame_scripts
+    ADD CONSTRAINT subgame_scripts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: symmetry_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -930,6 +1133,20 @@ CREATE UNIQUE INDEX index_games_on_simulator_instance_id_and_name ON games USING
 --
 
 CREATE UNIQUE INDEX index_observation_aggs_on_observation_id_and_symmetry_group_id ON observation_aggs USING btree (observation_id, symmetry_group_id);
+
+
+--
+-- Name: index_players_on_observation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_players_on_observation_id ON players USING btree (observation_id);
+
+
+--
+-- Name: index_players_on_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_players_on_symmetry_group_id ON players USING btree (symmetry_group_id);
 
 
 --
@@ -1157,3 +1374,11 @@ INSERT INTO schema_migrations (version) VALUES ('20140427163152');
 INSERT INTO schema_migrations (version) VALUES ('20140428171305');
 
 INSERT INTO schema_migrations (version) VALUES ('20140801150459');
+
+INSERT INTO schema_migrations (version) VALUES ('20140818204707');
+
+INSERT INTO schema_migrations (version) VALUES ('20140818210819');
+
+INSERT INTO schema_migrations (version) VALUES ('20140818212025');
+
+INSERT INTO schema_migrations (version) VALUES ('20140818213205');

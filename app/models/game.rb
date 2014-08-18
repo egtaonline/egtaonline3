@@ -11,7 +11,7 @@ class Game < ActiveRecord::Base
   delegate :configuration, to: :simulator_instance
   delegate :simulator, to: :simulator_instance
   delegate :control_variate_state, to: :simulator_instance
-
+  has_many :analyses
   def profile_space
     '(' +
       roles.map { |r| "(role = '#{r.name}' AND #{r.strategy_query})" }
