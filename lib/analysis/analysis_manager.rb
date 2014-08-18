@@ -6,7 +6,7 @@ class AnalysisManager
   attr_reader :time
   def initialize(game, scripts_argument_setter_obj, pbs_formatter_obj)
     @game = game
-    @time = Time.now.strftime('%Y%d%m%H%M%S%Z')
+    @time = Time.now.strftime('%Y%m%d%H%M%S%Z')
     @scripts_argument_setter_obj = scripts_argument_setter_obj
     @pbs_formatter_obj = pbs_formatter_obj
     @game_id = game.id.to_s

@@ -5,7 +5,7 @@ describe AnalysisManager do
     let(:scripts_argument_setter_obj) {double("scripts_argument_setter_obj")}
     let(:pbs_formatter_obj) {double("pbs_formatter_obj")}
     let(:time) {Time.new(2007,8,1,16,53,0, "-04:00") }
-    let(:format_time) {Time.new(2007,8,1,16,53,0, "-04:00").strftime('%Y%d%m%H%M%S%Z')}
+    let(:format_time) {Time.new(2007,8,1,16,53,0, "-04:00").strftime('%Y%m%d%H%M%S%Z')}
     let(:path_finder) {AnalysisPathFinder.new(game.id.to_s, format_time,"/mnt/nfs/home/egtaonline","/nfs/wellman_ls")}
 
     describe '#initialize' do
@@ -21,7 +21,7 @@ describe AnalysisManager do
         AnalysisPathFinder.stub(:new).with(game.id.to_s, format_time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls").and_return(path_finder)
         scripts_argument_setter_obj.stub(:set_path).with(path_finder)
         @manager = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)
-        @manager.time.should == "20070108165300+04:00"
+        @manager.time.should == "20070801165300+04:00"
       end
 
       it "sets the path finder object" do

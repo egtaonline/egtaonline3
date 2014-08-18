@@ -73,7 +73,7 @@ class AnalysisPathFinder
   end
 
   def output_file_name
-    "#{@game_id}-analysis-#{@time}.out"
+    "#{@game_id}-analysis-#{@time}.txt"
   end
 
   def reduction_file_name
