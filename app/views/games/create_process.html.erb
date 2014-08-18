@@ -11,7 +11,7 @@
 				<div>
 					<%= select_tag "day", options_for_select((0..7).step(1)) %>day(s)
 					<%= select_tag "hour", options_for_select((0..23).step(1), 6) %>hour(s)
-					<%= select_tag "min", options_for_select((0..59).step(1)) %>minutue(s)
+					<%= select_tag "min", options_for_select((0..59).step(1)) %>minute(s)
 				</div>
 			</div>
 			<div>
@@ -25,11 +25,11 @@
 		
 		<fieldset id = "reduced"><!--Reduced Scripts' Arguments -->
 			<div>
-				<%= label_tag('enable_reduced', 'Enable Reduced Script') %>
+				<%= label_tag('enable_reduced', 'Enable Reduction Script') %>
 				<%= check_box_tag('enable_reduced', 'enable_reduced' , true)%>
 			</div>
 			<hr>
-			<legend>Reduced Script Arguments:</legend>
+			<legend>Reduction Script Arguments:</legend>
 			<div>
 				<label for="reduced_mode">Reduced Mode:</label>	
 				<%= radio_button_tag(:reduced_mode, "DPR", true, class: "reduced_input") %>
@@ -54,21 +54,28 @@
 			<legend>Analysis Script Arguments:</legend>
 			
 			<div><!--Subgame argument --><!-- "Will be overwritten with new subgames."-->	
-				<%= label_tag("enable_subgame", "Run analysis with subgames") %>	
+				<%= label_tag("enable_subgame", "Run Analysis with Subgames") %>	
 				<%= check_box_tag('enable_subgame', 'enable_subgame', true)%>
 			</div><!--End of subgame argument -->
 
+			<div><!--verbose flag -->
+				<%= label_tag("enable_verbose", "Enable Verbose Flag ") %>	
+				<%= check_box_tag('enable_verbose', 'enable_verbose', true)%>
+			</div><!--End of verbose flag -->
+
 			<hr>
-			<%= label_tag("regret", "Regret: Max allowed regret for approximate Nash equilibria:") %>
+			<%= label_tag("regret", "Regret: Max allowed regret for approximate Nash equilibrium:") %>
 			<%= number_field_tag("regret", 1e-3, {step:0.001, min:0})%>
-			<%= label_tag("dist", "Dist: L2-distance threshold to consider equilibria distinct:") %>
+			<%= label_tag("dist", "Dist: L2-distance threshold to consider equilibrium distinct:") %>
 			<%= number_field_tag("dist", 1e-3, {step:0.001,min:0})%>
 			<%= label_tag("support", "Support: Min probability for a strategy to be considered in support:") %>
 			<%= number_field_tag("support", 1e-3, {step:0.001,min:0})%>
 			<%= label_tag("converge", "Converge: Replicator dynamics convergence threshold:") %>
-			<%= number_field_tag("converge", 1e-8,{step:1e-8, min:0,class: "enable"})%>
+			<%= number_field_tag("converge", 1e-8,{step:1e-8, min:0, class: "enable"})%>
 			<%= label_tag("iters", "Iters: Max replicator dynamics iterations:") %>
 			<%= number_field_tag("iters", 10000, {step:1, min:0, class: "enable"})%>
+			<%= label_tag("points", "Points: Number of random points from which to initialize replicator dynamics:") %>
+			<%= number_field_tag("points", 0, {step:1, min:0})%>
 			
 		</fieldset><!-- End of Analysis Scripts' Arguments -->	
 		<br />

@@ -74,7 +74,6 @@ class GamesController < ProfileSpacesController
             game.subgames = subgame_json.read 
 
             if game.save
-              # FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json", dest_path
               FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json"
             else
               flash[:alert] = game.errors.full_messages.first 
@@ -110,8 +109,11 @@ class GamesController < ProfileSpacesController
   end
   
   def analyze
-
-    analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]}")
+    if params[:enable_verbose] !=nil 
+      analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]} --verbose")
+    else
+      analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]}")
+    end
     
     if params[:enable_reduced] != nil
       reduced_num_array = Array.new  
