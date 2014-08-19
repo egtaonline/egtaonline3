@@ -8,8 +8,20 @@ class AnalysisArgumentSetter
     FileUtils.mv("#{GamePresenter.new(game).to_json()}",File.join("#{local_input_path}","#{input_file_name}"))
   end
 
-  def run_with_option(input_file_name,output_file_name,optional_argument = nil)
-    "python #{@script_name} #{@required_argument_list} #{optional_argument} #{input_file_name} > #{output_file_name}"
+  def set_input_file(input_file_name)
+    @input_file_name = input_file_name
+  end
+
+  def set_output_file(output_file_name)
+    @output_file_name = output_file_name
+  end
+
+  def add_argument(optional_argument)
+    @required_argument_list = @required_argument_list + " #{optional_argument} "
+  end
+
+  def get_command
+    "python #{@script_name} #{@required_argument_list} #{@input_file_name} > #{@output_file_name}"
   end
 
   def set_up_remote_script(script_path, work_dir)

@@ -123,7 +123,8 @@ class GamesController < ProfileSpacesController
     end
 
 
-    scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis_obj,reduction_obj,subgame_obj)
+
+    scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis_obj, params[:enable_dominance], reduction_obj,subgame_obj)
     pbs_formatter_obj = AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min], params[:memory], params[:unit])
     
     analysis = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)

@@ -16,19 +16,24 @@ class SubgameArgumentSetter
 		end
 	end
 
-	def run_with_option(input_file_name, output_file_name, subgame_file_name = nil)
-		# argument_list += @required_argument_hash.map{|k,v| "-#{k} #{v}"}.join(' ')
-		#throw when optional argument input is blank
-		# optional_argument.each{|option| argument_list += " -#{option} #{optional_argument_hash[option]} "}
+
+	def set_input_file(input_file_name)
+	    @input_file_name = input_file_name
+	end
+
+	def set_output_file(output_file_name)
+	    @output_file_name = output_file_name
+	end
+
+	def get_command
 		if @subgame_exist
 			<<-DOCUMENT
-mv #{subgame_file_name} old_#{subgame_file_name}
-python #{@script_name} detect -k old_#{subgame_file_name} < #{input_file_name} > #{output_file_name}
+mv #{@output_file_name} old_#{@output_file_name}
+python #{@script_name} detect -k old_#{@output_file_name} < #{@input_file_name} > #{@output_file_name}
 			DOCUMENT
 		else
-			"python #{@script_name} detect < #{input_file_name} > #{output_file_name}"
+			"python #{@script_name} detect < #{@input_file_name} > #{@output_file_name}"
 		end
-
 	end
 
 	def set_up_remote(input_file_path,script_path, work_dir)

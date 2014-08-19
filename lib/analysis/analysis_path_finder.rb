@@ -1,4 +1,3 @@
-
 class AnalysisPathFinder
   def initialize(game_id,time,local_path,remote_path)
     @game_id = game_id
@@ -56,6 +55,10 @@ class AnalysisPathFinder
     @scripts_path
   end
 
+  def dominance_script_path
+    @scripts_path
+  end
+
   def pbs_error_file
     "#{@game_id}-analysis-#{@time}-pbs.e"
   end
@@ -88,4 +91,7 @@ class AnalysisPathFinder
     "#{@game_id}-wrapper-#{@time}"
   end
 
+  def dominance_json_file_name
+    "#{@game_id}-dominance-#{@time}.json"
+  end
 end
