@@ -1,3 +1,3 @@
 class ReductionScript < ActiveRecord::Base
-	has_many :analyses 
+	belongs_to :analysis
 end

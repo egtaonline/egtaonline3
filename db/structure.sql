@@ -52,12 +52,7 @@ CREATE TABLE analyses (
     game_id integer,
     status text,
     job_id integer,
-    output text,
     error_message text,
-    pbs_id integer,
-    analysis_script_id integer,
-    reduction_script_id integer,
-    subgame_script_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -96,6 +91,8 @@ CREATE TABLE analysis_scripts (
     iters integer,
     points integer,
     analysis_id integer,
+    enable_dominance boolean,
+    output text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -183,6 +180,38 @@ CREATE SEQUENCE control_variate_states_id_seq
 --
 
 ALTER SEQUENCE control_variate_states_id_seq OWNED BY control_variate_states.id;
+
+
+--
+-- Name: dominance_scripts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE dominance_scripts (
+    id integer NOT NULL,
+    output text,
+    analysis_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: dominance_scripts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE dominance_scripts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dominance_scripts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE dominance_scripts_id_seq OWNED BY dominance_scripts.id;
 
 
 --
@@ -283,6 +312,43 @@ CREATE SEQUENCE observations_id_seq
 --
 
 ALTER SEQUENCE observations_id_seq OWNED BY observations.id;
+
+
+--
+-- Name: pbs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pbs (
+    id integer NOT NULL,
+    day integer,
+    hour integer,
+    minute integer,
+    memory integer,
+    memory_unit text,
+    analysis_id integer,
+    scripts text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: pbs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pbs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pbs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pbs_id_seq OWNED BY pbs.id;
 
 
 --
@@ -397,8 +463,9 @@ ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
 CREATE TABLE reduction_scripts (
     id integer NOT NULL,
     mode text,
-    reduced_number text,
+    reduced_number_hash text,
     analysis_id integer,
+    output text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -684,8 +751,9 @@ ALTER SEQUENCE simulators_id_seq OWNED BY simulators.id;
 CREATE TABLE subgame_scripts (
     id integer NOT NULL,
     subgame text,
-    reduced_number text,
+    reduced_number_hash text,
     analysis_id integer,
+    output text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -824,6 +892,13 @@ ALTER TABLE ONLY control_variate_states ALTER COLUMN id SET DEFAULT nextval('con
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY dominance_scripts ALTER COLUMN id SET DEFAULT nextval('dominance_scripts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY games ALTER COLUMN id SET DEFAULT nextval('games_id_seq'::regclass);
 
 
@@ -839,6 +914,13 @@ ALTER TABLE ONLY observation_aggs ALTER COLUMN id SET DEFAULT nextval('observati
 --
 
 ALTER TABLE ONLY observations ALTER COLUMN id SET DEFAULT nextval('observations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pbs ALTER COLUMN id SET DEFAULT nextval('pbs_id_seq'::regclass);
 
 
 --
@@ -972,6 +1054,14 @@ ALTER TABLE ONLY control_variate_states
 
 
 --
+-- Name: dominance_scripts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY dominance_scripts
+    ADD CONSTRAINT dominance_scripts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: games_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -993,6 +1083,14 @@ ALTER TABLE ONLY observation_aggs
 
 ALTER TABLE ONLY observations
     ADD CONSTRAINT observations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pbs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pbs
+    ADD CONSTRAINT pbs_pkey PRIMARY KEY (id);
 
 
 --
@@ -1133,20 +1231,6 @@ CREATE UNIQUE INDEX index_games_on_simulator_instance_id_and_name ON games USING
 --
 
 CREATE UNIQUE INDEX index_observation_aggs_on_observation_id_and_symmetry_group_id ON observation_aggs USING btree (observation_id, symmetry_group_id);
-
-
---
--- Name: index_players_on_observation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_players_on_observation_id ON players USING btree (observation_id);
-
-
---
--- Name: index_players_on_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_players_on_symmetry_group_id ON players USING btree (symmetry_group_id);
 
 
 --
@@ -1382,3 +1466,7 @@ INSERT INTO schema_migrations (version) VALUES ('20140818210819');
 INSERT INTO schema_migrations (version) VALUES ('20140818212025');
 
 INSERT INTO schema_migrations (version) VALUES ('20140818213205');
+
+INSERT INTO schema_migrations (version) VALUES ('20140821064136');
+
+INSERT INTO schema_migrations (version) VALUES ('20140821064951');
