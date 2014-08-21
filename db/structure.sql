@@ -92,7 +92,7 @@ CREATE TABLE analysis_scripts (
     points integer,
     analysis_id integer,
     enable_dominance boolean,
-    output text,
+    output json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -188,7 +188,7 @@ ALTER SEQUENCE control_variate_states_id_seq OWNED BY control_variate_states.id;
 
 CREATE TABLE dominance_scripts (
     id integer NOT NULL,
-    output text,
+    output json,
     analysis_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
@@ -463,9 +463,9 @@ ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
 CREATE TABLE reduction_scripts (
     id integer NOT NULL,
     mode text,
-    reduced_number_hash text,
+    reduced_number_hash json,
     analysis_id integer,
-    output text,
+    output json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -751,9 +751,9 @@ ALTER SEQUENCE simulators_id_seq OWNED BY simulators.id;
 CREATE TABLE subgame_scripts (
     id integer NOT NULL,
     subgame text,
-    reduced_number_hash text,
+    reduced_number_hash json,
     analysis_id integer,
-    output text,
+    output json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );

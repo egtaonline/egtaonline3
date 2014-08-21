@@ -102,40 +102,46 @@ class GamesController < ProfileSpacesController
   def create_process
     
   end
-  
   def analyze
-    if params[:enable_verbose] !=nil 
-      analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]} --verbose")
-    else
-      analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]}")
-    end
-    
-    if params[:enable_reduced] != nil
-      reduced_num_array = Array.new  
-      game.roles.each do |role|
-        reduced_num_array << params["#{role.name}"]
-      end
-      reduction_obj = ReducedArgumentSetter.new(params[:reduced_mode], reduced_num_array)
-    end
-    
-    if params[:enable_subgame] != nil
-      subgame_obj = SubgameArgumentSetter.new
-    end
 
-
-    scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis_obj,reduction_obj,subgame_obj)
-    pbs_formatter_obj = AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min], params[:memory], params[:unit])
-    
-    analysis = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)
-
-
-    response = analysis.launch_analysis
-    unless response =~ /\A(\d+)/ 
-      flash[:flux_error] = "Submission failed: #{response}" 
-    end
-
-    @time = analysis.time
   end
+  def analyze
+    @analysis = game.create_analysis()
+    @analysis_script = @analysis.create_anaysis_script(verbose: params[:enable_verbose] !=nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_verbose])
+    # @reduction_script = @analysis.create_reduction_script()
+  end
+  #   if params[:enable_verbose] !=nil 
+  #     analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]} --verbose")
+  #   else
+  #     analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]}")
+  #   end
+    
+  #   if params[:enable_reduced] != nil
+  #     reduced_num_array = Array.new  
+  #     game.roles.each do |role|
+  #       reduced_num_array << params["#{role.name}"]
+  #     end
+  #     reduction_obj = ReducedArgumentSetter.new(params[:reduced_mode], reduced_num_array)
+  #   end
+    
+  #   if params[:enable_subgame] != nil
+  #     subgame_obj = SubgameArgumentSetter.new
+  #   end
+
+
+  #   scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis_obj,reduction_obj,subgame_obj)
+  #   pbs_formatter_obj = AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min], params[:memory], params[:unit])
+    
+  #   analysis = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)
+
+
+  #   response = analysis.launch_analysis
+  #   unless response =~ /\A(\d+)/ 
+  #     flash[:flux_error] = "Submission failed: #{response}" 
+  #   end
+
+  #   @time = analysis.time
+  # end
 
   private
 

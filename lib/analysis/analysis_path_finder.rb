@@ -1,4 +1,3 @@
-
 class AnalysisPathFinder
   def initialize(game_id,time,local_path,remote_path)
     @game_id = game_id
