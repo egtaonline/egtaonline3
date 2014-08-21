@@ -9,7 +9,9 @@ class CreateAnalysisScripts < ActiveRecord::Migration
       t.integer :iters
       t.integer :points
       t.integer :analysis_id
-
+      t.boolean :enable_dominance
+      t.text :output
+      
       t.timestamps
     end
   end
