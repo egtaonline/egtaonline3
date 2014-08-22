@@ -3,21 +3,22 @@ require_relative 'scripts_argument_setter.rb'
 require_relative  'analysis_pbs_formatter.rb'
 
 class AnalysisManager 
-  attr_reader :time
   def initialize(analysis)
-    @game = game
-    @time = Time.now.strftime('%Y%m%d%H%M%S%Z')
-    @scripts_argument_setter_obj = scripts_argument_setter_obj
-    @pbs_formatter_obj = pbs_formatter_obj
-    @game_id = game.id.to_s
-    @path_finder = AnalysisPathFinder.new(@game_id, @time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
-    
+    # @path_finder = AnalysisPathFinder.new(analysis.game_id, analysis.id, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
+    @analysis_obj = analysis.analysis_script
+    # @reduction_obj = analysis.reduction_script
     ###For Local Debug######
     # @path_finder = AnalysisPathFinder.new(@game_id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
-    
-    @scripts_argument_setter_obj.set_path(@path_finder) 
+    analysis = analysis
+    # @scripts_argument_setter_obj.set_path(@path_finder) 
   end
 
+  def prepare_analysis(game)
+    created_folder 
+    prepare_input(game)
+  end
+  
+  ########################################
   def launch_analysis
     created_folder
     prepare_input
@@ -25,18 +26,13 @@ class AnalysisManager
     submit_job
   end
 
+
+ 
+
   private
 
-  def created_folder
-    FileUtils::mkdir_p "#{@path_finder.local_output_path}", mode: 0770
-    FileUtils::mkdir_p "#{@path_finder.local_input_path}", mode: 0770
-    FileUtils::mkdir_p "#{@path_finder.local_pbs_path}", mode: 0770
-    FileUtils::mkdir_p "#{@path_finder.local_subgame_path}", mode: 0770
-  end
 
-  def prepare_input
-    @scripts_argument_setter_obj.prepare_input(@game)
-  end 
+
                                                                                                                                                                                                                                                                                                                                                                                                                                     
   def set_script_arguments
     @set_up_remote_command = @scripts_argument_setter_obj.set_up_remote_command

@@ -2,33 +2,26 @@ class SubgameArgumentSetter
 	def initialize
 		@script_name = "Subgames.py"
 	end
-	def prepare_input(game, input_dir, input_file)
-		
-		subgame_json = game.subgames
-		if subgame_json.blank?
-			@subgame_exist = false
-		else
-		    File.open(File.join(input_dir, input_file), 'w', 0770) do |f| 
-         		f.write(subgame_json.to_json)
-         		f.chmod(0770)
-      	 	end
-      	 	@subgame_exist = true
-		end
+	
+
+
+	def set_input_file(input_file_name)
+	    @input_file_name = input_file_name
 	end
 
-	def run_with_option(input_file_name, output_file_name, subgame_file_name = nil)
-		# argument_list += @required_argument_hash.map{|k,v| "-#{k} #{v}"}.join(' ')
-		#throw when optional argument input is blank
-		# optional_argument.each{|option| argument_list += " -#{option} #{optional_argument_hash[option]} "}
+	def set_output_file(output_file_name)
+	    @output_file_name = output_file_name
+	end
+
+	def get_command
 		if @subgame_exist
 			<<-DOCUMENT
-mv #{subgame_file_name} old_#{subgame_file_name}
-python #{@script_name} detect -k old_#{subgame_file_name} < #{input_file_name} > #{output_file_name}
+mv #{@output_file_name} old_#{@output_file_name}
+python #{@script_name} detect -k old_#{@output_file_name} < #{@input_file_name} > #{@output_file_name}
 			DOCUMENT
 		else
-			"python #{@script_name} detect < #{input_file_name} > #{output_file_name}"
+			"python #{@script_name} detect < #{@input_file_name} > #{@output_file_name}"
 		end
-
 	end
 
 	def set_up_remote(input_file_path,script_path, work_dir)
