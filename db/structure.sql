@@ -750,7 +750,7 @@ ALTER SEQUENCE simulators_id_seq OWNED BY simulators.id;
 
 CREATE TABLE subgame_scripts (
     id integer NOT NULL,
-    subgame text,
+    subgame json,
     reduced_number_hash json,
     analysis_id integer,
     output json,
@@ -1231,6 +1231,20 @@ CREATE UNIQUE INDEX index_games_on_simulator_instance_id_and_name ON games USING
 --
 
 CREATE UNIQUE INDEX index_observation_aggs_on_observation_id_and_symmetry_group_id ON observation_aggs USING btree (observation_id, symmetry_group_id);
+
+
+--
+-- Name: index_players_on_observation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_players_on_observation_id ON players USING btree (observation_id);
+
+
+--
+-- Name: index_players_on_symmetry_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_players_on_symmetry_group_id ON players USING btree (symmetry_group_id);
 
 
 --

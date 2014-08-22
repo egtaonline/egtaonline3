@@ -105,9 +105,31 @@ class GamesController < ProfileSpacesController
 
   end
   def analyze
-    @analysis = game.create_analysis()
-    @analysis_script = @analysis.create_anaysis_script(verbose: params[:enable_verbose] !=nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_verbose])
-    # @reduction_script = @analysis.create_reduction_script()
+    analysis = game.analyses.create()
+    analysis.create_analysis_script(verbose: params[:enable_verbose] !=nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_verbose])
+    role_number_hash = Hash.new
+      game.roles.each do |role|
+        role_number_hash.merge(params.select {|key, value| [role.name].include?(key) })
+      end
+    if params[:enable_reduced] != nil
+      analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number_hash: role_number_hash)
+    end
+    if params[:enable_subgame] != nil
+      # last = game.analyses.last.subgame_script
+      last_game = game.analyses.last
+      if last_game
+        last_subgame = last_game.subgame_script
+        if last_subgame
+          analysis.create_subgame_script(subgame: last_subgame.output)
+        end
+      end
+      # @subgame_script = @analysis.create_subgame_script(mode: params[:reduced_mode], reduced_number_hash: role_number_hash)
+    end
+    analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit])
+    AnalysisManager.new(analysis)
+    # AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min], params[:memory], params[:unit])
+
+    # scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis)
   end
   #   if params[:enable_verbose] !=nil 
   #     analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]} --verbose")
@@ -128,8 +150,7 @@ class GamesController < ProfileSpacesController
   #   end
 
 
-  #   scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis_obj,reduction_obj,subgame_obj)
-  #   pbs_formatter_obj = AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min], params[:memory], params[:unit])
+  #   
     
   #   analysis = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)
 

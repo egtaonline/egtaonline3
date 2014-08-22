@@ -4,7 +4,7 @@ require_relative  'analysis_pbs_formatter.rb'
 
 class AnalysisManager 
   attr_reader :time
-  def initialize(game, scripts_argument_setter_obj, pbs_formatter_obj)
+  def initialize(analysis)
     @game = game
     @time = Time.now.strftime('%Y%m%d%H%M%S%Z')
     @scripts_argument_setter_obj = scripts_argument_setter_obj
