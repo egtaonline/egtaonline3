@@ -2,19 +2,7 @@ class SubgameArgumentSetter
 	def initialize
 		@script_name = "Subgames.py"
 	end
-	def prepare_input(game, input_dir, input_file)
-		
-		subgame_json = game.subgames
-		if subgame_json.blank?
-			@subgame_exist = false
-		else
-		    File.open(File.join(input_dir, input_file), 'w', 0770) do |f| 
-         		f.write(subgame_json.to_json)
-         		f.chmod(0770)
-      	 	end
-      	 	@subgame_exist = true
-		end
-	end
+	
 
 
 	def set_input_file(input_file_name)

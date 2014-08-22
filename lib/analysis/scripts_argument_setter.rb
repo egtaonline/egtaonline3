@@ -99,7 +99,9 @@ rm -rf #{@path_obj.working_dir}
 				@dominance_obj.set_input_file(@path_obj.reduction_file_name)
 			end
 			@analysis_obj.set_input_file(@path_obj.reduction_file_name)
-
+			if @subgame_obj != nil
+				@subgame_obj.set_input_file(@path_obj.reduction_file_name)
+			end
 		else
 			if @dominance_obj != nil
 				@dominance_obj.set_input_file(@path_obj.input_file_name)

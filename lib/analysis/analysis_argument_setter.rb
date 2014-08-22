@@ -4,9 +4,6 @@ class AnalysisArgumentSetter
     @required_argument_list = required_argument_list
   end
 
-  def prepare_input(game, local_input_path, input_file_name)
-    FileUtils.mv("#{GamePresenter.new(game).to_json()}",File.join("#{local_input_path}","#{input_file_name}"))
-  end
 
   def set_input_file(input_file_name)
     @input_file_name = input_file_name
