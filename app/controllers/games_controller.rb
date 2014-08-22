@@ -64,7 +64,12 @@ class GamesController < ProfileSpacesController
             FileUtils.cp_r("#{error_file}", dest_path) unless File.zero?(error_file)             
             FileUtils.rm error_file
         end
+        subgame_json = game.subgames
 
+        File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", 'w', 0770) do |f| 
+          f.write(subgame_json.to_json)
+          f.chmod(0770)
+        end
         # move subgame json files 
         if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))
           if File.zero?("#{orgin_path}/subgame/#{game.id}-subgame.json")
