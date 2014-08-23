@@ -105,10 +105,9 @@ class GamesController < ProfileSpacesController
 
   end
   def analyze
-    analysis = game.analyses.create()
-    analysis.create_analysis_script(verbose: params[:enable_verbose] !=nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_verbose])
+    analysis = game.analyses.create(enable_subgame: params[:enable_subgame], enable_reduction: params[:enable_reduced])
+    analysis.create_analysis_script(verbose: params[:enable_verbose] !=nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_dominance] != nil)
     analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit])
-    # reduction_obj = ReducedArgumentSetter.new(params[:reduced_mode], reduced_num_array)
     
     if params[:enable_reduced] != nil
         role_number_hash = Hash.new
@@ -117,17 +116,12 @@ class GamesController < ProfileSpacesController
       end
       analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number_hash: role_number_hash)
     end
-    # if params[:enable_subgame] != nil
-    #   last_game = game.analyses.last
-    #   if last_game
-    #     last_subgame = last_game.subgame_script
-    #     if last_subgame
-    #       analysis.create_subgame_script(subgame: last_subgame.output)
-    #     end
-    #   end
-    # end
-    
-    AnalysisManager.new(analysis)
+
+    # file_manager = FileManager.new(@path_obj, game).create_folder
+    # file_manager.prepare_analysis_input(game)
+
+    @path_obj = AnalysisPathFinder.new(game.id.to_s, analysis.id.to_s, "#{Rails.root}/app","/nfs/wellman_ls")
+    AnalysisManager.new(analysis, game)
     # AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min], params[:memory], params[:unit])
 
     # scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis)

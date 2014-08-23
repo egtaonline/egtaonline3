@@ -3,48 +3,74 @@ require_relative 'scripts_argument_setter.rb'
 require_relative  'analysis_pbs_formatter.rb'
 
 class AnalysisManager 
-  def initialize(analysis)
-    # @path_finder = AnalysisPathFinder.new(analysis.game_id, analysis.id, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
-    @analysis_obj = analysis.analysis_script
-    # @reduction_obj = analysis.reduction_script
-    ###For Local Debug######
-    # @path_finder = AnalysisPathFinder.new(@game_id, @time, "#{Rails.root}/app","/nfs/wellman_ls")
-    analysis = analysis
-    # @scripts_argument_setter_obj.set_path(@path_finder) 
+  def initialize(analysis, game)
+    @path_finder = AnalysisPathFinder.new(analysis.game_id, analysis.id, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
+    
+    @analysis = analysis
+    @game = game
+    @file_manager = FileManager.new(@path_finder)
+
   end
 
-  def prepare_analysis(game)
-    created_folder 
-    prepare_input(game)
-  end
-  
-  ########################################
   def launch_analysis
-    created_folder
-    prepare_input
-    set_script_arguments
-    submit_job
+    prepare
+    create_script_setters
+    set_commands
+    prepare_pbs
   end
-
-
- 
 
   private
 
+  def prepare
+    @file_manager.created_folder
+    @file_manager.prepare_analysis_input(@game)   
+    if analysis.enable_subgame 
+      prepare_subgame
+    end
+  end
+
+  def create_script_setters
+    analysis_obj = AnalysisScriptSetter.new(analysis.analysis_script, @path_finder)
+    if analysis.enable_reduction
+      reduction_obj = ReductionScriptSetter.new(analysis.reduction_script)
+    end
+
+    if analysis.enable_subgame
+      subgame_obj = SubgameScriptSetter.new(analysis.subgame_script)
+    end
+
+    if analysis.enable_subgame || analysis.analysis_script.enable_dominance
+      dominance_obj = DominanceScriptSetter.new(analysis.dominance_script)
+    end
+    
+    @command_setter = CommandSetter.new(analysis_obj, reduction_obj, dominance_obj, subgame_obj, @path_finder)
+  end
+
+  def prepare_subgame    
+    if  game.analyses.count >= 2 && game.analyses[-2].subgame_script
+      @file_manager.prepare_subgame_input(last_subgame.output)
+      analysis.create_subgame_script(subgame: last_subgame.output)
+    else
+      analysis.create_subgame_script()
+    end
+  end
 
 
                                                                                                                                                                                                                                                                                                                                                                                                                                     
-  def set_script_arguments
-    @set_up_remote_command = @scripts_argument_setter_obj.set_up_remote_command
-    @running_script_command = @scripts_argument_setter_obj.get_script_command
-    @clean_up_command = @scripts_argument_setter_obj.clean_up_remote_command
+  def set_commands
+    @set_up_remote_command = @command_setter.set_up_remote_command
+    @running_script_command = @command_setter.get_script_command
+    @clean_up_command = @command_setter.clean_up_remote_command
   end
 
-  def submit_job
-    pbs_file = @pbs_formatter_obj.prepare_pbs(File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file), File.join(@path_finder.remote_pbs_path,@path_finder.pbs_output_file), @set_up_remote_command, @running_script_command, @clean_up_command)
-    @pbs_formatter_obj.write_pbs(pbs_file, File.join("#{@path_finder.local_pbs_path}","#{@path_finder.pbs_file_name}"))
+  def prepare_pbs
+    
+  end
+  # def submit_job
+  #   pbs_file = @pbs_formatter_obj.prepare_pbs(File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file), File.join(@path_finder.remote_pbs_path,@path_finder.pbs_output_file), @set_up_remote_command, @running_script_command, @clean_up_command)
+  #   @pbs_formatter_obj.write_pbs(pbs_file, File.join("#{@path_finder.local_pbs_path}","#{@path_finder.pbs_file_name}"))
     
     ####Comment with no access to flux
-    @pbs_formatter_obj.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
-  end 
+  #   @pbs_formatter_obj.submit(File.join("#{@path_finder.remote_pbs_path}","#{@path_finder.pbs_file_name}"))
+  # end 
 end
