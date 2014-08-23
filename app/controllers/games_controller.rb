@@ -65,7 +65,7 @@ class GamesController < ProfileSpacesController
             FileUtils.rm error_file
         end
         # subgame_json = game.subgames
-        game.subgames = nil 
+        # game.subgames = nil 
         # File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", 'w', 0770) do |f| 
         #   f.write(subgame_json.to_json)
         #   f.chmod(0770)
