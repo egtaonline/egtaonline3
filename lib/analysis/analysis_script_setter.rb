@@ -21,7 +21,7 @@ class AnalysisScriptSetter
     end
 
     if @analysis.enable_dominance != nil
-      add_argument(" -nd #{@path_obj.dominance_json_file_name} ")
+      add_argument(" -nd ./out/#{@path_obj.dominance_json_file_name} ")
     end
  
   end

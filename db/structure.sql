@@ -53,8 +53,12 @@ CREATE TABLE analyses (
     status text,
     job_id integer,
     error_message text,
+    output text,
+    subgame json,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    enable_subgame boolean,
+    enable_reduction boolean
 );
 
 
@@ -92,7 +96,6 @@ CREATE TABLE analysis_scripts (
     points integer,
     analysis_id integer,
     enable_dominance boolean,
-    output json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -328,7 +331,8 @@ CREATE TABLE pbs (
     analysis_id integer,
     scripts text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    user_email text
 );
 
 
@@ -463,7 +467,7 @@ ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
 CREATE TABLE reduction_scripts (
     id integer NOT NULL,
     mode text,
-    reduced_number_hash json,
+    reduced_number text,
     analysis_id integer,
     output json,
     created_at timestamp without time zone,
@@ -751,9 +755,7 @@ ALTER SEQUENCE simulators_id_seq OWNED BY simulators.id;
 CREATE TABLE subgame_scripts (
     id integer NOT NULL,
     subgame json,
-    reduced_number_hash json,
     analysis_id integer,
-    output json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -1484,3 +1486,9 @@ INSERT INTO schema_migrations (version) VALUES ('20140818213205');
 INSERT INTO schema_migrations (version) VALUES ('20140821064136');
 
 INSERT INTO schema_migrations (version) VALUES ('20140821064951');
+
+INSERT INTO schema_migrations (version) VALUES ('20140823012206');
+
+INSERT INTO schema_migrations (version) VALUES ('20140823012602');
+
+INSERT INTO schema_migrations (version) VALUES ('20140823185552');

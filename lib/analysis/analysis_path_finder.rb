@@ -1,9 +1,10 @@
 class AnalysisPathFinder
-  attr_reader :local_data_path, :scripts_path
+  attr_reader :local_data_path, :scripts_path, :remote_data_path
   def initialize(game_id,analysis_id,local_path,remote_path)
-    @game_id = game_id
-    @analysis_id = analysis_id
+    @game_id = game_id.to_s 
+    @analysis_id = analysis_id.to_s 
     @remote_data_path = File.join(remote_path,'egtaonline','analysis',@game_id, @analysis_id )
+
     @local_data_path = File.join(local_path,'analysis',@game_id, @analysis_id)
     @scripts_path = File.join(remote_path,'GameAnalysis')   
   end
@@ -38,6 +39,10 @@ class AnalysisPathFinder
 
   def subgame_json_file_name
     "#{@game_id}-subgame-#{@analysis_id}.json"
+  end
+
+  def dominance_json_file_name
+    "#{@game_id}-dominance-#{@analysis_id}.json"
   end
 
   def pbs_file_name

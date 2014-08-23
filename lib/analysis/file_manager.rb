@@ -1,3 +1,5 @@
+require_relative 'analysis_path_finder.rb'
+
 class FileManager
 	
   def initialize(path_obj)

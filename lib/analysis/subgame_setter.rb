@@ -16,8 +16,7 @@ class SubgameSetter
 	def get_command
 		if @subgame.subgame
 			<<-DOCUMENT
-mv #{@output_file_name} old_#{@output_file_name}
-python #{@script_name} detect -k old_#{@output_file_name} < #{@input_file_name} > #{@output_file_name}
+python #{@script_name} detect -k #{@output_file_name} < #{@input_file_name} > #{@output_file_name}
 			DOCUMENT
 		else
 			"python #{@script_name} detect < #{@input_file_name} > #{@output_file_name}"
