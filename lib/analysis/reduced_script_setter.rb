@@ -1,4 +1,4 @@
-class ReducedArgumentSetter 
+class ReducedScriptSetter 
 	def initialize(reduction)
 		@reduction = reduction
 		@script_name = "Reductions.py"
@@ -14,7 +14,7 @@ class ReducedArgumentSetter
 	end
 
 	def get_command
-		"python #{@script_name} -input #{@input_file_name} -output #{@output_file_name} #{@reduction.mode} #{eval(@reduction.reduced_number_hash).values.join(' ')}"
+		"python #{@script_name} -input #{@input_file_name} -output #{@output_file_name} #{@reduction.mode} #{@reduction.reduced_number}"
 	end
 
 	def set_up_remote_script(script_path, work_dir)

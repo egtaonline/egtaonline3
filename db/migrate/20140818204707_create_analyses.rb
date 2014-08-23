@@ -5,6 +5,8 @@ class CreateAnalyses < ActiveRecord::Migration
       t.text :status
       t.integer :job_id
       t.text :error_message
+      t.text :output
+      t.json :subgame
 
       t.timestamps
     end

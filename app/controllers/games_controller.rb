@@ -102,27 +102,23 @@ class GamesController < ProfileSpacesController
   def create_process
     
   end
-  def analyze
 
-  end
   def analyze
-    analysis = game.analyses.create(enable_subgame: params[:enable_subgame], enable_reduction: params[:enable_reduced])
-    analysis.create_analysis_script(verbose: params[:enable_verbose] !=nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_dominance] != nil)
-    analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit])
+    analysis = game.analyses.create(enable_subgame: params[:enable_subgame] != nil, enable_reduction: params[:enable_reduced] != nil)
+    analysis.create_analysis_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_dominance] != nil)
+    analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit], user_email: "#{current_user.email}")
     
     if params[:enable_reduced] != nil
-        role_number_hash = Hash.new
+        role_number_array = Array.new
         game.roles.each do |role|
-        role_number_hash[role.name] = params[role.name]
+        role_number_array << params[role.name]
       end
-      analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number_hash: role_number_hash)
+      analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number: role_number_array.join(" "))
     end
 
-    # file_manager = FileManager.new(@path_obj, game).create_folder
-    # file_manager.prepare_analysis_input(game)
 
     @path_obj = AnalysisPathFinder.new(game.id.to_s, analysis.id.to_s, "#{Rails.root}/app","/nfs/wellman_ls")
-    AnalysisManager.new(analysis, game)
+    AnalysisManager.new(analysis, game).prepare_analysis
     # AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min], params[:memory], params[:unit])
 
     # scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis)

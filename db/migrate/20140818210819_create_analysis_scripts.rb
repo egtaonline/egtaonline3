@@ -10,7 +10,7 @@ class CreateAnalysisScripts < ActiveRecord::Migration
       t.integer :points
       t.integer :analysis_id
       t.boolean :enable_dominance
-      t.json :output
+      
       
       t.timestamps
     end

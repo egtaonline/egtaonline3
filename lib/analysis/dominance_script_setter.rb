@@ -1,6 +1,8 @@
-class DominanceArgumentSetter 
-	def initialize
+class DominanceScriptSetter 
+	def initialize(analysis)
 		@script_name = "Dominance.py"
+		analysis.create_dominance_script()
+		#failure, throw an error
 	end
 	
 	def set_input_file(input_file_name)

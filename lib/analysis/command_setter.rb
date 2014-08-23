@@ -1,8 +1,8 @@
-require_relative 'reduced_argument_setter.rb'
-require_relative 'analysis_argument_setter.rb'
-require_relative 'subgame_argument_setter.rb'
+require_relative 'reduced_script_setter.rb'
+require_relative 'analysis_script_setter.rb'
+require_relative 'subgame_setter.rb'
 require_relative 'analysis_path_finder.rb'
-require_relative 'dominance_argument_setter.rb'
+require_relative 'dominance_script_setter.rb'
 
 class CommandSetter
 	def initialize(analysis_obj, reduction_obj, dominance_obj, subgame_obj, path_finder)
@@ -77,7 +77,7 @@ rm -rf #{@path_obj.working_dir}
 
 	def set_dominance
 		if @dominance_obj != nil
-			"#{@dominance_obj.set_up_remote_script(@path_obj.dominance_script_path, @path_obj.working_dir)}"
+			"#{@dominance_obj.set_up_remote_script(@path_obj.scripts_path, @path_obj.working_dir)}"
 		end
 	end
 	
@@ -85,13 +85,13 @@ rm -rf #{@path_obj.working_dir}
 	def set_up_input_output
 		if @reduction_obj != nil
 			@reduction_obj.set_input_file(@path_obj.input_file_name)
-			@reduction_obj.set_output_file(@path_obj.reduction_file_name)
+			@reduction_obj.set_output_file("./out/#{@path_obj.reduction_file_name}")
 			if @dominance_obj != nil
-				@dominance_obj.set_input_file(@path_obj.reduction_file_name)
+				@dominance_obj.set_input_file("./out/#{@path_obj.reduction_file_name}")
 			end
-			@analysis_obj.set_input_file(@path_obj.reduction_file_name)
+			@analysis_obj.set_input_file("./out/#{@path_obj.reduction_file_name}")
 			if @subgame_obj != nil
-				@subgame_obj.set_input_file(@path_obj.reduction_file_name)
+				@subgame_obj.set_input_file("./out/#{@path_obj.reduction_file_name}")
 			end
 		else
 			if @dominance_obj != nil
@@ -101,14 +101,14 @@ rm -rf #{@path_obj.working_dir}
 		end
 
 		if @subgame_obj != nil 
-			@subgame_obj.set_input_file(@path_obj.dominance_json_file_name)
-			@subgame_obj.set_output_file(@path_obj.subgame_json_file_name)
-			@analysis_obj.add_argument(" -sg #{@path_obj.subgame_json_file_name} ")
+			@subgame_obj.set_input_file("./out/#{@path_obj.dominance_json_file_name}")
+			@subgame_obj.set_output_file("./out/#{@path_obj.subgame_json_file_name}")
+			@analysis_obj.add_argument(" -sg ./out/#{@path_obj.subgame_json_file_name} ")
 		end
 
 		if @dominance_obj != nil
-			@dominance_obj.set_output_file(@path_obj.dominance_json_file_name)
+			@dominance_obj.set_output_file("./out/#{@path_obj.dominance_json_file_name}")
 		end
-		@analysis_obj.set_output_file(@path_obj.output_file_name)
+		@analysis_obj.set_output_file("./out/#{@path_obj.output_file_name}")
 	end
 end
