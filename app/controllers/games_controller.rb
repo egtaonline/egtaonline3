@@ -104,7 +104,7 @@ class GamesController < ProfileSpacesController
   end
 
   def analyze
-    analysis = game.analyses.create(enable_subgame: params[:enable_subgame] != nil, enable_reduction: params[:enable_reduced] != nil)
+    analysis = game.analyses.create(status: 'pending', enable_subgame: params[:enable_subgame] != nil, enable_reduction: params[:enable_reduced] != nil)
     analysis.create_analysis_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_dominance] != nil)
     analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit], user_email: "#{current_user.email}")
     
@@ -116,44 +116,9 @@ class GamesController < ProfileSpacesController
       analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number: role_number_array.join(" "))
     end
 
-
-    @path_obj = AnalysisPathFinder.new(game.id.to_s, analysis.id.to_s, "#{Rails.root}/app","/nfs/wellman_ls")
     AnalysisManager.new(analysis, game).prepare_analysis
-    # AnalysisPbsFormatter.new("#{current_user.email}",params[:day], params[:hour], params[:min], params[:memory], params[:unit])
 
-    # scripts_argument_setter_obj = ScriptsArgumentSetter.new(analysis)
   end
-  #   if params[:enable_verbose] !=nil 
-  #     analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]} --verbose")
-  #   else
-  #     analysis_obj = AnalysisArgumentSetter.new("-r #{params[:regret]} -d #{params[:dist]} -s #{params[:support]} -c #{params[:converge]}  -i #{params[:iters]} -p #{params[:points]}")
-  #   end
-    
-  #   if params[:enable_reduced] != nil
-  #     reduced_num_array = Array.new  
-  #     game.roles.each do |role|
-  #       reduced_num_array << params["#{role.name}"]
-  #     end
-  #     reduction_obj = ReducedArgumentSetter.new(params[:reduced_mode], reduced_num_array)
-  #   end
-    
-  #   if params[:enable_subgame] != nil
-  #     subgame_obj = SubgameArgumentSetter.new
-  #   end
-
-
-  #   
-    
-  #   analysis = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)
-
-
-  #   response = analysis.launch_analysis
-  #   unless response =~ /\A(\d+)/ 
-  #     flash[:flux_error] = "Submission failed: #{response}" 
-  #   end
-
-  #   @time = analysis.time
-  # end
 
   private
 
