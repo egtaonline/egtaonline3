@@ -1,0 +1,7 @@
+%tr
+  %td.fixed= link_to analysis.status, analysis_path(analysis)
+  %td.fixed= link_to analysis.game_id, analysis_path(analysis)
+  %td.fixed= link_to analysis.id, analysis_path(analysis)
+  // %td.fixed= link_to analysis.id, analysis_path(analysis)
+
+  %td.fixed= link_to (analysis.job_id != nil ? analysis.job_id : "N/A"), analysis_path(analysis)

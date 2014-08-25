@@ -30,10 +30,8 @@ Egtaonline3::Application.routes.draw do
   end
 
   resources :games do
-    #########################
     post :create_process, on: :member
     post :analyze, on: :member
-    #########################
     resources :roles, only: [:create, :destroy] do
       member do
         post :add_strategy
@@ -70,7 +68,7 @@ Egtaonline3::Application.routes.draw do
 
   resources :profiles, only: :show
   resources :simulations, only: [:index, :show]
-
+  resources :analyses, only: [:index, :show]
 
   resources :connection, only: [:new, :create]
   root to: 'high_voltage/pages#show', id: 'home'
