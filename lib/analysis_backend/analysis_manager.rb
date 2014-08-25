@@ -71,7 +71,7 @@ class AnalysisManager
   end
 
   def prepare_pbs
-    AnalysisPbsFormatter.new(@analysis.pbs, @path_finder).write_pbs(@set_up_remote_command, @running_script_command, @clean_up_command)
+    AnalysisPbsFormatter.new(@analysis.pbs, @path_finder).write_pbs(@analysis.game_id.to_s, @set_up_remote_command, @running_script_command, @clean_up_command)
   end
   # def submit_job
   #   pbs_file = @pbs_formatter_obj.prepare_pbs(File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file), File.join(@path_finder.remote_pbs_path,@path_finder.pbs_output_file), @set_up_remote_command, @running_script_command, @clean_up_command)

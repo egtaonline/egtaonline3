@@ -10,8 +10,8 @@ class AnalysisPbsFormatter
 
    end
 
-   def write_pbs(set_up_remote_command, running_script_command, clean_up_command)
-      pbs_file = prepare_pbs(set_up_remote_command, running_script_command, clean_up_command)
+   def write_pbs(game_id, set_up_remote_command, running_script_command, clean_up_command)
+      pbs_file = prepare_pbs(game_id, set_up_remote_command, running_script_command, clean_up_command)
       File.open("#{File.join(@path_finder.local_data_path, @path_finder.pbs_file_name)}", 'w', 0770) do |f|
          f.write(pbs_file)
       end
@@ -39,12 +39,12 @@ class AnalysisPbsFormatter
 
    private 
    
-   def prepare_pbs(set_up_remote_command, running_script_command, clean_up_command)
+   def prepare_pbs(game_id, set_up_remote_command, running_script_command, clean_up_command)
     pbs_error_path = File.join(@path_finder.remote_data_path, @path_finder.pbs_error_file)
     pbs_output_path = File.join(@path_finder.remote_data_path, @path_finder.pbs_output_file)
       <<-DOCUMENT
 #!/bin/bash
-#PBS -N analysis
+#PBS -N analysis-#{game_id}
 
 #PBS -A wellman_flux
 #PBS -q flux
