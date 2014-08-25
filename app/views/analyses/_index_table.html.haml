@@ -1,0 +1,11 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= sortable "status"
+      %th= sortable "game_id", "Game"
+      %th= sortable "id", "Folder Number"
+      %th= sortable "job_id"
+
+  %tbody
+    =render analyses
+=paginate analyses, remote: true

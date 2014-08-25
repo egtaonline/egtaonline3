@@ -4,7 +4,7 @@ class AnalysisDataParser
 
   def perform(analysis)
     unless analysis.state == 'complete'
-      DataProcessor.new(analysis).process_files
+      AnalysisDataProcessor.new(analysis).process_files
     end
   end
 end

@@ -1,5 +1,5 @@
 class AnalysisDataProcessor
-	def initialize(analysis, location)
+	def initialize(analysis)
 		@analysis = analysis
 		@path_finder = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
@@ -15,7 +15,7 @@ class AnalysisDataProcessor
 		if error_message != nil 
 			@analysis.fail(error_message)
 		else
-			#remove folders
+			FileUtils.rm_rf(@path_finder.local_data_path)
 		end
 			
 	end
