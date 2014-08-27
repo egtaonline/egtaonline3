@@ -10,34 +10,14 @@ class AnalysisPbsFormatter
 
    end
 
-   def write_pbs(game_id, set_up_remote_command, running_script_command, clean_up_command)
+   def format(game_id, set_up_remote_command, running_script_command, clean_up_command)
       pbs_file = prepare_pbs(game_id, set_up_remote_command, running_script_command, clean_up_command)
-      File.open("#{File.join(@path_finder.local_data_path, @path_finder.pbs_file_name)}", 'w', 0770) do |f|
-         f.write(pbs_file)
-      end
+     
       @pbs.scripts = pbs_file
       @pbs.save
       #throw an error 
    end
-   
-   # def submit(pbs_path)
-   #      # proxy = nil
-   #    proxy = Backend.connection.acquire      
-       
-   #     if proxy
-   #       begin
-   #         response = proxy.exec!("qsub -V -r n #{pbs_path}")       
-   #         return response
-            
-   #       rescue => e
-   #          return e.message
-   #       end
-   #     else
-   #        return "Lost connection to flux"
-   #     end
-   # end
-
-   private 
+ 
    
    def prepare_pbs(game_id, set_up_remote_command, running_script_command, clean_up_command)
     pbs_error_path = File.join(@path_finder.remote_data_path, @path_finder.pbs_error_file)

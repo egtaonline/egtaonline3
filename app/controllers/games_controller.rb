@@ -115,7 +115,7 @@ class GamesController < ProfileSpacesController
       analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number: role_number_array.join(" "))
     end
 
-    AnalysisManager.new(analysis, game).prepare_analysis
+    AnalysisManager.new(analysis).prepare_analysis
 
   end
 

@@ -3,7 +3,7 @@ class AnalysisChecker
 	sidekiq_options queue: 'high_concurrency'
 	def perform
 	    ActiveRecord::Base.transaction do
-	      AnalysisBackend.update_analysis(Analysis.active)
+	      AnalysisUpdatter.update_analysis(Analysis.active)
 	    end
 	end
 end

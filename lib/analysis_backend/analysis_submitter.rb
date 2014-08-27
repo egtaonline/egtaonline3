@@ -4,7 +4,7 @@ class AnalysisSubmitter
 		@path_finder = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
   def submit
-    proxy = connection.acquire
+    proxy = Backend.connection.acquire
     if proxy
       begin
         response = proxy.exec!("qsub -V -r n #{File.join(@path_finder.remote_data_path, @path_finder.pbs_file_name)}") 
