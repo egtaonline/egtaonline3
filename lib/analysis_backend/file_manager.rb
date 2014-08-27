@@ -6,6 +6,7 @@ class FileManager
     @path_obj = path_obj
   end
   def created_folder
+    FileUtils.rm_rf("#{@path_obj.local_data_path}")
     FileUtils::mkdir_p "#{@path_obj.local_data_path}", mode: 0770
   end
 
@@ -20,5 +21,10 @@ class FileManager
     end
   end
 
-	
+  def prepare_pbs(pbs_file)
+	   File.open("#{File.join(@path_finder.local_data_path, @path_finder.pbs_file_name)}", 'w', 0770) do |f|
+         f.write(pbs_file)
+      end
+  end
+
 end

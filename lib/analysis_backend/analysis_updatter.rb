@@ -1,8 +1,7 @@
 class AnalysisUpdatter
-	def initialize(analysis)
-		@analysis = analysis
-		@path_finder = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
-	end
+  def initialize
+
+  end
 
 
   def update_analysis(analyses)
