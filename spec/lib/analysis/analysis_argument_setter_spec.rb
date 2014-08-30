@@ -31,20 +31,25 @@ describe AnalysisArgumentSetter do
 			@setter.prepare_input(game, local_input_path, input_file_name).should be_true
 		end
 	end
-	
-	describe "#run_with_option" do
-		input_file_name  = "input_file_name"
-		output_file_name = "output_file_name"
-		context "when there is no optional arugment" do 
-			it "runs with required ones" do
-				 expect(@setter.run_with_option(input_file_name, output_file_name)).to eq("python AnalysisScript.py -foo bar  input_file_name > output_file_name")
-			end
+
+	describe "#set_input_file" do
+		it "sets input file name" do
+			@setter.set_input_file("input")
+			expect(@setter.instance_variable_get(:@input_file_name)).to eq("input")
 		end
-		context "when there is optional arguments" do
-			it "runs with optional arguments" do
-				optional_argument = "I am optional arguments"
-				expect(@setter.run_with_option(input_file_name, output_file_name, optional_argument)).to eq("python AnalysisScript.py -foo bar I am optional arguments input_file_name > output_file_name")
-			end
+	end
+
+	describe "#set_output_file" do
+		it "sets output file name" do
+			@setter.set_output_file("output")
+			expect(@setter.instance_variable_get(:@output_file_name)).to eq("output")
+		end
+	end
+
+	describe "#add_argument" do
+		it "adds additional arguements" do
+			@setter.add_argument("additional")
+			expect(@setter.instance_variable_get(:@required_argument_list)).to eq("-foo bar additional ")
 		end
 	end
 

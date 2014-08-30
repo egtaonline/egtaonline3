@@ -51,12 +51,12 @@ describe SubgameArgumentSetter do
      		end
 		end
 	end
-	describe "#run_with_option" do
+	describe "#get_command" do
 		context "when subgame json file doesn't exit" do 
 			it "runs without argument k" do
-				input_file_name = "foo"
-				output_file_name = "bar"
-				expect(@setter.run_with_option(input_file_name,output_file_name)).to eq("python Subgames.py detect < foo > bar")
+				@setter.set_input_file("foo")
+				@setter.set_output_file("bar")
+				expect(@setter.get_command).to eq("python Subgames.py detect < foo > bar")
 			end
 		end
 		context "when subgame json file exits" do 
@@ -76,8 +76,10 @@ describe SubgameArgumentSetter do
 		          "#{input_dir}/#{input_file}", 'w', 0770).and_yield(f)
 		        f.stub(:chmod).with(0770)
      			@setter.prepare_input(non_empty_game, input_dir, input_file)
-				expect(@setter.run_with_option(input_file_name,output_file_name, subgame_json_file_name)).to eq("mv subgame.json old_subgame.json\n" \
-               "python Subgames.py detect -k old_subgame.json < foo > bar\n")
+     			@setter.set_input_file("foo")
+				@setter.set_output_file("subgame.json")
+				expect(@setter.get_command).to eq("mv subgame.json old_subgame.json\n" \
+               "python Subgames.py detect -k old_subgame.json < foo > subgame.json\n")
 			end
 		end
 	end

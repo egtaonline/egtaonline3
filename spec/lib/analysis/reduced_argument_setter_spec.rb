@@ -5,12 +5,14 @@ describe ReducedArgumentSetter do
 	before(:each) do
 		@setter = ReducedArgumentSetter.new(reduction_mode, reduced_num_array)
 	end
-	describe "#run_with_option" do
+	describe "#get_command" do
 		let(:input) { "bar.in" }
 		let(:output) { "bar.out" }
 		it "has right format of arguments" do
 			reduced_num_array.should_receive(:join).with(" ").and_return("1 2 3")
-			@setter.run_with_option(input, output).should == "python Reductions.py -input bar.in -output bar.out foo 1 2 3"
+			@setter.set_input_file(input)
+			@setter.set_output_file(output)
+			@setter.get_command.should == "python Reductions.py -input bar.in -output bar.out foo 1 2 3"
 		end
 	end
 	describe "#set_up_remote_script" do

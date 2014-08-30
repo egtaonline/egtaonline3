@@ -21,7 +21,7 @@ describe AnalysisManager do
         AnalysisPathFinder.stub(:new).with(game.id.to_s, format_time, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls").and_return(path_finder)
         scripts_argument_setter_obj.stub(:set_path).with(path_finder)
         @manager = AnalysisManager.new(game, scripts_argument_setter_obj, pbs_formatter_obj)
-        @manager.time.should == "20070801165300+04:00"
+        @manager.time.should == format_time
       end
 
       it "sets the path finder object" do
