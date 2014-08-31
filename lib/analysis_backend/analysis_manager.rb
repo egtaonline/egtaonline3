@@ -31,11 +31,12 @@ class AnalysisManager
       reduction_obj = ReducedScriptSetter.new(@analysis.reduction_script)
     end
 
-    if @analysis.enable_subgame
+    if @analysis.enable_subgame != nil
+      prepare_subgame
       subgame_obj = SubgameSetter.new(@analysis.subgame_script)
     end
 
-    if @analysis.enable_subgame || @analysis.analysis_script.enable_dominance
+    if @analysis.enable_subgame != nil || @analysis.analysis_script.enable_dominance != nil
       dominance_obj = DominanceScriptSetter.new(@analysis)
     end
     
@@ -43,7 +44,7 @@ class AnalysisManager
   end
 
   def prepare_subgame
-    last_game = @game.analyses.where("subgame IS NOT NULL").last    
+    last_game = Game.find(@analysis.game_id).analyses.where("subgame IS NOT NULL").last    
     if last_game != nil
       @analysis.create_subgame_script(subgame: last_game.subgame)
     else
