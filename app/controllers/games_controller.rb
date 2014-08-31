@@ -105,7 +105,7 @@ class GamesController < ProfileSpacesController
 
   def analyze
     analysis = game.analyses.create(status: 'pending', enable_subgame: params[:enable_subgame] != nil, enable_reduction: params[:enable_reduced] != nil)
-    analysis.create_analysis_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], enable_dominance: params[:enable_dominance] != nil)
+    analysis.create_analysis_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], support: params[:support],enable_dominance: params[:enable_dominance] != nil)
     analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit], user_email: "#{current_user.email}")
     
     if params[:enable_reduced] != nil
