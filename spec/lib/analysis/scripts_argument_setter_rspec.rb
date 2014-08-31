@@ -236,15 +236,14 @@ describe ScriptsArgumentSetter do
 		end
 
 	describe "#set_up_input_output" do
-		context "when nothing is  nil" do
+		context "when nothing is nil" do
 			let(:analysis_obj) {double("analysis_obj")}
 			let(:game) { double(id:1)}
 			let(:subgame_obj) {double("subgame_obj")}
 			let(:reduction_obj){ double ("reduction_obj")}
 			let(:path_obj){AnalysisPathFinder.new(game.id.to_s,"200001011030","local_path","remote_path")}			
 			let(:enable_dominance){true} 
-			before(:each) do
-		    	
+			before(:each) do	    	
 				@setter = ScriptsArgumentSetter.new(analysis_obj,enable_dominance,reduction_obj,subgame_obj)
 				@setter.set_path(path_obj)
       		end
@@ -265,7 +264,7 @@ describe ScriptsArgumentSetter do
 			it "sets reduction output file for dominance script input" do
 				reduction_obj.stub(:set_input_file).with(path_obj.input_file_name)
 				reduction_obj.stub(:set_output_file).with(path_obj.reduction_file_name)
-				@setter.instance_variable_get(:@dominance_obj).stub(:set_input_file).with(path_obj.reduction_file_name)
+				@setter.instance_variable_get(:@dominance_obj).should_receive(:set_input_file).with(path_obj.reduction_file_name)
 				analysis_obj.stub(:set_input_file).with(path_obj.reduction_file_name)
 				subgame_obj.stub(:set_input_file).with(path_obj.dominance_json_file_name)
 				subgame_obj.stub(:set_output_file).with(path_obj.subgame_json_file_name)
@@ -327,6 +326,94 @@ describe ScriptsArgumentSetter do
 				subgame_obj.stub(:set_output_file).with(path_obj.subgame_json_file_name)
 				analysis_obj.stub(:add_argument).with(" -sg #{path_obj.subgame_json_file_name} ")
 				analysis_obj.should_receive(:add_argument).with(" -nd #{path_obj.dominance_json_file_name} ")
+				@setter.instance_variable_get(:@dominance_obj).stub(:set_output_file).with(path_obj.dominance_json_file_name)
+				analysis_obj.stub(:set_output_file).with(path_obj.output_file_name)
+				@setter.send(:set_up_input_output)
+				
+			end
+		end
+
+		context "when reduction obj is nil" do
+			let(:analysis_obj) {double("analysis_obj")}
+			let(:game) { double(id:1)}
+			let(:subgame_obj) {double("subgame_obj")}
+			let(:path_obj){AnalysisPathFinder.new(game.id.to_s,"200001011030","local_path","remote_path")}			
+			let(:enable_dominance){true} 
+			before(:each) do	    	
+				@setter = ScriptsArgumentSetter.new(analysis_obj,enable_dominance,nil,subgame_obj)
+				@setter.set_path(path_obj)
+      		end
+			it "sets original input file for dominance script input" do
+				
+				@setter.instance_variable_get(:@dominance_obj).stub(:set_input_file).with(path_obj.input_file_name)
+				analysis_obj.stub(:set_input_file).with(path_obj.input_file_name)
+				subgame_obj.stub(:set_input_file).with(path_obj.dominance_json_file_name)
+				subgame_obj.stub(:set_output_file).with(path_obj.subgame_json_file_name)
+				analysis_obj.stub(:add_argument).with(" -sg #{path_obj.subgame_json_file_name} ")
+				analysis_obj.stub(:add_argument).with(" -nd #{path_obj.dominance_json_file_name} ")
+				@setter.instance_variable_get(:@dominance_obj).should_receive(:set_output_file).with(path_obj.dominance_json_file_name)
+				analysis_obj.stub(:set_output_file).with(path_obj.output_file_name)
+				@setter.send(:set_up_input_output)
+			end
+		end
+
+		context "when subgame obj is nil" do
+			let(:analysis_obj) {double("analysis_obj")}
+			let(:game) { double(id:1)}
+			let(:reduction_obj){ double ("reduction_obj")}
+			let(:path_obj){AnalysisPathFinder.new(game.id.to_s,"200001011030","local_path","remote_path")}			
+			let(:enable_dominance){true} 
+			before(:each) do	    	
+				@setter = ScriptsArgumentSetter.new(analysis_obj,enable_dominance,reduction_obj,nil)
+				@setter.set_path(path_obj)
+      		end
+			it "should not set subgame json file for analysis script" do
+				reduction_obj.stub(:set_input_file).with(path_obj.input_file_name)
+				reduction_obj.stub(:set_output_file).with(path_obj.reduction_file_name)
+				@setter.instance_variable_get(:@dominance_obj).stub(:set_input_file).with(path_obj.reduction_file_name)
+				analysis_obj.stub(:set_input_file).with(path_obj.reduction_file_name)
+				analysis_obj.should_not_receive(:add_argument).with(" -sg #{path_obj.subgame_json_file_name} ")
+				analysis_obj.stub(:add_argument).with(" -nd #{path_obj.dominance_json_file_name} ")
+				@setter.instance_variable_get(:@dominance_obj).stub(:set_output_file).with(path_obj.dominance_json_file_name)
+				analysis_obj.stub(:set_output_file).with(path_obj.output_file_name)
+				@setter.send(:set_up_input_output)
+			end
+		end
+
+		context "when dominance is disabled" do
+			let(:analysis_obj) {double("analysis_obj")}
+			let(:game) { double(id:1)}
+			let(:subgame_obj) {double("subgame_obj")}
+			let(:reduction_obj){ double ("reduction_obj")}
+			let(:path_obj){AnalysisPathFinder.new(game.id.to_s,"200001011030","local_path","remote_path")}			
+			let(:enable_dominance){true} 
+			before(:each) do	    	
+				@setter = ScriptsArgumentSetter.new(analysis_obj,nil,reduction_obj,subgame_obj)
+				@setter.set_path(path_obj)
+      		end
+			it "sets dominance output file for subgame script input" do
+				reduction_obj.stub(:set_input_file).with(path_obj.input_file_name)
+				reduction_obj.stub(:set_output_file).with(path_obj.reduction_file_name)
+				@setter.instance_variable_get(:@dominance_obj).stub(:set_input_file).with(path_obj.reduction_file_name)
+				analysis_obj.stub(:set_input_file).with(path_obj.reduction_file_name)
+				subgame_obj.should_receive(:set_input_file).with(path_obj.dominance_json_file_name)
+				subgame_obj.stub(:set_output_file).with(path_obj.subgame_json_file_name)
+				analysis_obj.stub(:add_argument).with(" -sg #{path_obj.subgame_json_file_name} ")
+				analysis_obj.stub(:add_argument).with(" -nd #{path_obj.dominance_json_file_name} ")
+				@setter.instance_variable_get(:@dominance_obj).stub(:set_output_file).with(path_obj.dominance_json_file_name)
+				analysis_obj.stub(:set_output_file).with(path_obj.output_file_name)
+				@setter.send(:set_up_input_output)
+			end
+
+			it "should not set dominance json file for analysis script" do
+				reduction_obj.stub(:set_input_file).with(path_obj.input_file_name)
+				reduction_obj.stub(:set_output_file).with(path_obj.reduction_file_name)
+				@setter.instance_variable_get(:@dominance_obj).stub(:set_input_file).with(path_obj.reduction_file_name)
+				analysis_obj.stub(:set_input_file).with(path_obj.reduction_file_name)
+				subgame_obj.stub(:set_input_file).with(path_obj.dominance_json_file_name)
+				subgame_obj.stub(:set_output_file).with(path_obj.subgame_json_file_name)
+				analysis_obj.stub(:add_argument).with(" -sg #{path_obj.subgame_json_file_name} ")
+				analysis_obj.should_not_receive(:add_argument).with(" -nd #{path_obj.dominance_json_file_name} ")
 				@setter.instance_variable_get(:@dominance_obj).stub(:set_output_file).with(path_obj.dominance_json_file_name)
 				analysis_obj.stub(:set_output_file).with(path_obj.output_file_name)
 				@setter.send(:set_up_input_output)
