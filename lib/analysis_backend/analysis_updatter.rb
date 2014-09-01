@@ -5,14 +5,14 @@ class AnalysisUpdatter
 
 
   def update_analysis(analyses)
-    proxy = connection.acquire
+    proxy = Backend.connection.acquire
     if proxy
       output = proxy.exec!('qstat -a | grep analysis-')
       status_hash = parse_to_hash(output)
       if status_hash
         analyses.each do |analysis|
-        AnalysisStatusResolver.new.act_on_status(
-            status_hash[simulation.job_id.to_s], simulation)
+        AnalysisStatusResolver.new(analysis).act_on_status(
+            status_hash[analysis.job_id.to_s])
         end
       end
     end

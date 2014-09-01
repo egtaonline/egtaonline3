@@ -7,11 +7,10 @@ class AnalysisPreparer
 	def prepare_analysis
 		file_manager = FileManager.new(@path_finder)
 		file_manager.created_folder
-		subgame_data = analysis.subgame
-		if subgame_data 
-			file_manager.prepare_subgame_input(subgame_data)
+		if @analysis.enable_subgame != nil && @analysis.subgame_script.subgame
+			file_manager.prepare_subgame_input(@analysis.subgame_script.subgame)
 		end
-	 	file_manager.prepare_analysis_input(Game.find(analysis.game_id))
+	 	file_manager.prepare_analysis_input(Game.find(@analysis.game_id))
 	    file_manager.prepare_pbs(@analysis.pbs.scripts)
 	end
 end

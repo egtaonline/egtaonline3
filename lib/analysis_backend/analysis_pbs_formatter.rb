@@ -20,8 +20,8 @@ class AnalysisPbsFormatter
  
    
    def prepare_pbs(game_id, set_up_remote_command, running_script_command, clean_up_command)
-    pbs_error_path = File.join(@path_finder.remote_data_path, @path_finder.pbs_error_file)
-    pbs_output_path = File.join(@path_finder.remote_data_path, @path_finder.pbs_output_file)
+    pbs_error_path = File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file)
+    pbs_output_path = File.join(@path_finder.remote_pbs_path, @path_finder.pbs_output_file)
       <<-DOCUMENT
 #!/bin/bash
 #PBS -N analysis-#{game_id}

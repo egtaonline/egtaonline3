@@ -7,8 +7,15 @@ class Analysis < ActiveRecord::Base
 	has_one :dominance_script, dependent: :destroy
 	has_one :pbs, dependent: :destroy
 
-	scope :queueable, where(status: "pending").order('created_at ASC').limit(5)
-	scope :active, where(status: %w(queued running))
+	
+	def self.active
+    	where(state: %w(queued running))
+  	end
+
+  	def self.queueable
+    	where(state: 'pending').order('created_at ASC').limit(5)
+  	end
+	
 	def fail(message)
     	update_attributes(error_message: message[0..255], status: 'failed')
     	requeue
@@ -34,4 +41,11 @@ class Analysis < ActiveRecord::Base
 	      AnalysisDataParser.perform_async(self)
 	    end
   	end
+
+  	def finish
+	    unless state == 'failed'
+	      logger.debug "Analysis #{id} moving to complete state"
+	      update_attributes(state: 'complete')
+	    end
+ 	end
 end

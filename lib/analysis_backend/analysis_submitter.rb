@@ -7,7 +7,7 @@ class AnalysisSubmitter
     proxy = Backend.connection.acquire
     if proxy
       begin
-        response = proxy.exec!("qsub -V -r n #{File.join(@path_finder.remote_data_path, @path_finder.pbs_file_name)}") 
+        response = proxy.exec!("qsub -V -r n #{File.join(@path_finder.remote_pbs_path, @path_finder.pbs_file_name)}") 
         if response =~ /\A(\d+)/
           @analysis.queue_as Regexp.last_match[0].to_i
         else
