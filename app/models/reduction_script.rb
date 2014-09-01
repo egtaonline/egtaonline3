@@ -2,6 +2,14 @@ class ReductionScript < ActiveRecord::Base
 	belongs_to :analysis
 	after_initialize :prepare
 
+	def get_command
+		"python #{@script_name} -input #{@path_obj.input_file_name} -output ./out/#{@path_obj.reduction_file_name} #{self.mode} #{self.reduced_number}"
+	end
+
+	def set_up_remote
+	    "cp -r #{@path_obj.scripts_path}/#{@script_name} #{@path_obj.working_dir}"
+	end
+
 	private
 
 	def prepare
@@ -13,11 +21,5 @@ class ReductionScript < ActiveRecord::Base
 	    @output_file_name = output_file_name
 	end
 
-	def get_command
-		"python #{@script_name} -input #{@path_obj.input_file_name} -output ./out/#{@path_obj.reduction_file_name}} #{self.mode} #{self.reduced_number}"
-	end
-
-	def set_up_remote_script(script_path, work_dir)
-    	"cp -r #{script_path}/#{@script_name} #{work_dir}"
-  	end
+	
 end
