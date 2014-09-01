@@ -3,4 +3,4 @@
 %p=control_variate_statement
 = link_to "Set Control Variates", edit_game_control_variable_path(game.id, game.simulator_instance_id), class: 'btn btn-primary'
 = link_to "Analyze JSON in EGAT", create_process_game_path(game.id), method: :post, class: 'btn btn-primary'
-= link_to "Link to Analysis Folder", analysis_path, class: 'btn btn-primary'
+= link_to 'Link to Analyses', game_analyses_path(game), class: 'btn btn-primary'

@@ -1,9 +1,22 @@
 class AnalysesController < AuthenticatedController
-  expose(:analyses) do
-    Analysis.order("#{sort_column} #{sort_direction}")
-      .page(params[:page])
-  end
+  # expose(:analyses) do
+  #   Analysis.order("#{sort_column} #{sort_direction}")
+  #     .page(params[:page])
+  # end
+
+  expose(:analyses) {index}
+
   expose(:analysis)
+
+  def index
+    if params[:game_id] != nil
+       Game.find(params[:game_id]).analyses.order("#{sort_column} #{sort_direction}")
+      .page(params[:page])
+    else
+      Analysis.order("#{sort_column} #{sort_direction}")
+      .page(params[:page]) 
+    end
+  end
 
   def show
     respond_to do |format|
