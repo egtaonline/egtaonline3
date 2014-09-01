@@ -3,3 +3,7 @@
   = u.attributes :status
   = u.attribute :id, label: "Folder number"
   = u.attributes :job_id, :error_message
+  = link_to "Download Analysis Output", url_for(action: "show", format: "json"), class: 'btn btn-primary'
+  = link_to "Download Subgame Json File", url_for(action: "show", format: "json", output: "subgame"), class: 'btn btn-primary'
+  = link_to "Download Non-Dominance Json File", url_for(action: "show", format: "json", output: "nd"), class: 'btn btn-primary'
+  = link_to "Download Reduced Json File", url_for(action: "show", format: "json", output: "reduced"), class: 'btn btn-primary'

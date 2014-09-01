@@ -25,7 +25,7 @@ class FileManager
   end
 
   def prepare_pbs(pbs_file)
-	   File.open("#{File.join(@path_finder.local_pbs_path, @path_finder.pbs_file_name)}", 'w', 0770) do |f|
+	   File.open("#{File.join(@path_obj.local_pbs_path, @path_obj.pbs_file_name)}", 'w', 0770) do |f|
          f.write(pbs_file)
       end
   end

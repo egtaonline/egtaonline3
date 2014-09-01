@@ -9,11 +9,11 @@ class Analysis < ActiveRecord::Base
 
 	
 	def self.active
-    	where(state: %w(queued running))
+    	where(status: %w(queued running))
   	end
 
   	def self.queueable
-    	where(state: 'pending').order('created_at ASC').limit(5)
+    	where(status: 'pending').order('created_at ASC').limit(5)
   	end
 	
 	def fail(message)
@@ -43,9 +43,9 @@ class Analysis < ActiveRecord::Base
   	end
 
   	def finish
-	    unless state == 'failed'
-	      logger.debug "Analysis #{id} moving to complete state"
-	      update_attributes(state: 'complete')
+	    unless status == 'failed'
+	      logger.debug "Analysis #{id} moving to complete status"
+	      update_attributes(status: 'complete')
 	    end
  	end
 end
