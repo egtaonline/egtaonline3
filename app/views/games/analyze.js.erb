@@ -7,6 +7,6 @@
 <% else  %>
 	$('#set').fadeOut();
 	$('#processing').fadeIn();
-	$('#processing').append('<p>Your file name will be <%= "#{game.id}-analysis-#{@time}.txt" %>. Error file <%= "#{game.id}-analysis-#{@time}-pbs.e" %> will be shown if your scheduled job gets terminanted wrongly. </p>')
+	$('#processing').append('<p>Your anlaysis id is <%= "#{@analysis_id}"%>.We will send you an email when the analysis output is ready. Please click the link at the game page to download your file.</p>')
 <% end %>
 

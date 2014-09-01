@@ -105,7 +105,7 @@ class GamesController < ProfileSpacesController
     end
 
     AnalysisManager.new(analysis).prepare_analysis
-
+    @analysis_id = analysis.id
   end
 
   private
