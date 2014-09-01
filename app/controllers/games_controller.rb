@@ -43,7 +43,7 @@ class GamesController < ProfileSpacesController
   end
 
   expose(:analysis_path) do
-    "/analysis/#{game.id}"
+    "/analysis/#{game.id}" 
   end
 
   # expose(:analyses_path) do
