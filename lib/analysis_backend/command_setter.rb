@@ -5,12 +5,13 @@ require_relative 'analysis_path_finder.rb'
 require_relative 'dominance_script_setter.rb'
 
 class CommandSetter
-	def initialize(analysis_obj, reduction_obj, dominance_obj, subgame_obj, path_finder)
-		@path_obj = path_finder
-		@analysis_obj = analysis_obj
-		@reduction_obj = reduction_obj
-		@subgame_obj = subgame_obj
-		@dominance_obj = dominance_obj
+	def initialize(analysis)
+		
+		@analysis_obj = analysis.analysis_script
+		@reduction_obj = analysis.reduction_script
+		@subgame_obj = analysis.subgame_script
+		@dominance_obj = analysis.dominance_script
+		@path_obj = AnalysisPathFinder.new(game_id.to_s, id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
 
 	def set_up_remote_command				
@@ -22,14 +23,13 @@ mkdir #{@path_obj.working_dir}
 #{set_subgame}
 #{set_dominance}
 cd #{@path_obj.working_dir}
-cp #{@path_obj.remote_data_path}/* .
+cp #{@path_obj.remote_input_path}/* .
 mkdir out
 export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 		DOCUMENT
 	end
 
 	def get_script_command
-		set_up_input_output
 		analysis_command = @analysis_obj.get_command
 		if @dominance_obj != nil
 			dominance_command = @dominance_obj.get_command
@@ -51,7 +51,7 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 	def clean_up_remote_command
 
 		<<-DOCUMENT
-cp #{@path_obj.working_dir}/out/* #{@path_obj.remote_data_path}
+cp #{@path_obj.working_dir}/out/* #{@path_obj.remote_output_path}
 rm -rf #{@path_obj.working_dir}
 		DOCUMENT
 
@@ -61,54 +61,24 @@ rm -rf #{@path_obj.working_dir}
 
 	def set_reduction
 		if @reduction_obj != nil
-			"#{@reduction_obj.set_up_remote_script(@path_obj.scripts_path,@path_obj.working_dir)}"
+			"#{@reduction_obj.set_up_remote}"
 		end
 	end
 	
 	def set_analysis
-		"#{@analysis_obj.set_up_remote_script(@path_obj.scripts_path,@path_obj.working_dir)}"
+		"#{@analysis_obj.set_up_remote}"
 	end
 
 	def set_subgame
 		if @subgame_obj != nil
-			"#{@subgame_obj.set_up_remote_script(@path_obj.scripts_path,@path_obj.working_dir)}"
+			"#{@subgame_obj.set_up_remote}"
 		end
 	end
 
 	def set_dominance
 		if @dominance_obj != nil
-			"#{@dominance_obj.set_up_remote_script(@path_obj.scripts_path, @path_obj.working_dir)}"
+			"#{@dominance_obj.set_up_remote_script}"
 		end
 	end
 	
-
-	def set_up_input_output
-		if @reduction_obj != nil
-			@reduction_obj.set_input_file(@path_obj.input_file_name)
-			@reduction_obj.set_output_file("./out/#{@path_obj.reduction_file_name}")
-			if @dominance_obj != nil
-				@dominance_obj.set_input_file("./out/#{@path_obj.reduction_file_name}")
-			end
-			@analysis_obj.set_input_file("./out/#{@path_obj.reduction_file_name}")
-			if @subgame_obj != nil
-				@subgame_obj.set_input_file("./out/#{@path_obj.reduction_file_name}")
-			end
-		else
-			if @dominance_obj != nil
-				@dominance_obj.set_input_file(@path_obj.input_file_name)
-			end
-			@analysis_obj.set_input_file(@path_obj.input_file_name)
-		end
-
-		if @subgame_obj != nil 
-			@subgame_obj.set_input_file("./out/#{@path_obj.dominance_json_file_name}")
-			@subgame_obj.set_output_file("./out/#{@path_obj.subgame_json_file_name}")
-			@analysis_obj.add_argument(" -sg ./out/#{@path_obj.subgame_json_file_name} ")
-		end
-
-		if @dominance_obj != nil
-			@dominance_obj.set_output_file("./out/#{@path_obj.dominance_json_file_name}")
-		end
-		@analysis_obj.set_output_file("./out/#{@path_obj.output_file_name}")
-	end
 end

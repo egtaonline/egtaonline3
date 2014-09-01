@@ -8,20 +8,20 @@ class AnalysisStatusResolver
 	def act_on_status(status)
 	    case status
 	    when 'R'
-	      analysis.start
+	      @analysis.start
 	    when 'C', '', nil
-	      if File.exist?(File.join(@path_finder.remote_data_path, @path_finder.pbs_error_file))
-	        error_message = File.open(File.join(@path_finder.remote_data_path, @path_finder.pbs_error_file))
+	      if File.exist?(File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file))
+	        error_message = File.open(File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file))
 	          .read(ERROR_LIMIT)
 	        if error_message
-	          analysis.fail(error_message)
+	          @analysis.fail(error_message)
 	        else
-	          analysis.process
+	          @analysis.process
 	        end
-	      elsif analysis.state == 'queued'
-	        analysis.start
+	      elsif @analysis.state == 'queued'
+	        @analysis.start
 	      else
-	        analysis.fail('Failed to queue')
+	        @analysis.fail('Failed to queue')
 	      end
 	    end
   	end

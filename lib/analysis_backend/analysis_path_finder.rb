@@ -4,13 +4,32 @@ class AnalysisPathFinder
     @game_id = game_id.to_s 
     @analysis_id = analysis_id.to_s 
     @remote_data_path = File.join(remote_path,'egtaonline','analysis',@game_id, @analysis_id )
-
     @local_data_path = File.join(local_path,'analysis',@game_id, @analysis_id)
     @scripts_path = File.join(remote_path,'GameAnalysis')   
   end
 
-  def dominance_script_path
-    @scripts_path
+  def local_input_path
+    File.join(@local_data_path,"in")
+  end
+
+  def local_output_path
+    File.join(@local_data_path,"out")
+  end
+  
+  def local_pbs_path
+    File.join(@local_data_path,"pbs")
+  end
+  
+  def remote_input_path
+    File.join(@remote_data_path,"in")
+  end
+
+  def remote_output_path
+    File.join(@remote_data_path,"out")
+  end
+  
+  def remote_pbs_path
+    File.join(@remote_data_path,"pbs")
   end
 
   def pbs_error_file

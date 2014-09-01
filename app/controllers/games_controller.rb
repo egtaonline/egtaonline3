@@ -49,31 +49,6 @@ class GamesController < ProfileSpacesController
   def show
     respond_to do |format|
       format.html do
-        orgin_path = "/mnt/nfs/home/egtaonline/analysis/#{game.id}"
-        
-        #DEBUG##########################
-        # orgin_path = "#{Rails.root}/app/analysis/#{game.id}"
-
-        dest_path = "#{Rails.root}/public/analysis/#{game.id}" 
-        #create folder if it doesn't exist, move everything in the output folder 
-        FileUtils::mkdir_p dest_path
-        FileUtils.mv(Dir["#{orgin_path}/out/*"],dest_path)
-       
-        # move error files 
-        Dir["#{orgin_path}/pbs/*.e"].each do |error_file|         
-            FileUtils.cp_r("#{error_file}", dest_path) unless File.zero?(error_file)             
-            FileUtils.rm error_file
-        end
-        
-        if(File.exist?("#{orgin_path}/subgame/#{game.id}-subgame.json"))
-          if File.zero?("#{orgin_path}/subgame/#{game.id}-subgame.json")
-            FileUtils.rm "#{orgin_path}/subgame/#{game.id}-subgame.json" 
-          else
-            subgame_json = File.open("#{orgin_path}/subgame/#{game.id}-subgame.json", "rb")
-            game.subgames = subgame_json.read        
-            flash[:alert] = game.errors.full_messages.first unless game.save                      
-          end          
-        end
       end
 
       format.json do
