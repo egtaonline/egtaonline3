@@ -12,15 +12,15 @@ class Pbs < ActiveRecord::Base
 
    def format(set_up_remote_command, running_script_command, clean_up_command)
       pbs_file = prepare_pbs(set_up_remote_command, running_script_command, clean_up_command)     
-      @pbs.scripts = pbs_file
-      @pbs.save
+      self.scripts = pbs_file
+      self.save
       #throw an error 
    end
  
    
    def prepare_pbs(set_up_remote_command, running_script_command, clean_up_command)
-      pbs_error_path = File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file)
-      pbs_output_path = File.join(@path_finder.remote_pbs_path, @path_finder.pbs_output_file)
+      pbs_error_path = File.join(@path_obj.remote_pbs_path, @path_obj.pbs_error_file)
+      pbs_output_path = File.join(@path_obj.remote_pbs_path, @path_obj.pbs_output_file)
       <<-DOCUMENT
 #!/bin/bash
 #PBS -N analysis-#{self.analysis_id}

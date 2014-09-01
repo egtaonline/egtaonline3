@@ -1,8 +1,4 @@
-require_relative 'reduced_script_setter.rb'
-require_relative 'analysis_script_setter.rb'
-require_relative 'subgame_setter.rb'
 require_relative 'analysis_path_finder.rb'
-require_relative 'dominance_script_setter.rb'
 
 class CommandSetter
 	def initialize(analysis)
@@ -11,7 +7,7 @@ class CommandSetter
 		@reduction_obj = analysis.reduction_script
 		@subgame_obj = analysis.subgame_script
 		@dominance_obj = analysis.dominance_script
-		@path_obj = AnalysisPathFinder.new(game_id.to_s, id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
+		@path_obj = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
 
 	def set_up_remote_command				
@@ -77,7 +73,7 @@ rm -rf #{@path_obj.working_dir}
 
 	def set_dominance
 		if @dominance_obj != nil
-			"#{@dominance_obj.set_up_remote_script}"
+			"#{@dominance_obj.set_up_remote}"
 		end
 	end
 	
