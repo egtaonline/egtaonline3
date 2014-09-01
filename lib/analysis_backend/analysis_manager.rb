@@ -5,7 +5,8 @@ require_relative 'analysis_path_finder.rb'
 
 class AnalysisManager 
   def initialize(analysis)
-    @path_finder = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "#{Rails.root}/app","/nfs/wellman_ls")
+    # @path_finder = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "#{Rails.root}/app","/nfs/wellman_ls")
+    @path_finder = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
     @analysis = analysis
     @file_manager = FileManager.new(@path_finder)
   end

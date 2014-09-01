@@ -46,6 +46,12 @@ class GamesController < ProfileSpacesController
     "/analysis/#{game.id}"
   end
 
+  # expose(:analyses_path) do
+  #   game.analyses.order("#{sort_column} #{sort_direction}")
+  #     .page(params[:page])
+  # end
+
+
   def show
     respond_to do |format|
       format.html do

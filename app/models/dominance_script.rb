@@ -4,7 +4,7 @@ class DominanceScript < ActiveRecord::Base
 	
 	
 	def get_command
-		"python #{@script_name} < #{@input_file_name} > #{@path_obj.dominance_json_file_name}"
+		"python #{@script_name} < #{@input_file_name} > ./out/#{@path_obj.dominance_json_file_name}"
 	end
 
 	def set_up_remote

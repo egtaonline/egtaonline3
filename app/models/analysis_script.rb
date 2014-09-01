@@ -3,7 +3,7 @@ class AnalysisScript < ActiveRecord::Base
 	after_initialize :prepare
 
 	def get_command
-	    "python #{@script_name} #{@required_argument_list} #{@input_file_name} > #{@path_obj.output_file_name}"
+	    "python #{@script_name} #{@required_argument_list} #{@input_file_name} > ./out/#{@path_obj.output_file_name}"
 	end
 
 	def set_up_remote

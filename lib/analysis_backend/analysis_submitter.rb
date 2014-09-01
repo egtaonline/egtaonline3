@@ -5,6 +5,7 @@ class AnalysisSubmitter
 	end
   def submit
     proxy = Backend.connection.acquire
+    # proxy = nil
     if proxy
       begin
         response = proxy.exec!("qsub -V -r n #{File.join(@path_finder.remote_pbs_path, @path_finder.pbs_file_name)}") 
@@ -16,6 +17,8 @@ class AnalysisSubmitter
       rescue => e
         @analysis.fail "Submission failed: #{e}"
       end
+    else
+      @analysis.fail "Lost connection to flux"
     end
   end
 end
