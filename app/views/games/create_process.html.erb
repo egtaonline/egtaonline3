@@ -9,16 +9,16 @@
 			<div>
 				<label for="time">Scripts Running Time</label>	
 				<div>
-					<%= select_tag "day", options_for_select((0..7).step(1)) %>day(s)
-					<%= select_tag "hour", options_for_select((0..23).step(1), 6) %>hour(s)
-					<%= select_tag "min", options_for_select((0..59).step(1)) %>minute(s)
+					<%= select_tag "day", options_for_select((0..7).step(1), @day )%>day(s)
+					<%= select_tag "hour", options_for_select((0..23).step(1), @hour) %>hour(s)
+					<%= select_tag "min", options_for_select((0..59).step(1), @minute)%>minute(s)
 				</div>
 			</div>
 			<div>
 				<label for="memory">Allocated Memory</label>	
 				<div>
-					<%= number_field_tag("memory", 4000, {step:1, min:0})%>
-					<%= select_tag("unit", "<option  selected='selected' >mb</option> <option>gb</option>".html_safe)%>
+					<%= number_field_tag("memory", @memory, {step:1, min:0})%>
+					<%= select_tag("unit", "<option  selected='selected' >#{@memory_unit}</option> <option>gb</option>".html_safe)%>
 				</div>
 			</div>
 		</fieldset><!--End of PBS arguments-->
@@ -26,15 +26,15 @@
 		<fieldset id = "reduced"><!--Reduced Scripts' Arguments -->
 			<div>
 				<%= label_tag('enable_reduced', 'Enable Reduction Script') %>
-				<%= check_box_tag('enable_reduced', 'enable_reduced' , true)%>
+				<%= check_box_tag('enable_reduced', 'enable_reduced' , @enable_reduced)%>
 			</div>
 			<hr>
 			<legend>Reduction Script Arguments:</legend>
 			<div>
 				<label for="reduced_mode">Reduced Mode:</label>	
-				<%= radio_button_tag(:reduced_mode, "DPR", true, class: "reduced_input") %>
+				<%= radio_button_tag(:reduced_mode, "DPR", @mode_hash["DPR"], class: "reduced_input") %>
 				<%= label_tag(:reduced_mode_dpr, "DPR") %>
-				<%= radio_button_tag(:reduced_mode, "HR", false, class: "reduced_input") %>
+				<%= radio_button_tag(:reduced_mode, "HR", @mode_hash["HR"], class: "reduced_input") %>
 				<%= label_tag(:reduced_mode_tr, "HR") %>
 			</div>
 			<!-- role names should be in aphabetical order-->
@@ -42,11 +42,10 @@
 				<% game.roles.each do |role| %>
 				<% @name = role.name%>
 				<% @count = role.count %>
-
-			<div class="form-group">
-				<%= label_tag(@name, @name) %>	
-				<%= number_field_tag(@name, @count, in: 1...@count + 1 , class: "reduced_input")%>
-			</div>
+				<div class="form-group">
+					<%= label_tag(@name, @name) %>	
+					<%= number_field_tag(@name, @role_number_hash[@name], in: 1...@count + 1 , class: "reduced_input")%>
+				</div>
 			<% end %>
 		</fieldset><!-- End of Reduced Scripts' Arguments -->
 		
@@ -55,32 +54,32 @@
 			
 			<div><!--Subgame argument --><!-- "Will be overwritten with new subgames."-->	
 				<%= label_tag("enable_subgame", "Run Analysis with Subgames") %>	
-				<%= check_box_tag('enable_subgame', 'enable_subgame', true)%>
+				<%= check_box_tag('enable_subgame', 'enable_subgame',  @enable_subgame )%>
 			</div><!--End of subgame argument -->
 
 			<div><!--Dominance argument --><!-- "Will be overwritten with new dominances."-->	
 				<%= label_tag("enable_dominance", "Run Analysis with Dominance Script") %>	
-				<%= check_box_tag('enable_dominance', 'enable_dominance', true)%>
+				<%= check_box_tag('enable_dominance', 'enable_dominance', @enable_dominance)%>
 			</div><!--End of dominance argument -->
 
 			<div><!--verbose flag -->
 				<%= label_tag("enable_verbose", "Enable Verbose Flag ") %>	
-				<%= check_box_tag('enable_verbose', 'enable_verbose', true)%>
+				<%= check_box_tag('enable_verbose', 'enable_verbose', @enable_verbose)%>
 			</div><!--End of verbose flag -->
 
 			<hr>
 			<%= label_tag("regret", "Regret: Max allowed regret for approximate Nash equilibrium:") %>
-			<%= number_field_tag("regret", 1e-3, {step:0.001, min:0})%>
+			<%= number_field_tag("regret", @regret, {step:0.001, min:0})%>
 			<%= label_tag("dist", "Dist: L2-distance threshold to consider equilibrium distinct:") %>
-			<%= number_field_tag("dist", 1e-3, {step:0.001,min:0})%>
+			<%= number_field_tag("dist",  @dist, {step:0.001,min:0})%>
 			<%= label_tag("support", "Support: Min probability for a strategy to be considered in support:") %>
-			<%= number_field_tag("support", 1e-3, {step:0.001,min:0})%>
+			<%= number_field_tag("support", @support, {step:0.001,min:0})%>
 			<%= label_tag("converge", "Converge: Replicator dynamics convergence threshold:") %>
-			<%= number_field_tag("converge", 1e-8,{step:1e-8, min:0, class: "enable"})%>
+			<%= number_field_tag("converge", @converge,{step:1e-8, min:0, class: "enable"})%>
 			<%= label_tag("iters", "Iters: Max replicator dynamics iterations:") %>
-			<%= number_field_tag("iters", 10000, {step:1, min:0, class: "enable"})%>
+			<%= number_field_tag("iters", @iters, {step:1, min:0, class: "enable"})%>
 			<%= label_tag("points", "Points: Number of random points from which to initialize replicator dynamics:") %>
-			<%= number_field_tag("points", 0, {step:1, min:0})%>
+			<%= number_field_tag("points", @points, {step:1, min:0})%>
 			
 		</fieldset><!-- End of Analysis Scripts' Arguments -->	
 		<br />

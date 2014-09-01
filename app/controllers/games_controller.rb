@@ -42,15 +42,6 @@ class GamesController < ProfileSpacesController
     game.name || 'EGTAOnline'
   end
 
-  expose(:analysis_path) do
-    "/analysis/#{game.id}" 
-  end
-
-  # expose(:analyses_path) do
-  #   game.analyses.order("#{sort_column} #{sort_direction}")
-  #     .page(params[:page])
-  # end
-
 
   def show
     respond_to do |format|
@@ -80,7 +71,24 @@ class GamesController < ProfileSpacesController
     respond_with(game)
   end
   def create_process
-    
+    last_analysis = game.analyses.last
+    if last_analysis != nil
+      @pbs = last_analysis.pbs     
+      @analysis_argument = last_analysis.analysis_script
+      
+      @enable_reduced = last_analysis.enable_reduction
+      @enable_subgame = last_analysis.enable_subgame
+
+      if @enable_reduced
+        @reduction_argument = last_analysis.reduction_script
+      end
+    else
+      @enable_reduced = true
+      @enable_subgame = true
+    end
+    set_pbs_default
+    set_analysis_default
+    set_reduction_default
   end
 
   def analyze
@@ -102,7 +110,64 @@ class GamesController < ProfileSpacesController
 
   private
 
+  def set_pbs_default
+    if @pbs != nil
+      @day = @pbs.day
+      @hour = @pbs.hour
+      @minute = @pbs.minute
+      @memory = @pbs.memory
+      @memory_unit = @pbs.memory_unit
+    else
+      @day = 0
+      @hour = 6
+      @minute = 0
+      @memory = 4000
+      @memory_unit = "mb"
+    end
+  end
+
+  def set_analysis_default
+    if @analysis_argument != nil
+      @enable_verbose = @analysis_argument.verbose
+      @regret = @analysis_argument.regret
+      @dist = @analysis_argument.dist
+      @converge =  @analysis_argument.converge
+      @iters = @analysis_argument.iters
+      @points = @analysis_argument.points
+      @support = @analysis_argument.support
+      @enable_dominance = @analysis_argument.enable_dominance
+    else
+      @enable_verbose = true
+      @regret = 0.001
+      @dist = 0.001
+      @converge =  0.00000001
+      @iters = 10000
+      @points = 0
+      @support = 0.001
+      @enable_dominance = true
+    end
+  end
   
+  def set_reduction_default
+    @mode_hash = {"DPR" =>false, "HR" =>false}
+    if @reduction_argument != nil
+        role_name_array = Array.new
+        game.roles.each do |role|
+          role_name_array << role.name
+        end
+        role_number_array = @reduction_argument.reduced_number.split(" ").map { |s| s.to_i }
+        @role_number_hash = Hash[role_name_array.zip role_number_array]
+        @mode_hash[@reduction_argument.mode] = true
+    else
+        @role_number_hash = {}
+        game.roles.each do |role|
+          @role_number_hash[role.name] = role.count
+        end
+        @mode_hash["DPR"] = true
+    end
+  end
+  
+
   def game_parameters
     params.require(:game).permit(:name, :size, :simulator_instance_id)
   end
