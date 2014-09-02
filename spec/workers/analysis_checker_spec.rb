@@ -8,8 +8,7 @@ describe AnalysisChecker do
       Analysis.should_receive(:active).and_return(analyses)
     end
 
-    it 'updates each active analysis' do
-      
+    it 'updates each active analysis' do     
       AnalysisUpdatter.should_receive(:new).and_return(updatter)
       updatter.should_receive(:update_analysis).with(analyses)
       subject.perform
