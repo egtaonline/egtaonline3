@@ -5,4 +5,5 @@ module Clockwork
   every(3.minutes, 'SimulationQueuer') { SimulationQueuer.perform_async }
   every(5.minutes, 'SimulationChecker') { SimulationChecker.perform_async }
   every(5.minutes, 'AnalysisQueuer') { AnalysisQueuer.perform_async }
+  every(5.minutes, 'AnalysisChecker') { AnalysisChecker.perform_async }
 end

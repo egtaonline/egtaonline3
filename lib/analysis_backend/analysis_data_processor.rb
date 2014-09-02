@@ -33,7 +33,7 @@ class AnalysisDataProcessor
 				reduction_script.output = reduction_output
 				reduction_script.save	
 				#throw
-				true			
+				# true			
 			else
 				false
 			end
@@ -51,7 +51,6 @@ class AnalysisDataProcessor
 				#throw
 				@analysis.subgame = subgame
 				@analysis.save
-				true				
 			else
 				false
 			end
@@ -69,7 +68,7 @@ class AnalysisDataProcessor
 				#throw
 				dominance_script.output = dominance_output
 				dominance_script.save	
-				true			
+				# true			
 			else
 				false
 			end
@@ -84,7 +83,7 @@ class AnalysisDataProcessor
 			output = File.open(analysis_out).read
 			@analysis.output = output
 			@analysis.save	
-			true	
+			# true	
 			#throw		
 		else
 			false
