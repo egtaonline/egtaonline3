@@ -16,14 +16,14 @@ class Analysis < ActiveRecord::Base
     	where(status: 'pending').order('created_at ASC').limit(5)
   	end
 	
+	def self.stale(age = 300_000)
+	    where('status IN (?) AND updated_at < ?',
+	          %w(queued complete failed), Time.current - age)
+  	end
+  	
 	def fail(message)
     	update_attributes(error_message: message[0..255], status: 'failed')
-    	requeue
   	end	
-
-  	def requeue
-    	AnalysisRequeuer.perform_in(5.minutes,self)
-  	end
 
   	def queue_as(jid)
     	update_attributes(job_id: jid, status: 'queued') if status == 'pending'
