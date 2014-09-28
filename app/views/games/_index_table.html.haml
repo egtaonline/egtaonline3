@@ -4,7 +4,6 @@
       %th= sortable "name"
       %th= sortable("simulator_instances.simulator_fullname", "Simulator")
       %th= sortable "size"
-      %th= params.inspect
   %tbody
     =render games
 = paginate games, remote: true
