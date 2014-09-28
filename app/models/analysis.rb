@@ -38,7 +38,7 @@ class Analysis < ActiveRecord::Base
 	      ActiveRecord::Base.transaction do
 	        update_attributes(status: 'processing')
 	      end
-	      AnalysisDataParser.perform_async(self)
+	      AnalysisDataParser.perform_async(self.id)
 	    end
   	end
 

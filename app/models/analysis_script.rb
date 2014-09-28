@@ -36,7 +36,7 @@ class AnalysisScript < ActiveRecord::Base
 	def check_optional_argument
 	   
 	   if self.verbose != nil
-	      add_argument(" --verbose ")
+	      add_argument("--verbose")
 	   end
 
 	   if self.enable_dominance != nil
