@@ -75,4 +75,14 @@ describe Analysis do
   end
 
 
+  #Change the debugging paths and make it pass
+  describe '#process' do
+    let(:AnalysisDataParser){double('AnalysisDataParser')}
+    it 'changes queued and running to processing and parses the data' do
+      analysis2 = create(:analysis, :running_status)
+      analysis2.process  
+      expect(analysis2.reload.error_message).to eq('Incorrect analysis output,')
+      expect(analysis2.reload.status).to eq('failed')
+    end
+  end
 end
