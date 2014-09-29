@@ -1,4 +1,5 @@
 = simple_form_for game, html: {class: 'form-inline' } do |f|
+  / = params.inspect
   = f.input :name
   = f.input :size, label: "Game size"
   = render partial: "configuration/selector"
