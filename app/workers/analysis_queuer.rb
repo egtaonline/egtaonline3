@@ -1,6 +1,6 @@
 class AnalysisQueuer
 	include Sidekiq::Worker
-	sidekiq_options queue: 'analysis'
+	sidekiq_options queue: 'backend'
 	def perform
 		ActiveRecord::Base.transaction do
 			to_be_queued = Analysis.queueable.to_a
