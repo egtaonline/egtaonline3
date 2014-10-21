@@ -68,7 +68,4 @@ class AnalysisPathFinder
     "#{@game_id}-wrapper-#{@analysis_id}"
   end
 
-  def dominance_json_file_name
-    "#{@game_id}-dominance-#{@time}.json"
-  end
 end
