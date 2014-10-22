@@ -11,6 +11,7 @@ class AnalysisUpdatter
       status_hash = parse_to_hash(output)
       if status_hash
         analyses.each do |analysis|
+        Rails.logger.info "Status Hash:#{status_hash[analysis.job_id.to_s]}"
         AnalysisStatusResolver.new(analysis).act_on_status(
             status_hash[analysis.job_id.to_s])
         end
