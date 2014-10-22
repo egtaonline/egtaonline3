@@ -18,7 +18,7 @@ class AnalysisStatusResolver
 	        else
 	          @analysis.process
 	        end
-	      elsif @analysis.state == 'queued'
+	      elsif @analysis.status == 'queued'
 	        @analysis.start
 	      else
 	        @analysis.fail('Failed to queue')
