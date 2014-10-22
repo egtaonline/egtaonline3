@@ -12,7 +12,7 @@ class AnalysisStatusResolver
 	    when 'C', '', nil
           Rails.logger.info "File path:#{File.exist?(File.join(@path_finder.local_pbs_path, @path_finder.pbs_error_file))}" 
 	      if File.exist?(File.join(@path_finder.local_pbs_path, @path_finder.pbs_error_file))
-	        error_message = File.open(File.join(@path_finder.remote_pbs_path, @path_finder.pbs_error_file))
+	        error_message = File.open(File.join(@path_finder.local_pbs_path, @path_finder.pbs_error_file))
 	          .read(ERROR_LIMIT)
 	        if error_message
 	          @analysis.fail(error_message)
