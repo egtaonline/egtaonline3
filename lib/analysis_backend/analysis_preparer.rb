@@ -8,7 +8,7 @@ class AnalysisPreparer
 	def prepare_analysis
 		file_manager = FileManager.new(@path_finder)
 		file_manager.created_folder
-		if @analysis.enable_subgame != nil && @analysis.subgame_script.subgame
+		if @analysis.enable_subgame != false && @analysis.subgame_script.subgame
 			file_manager.prepare_subgame_input(@analysis.subgame_script.subgame)
 		end
 	 	file_manager.prepare_analysis_input(Game.find(@analysis.game_id))
