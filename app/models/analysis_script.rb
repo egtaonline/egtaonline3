@@ -35,11 +35,11 @@ class AnalysisScript < ActiveRecord::Base
 
 	def check_optional_argument
 	   
-	   if self.verbose != nil
+	   if self.verbose != false
 	      add_argument("--verbose")
 	   end
 
-	   if self.enable_dominance != nil
+	   if self.enable_dominance != false
 	      add_argument(" -nd ./out/#{@path_obj.dominance_json_file_name} ")
 	   end
 

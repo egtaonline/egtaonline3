@@ -96,7 +96,7 @@ class GamesController < ProfileSpacesController
     analysis.create_analysis_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], support: params[:support],enable_dominance: params[:enable_dominance] != nil)
     analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit], user_email: "#{current_user.email}")
     
-    if params[:enable_reduced] != nil
+    if params[:enable_reduced] != nil       
         role_number_array = Array.new
         game.roles.each do |role|
         role_number_array << params[role.name]

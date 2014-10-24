@@ -20,11 +20,11 @@ class AnalysisManager
   private
 
   def create_script_setter
-    if @analysis.enable_subgame != nil
+    if @analysis.enable_subgame != false
       prepare_subgame
     end
 
-    if @analysis.enable_subgame != nil || @analysis.analysis_script.enable_dominance != nil
+    if @analysis.enable_subgame != false || @analysis.analysis_script.enable_dominance != false
       @analysis.create_dominance_script()
     end
     
