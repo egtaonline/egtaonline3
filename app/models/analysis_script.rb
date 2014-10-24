@@ -40,11 +40,11 @@ class AnalysisScript < ActiveRecord::Base
 	   end
 
 	   if self.enable_dominance != false
-	      add_argument(" -nd ./out/#{@path_obj.dominance_json_file_name} ")
+	      add_argument(" -nd out/#{@path_obj.dominance_json_file_name} ")
 	   end
 
 	   if @analysis.subgame_script != nil
-	   	  add_argument(" -sg ./out/#{@path_obj.subgame_json_file_name} ")
+	   	  add_argument(" -sg out/#{@path_obj.subgame_json_file_name} ")
 	   end
 	end
 
