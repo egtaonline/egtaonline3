@@ -28,6 +28,9 @@ class AnalysisManager
       @analysis.create_dominance_script()
     end
     
+    @analysis.analysis_script.set_input_file
+    @analysis.analysis_script.check_optional_argument
+
     @command_setter = CommandSetter.new(@analysis)
   end
 
