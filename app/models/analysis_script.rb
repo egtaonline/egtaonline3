@@ -53,36 +53,4 @@ class AnalysisScript < ActiveRecord::Base
 	    @path_obj = AnalysisPathFinder.new(@analysis.game_id.to_s, analysis_id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
 
-	#def set_input_file
-		#if @analysis.reduction_script != nil
-			#@input_file_name = "./out/#{@path_obj.reduction_file_name}"
-            #Rails.logger.info "Reduction script is not nil"
-		#else
-			#@input_file_name = @path_obj.input_file_name
-            #Rails.logger.info "Reduction Script is nil"
-		#end
-	#end
-
-	#def check_optional_argument
-	   
-	   #if self.verbose != false
-		  #add_argument("--verbose")
-	   #end
-
-	   #if self.enable_dominance != false
-		  #add_argument(" -nd out/#{@path_obj.dominance_json_file_name} ")
-	   #end
-
-	   #if @analysis.subgame_script != nil
-			 #add_argument(" -sg out/#{@path_obj.subgame_json_file_name} ")
-	   #end
-	#end
-
-
-	#def add_argument(optional_argument)
-	   #@required_argument_list = @required_argument_list + " #{optional_argument} "
-	#end
-
-	
-
 end
