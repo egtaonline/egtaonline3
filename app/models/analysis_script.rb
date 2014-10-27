@@ -12,7 +12,7 @@ class AnalysisScript < ActiveRecord::Base
 
 	def set_input_file
 		if @analysis.reduction_script != nil
-			@input_file_name = "./out/#{@path_obj.reduction_file_name}"
+			@input_file_name = "out/#{@path_obj.reduction_file_name}"
 		else
 			@input_file_name = @path_obj.input_file_name
 		end
