@@ -8,6 +8,7 @@ class AnalysisPreparer
 	def prepare_analysis
 		file_manager = FileManager.new(@path_finder)
 		file_manager.created_folder
+        Rails.logger.info "Analysis id is #{@analysis.id}"
 		if @analysis.enable_subgame != false && @analysis.subgame_script.subgame
 			file_manager.prepare_subgame_input(@analysis.subgame_script.subgame)
 		end
