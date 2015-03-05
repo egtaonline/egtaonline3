@@ -11,7 +11,7 @@ class DailyCleanup
         AnalysisCleanup.perform_async(a.game_id, a.id)
       end
       Simulation.stale.delete_all
-      Analysis.stale.delete_all
+      #Analysis.stale.delete_all
       Simulation.recently_finished.each { |s| s.requeue }
       FileUtils.rm_rf(Dir.glob("#{Rails.root}/public/games/*"), secure: true)
 
