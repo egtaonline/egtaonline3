@@ -42,10 +42,16 @@ class GamesController < ProfileSpacesController
     game.name || 'EGTAOnline'
   end
 
+  expose(:learning_path) do
+    "/learning/#{game.id}"
+  end
 
   def show
     respond_to do |format|
       format.html do
+        FileUtils::mkdir_p "#{Rails.root}/learning/#{game.id}"
+
+        FileUtils.cp_r(Dir["/mnt/nfs/home/egtaonline/learning/#{game.id}/out/*"],"#{Rails.root}/learning/#{game.id}")
       end
 
       format.json do
@@ -106,6 +112,25 @@ class GamesController < ProfileSpacesController
 
     AnalysisManager.new(analysis).prepare_analysis
     @analysis_id = analysis.id
+  end
+
+  def game_learning_process
+    FileUtils::mkdir_p "/mnt/nfs/home/egtaonline/learning/#{game.id}/in"
+    FileUtils::mkdir_p "/mnt/nfs/home/egtaonline/learning/#{game.id}/out"
+  end
+
+  def learning_submit
+    current_time = Time.now.utc.iso8601.gsub('-', '').gsub(':', '')
+    local_path = "/mnt/nfs/home/egtaonline/learning/" + game.id
+    game_id = game.id.to_s
+    # local_path = "#{Rails.root}/learning/" + game_id
+
+    file_name = "game" + game_id + "-learning-" + current_time + ".json"
+    FileUtils::mkdir_p local_path + "/in", mode: 0770
+    FileUtils::mkdir_p local_path + "/out", mode: 0770
+    FileUtils.mv("#{GamePresenter.new(game).to_json()}",File.join(local_path + "/in",file_name))
+    learning = LearningSubmitter.new(game_id, current_time, params[:day], params[:hour], params[:min], params[:memory], params[:unit], params[:cv], params[:regret], params[:dist], params[:converge], params[:iters], params[:samples], current_user.email)
+    learning.submit
   end
 
   private

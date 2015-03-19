@@ -1,0 +1,24 @@
+#!/bin/bash
+#PBS -N analysis
+#PBS -A wellman_flux
+#PBS -q flux
+#PBS -l qos=flux
+#PBS -W group_list=wellman
+#PBS -l walltime=0:10:00
+#PBS -l nodes=1:ppn=1,pmem=4000mb
+#PBS -M 1000
+#PBS -m abe
+#PBS -V
+#PBS -W umask=0007
+umask 0007
+module load python/2.7.5
+mkdir /tmp/${PBS_JOBID}
+cp -r /nfs/wellman_ls/egtaonline/learning/16/in/game16-learning-20150305T022727Z.json /tmp/${PBS_JOBID}
+cp -r /nfs/wellman_ls/GameAnalysis/learning.py /tmp/${PBS_JOBID}
+cd /tmp/${PBS_JOBID}
+export PYTHONPATH=$PYTHONPATH:/nfs/wellman_ls/GameAnalysis
+
+python learning.py game game16-learning-20150305T022727Z.json -r 3 -d 0.01 -c 0.001 -i 1.0e-06 -s 1e-3 -sp 10000 > game16-learning-20150305T022727Z.out 
+
+cp -r /tmp/${PBS_JOBID}/16-analysis-.out /nfs/wellman_ls/egtaonline/learning/16/out
+rm -rf /tmp/${PBS_JOBID}

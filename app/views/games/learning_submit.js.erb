@@ -1,0 +1,12 @@
+<% if flash[:flux_error] %>
+	window.scrollTo(0, 0);
+	$('.fluxError').empty();
+	$('.fluxError').append('<%= flash[:flux_error] %>');
+	$('.fluxError').fadeIn();
+	<% flash[:flux_error] = nil %>
+<% else  %>
+	$('#set').fadeOut();
+	$('#processing').fadeIn();
+	$('#processing').append('<p>We will send you an email when the analysis output is ready. Please click the link at the game page to download your file.</p>')
+<% end %>
+

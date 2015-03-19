@@ -1,0 +1,62 @@
+<div class="fluxError alert alert-error">
+</div>
+
+<div id = "set">
+	<h1>Learn Payoff</h1>
+	<%= form_tag(learning_submit_game_path, remote: true, role: "form") do%>
+		<fieldset ><!-- PBS Arguments -->
+			<legend>PBS Script Arguments:</legend>
+			<div>
+				<label for="time">Scripts Running Time</label>	
+				<div>
+					<%= select_tag "day", options_for_select((0..7).step(1), @day )%>day(s)
+					<%= select_tag "hour", options_for_select((0..23).step(1), @hour) %>hour(s)
+					<%= select_tag "min", options_for_select((0..59).step(1), @minute)%>minute(s)
+				</div>
+			</div>
+			<div>
+				<label for="memory">Allocated Memory</label>	
+				<div>
+					<%= number_field_tag("memory", @memory, {step:1, min:0, value: 4000})%>
+					<%= select_tag("unit", "<option selected='selected' >mb</option> <option>gb</option>".html_safe)%>
+				</div>
+			</div>
+		</fieldset><!--End of PBS arguments-->
+		
+		
+		<fieldset id = "analysis"><!-- Analysis Scripts' Arguments -->	
+			<legend>Learning Script Arguments:</legend>
+			
+			<!-- <div>
+				<%= label_tag("at_least_one", "Get Best Estimation") %>	
+				<%= check_box_tag('at_least_one', 'at_least_one',  @at_least_one )%>
+			</div> -->
+
+			<hr>
+			<%= label_tag("cv", "Cross Validation Fold: Number of folds for cross validation:") %>
+			<%= number_field_tag("cv", @cv, {step:1, min:0, value:3})%>
+			<%= label_tag("regret", "Regret: Max allowed regret for approximate Nash equilibrium:") %>
+			<%= number_field_tag("regret", @regret, {step:0.001, min:0, value: 1e-2})%>
+			<%= label_tag("dist", "Dist: L2-distance threshold to consider equilibrium distinct:") %>
+			<%= number_field_tag("dist",  @dist, {step:0.001,min:0, value:1e-3})%>
+			<!--
+			<%= label_tag("random_restarts", "Random restart:") %>
+			<%= number_field_tag("random_restarts", @random_restart, {step:1, min:0})%>
+			-->
+			<%= label_tag("converge", "Converge: Replicator dynamics convergence threshold:") %>
+			<%= number_field_tag("converge", @converge,{step:1e-6, min:0, value: 1e-6})%>
+			<%= label_tag("iters", "Iters: Max replicator dynamics iterations:") %>
+			<%= number_field_tag("iters", @iters, {step:1, min:0, value: 10000})%>
+			<%= label_tag("samples", "Samples: Number of samples to mimic expected values:") %>
+			<%= number_field_tag("samples", @samples, {step:1, min:0, value: 1000})%>
+			
+			
+		</fieldset><!-- End of Analysis Scripts' Arguments -->	
+		<br />
+	<%= submit_tag("Submit")%>
+	<% end %>
+</div>
+
+<div id = "processing">
+	<h1>Analyzing</h1>
+</div>
