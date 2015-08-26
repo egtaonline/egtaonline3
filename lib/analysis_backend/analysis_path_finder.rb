@@ -10,7 +10,7 @@ class AnalysisPathFinder
 
   def local_input_path
     File.join(@local_data_path,"in")
-  end
+  end   
 
   def local_output_path
     File.join(@local_data_path,"out")
@@ -62,6 +62,10 @@ class AnalysisPathFinder
 
   def dominance_json_file_name
     "#{@game_id}-dominance-#{@analysis_id}.json"
+  end
+  
+  def bootstrap_json_file_name
+      "#{@game_id}-bootstrap-#{@analysis_id}.json"
   end
 
   def pbs_file_name
