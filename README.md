@@ -66,7 +66,7 @@ bundle exec rake db:migrate
 RAILS\_ENV=test bundle exec rake db:migrate
 ```
 
-These commands should also be run whenever you have written a new migration, or you git pull a code update that has new migrations in it.
+These commands should also be run whenever you have written a new migration, or you git pull a code update that has new migrations in it. In order to run your local development environment of EGTA, resore a backup of the [db fragment](https://github.com/egtaonline/Test-DB-backup).
 
 # Running the tests
 If you've gotten this far, it's time to run the test suite to make sure everything has been set up correctly.  The test suite uses the [RSpec](http://rspec.info/) framework for writing and running tests.  To run all the tests:
