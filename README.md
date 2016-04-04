@@ -4,6 +4,7 @@ This code has the following development/testing dependencies:
 * PostgreSQL 9.2+ (currently deployed with 9.3.2) - the database
 * PhantomJS - used to simulate javascript in the browser for testing
 * NodeJS - the javascript execution engine (you be may be able to use a different JS execution engine with no problems, as we are not dependent on anything Node specific)
+* Redis
 
 If you are developing on a Mac, I strongly recommend installing [homebrew](http://brew.sh/), since it makes installing dependencies such as these trivial.  Also, make sure to follow any instructions that show up when you install these dependencies with homebrew.
 
