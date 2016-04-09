@@ -7,6 +7,7 @@ class CommandSetter
 		@reduction_obj = analysis.reduction_script
 		@subgame_obj = analysis.subgame_script
 		@dominance_obj = analysis.dominance_script
+        @bootstrap_obj = analysis.bootstrap_script
 		@path_obj = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
 
@@ -19,6 +20,7 @@ cp -r /nfs/wellman_ls/GameAnalysis/GameIO.py /tmp/${PBS_JOBID}
 #{set_reduction}
 #{set_subgame}
 #{set_dominance}
+#{set_bootstrap}
 cd #{@path_obj.working_dir}
 cp #{@path_obj.remote_input_path}/* .
 mkdir out
@@ -37,11 +39,15 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 		if @subgame_obj != nil
 			subgame_command = @subgame_obj.get_command
 		end
+        if @bootstrap_obj != nil
+            bootstrap_command = @bootstrap_obj.get_command
+        end
 		<<-DOCUMENT
 #{reduction_command}
 #{dominance_command}
 #{subgame_command}
 #{analysis_command}
+#{bootstrap_command}
 		DOCUMENT
 	end
 
@@ -77,5 +83,11 @@ rm -rf #{@path_obj.working_dir}
 			"#{@dominance_obj.set_up_remote}"
 		end
 	end
+    
+    def set_bootstrap
+        if @bootstrap_obj != nil
+            "#{@bootstrap_obj.set_up_remote}"
+        end
+    end
 	
 end

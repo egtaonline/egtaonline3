@@ -12,6 +12,7 @@ class AnalysisDataProcessor
 		error_message += "Incorrect subgame output," unless check_subgame_file
 		error_message += "Incorrect dominance output," unless check_dominance_file
 		error_message += "Incorrect analysis output," unless check_analysis_output
+        error message += "Incorrect bootstrap output," unless check_bootstrap_output
 
 		if error_message.to_s.strip.length != 0 
 			@analysis.fail(error_message)			
@@ -76,6 +77,22 @@ class AnalysisDataProcessor
 			true	
 		end
 	end
+    
+    def check_bootstrap_file
+        if  @analysis.bootstrap_script
+            bootstrap_script_output = File.join(@path_finder.local_output_path, @path_finder.bootstrap_json_file_name)
+            if File.exist?(bootstrap_script_output)
+                bootstrap_output = File.open(bootstrap_script_output).read
+                #throw
+                bootstrap_script.output = bootstrap_output
+                bootstrap_script.save
+            else
+                false
+            end
+        else
+            true
+        end
+    end
 
 	def check_analysis_output
 		analysis_out = File.join(@path_finder.local_output_path, @path_finder.output_file_name)
