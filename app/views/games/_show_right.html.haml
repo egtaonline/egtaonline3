@@ -1,3 +1,5 @@
+%div= link_to 'Toggle Editable', '#', method: :get, class: 'btn btn-secondary', id: 'toggle_editable_link'
+
 #roles= render partial: "role_table"
 %p="#{profile_counts["count"]} profile(s) and #{profile_counts["observations_count"] || 0} observation(s) as currently configured."
 %p=control_variate_statement

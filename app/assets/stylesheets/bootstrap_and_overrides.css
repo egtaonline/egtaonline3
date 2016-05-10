@@ -44,3 +44,12 @@ td {
 .fixed {
   word-break: normal;
 }
+
+.unselected {
+  opacity: 0.5;
+}
+
+.hidden {
+  display: none;
+  visibility: visible;
+}

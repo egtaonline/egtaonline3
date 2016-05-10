@@ -7,7 +7,7 @@
   %tbody
     =render partial: "role", collection: scheduler.roles
 -if scheduler.unassigned_player_count > 0
-  =form_tag scheduler_roles_path(scheduler), method: :post do
+  =form_tag scheduler_roles_path(scheduler), method: :post, class: 'hidden' do
     = select_tag "role", options_for_select(scheduler.available_roles)
     = number_field_tag "role_count", scheduler.unassigned_player_count, in: 1..scheduler.unassigned_player_count
     = submit_tag "Add Role", class: 'btn btn-primary'

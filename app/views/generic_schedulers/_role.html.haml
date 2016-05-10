@@ -1,4 +1,4 @@
 %tr
   %td= role.name
   %td.fixed= role.count
-  %td= link_to 'Remove Role', role_owner_path + "/roles/#{role.name}", method: :delete, class: 'btn btn-danger'
+  %td.hidden= link_to 'Remove Role', role_owner_path + "/roles/#{role.name}", method: :delete, class: 'btn btn-danger'

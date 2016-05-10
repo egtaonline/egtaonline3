@@ -38,7 +38,7 @@ describe 'GameSchedulers' do
         Simulator.last.add_strategy('Bidder', 'A.B')
         game_scheduler.add_role('Bidder', game_scheduler.size)
         visit "/#{klass.tableize}/#{game_scheduler.id}"
-        click_button 'Add Strategy'
+        click_link('Add Strategy', match: :first)
         expect(page).to have_content("Inspect #{klass.titleize}")
         expect(page).to have_content('A.B')
         game_scheduler.reload.roles.last.strategies.count.should eql(1)

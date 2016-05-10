@@ -107,7 +107,7 @@ describe 'Games' do
       Simulator.last.add_strategy('Bidder', 'A.B')
       game.add_role('Bidder', game.size)
       visit game_path(game.id)
-      click_button 'Add Strategy'
+      click_link('Add Strategy', match: :first)
       expect(page).to have_content('Inspect Game')
       expect(page).to have_content('A.B')
       Game.last.roles.last.strategies.count.should eql(1)

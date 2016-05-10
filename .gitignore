@@ -19,3 +19,7 @@ simulator_uploads/*/
 /coverage
 /public/uploads
 .idea
+/flux_proxy
+/shared
+/vendor
+.*.swp

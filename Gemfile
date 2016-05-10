@@ -118,3 +118,4 @@ group :test do
   gem 'timecop'
 end
 
+gem 'js_cookie_rails', '~> 1.0', '>= 1.0.1'

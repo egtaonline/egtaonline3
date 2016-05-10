@@ -14,4 +14,5 @@
 //= require jquery-migrate-min
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require js.cookie
 //= require_tree .

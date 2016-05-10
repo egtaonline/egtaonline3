@@ -7,6 +7,9 @@ module PatternBasedScheduler
       role.strategies.sort!
       role.save!
       update_requirements
+      if role.deviating_strategies.include? strategy
+        self.remove_deviating_strategy(role_name, strategy)
+      end
     end
   end
 

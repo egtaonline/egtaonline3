@@ -7,6 +7,9 @@ class DeviationScheduler < Scheduler
       role.deviating_strategies += [strategy]
       role.save!
       ProfileAssociator.perform_async(id)
+      if role.strategies.include? strategy
+        self.remove_strategy(role_name, strategy)
+      end
     end
   end
 
