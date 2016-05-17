@@ -11,7 +11,7 @@ $('#toggle_editable_link').click( function( event ) {
 });
 
 $(document).on('ready page:load', function() {
-  if (Cookies.get('lastURL') != document.URL) {
+  if (Cookies.get('lastURL') != location.pathname) {
     Cookies.set('editable', '0');
     Cookies.set('scroll', 0);
   }
@@ -25,5 +25,5 @@ $(document).on('ready page:load', function() {
     Cookies.set('scroll', $(document).scrollTop());
   });
 
-  Cookies.set('lastURL', document.URL);
+  Cookies.set('lastURL', location.pathname);
 });
