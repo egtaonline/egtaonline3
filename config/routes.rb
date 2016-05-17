@@ -31,6 +31,7 @@ Egtaonline3::Application.routes.draw do
 
   resources :games do
     post :create_process, on: :member
+    post :create_learning_process, on: :member
     post :analyze, on: :member
     resources :roles, only: [:create, :destroy] do
       member do

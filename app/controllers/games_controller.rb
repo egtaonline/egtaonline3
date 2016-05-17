@@ -91,6 +91,17 @@ class GamesController < ProfileSpacesController
     set_reduction_default
   end
 
+  def create_learning_process
+    last_analysis = game.analyses.last
+    if last_analysis != nil
+      @pbs = last_analysis.pbs
+      @analysis_argument = last_analysis.learning_script
+    else
+    end
+    set_pbs_default
+    set_learning_default
+  end
+
   def analyze
     analysis = game.analyses.create(status: 'pending', enable_subgame: params[:enable_subgame] != nil, enable_reduction: params[:enable_reduced] != nil)
     analysis.create_analysis_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], support: params[:support],enable_dominance: params[:enable_dominance] != nil)
@@ -166,6 +177,29 @@ class GamesController < ProfileSpacesController
         @mode_hash["DPR"] = true
     end
   end
+
+  def set_learning_default
+    if @analysis_argument != nil
+      @enable_verbose = @analysis_argument.verbose
+      @regret = @analysis_argument.regret
+      @dist = @analysis_argument.dist
+      @converge =  @analysis_argument.converge
+      @iters = @analysis_argument.iters
+      @points = @analysis_argument.points
+      @support = @analysis_argument.support
+      @enable_dominance = @analysis_argument.enable_dominance
+    else
+      @enable_verbose = true
+      @regret = 0.001
+      @dist = 0.001
+      @converge =  0.00000001
+      @iters = 10000
+      @points = 0
+      @support = 0.001
+      @enable_dominance = true
+    end
+  end
+
   
 
   def game_parameters
