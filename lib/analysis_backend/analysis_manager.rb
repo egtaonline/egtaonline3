@@ -20,18 +20,27 @@ class AnalysisManager
   private
 
   def create_script_setter
-    if @analysis.enable_subgame != false
-      prepare_subgame
-    end
 
-    if @analysis.enable_subgame != false || @analysis.analysis_script.enable_dominance != false
-      @analysis.create_dominance_script()
-    end
-    
-    @analysis.analysis_script.set_input_file
-    @analysis.analysis_script.check_optional_argument
+    #if @analysis.enable_learning != false
 
-    @command_setter = CommandSetter.new(@analysis)
+     # @analysis.learning_script.set_input_file
+      #@analysis.learning_script.check_optional_argument
+
+      #@command_setter = CommandSetter.new(@analysis)
+
+    #else
+      if @analysis.enable_subgame != false
+        prepare_subgame
+      end
+      if @analysis.enable_subgame != false || @analysis.analysis_script.enable_dominance != false
+        @analysis.create_dominance_script()
+      end
+      @analysis.analysis_script.set_input_file
+      @analysis.analysis_script.check_optional_argument
+
+      @command_setter = CommandSetter.new(@analysis)
+
+    #end
   end
 
   def prepare_subgame
@@ -42,7 +51,6 @@ class AnalysisManager
       @analysis.create_subgame_script()
     end
   end
-
 
                                                                                                                                                                                                                                                                                                                                                                                                                                     
   def set_commands

@@ -33,6 +33,7 @@ Egtaonline3::Application.routes.draw do
     post :create_process, on: :member
     post :create_learning_process, on: :member
     post :analyze, on: :member
+    post :analyze_learning, on: :member
     resources :roles, only: [:create, :destroy] do
       member do
         post :add_strategy

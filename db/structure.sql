@@ -62,7 +62,8 @@ CREATE TABLE analyses (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     enable_subgame boolean,
-    enable_reduction boolean
+    enable_reduction boolean,
+    enable_learning boolean
 );
 
 
@@ -1552,3 +1553,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140823012602');
 INSERT INTO schema_migrations (version) VALUES ('20140823185552');
 
 INSERT INTO schema_migrations (version) VALUES ('20160516200941');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518151649');

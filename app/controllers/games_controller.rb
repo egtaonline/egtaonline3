@@ -70,12 +70,13 @@ class GamesController < ProfileSpacesController
     game.destroy
     respond_with(game)
   end
+
   def create_process
     last_analysis = game.analyses.last
     if last_analysis != nil
       @pbs = last_analysis.pbs     
       @analysis_argument = last_analysis.analysis_script
-      
+
       @enable_reduced = last_analysis.enable_reduction
       @enable_subgame = last_analysis.enable_subgame
 
@@ -86,27 +87,31 @@ class GamesController < ProfileSpacesController
       @enable_reduced = true
       @enable_subgame = true
     end
+
     set_pbs_default
     set_analysis_default
     set_reduction_default
   end
 
   def create_learning_process
+    puts "\n\n\n blah \n\n\n"
     last_analysis = game.analyses.last
+
     if last_analysis != nil
       @pbs = last_analysis.pbs
       @analysis_argument = last_analysis.learning_script
-    else
     end
+
     set_pbs_default
     set_learning_default
+    # Don't need set_reduction_default
   end
 
   def analyze
-    analysis = game.analyses.create(status: 'pending', enable_subgame: params[:enable_subgame] != nil, enable_reduction: params[:enable_reduced] != nil)
+    analysis = game.analyses.create(status: 'pending', enable_subgame: params[:enable_subgame] != nil, enable_reduction: params[:enable_reduced] != nil, enable_learning: false)
     analysis.create_analysis_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], support: params[:support],enable_dominance: params[:enable_dominance] != nil)
     analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit], user_email: "#{current_user.email}")
-    
+  
     if params[:enable_reduced] != nil       
         role_number_array = Array.new
         game.roles.each do |role|
@@ -114,6 +119,15 @@ class GamesController < ProfileSpacesController
       end
       analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number: role_number_array.join(" "))
     end
+
+    AnalysisManager.new(analysis).prepare_analysis
+    @analysis_id = analysis.id
+  end
+
+  def analyze_learning
+    analysis = game.analyses.create(status: 'pending', enable_subgame: false, enable_reduction: false, enable_learning: true)
+    analysis.create_learning_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], support: params[:support],enable_dominance: params[:enable_dominance] != nil)
+    analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit], user_email: "#{current_user.email}")
 
     AnalysisManager.new(analysis).prepare_analysis
     @analysis_id = analysis.id
@@ -138,6 +152,7 @@ class GamesController < ProfileSpacesController
   end
 
   def set_analysis_default
+    @enable_learning = false
     if @analysis_argument != nil
       @enable_verbose = @analysis_argument.verbose
       @regret = @analysis_argument.regret
@@ -179,6 +194,7 @@ class GamesController < ProfileSpacesController
   end
 
   def set_learning_default
+    @enable_learning = true
     if @analysis_argument != nil
       @enable_verbose = @analysis_argument.verbose
       @regret = @analysis_argument.regret
@@ -199,8 +215,6 @@ class GamesController < ProfileSpacesController
       @enable_dominance = true
     end
   end
-
-  
 
   def game_parameters
     params.require(:game).permit(:name, :size, :simulator_instance_id)

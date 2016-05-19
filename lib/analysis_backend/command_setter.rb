@@ -7,6 +7,9 @@ class CommandSetter
 		@reduction_obj = analysis.reduction_script
 		@subgame_obj = analysis.subgame_script
 		@dominance_obj = analysis.dominance_script
+
+		#@learning_obj = analysis.learning_script
+
 		@path_obj = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
 

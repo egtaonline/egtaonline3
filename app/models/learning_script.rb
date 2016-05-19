@@ -28,9 +28,9 @@ class LearningScript < ActiveRecord::Base
 	      add_argument(" -nd out/#{@path_obj.dominance_json_file_name} ")
 	   end
 
-	   if @analysis.subgame_script != nil
-	   	  add_argument(" -sg out/#{@path_obj.subgame_json_file_name} ")
-	   end
+	   #if @analysis.subgame_script != nil
+	   #	  add_argument(" -sg out/#{@path_obj.subgame_json_file_name} ")
+	   #end
 	end
 
 
