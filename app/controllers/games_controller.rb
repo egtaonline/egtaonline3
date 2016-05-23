@@ -73,6 +73,7 @@ class GamesController < ProfileSpacesController
 
   def create_process
     last_analysis = game.analyses.last
+
     if last_analysis != nil
       @pbs = last_analysis.pbs     
       @analysis_argument = last_analysis.analysis_script
@@ -94,7 +95,6 @@ class GamesController < ProfileSpacesController
   end
 
   def create_learning_process
-    puts "\n\n\n blah \n\n\n"
     last_analysis = game.analyses.last
 
     if last_analysis != nil
@@ -128,7 +128,7 @@ class GamesController < ProfileSpacesController
     analysis = game.analyses.create(status: 'pending', enable_subgame: false, enable_reduction: false, enable_learning: true)
     analysis.create_learning_script(verbose: params[:enable_verbose] != nil, regret: params[:regret], dist: params[:dist], converge: params[:converge], iters: params[:iters], points: params[:points], support: params[:support],enable_dominance: params[:enable_dominance] != nil)
     analysis.create_pbs(day: params[:day], hour: params[:hour], minute: params[:min], memory: params[:memory], memory_unit: params[:unit], user_email: "#{current_user.email}")
-
+    
     AnalysisManager.new(analysis).prepare_analysis
     @analysis_id = analysis.id
   end
@@ -152,7 +152,6 @@ class GamesController < ProfileSpacesController
   end
 
   def set_analysis_default
-    @enable_learning = false
     if @analysis_argument != nil
       @enable_verbose = @analysis_argument.verbose
       @regret = @analysis_argument.regret
@@ -194,7 +193,6 @@ class GamesController < ProfileSpacesController
   end
 
   def set_learning_default
-    @enable_learning = true
     if @analysis_argument != nil
       @enable_verbose = @analysis_argument.verbose
       @regret = @analysis_argument.regret

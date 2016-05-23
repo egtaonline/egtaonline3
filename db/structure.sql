@@ -1288,6 +1288,13 @@ CREATE UNIQUE INDEX index_games_on_simulator_instance_id_and_name ON games USING
 
 
 --
+-- Name: index_learning_scripts_on_analysis_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_learning_scripts_on_analysis_id ON learning_scripts USING btree (analysis_id);
+
+
+--
 -- Name: index_observation_aggs_on_observation_id_and_symmetry_group_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1555,3 +1562,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140823185552');
 INSERT INTO schema_migrations (version) VALUES ('20160516200941');
 
 INSERT INTO schema_migrations (version) VALUES ('20160518151649');
+
+INSERT INTO schema_migrations (version) VALUES ('20160523175208');

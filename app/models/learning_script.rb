@@ -47,7 +47,7 @@ class LearningScript < ActiveRecord::Base
 	end
 
 	def set_up_variables
-		@script_name = "LearningScript.py"
+		@script_name = "GameLearning.py"
 	    @analysis = Analysis.find(analysis_id)
 	    @required_argument_list = "-r #{self.regret} -d #{self.dist} -s #{self.support} -c #{self.converge} -i #{self.iters} -p #{self.points}"
 	    @path_obj = AnalysisPathFinder.new(@analysis.game_id.to_s, analysis_id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")

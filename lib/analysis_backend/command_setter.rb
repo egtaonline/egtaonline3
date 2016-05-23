@@ -1,14 +1,14 @@
 require_relative 'analysis_path_finder.rb'
 
 class CommandSetter
-	def initialize(analysis)
-		
+	def initialize(analysis)		
 		@analysis_obj = analysis.analysis_script
 		@reduction_obj = analysis.reduction_script
 		@subgame_obj = analysis.subgame_script
 		@dominance_obj = analysis.dominance_script
 
-		#@learning_obj = analysis.learning_script
+		#Add learning_obj
+		@learning_obj = analysis.learning_script
 
 		@path_obj = AnalysisPathFinder.new(analysis.game_id.to_s, analysis.id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
@@ -30,15 +30,21 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 	end
 
 	def get_script_command
-		analysis_command = @analysis_obj.get_command
-		if @dominance_obj != nil
-			dominance_command = @dominance_obj.get_command
-		end	
-		if @reduction_obj != nil
-			reduction_command = @reduction_obj.get_command
-		end
-		if @subgame_obj != nil
-			subgame_command = @subgame_obj.get_command
+		if @learning_obj != nil
+			analysis_command = @learning_obj.get_command
+		else
+
+			analysis_command = @analysis_obj.get_command
+			if @dominance_obj != nil
+				dominance_command = @dominance_obj.get_command
+			end	
+			if @reduction_obj != nil
+				reduction_command = @reduction_obj.get_command
+			end
+			if @subgame_obj != nil
+				subgame_command = @subgame_obj.get_command
+			end
+
 		end
 		<<-DOCUMENT
 #{reduction_command}
@@ -66,7 +72,11 @@ rm -rf #{@path_obj.working_dir}
 	end
 	
 	def set_analysis
-		"#{@analysis_obj.set_up_remote}"
+		if @learning_obj != nil
+			"#{@learning_obj.set_up_remote}"
+		else
+			"#{@analysis_obj.set_up_remote}"
+		end
 	end
 
 	def set_subgame
