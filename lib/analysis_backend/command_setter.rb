@@ -32,6 +32,9 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 	def get_script_command
 		if @learning_obj != nil
 			analysis_command = @learning_obj.get_command
+			if @dominance_obj != nil
+				dominance_command = @dominance_obj.get_command
+			end
 		else
 
 			analysis_command = @analysis_obj.get_command
