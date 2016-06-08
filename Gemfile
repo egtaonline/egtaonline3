@@ -118,4 +118,5 @@ group :test do
   gem 'timecop'
 end
 
+# Allows easier management of cookies in javascript
 gem 'js_cookie_rails', '~> 1.0', '>= 1.0.1'

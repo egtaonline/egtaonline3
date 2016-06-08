@@ -51,6 +51,10 @@ class SchedulersController < ProfileSpacesController
     respond_with(scheduler)
   end
 
+  def show
+    @profile_threshold = 2000
+  end
+
   def create_game_to_match
     if Game.find_by(simulator_instance_id: scheduler.simulator_instance_id,
                     name: scheduler.name)

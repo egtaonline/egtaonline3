@@ -53,3 +53,7 @@ td {
   display: none;
   visibility: visible;
 }
+
+.invisible {
+  visibility: hidden;
+}

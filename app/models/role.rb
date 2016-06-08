@@ -30,6 +30,46 @@ class Role < ActiveRecord::Base
     '(' + strategies.map { |strat| "strategy = '#{strat}'" }.join(' OR ') + ')'
   end
 
+  def num_profiles_after_adding_strategy
+   if role_owner.class < Scheduler && role_owner.class != GenericScheduler
+      counts = []
+      strategies = []
+      deviating_strategies = []
+      for r in role_owner.roles
+        counts.push(r.reduced_count)
+        deviating_strategies.push(r.deviating_strategies.length)
+
+        if r == self
+          strategies.push(r.strategies.length + 1)
+        else
+          strategies.push(r.strategies.length)
+        end
+      end
+
+      return ProfileCounter.num_profiles(role_owner.class, counts, strategies, deviating_strategies)
+    end
+  end
+
+  def num_profiles_after_adding_deviating_strategy
+   if role_owner.class < Scheduler && role_owner.class != GenericScheduler
+      counts = []
+      strategies = []
+      deviating_strategies = []
+      for r in role_owner.roles
+        counts.push(r.reduced_count)
+        strategies.push(r.strategies.length)
+
+        if r == self
+          deviating_strategies.push(r.deviating_strategies.length + 1)
+        else
+          deviating_strategies.push(r.deviating_strategies.length)
+        end
+      end
+
+      return ProfileCounter.num_profiles(role_owner.class, counts, strategies, deviating_strategies)
+    end
+  end
+
   private
 
   def unassigned_player_count

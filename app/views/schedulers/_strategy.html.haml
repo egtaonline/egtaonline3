@@ -4,4 +4,4 @@
   %td.hidden= link_to 'Remove Strategy', "/schedulers/#{scheduler.id}/roles/#{role.name}/remove_strategy?strategy=#{strategy}", method: :post, class: 'btn btn-mini btn-warning'
 -else
   %td.hidden.unselected= strategy
-  %td.hidden= link_to 'Add Strategy', url_for({ action: :add_strategy, controller: :roles, id: role.name, scheduler_id: role_owner.id, "#{role.name}_strategy".to_sym => strategy }), method: :post, class: 'btn btn-mini btn-info'
+  %td.hidden{:class => ("invisible" if role.deviating_strategies.include? strategy)}= link_to 'Add Strategy', url_for({ action: :add_strategy, controller: :roles, id: role.name, scheduler_id: role_owner.id, "#{role.name}_strategy".to_sym => strategy }), method: :post, class: 'btn btn-mini btn-info', data: {confirm: (s_num > @profile_threshold ? "Adding this strategy will schedule #{s_num} total profiles, over the threshold. Are you sure?" : nil)}

@@ -4,4 +4,4 @@
   %td.fixed= deviating_role.reduced_count
   %td
     %table
-      =render partial: "/deviation_schedulers/deviating_strategy", collection: (deviating_role.strategies + deviating_role.deviating_strategies + role_owner.available_strategies(deviating_role.name)).sort!, locals: {role: deviating_role}
+      =render partial: "/deviation_schedulers/deviating_strategy", collection: (deviating_role.strategies + deviating_role.deviating_strategies + role_owner.available_strategies(deviating_role.name)).sort!, locals: {role: deviating_role, d_num: deviating_role.num_profiles_after_adding_deviating_strategy}

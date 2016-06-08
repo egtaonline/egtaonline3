@@ -47,18 +47,13 @@ describe 'Users can make schedulers to schedule profiles' do
         click_button 'Add Role'
         scheduler.reload
         if described_class != GenericScheduler
-#          select strategy, from: "#{role}_strategy"
-#          click_button 'Add Strategy'
           click_link('Add Strategy', match: :first)
           expect(page).to have_content("Remove Strategy")
         else
           scheduler.add_profile("#{role}: 2 #{strategy}")
-#          scheduler.add_profile("Remove Strategy")
           visit "/#{klass}/#{scheduler.id}"
           expect(page).to have_content("#{role}: 2 #{strategy}")
         end
-#        expect(page).to have_content("#{role}: 2 #{strategy}")
-#        expect(page).to have_content("Remove Strategy")
       end
     end
 
