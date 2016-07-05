@@ -1,0 +1,4 @@
+%h2= "Create Game to Match"
+= simple_form_for scheduler, url: create_game_to_match_scheduler_path(scheduler), method: :post, html: {class: 'form-inline' } do |f|
+  = f.input :name, input_html: {value: scheduler.name}#{value: session[:entry] ? session[:entry] : scheduler.name}
+  = f.button :submit, "Create Game to Match"

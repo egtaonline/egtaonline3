@@ -34,6 +34,8 @@ Egtaonline3::Application.routes.draw do
     post :create_learning_process, on: :member
     post :analyze, on: :member
     post :analyze_learning, on: :member
+    get :copy
+    post :duplicate
     resources :roles, only: [:create, :destroy] do
       member do
         post :add_strategy
@@ -67,7 +69,11 @@ Egtaonline3::Application.routes.draw do
 
   resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers,
             :generic_schedulers, :hierarchical_deviation_schedulers,
-            :dpr_deviation_schedulers, :deviation_schedulers, except: :delete
+            :dpr_deviation_schedulers, :deviation_schedulers, except: :delete do
+    get :copy
+    post :duplicate
+    get :game_to_match
+  end
 
   resources :profiles, only: :show
   resources :simulations, only: [:index, :show]

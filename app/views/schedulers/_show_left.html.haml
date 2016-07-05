@@ -11,4 +11,6 @@
   %h3 Simulator Configuration
   = render partial: 'configuration/parameter', collection: scheduler.configuration.to_a, locals: { u: u }
 = link_to "Edit #{model_name.titleize}", "/#{model_name.tableize}/#{scheduler.id}/edit", class: 'btn btn-primary'
-= link_to "Create Game to Match", create_game_to_match_scheduler_path(scheduler), method: :post, class: 'btn btn-primary'
+= link_to "Copy #{model_name.titleize}", "/#{model_name.tableize}/#{scheduler.id}/copy", class: 'btn btn-primary'
+= link_to "Destroy #{model_name.titleize}", "/#{model_name.tableize}/#{scheduler.id}", method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+= link_to "Create Game to Match", "/#{model_name.tableize}/#{scheduler.id}/game_to_match", class: 'btn btn-primary'

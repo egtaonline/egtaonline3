@@ -11,8 +11,8 @@ class GameBuilder
     game
   end
 
-  def self.create_game_to_match(scheduler)
-    game = Game.create!(name: scheduler.name, size: scheduler.size,
+  def self.create_game_to_match(scheduler, new_name = scheduler.name)
+    game = Game.create!(name: new_name, size: scheduler.size,
                         simulator_instance_id: scheduler.simulator_instance_id)
     scheduler.roles.each do |role|
       game.roles.create!(

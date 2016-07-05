@@ -5,3 +5,4 @@
   = u.attribute :email
   = render partial: 'configuration/parameter', collection: simulator.configuration.to_a, locals: { u: u }
 = link_to "Edit Simulator", edit_simulator_path(simulator), class: 'btn btn-primary'
+= link_to "Destroy Simulator", simulator, data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-danger'

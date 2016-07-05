@@ -5,4 +5,5 @@
   %td.fixed= link_to (scheduler.active ? "Yes" : "No"), scheduler
   %td
     = link_to 'Edit', edit_scheduler_path(scheduler), class: 'btn btn-mini'
+    = link_to 'Copy', "/#{scheduler.type.tableize}/#{scheduler.id}/copy", class: 'btn btn-mini'
     = link_to 'Destroy', scheduler_path(scheduler), data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-mini btn-danger'

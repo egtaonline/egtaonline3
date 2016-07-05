@@ -56,12 +56,13 @@ class SchedulersController < ProfileSpacesController
   end
 
   def create_game_to_match
+    new_name = params[scheduler.type.tableize.singularize][:name]
     if Game.find_by(simulator_instance_id: scheduler.simulator_instance_id,
-                    name: scheduler.name)
-      flash[:alert] = 'A game with that name already exists.'
-      respond_with(scheduler)
+                    name: new_name)
+      flash[:alert] = "A game with the name '#{new_name}' already exists."
+      redirect_to :back
     else
-      respond_with(GameBuilder.create_game_to_match(scheduler))
+      respond_with(GameBuilder.create_game_to_match(scheduler, new_name))
     end
   end
 

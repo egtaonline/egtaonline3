@@ -19,7 +19,8 @@ describe 'Games can be created from schedulers', type: :feature do
       it 'alerts the user' do
         visit "/#{klass.tableize}/#{scheduler.id}"
         click_on 'Create Game to Match'
-        page.should have_content 'A game with that name already exists.'
+        click_on 'Create Game to Match'
+        page.should have_content "A game with the name '#{scheduler.name}' already exists."
         Game.count.should == 1
       end
     end

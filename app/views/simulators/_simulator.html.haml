@@ -2,4 +2,5 @@
   %td= link_to simulator.name, simulator
   %td= link_to simulator.version, simulator
   %td
+    = link_to 'Edit', edit_simulator_path(simulator), class: 'btn btn-mini'
     = link_to 'Destroy', simulator, data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-mini btn-danger'

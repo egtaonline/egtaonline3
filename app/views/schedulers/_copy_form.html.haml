@@ -1,0 +1,3 @@
+= simple_form_for scheduler, url: "/#{model_name.tableize}/#{scheduler.id}/duplicate", method: :post, html: {class: 'form-inline' } do |f|
+  = f.input :name, input_html: {value: "#{scheduler.name}_copy"}# {value: session[:entry] ? session[:entry] : "#{scheduler.name}_copy"}
+  = f.button :submit, "Copy Scheduler"
