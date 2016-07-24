@@ -15,7 +15,6 @@ class CommandSetter
 
 	def set_up_remote_command				
 		<<-DOCUMENT
-module load python/2.7.5
 mkdir #{@path_obj.working_dir} 
 cp -r /nfs/wellman_ls/GameAnalysis/GameIO.py /tmp/${PBS_JOBID}
 #{set_analysis}
