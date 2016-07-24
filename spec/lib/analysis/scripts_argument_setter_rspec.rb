@@ -137,7 +137,7 @@ describe ScriptsArgumentSetter do
 				setter = ScriptsArgumentSetter.new(analysis_obj,enable_dominance,reduction_obj,subgame_obj)
 				setter.set_path(path_obj)
 				setter.instance_variable_get(:@dominance_obj).should_receive(:set_up_remote_script).with(path_obj.dominance_script_path, path_obj.working_dir).and_return(dominance_set_up_command)
-				expect(setter.set_up_remote_command).to eq(
+				expect(setter.set_up_remote_command).to eq("module load python-anaconda2/latest\n" \
 				   "mkdir /tmp/${PBS_JOBID}\n" \
 	               "analysis_set_up_remote_script_command\n" \
 	               "analysis_set_up_remote_input_command\n\n" \
