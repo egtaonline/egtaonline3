@@ -27,21 +27,8 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 	def get_script_command
 		if @learning_obj != nil
 			analysis_command = @learning_obj.get_command
-			if @dominance_obj != nil
-				dominance_command = @dominance_obj.get_command
-			end
 		else
 			analysis_command = @analysis_obj.get_command
-			#if @dominance_obj != nil
-			#	dominance_command = @dominance_obj.get_command
-			#end	
-			#if @reduction_obj != nil
-			#	reduction_command = @reduction_obj.get_command
-			#end
-			#if @subgame_obj != nil
-			#	subgame_command = @subgame_obj.get_command
-			#end
-
 		end
 		<<-DOCUMENT
 #{analysis_command}
@@ -55,34 +42,6 @@ cp #{@path_obj.working_dir}/out/* #{@path_obj.remote_output_path}
 rm -rf #{@path_obj.working_dir}
 		DOCUMENT
 
-	end
-
-	private
-
-	def set_reduction
-		if @reduction_obj != nil
-			"#{@reduction_obj.set_up_remote}"
-		end
-	end
-	
-	def set_analysis
-		if @learning_obj != nil
-			"#{@learning_obj.set_up_remote}"
-		else
-			"#{@analysis_obj.set_up_remote}"
-		end
-	end
-
-	def set_subgame
-		if @subgame_obj != nil
-			"#{@subgame_obj.set_up_remote}"
-		end
-	end
-
-	def set_dominance
-		if @dominance_obj != nil
-			"#{@dominance_obj.set_up_remote}"
-		end
 	end
 	
 end
