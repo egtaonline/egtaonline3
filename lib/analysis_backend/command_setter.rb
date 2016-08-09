@@ -15,13 +15,8 @@ class CommandSetter
 
 	def set_up_remote_command				
 		<<-DOCUMENT
-module load python-anaconda2/latest 2>/dev/null
+module load python-dev/3.5.2
 mkdir #{@path_obj.working_dir} 
-cp -r /nfs/wellman_ls/GameAnalysis/GameIO.py /tmp/${PBS_JOBID}
-#{set_analysis}
-#{set_reduction}
-#{set_subgame}
-#{set_dominance}
 cd #{@path_obj.working_dir}
 cp #{@path_obj.remote_input_path}/* .
 mkdir out
@@ -36,23 +31,19 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 				dominance_command = @dominance_obj.get_command
 			end
 		else
-
 			analysis_command = @analysis_obj.get_command
-			if @dominance_obj != nil
-				dominance_command = @dominance_obj.get_command
-			end	
-			if @reduction_obj != nil
-				reduction_command = @reduction_obj.get_command
-			end
-			if @subgame_obj != nil
-				subgame_command = @subgame_obj.get_command
-			end
+			#if @dominance_obj != nil
+			#	dominance_command = @dominance_obj.get_command
+			#end	
+			#if @reduction_obj != nil
+			#	reduction_command = @reduction_obj.get_command
+			#end
+			#if @subgame_obj != nil
+			#	subgame_command = @subgame_obj.get_command
+			#end
 
 		end
 		<<-DOCUMENT
-#{reduction_command}
-#{dominance_command}
-#{subgame_command}
 #{analysis_command}
 		DOCUMENT
 	end
