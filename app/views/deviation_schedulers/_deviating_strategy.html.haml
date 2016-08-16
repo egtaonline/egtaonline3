@@ -1,7 +1,9 @@
 %tr
--if role.deviating_strategies.include? deviating_strategy
-  %td= deviating_strategy
-  %td.hidden= link_to 'Remove Deviating Strategy', "/schedulers/#{scheduler.id}/roles/#{role.name}/remove_deviating_strategy?strategy=#{deviating_strategy}", method: :post, class: 'btn btn-mini btn-warning'
--else
-  %td.hidden.unselected= deviating_strategy
-  %td.hidden{:class => ("invisible" if role.strategies.include? deviating_strategy)}= link_to 'Add Deviating Strategy', url_for({ action: :add_deviating_strategy, controller: :roles, id: role.name, scheduler_id: role_owner.id, "deviating_#{role.name}_strategy".to_sym => deviating_strategy }), method: :post, class: 'btn btn-mini btn-info', data: {confirm: (d_num > @profile_threshold ? "Adding this deviating strategy will schedule #{d_num} total profiles, over the threshold. Are you sure?" : nil)}
+  %td{:class => ("hidden unselected" unless role.deviating_strategies.include? deviating_strategy)}= deviating_strategy
+  %td.hidden#add_or_remove_strategy_link
+    -if role.deviating_strategies.include? deviating_strategy
+      = link_to 'Remove Deviating Strategy', "/schedulers/#{scheduler.id}/roles/#{role.name}/remove_deviating_strategy?strategy=#{deviating_strategy}", method: :post, class: 'btn btn-mini btn-warning'
+    -elsif role.strategies.include? deviating_strategy
+      %button{href: '#', class: 'btn btn-mini', disabled: true}= 'Add Deviating Strategy'
+    -else
+      = link_to 'Add Deviating Strategy', url_for({ action: :add_deviating_strategy, controller: :roles, id: role.name, scheduler_id: role_owner.id, "deviating_#{role.name}_strategy".to_sym => deviating_strategy }), method: :post, class: 'btn btn-mini btn-info', data: {confirm: (d_num > @profile_threshold ? "Adding this deviating strategy will schedule #{d_num} total profiles, over the threshold. Are you sure?" : nil)}

@@ -1,3 +1,7 @@
+$(window).bind("load", function() {
+  $('#toggle_editable_link').css("visibility", "visible");
+});
+
 $('#toggle_editable_link').click( function( event ) {
   event.preventDefault();
   event.stopPropagation();

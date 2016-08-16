@@ -10,6 +10,7 @@ class Simulation < ActiveRecord::Base
 
   delegate :assignment, to: :profile
   delegate :simulator_fullname, to: :profile
+  delegate :simulator_id, to: :profile
 
   def self.active_on_flux
     active.where(qos: 'flux')

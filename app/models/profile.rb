@@ -16,6 +16,7 @@ class Profile < ActiveRecord::Base
 
   delegate :simulator, to: :simulator_instance
   delegate :simulator_fullname, to: :simulator_instance
+  delegate :simulator_id, to: :simulator_instance
 
   def profile_matches_simulator
     assignment.split('; ').each do |role_string|

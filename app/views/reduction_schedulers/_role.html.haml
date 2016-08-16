@@ -4,5 +4,5 @@
   %td.fixed= role.reduced_count
   %td
     %table
-      =render partial: "strategy", collection: (role.strategies + role.deviating_strategies + role_owner.available_strategies(role.name)).sort!, locals: {role: role, s_num: role.num_profiles_after_adding_strategy}
+      =render partial: "strategy", collection: (role.strategies + role.deviating_strategies + role_owner.available_strategies(role.name)).sort, locals: {role: role, s_num: role.num_profiles_after_adding_strategy}
   %td.hidden= link_to 'Remove Role', role_owner_path + "/roles/#{role.name}", method: :delete, class: 'btn btn-danger'

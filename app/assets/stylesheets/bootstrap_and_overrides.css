@@ -57,3 +57,32 @@ td {
 .invisible {
   visibility: hidden;
 }
+
+#toggle_editable_link {
+  visibility: hidden;
+}
+
+#add_or_remove_strategy_link {
+/*  white-space: nowrap;*/
+  width: 150px;
+}
+
+#index_header_box {
+  display: inline-block;
+}
+
+#search_form_box {
+  display: inline-block;
+  float: right;
+  height: 44px;
+  padding-top:20px
+}
+
+#search_box {
+  vertical-align: top;
+  margin-top: 2px;
+}
+
+#search_button {
+  vertical-align: top;
+}
