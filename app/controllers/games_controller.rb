@@ -72,12 +72,12 @@ class GamesController < ProfileSpacesController
   end
 
   def create_process
-    last_analysis = game.analyses.last
+    #last_analysis = game.analyses.last 
+    last_analysis = game.analyses.where(enable_learning: false).last
 
     if last_analysis != nil
       @pbs = last_analysis.pbs     
       @analysis_argument = last_analysis.analysis_script
-
       @enable_reduced = last_analysis.enable_reduction
       @enable_subgame = last_analysis.enable_subgame
 
@@ -95,7 +95,8 @@ class GamesController < ProfileSpacesController
   end
 
   def create_learning_process
-    last_analysis = game.analyses.last
+    #last_analysis = game.analyses.last
+    last_analysis = game.analyses.where(enable_learning: true).last
 
     if last_analysis != nil
       @pbs = last_analysis.pbs
@@ -114,12 +115,14 @@ class GamesController < ProfileSpacesController
   
     if params[:enable_reduced] != nil       
         role_number_array = Array.new
+        role_name_array = Array.new
         game.roles.each do |role|
         role_number_array << params[role.name]
+        role_name_array << role.name
       end
-      analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number: role_number_array.join(" "))
+      analysis.create_reduction_script(mode: params[:reduced_mode], reduced_number: role_name_array.zip(role_number_array).flatten.compact.join(" "))
+    #reduced_number: role_number_array.join(" ")
     end
-
     AnalysisManager.new(analysis).prepare_analysis
     @analysis_id = analysis.id
   end
@@ -180,7 +183,7 @@ class GamesController < ProfileSpacesController
         game.roles.each do |role|
           role_name_array << role.name
         end
-        role_number_array = @reduction_argument.reduced_number.split(" ").map { |s| s.to_i }
+        role_number_array = @reduction_argument.reduced_number.split(" ").map { |s| s.to_i }.select.with_index { |_, j| j.odd? }
         @role_number_hash = Hash[role_name_array.zip role_number_array]
         @mode_hash[@reduction_argument.mode] = true
     else
@@ -201,7 +204,6 @@ class GamesController < ProfileSpacesController
       @iters = @analysis_argument.iters
       @points = @analysis_argument.points
       @support = @analysis_argument.support
-      @enable_dominance = @analysis_argument.enable_dominance
     else
       @enable_verbose = true
       @regret = 0.001
@@ -210,7 +212,6 @@ class GamesController < ProfileSpacesController
       @iters = 10000
       @points = 0
       @support = 0.001
-      @enable_dominance = true
     end
   end
 

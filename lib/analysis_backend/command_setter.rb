@@ -15,13 +15,8 @@ class CommandSetter
 
 	def set_up_remote_command				
 		<<-DOCUMENT
-module load python-anaconda2/latest 2>/dev/null
+module load python-dev/3.5.2
 mkdir #{@path_obj.working_dir} 
-cp -r /nfs/wellman_ls/GameAnalysis/GameIO.py /tmp/${PBS_JOBID}
-#{set_analysis}
-#{set_reduction}
-#{set_subgame}
-#{set_dominance}
 cd #{@path_obj.working_dir}
 cp #{@path_obj.remote_input_path}/* .
 mkdir out
@@ -32,27 +27,10 @@ export PYTHONPATH=$PYTHONPATH:#{@path_obj.scripts_path}
 	def get_script_command
 		if @learning_obj != nil
 			analysis_command = @learning_obj.get_command
-			if @dominance_obj != nil
-				dominance_command = @dominance_obj.get_command
-			end
 		else
-
 			analysis_command = @analysis_obj.get_command
-			if @dominance_obj != nil
-				dominance_command = @dominance_obj.get_command
-			end	
-			if @reduction_obj != nil
-				reduction_command = @reduction_obj.get_command
-			end
-			if @subgame_obj != nil
-				subgame_command = @subgame_obj.get_command
-			end
-
 		end
 		<<-DOCUMENT
-#{reduction_command}
-#{dominance_command}
-#{subgame_command}
 #{analysis_command}
 		DOCUMENT
 	end
@@ -64,34 +42,6 @@ cp #{@path_obj.working_dir}/out/* #{@path_obj.remote_output_path}
 rm -rf #{@path_obj.working_dir}
 		DOCUMENT
 
-	end
-
-	private
-
-	def set_reduction
-		if @reduction_obj != nil
-			"#{@reduction_obj.set_up_remote}"
-		end
-	end
-	
-	def set_analysis
-		if @learning_obj != nil
-			"#{@learning_obj.set_up_remote}"
-		else
-			"#{@analysis_obj.set_up_remote}"
-		end
-	end
-
-	def set_subgame
-		if @subgame_obj != nil
-			"#{@subgame_obj.set_up_remote}"
-		end
-	end
-
-	def set_dominance
-		if @dominance_obj != nil
-			"#{@dominance_obj.set_up_remote}"
-		end
 	end
 	
 end

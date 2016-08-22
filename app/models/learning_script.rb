@@ -3,7 +3,7 @@ class LearningScript < ActiveRecord::Base
 	after_initialize :prepare
 
 	def get_command
-	    "/nfs/wellman_ls/GameAnalysis/python27ve/bin/python #{@script_name} #{@required_argument_list} #{@input_file_name} > ./out/#{@path_obj.output_file_name}"
+	    "/nfs/wellman_ls/game_analysis/ga learning -i #{@input_file_name} -o ./out/#{@path_obj.output_file_name} #{@required_argument_list}"
 	end
 
 	def set_up_remote
@@ -11,22 +11,17 @@ class LearningScript < ActiveRecord::Base
 	end
 
 	def set_input_file
-		if @analysis.reduction_script != nil
-			@input_file_name = "out/#{@path_obj.reduction_file_name}"
-		else
-			@input_file_name = @path_obj.input_file_name
-		end
+		@input_file_name = @path_obj.input_file_name
 	end
 
 	def check_optional_argument
-	   
 	   if self.verbose != false
 	      add_argument("--verbose")
 	   end
 
-	   if self.enable_dominance != false
-	      add_argument(" -nd out/#{@path_obj.dominance_json_file_name} ")
-	   end
+	   #if self.enable_dominance != false
+	   #   add_argument(" -nd out/#{@path_obj.dominance_json_file_name} ")
+	   #end
 
 	   #if @analysis.subgame_script != nil
 	   #	  add_argument(" -sg out/#{@path_obj.subgame_json_file_name} ")
@@ -49,7 +44,7 @@ class LearningScript < ActiveRecord::Base
 	def set_up_variables
 		@script_name = "GameLearning.py"
 	    @analysis = Analysis.find(analysis_id)
-	    @required_argument_list = "-r #{self.regret} -d #{self.dist} -s #{self.support} -c #{self.converge} -i #{self.iters} -p #{self.points}"
+	    @required_argument_list = "--dist-thresh #{self.dist} -r #{self.regret} -t #{self.support} --rand-restarts #{self.points} -c #{self.converge} -m #{self.iters}"
 	    @path_obj = AnalysisPathFinder.new(@analysis.game_id.to_s, analysis_id.to_s, "/mnt/nfs/home/egtaonline","/nfs/wellman_ls")
 	end
 
