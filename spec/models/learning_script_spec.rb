@@ -66,7 +66,7 @@ describe LearningScript do
 	  	it 'sets up the remote working dir on flux' do
 	  		analysis = create(:analysis, :running_status)
 			analysis_script = analysis.create_analysis_script(@params)
-			com = "cp -r /nfs/wellman_ls/GameAnalysis/AnalysisScript.py /tmp/${PBS_JOBID}"
+			com = "cp -r /nfs/wellman_ls/game_analysis/AnalysisScript.py /tmp/${PBS_JOBID}"
 
 			expect(analysis_script.set_up_remote).to eq(com)
 	  	end

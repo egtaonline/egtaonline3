@@ -30,7 +30,7 @@ describe ReductionScript do
 
   describe '#set_up_remote' do
   	it 'sets up remote working dir with files' do
-  		com = "cp -r /nfs/wellman_ls/GameAnalysis/Reductions.py /tmp/${PBS_JOBID}"
+		com = "cp -r /nfs/wellman_ls/game_analysis/Reductions.py /tmp/${PBS_JOBID}"
   		expect(@analysis.reduction_script.set_up_remote).to eq(com)
   	end
   end	

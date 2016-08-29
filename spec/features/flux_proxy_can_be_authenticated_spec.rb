@@ -21,9 +21,8 @@ describe 'The flux proxy can be connected through the web page',
         click_on 'Please authenticate with your Flux account to restore.'
         fill_in 'Uniqname', with: uniqname
         fill_in 'Password', with: password
-        fill_in 'Verification number', with: verification_number
         Backend.should_receive(:authenticate).with(
-          'uniqname' => uniqname, 'verification_number' => verification_number,
+          'uniqname' => uniqname,
           'password' => password).and_return(true)
         Backend.should_receive(:connected?).and_return(true)
         click_on 'Connect to Flux'
@@ -37,8 +36,8 @@ describe 'The flux proxy can be connected through the web page',
     context 'when the authentication is unsuccessful' do
       before do
         Backend.should_receive(:authenticate).with(
-          'uniqname' => uniqname, 'password' => password,
-          'verification_number' => verification_number).and_return(false)
+          'uniqname' => uniqname, 'password' => password
+          ).and_return(false)
         Backend.should_receive(:connected?).exactly(3).times.and_return(false)
         visit '/'
       end
@@ -50,7 +49,6 @@ describe 'The flux proxy can be connected through the web page',
         click_on 'Please authenticate with your Flux account to restore.'
         fill_in 'Uniqname', with: uniqname
         fill_in 'Password', with: password
-        fill_in 'Verification number', with: verification_number
         click_on 'Connect to Flux'
         expect(page).to have_content('Failed to authenticate.')
       end

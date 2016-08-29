@@ -36,7 +36,7 @@ describe SubgameScript do
   describe '#set_up_remote' do
   	it 'sets the remote working directory' do
   		@analysis.create_subgame_script
-  		com = "cp -r /nfs/wellman_ls/GameAnalysis/Subgames.py /tmp/${PBS_JOBID}"
+		com = "cp -r /nfs/wellman_ls/game_analysis/Subgames.py /tmp/${PBS_JOBID}"
   		expect(@analysis.subgame_script.set_up_remote).to eq(com)
   	end
   end

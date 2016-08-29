@@ -41,7 +41,7 @@ describe DominanceScript do
   describe '#set_up_remote' do
   	it 'sets the remote working directory' do
   		@analysis.create_dominance_script
-  		com = "cp -r /nfs/wellman_ls/GameAnalysis/Dominance.py /tmp/${PBS_JOBID}"
+		com = "cp -r /nfs/wellman_ls/game_analysis/Dominance.py /tmp/${PBS_JOBID}"
   		expect(@analysis.dominance_script.set_up_remote).to eq(com)
   	end
   end

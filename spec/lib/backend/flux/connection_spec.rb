@@ -13,12 +13,12 @@ describe Connection do
       context "when flux proxy returns #{truth}" do
         before do
           flux_proxy.should_receive(:authenticate).with(
-            uniqname, verification_number, password).and_return(truth)
+            uniqname, password).and_return(truth)
         end
 
         it do
           expect(connection.authenticate(
-            uniqname: uniqname, verification_number: verification_number,
+            uniqname: uniqname,
             password: password)).to eq(truth)
         end
       end
@@ -27,12 +27,12 @@ describe Connection do
     context 'when it raise an error' do
       before do
         flux_proxy.should_receive(:authenticate).with(
-          uniqname, verification_number, password).and_raise(IOError)
+          uniqname, password).and_raise(IOError)
       end
 
       it do
         expect(connection.authenticate(
-          uniqname: uniqname, verification_number: verification_number,
+          uniqname: uniqname,
           password: password)).to be_false
       end
     end
