@@ -8,9 +8,9 @@ class AnalysisDataProcessor
 	def process_files
 		error_message = ""
 
-		error_message += "Incorrect reduction output," unless check_reduction_file
-		error_message += "Incorrect subgame output," unless check_subgame_file
-		error_message += "Incorrect dominance output," unless check_dominance_file
+#		error_message += "Incorrect reduction output," unless check_reduction_file
+#		error_message += "Incorrect subgame output," unless check_subgame_file
+#		error_message += "Incorrect dominance output," unless check_dominance_file
 		error_message += "Incorrect analysis output," unless check_analysis_output
 
 		if error_message.to_s.strip.length != 0 
