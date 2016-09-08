@@ -9,9 +9,9 @@ class AnalysisPreparer
 		file_manager = FileManager.new(@path_finder)
 		file_manager.created_folder
         Rails.logger.info "Analysis id is #{@analysis.id}"
-		if @analysis.enable_subgame != false && @analysis.subgame_script.subgame
-			file_manager.prepare_subgame_input(@analysis.subgame_script.subgame)
-		end
+#		if @analysis.enable_subgame != false && @analysis.subgame_script.subgame
+#			file_manager.prepare_subgame_input(@analysis.subgame_script.subgame)
+#		end
 	 	file_manager.prepare_analysis_input(Game.find(@analysis.game_id))
 	    file_manager.prepare_pbs(@analysis.pbs.scripts)
 	end
