@@ -3,9 +3,15 @@ class GamesController < ProfileSpacesController
   helper_method :download_output
 
   expose(:games) do
-    Game.includes(simulator_instance: :simulator)
-    .order("#{sort_column} #{sort_direction}")
-    .page(params[:page])
+    if params[:search]
+      Game.search(params[:search]).includes(simulator_instance: :simulator)
+      .order("#{sort_column} #{sort_direction}")
+      .page(params[:page])
+    else
+      Game.includes(simulator_instance: :simulator)
+      .order("#{sort_column} #{sort_direction}")
+      .page(params[:page])
+    end
   end
   expose(:game, attributes: :game_parameters)  do
     id = params['game_id'] || params[:id]

@@ -25,6 +25,17 @@ class Scheduler < ActiveRecord::Base
   after_save :try_scheduling, on: :update, if: :activated?
   after_save :reset_roles, on: :update, if: :size_changed?
 
+  def self.search(search)
+    search.strip!
+    search.upcase!
+    words = search.split(' ')
+    a = where("UPPER(name) LIKE ?", "%#{words[0]}%")
+    for i in 1..words.size
+      a = a.where("UPPER(name) LIKE ?", "%#{words[i]}%")
+    end
+    a
+  end
+
   def reset_roles
     roles.destroy_all
   end

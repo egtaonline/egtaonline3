@@ -69,6 +69,17 @@ class Simulator < ActiveRecord::Base
     self.save!
   end
 
+  def self.search(search)
+    search.strip!
+    search.upcase!
+    words = search.split(' ')
+    a = where("UPPER(name) LIKE ?", "%#{words[0]}%")
+    for i in 1..words.size
+      a = a.where("UPPER(name) LIKE ?", "%#{words[i]}%")
+    end
+    a
+  end
+
   private
 
   def location

@@ -79,4 +79,15 @@ class Game < ActiveRecord::Base
       roles.map { |role| "\"#{role.name}\" => #{role.count}" }
       .join(', ') + "')"
   end
+
+  def self.search(search)
+    search.strip!
+    search.upcase!
+    words = search.split(' ')
+    a = where("UPPER(name) LIKE ?", "%#{words[0]}%")
+    for i in 1..words.size
+      a = a.where("UPPER(name) LIKE ?", "%#{words[i]}%")
+    end
+    a
+  end
 end

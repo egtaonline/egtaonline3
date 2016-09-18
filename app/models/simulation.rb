@@ -94,4 +94,15 @@ class Simulation < ActiveRecord::Base
       end
     end
   end
+
+  def self.search(search)
+    search.strip!
+    search.upcase!
+    words = search.split(' ')
+    a = where("UPPER(name) LIKE ?", "%#{words[0]}%")
+    for i in 1..words.size
+      a = a.where("UPPER(name) LIKE ?", "%#{words[i]}%")
+    end
+    a
+  end
 end

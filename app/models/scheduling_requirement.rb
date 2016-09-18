@@ -10,4 +10,12 @@ class SchedulingRequirement < ActiveRecord::Base
   delegate :observations_count, to: :profile
 
   after_save { profile.try_scheduling }
+
+  def self.search(search)
+    search.strip!
+#    search.gsub!(" ", "%")
+    search.gsub!(" ", "_")
+    search.upcase!
+    joins(:profile).where("UPPER(assignment) LIKE ?", "%#{search}%")
+  end
 end

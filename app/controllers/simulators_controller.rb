@@ -1,6 +1,11 @@
 class SimulatorsController < AuthenticatedController
   expose(:simulators) do
-    Simulator.order("#{sort_column} #{sort_direction}").page(params[:page])
+    if params[:search]
+      Simulator.search(params[:search]).order("#{sort_column} #{sort_direction}")
+        .page(params[:page])
+    else
+      Simulator.order("#{sort_column} #{sort_direction}").page(params[:page])
+    end
   end
   expose(:simulator, attributes: :simulator_parameters)
 

@@ -1,0 +1,3 @@
+= form_tag url_for(controller: params[:controller]), method: :get do
+  = text_field_tag :search, params[:search], placeholder: "Search #{params[:controller].titleize}", id: 'search_box'
+  = submit_tag "Search", class: 'btn btn-primary', id: 'search_button'

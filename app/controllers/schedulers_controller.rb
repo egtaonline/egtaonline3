@@ -1,8 +1,14 @@
 class SchedulersController < ProfileSpacesController
   expose(:schedulers) do
-    klass.includes(:simulator_instance)
-      .order("#{sort_column} #{sort_direction}#{secondary_column}")
-      .page(params[:page])
+    if params[:search]
+      klass.search(params[:search]).includes(:simulator_instance)
+        .order("#{sort_column} #{sort_direction}#{secondary_column}")
+        .page(params[:page])
+    else
+      klass.includes(:simulator_instance)
+        .order("#{sort_column} #{sort_direction}#{secondary_column}")
+        .page(params[:page])
+    end
   end
   expose(:scheduler, attributes: :scheduler_parameters) do
     id = params["#{model_name}_id"] || params[:id]
@@ -31,9 +37,15 @@ class SchedulersController < ProfileSpacesController
   expose(:role_owner_path) { "/schedulers/#{scheduler.id}" }
 
   expose(:scheduling_requirements) do
-    SchedulingRequirement.where(scheduler_id: params[:id])
-      .includes(:profile).order("#{sort_column} #{sort_direction}")
-      .page(params[:page])
+    if params[:profile_search]
+      SchedulingRequirement.search(params[:profile_search]).where(scheduler_id: params[:id])
+        .includes(:profile).order("#{sort_column} #{sort_direction}")
+        .page(params[:page])
+    else
+      SchedulingRequirement.where(scheduler_id: params[:id])
+        .includes(:profile).order("#{sort_column} #{sort_direction}")
+        .page(params[:page])
+    end
   end
 
   def create

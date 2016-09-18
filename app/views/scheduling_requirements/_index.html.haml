@@ -1,4 +1,9 @@
-%h3 Profiles
+%div
+  %h3#index_header_box Profiles
+  %div#search_form_box
+    = form_tag params, method: :get do
+      = text_field_tag :profile_search, params[:profile_search], placeholder: "Search Profiles", id: 'search_form'
+      = submit_tag "Search", class: 'btn btn-primary', id: 'search_button'
 %table.table.table-striped
   %thead
     %tr
