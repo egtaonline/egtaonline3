@@ -44,7 +44,7 @@ class ProfileCounter
         total1 += strategies[r] * intermediate
         total3 += deviating_strategies[r] * intermediate
       end
-  
+
       pset = []
       for i in 2..roles.length
         pset.concat(roles.combination(i).to_a)
@@ -66,7 +66,7 @@ class ProfileCounter
 
         total2 += (set.length - 1) * inter1 * inter2
       end  
-  
+
       total4 = 0
       for r in roles
         inter1 = 0 

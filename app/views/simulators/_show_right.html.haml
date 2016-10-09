@@ -5,7 +5,7 @@
       %th Name
       %th Strategy Set
   %tbody
-    =render partial: "role", collection: simulator.role_configuration.to_a
+    =render partial: "role", collection: simulator.role_configuration.to_a.sort
     =form_tag simulator_roles_path(simulator), method: :post do
       %td= text_field_tag :role
       %td= submit_tag "Add Role", class: 'btn btn-primary'

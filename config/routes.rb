@@ -21,6 +21,7 @@ Egtaonline3::Application.routes.draw do
   end
 
   resources :simulators do
+    get :download_zip
     resources :roles, only: [:create, :destroy] do
       member do
         post :add_strategy
