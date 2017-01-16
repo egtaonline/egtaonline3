@@ -4,6 +4,10 @@ class ReductionCreator
     assignments.flat_map { |assignment| expand_assignment(assignment, roles) }
   end
 
+  def self.sparse_expand_assignments(assignments, roles)
+    assignments.flat_map { |assignment| sparse_expand_assignment(assignment, roles) }
+  end
+
   def self.expand_role(strategy_hash, player_count)
     player_multiple = strategy_hash.values.reduce(:+)
     r_factor = reduction_factor(player_multiple, player_count)
