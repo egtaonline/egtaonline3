@@ -52,12 +52,16 @@ class SchedulersController < ProfileSpacesController
   end
 
   def show
+    # number of profiles before a warning is given when adding a strategy
     @profile_threshold = 2000
-    @warning = false
+
+    # determine if the warning about unmet scheduling requirements
+    # should be given when deleting a scheduler
+    @unmet_reqs_warning = false
     if scheduler.active
       for req in scheduling_requirements
         if req.count > req.profile.observations_count
-          @warning = true
+          @unmet_reqs_warning = true
           break
         end
       end
