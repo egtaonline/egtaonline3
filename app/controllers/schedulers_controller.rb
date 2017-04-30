@@ -65,6 +65,15 @@ class SchedulersController < ProfileSpacesController
 
   def show
     @profile_threshold = 2000
+    @warning = false
+    if scheduler.active
+      for req in scheduling_requirements
+        if req.count > req.profile.observations_count
+          @warning = true
+          break
+        end
+      end
+    end
   end
 
   def create_game_to_match

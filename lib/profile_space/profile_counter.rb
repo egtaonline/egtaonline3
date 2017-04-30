@@ -44,7 +44,7 @@ class ProfileCounter
         total1 += strategies[r] * intermediate
         total3 += deviating_strategies[r] * intermediate
       end
-  
+
       pset = []
       for i in 2..roles.length
         pset.concat(roles.combination(i).to_a)
@@ -53,18 +53,20 @@ class ProfileCounter
       for set in pset
         inter1 = 1
         for r in set
-          inter2 = 1
-          others = roles - set
-          for r_a in others
-            n = counts[r_a]
-            s = strategies[r_a]
-            inter2 *= ((s)..(n+s-1)).inject(:*)/(1..n).inject(:*) - s
-          end
-          inter1 *= strategies[r] * inter2
+         inter1 *= strategies[r]
         end
-        total2 += (set.length - 1) * inter1
+
+        inter2 = 1
+        others = roles - set
+        for r_a in others
+          n = counts[r_a]
+          s = strategies[r_a]
+          inter2 *= ((s)..(n+s-1)).inject(:*)/(1..n).inject(:*) - s
+        end
+
+        total2 += (set.length - 1) * inter1 * inter2
       end  
-  
+
       total4 = 0
       for r in roles
         inter1 = 0 
@@ -89,9 +91,41 @@ class ProfileCounter
         end
         total4 += deviating_strategies[r] * inter1
       end 
-  
-      return total1 - total2 + total3 + total4  
 
+      total5 = 0
+      for set in pset
+        for r in roles
+          inter1 = 1
+          for r_a in set
+            unless r == r_a && counts[r] == 1
+              inter1 *= strategies[r_a]
+            end
+          end
+
+          inter2 = 1
+          others = roles - set
+          for r_b in others
+            n = counts[r_b]
+            s = strategies[r_b]
+            if r == r_b
+              n -= 1
+            end
+
+            inter2 *= (n > 0 ? ((s)..(n+s-1)).inject(:*)/(1..n).inject(:*) : 1) - (r == r_b && counts[r] == 1 ? 1 : s)
+          end
+
+          if counts[r] > 1 && set.include?(r)
+            total5 += (set.length - 2) * deviating_strategies[r] * inter1 * inter2
+          else
+            total5 += (set.length - 1) * deviating_strategies[r] * inter1 * inter2
+          end
+        end
+      end
+
+      return total1 - total2 + total3 + total4 - total5
+
+    else
+      return 0 # should not be needed
     end
   end
 end

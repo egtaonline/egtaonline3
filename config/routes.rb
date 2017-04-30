@@ -21,6 +21,7 @@ Egtaonline3::Application.routes.draw do
   end
 
   resources :simulators do
+    get :download_zip
     resources :roles, only: [:create, :destroy] do
       member do
         post :add_strategy
@@ -69,7 +70,8 @@ Egtaonline3::Application.routes.draw do
 
   resources :game_schedulers, :hierarchical_schedulers, :dpr_schedulers,
             :generic_schedulers, :hierarchical_deviation_schedulers,
-            :dpr_deviation_schedulers, :deviation_schedulers, except: :delete do
+            :dpr_deviation_schedulers, :deviation_schedulers, :sparse_dpr_deviation_schedulers,
+            except: :delete do
     get :copy
     post :duplicate
     get :game_to_match

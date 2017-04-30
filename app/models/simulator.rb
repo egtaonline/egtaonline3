@@ -41,6 +41,7 @@ class Simulator < ActiveRecord::Base
 
   def add_strategy(role, strategy)
     role_configuration[role] ||= []
+    strategy.strip!
     role_configuration[role] << strategy
     role_configuration[role].sort!
     self.save!
@@ -53,6 +54,7 @@ class Simulator < ActiveRecord::Base
 
   def add_role(role)
     if role =~ /\A\w+\z/
+      role.strip!
       role_configuration[role] ||= []
       simulator_instances.each do |si|
         si.control_variables.each do |cv|

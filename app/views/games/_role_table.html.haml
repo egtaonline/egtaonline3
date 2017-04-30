@@ -6,9 +6,9 @@
       %th Count
       %th Strategy Set
   %tbody
-    =render partial: "role", collection: game.roles.sort!
+    =render partial: "role", collection: game.roles
 -if game.unassigned_player_count > 0
   =form_tag game_roles_path(game), method: :post, class: 'hidden' do
-    = select_tag "role", options_for_select(game.available_roles)
+    = select_tag "role", options_for_select(game.available_roles.sort)
     = number_field_tag "role_count", game.unassigned_player_count, in: 1..game.unassigned_player_count
     = submit_tag "Add Role", class: 'btn btn-primary'

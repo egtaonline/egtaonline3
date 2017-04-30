@@ -9,6 +9,9 @@ class ProfileSpacesController < AuthenticatedController
   def duplicate
     s = role_owner.dup
     s.name = params[model_name][:name]
+    if model_name.include? "scheduler"
+      s.active = false
+    end
 
     if s.save
       for role in role_owner.roles
