@@ -2,6 +2,9 @@
   %h3#index_header_box Profiles
   %div#search_form_box
     = form_tag params, method: :get do
+      %span.hover_wrapper
+        %i.hover_button{:class => 'icon-info-sign icon-2x'}
+        %div.hover_info Searches the Assignment column by default. Other columns can be searched with the format: underscored_column_name="value", no spaces.
       = text_field_tag :profile_search, params[:profile_search], placeholder: "Search Profiles", id: 'search_form'
       = submit_tag "Search", class: 'btn btn-primary', id: 'search_button'
 %table.table.table-striped

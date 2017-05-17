@@ -1,5 +1,7 @@
 class Game < ActiveRecord::Base
   include ProfileSpaces
+  extend Searchable
+
   validates_presence_of :size
   validates :name, presence: true,
                    uniqueness: { scope: :simulator_instance_id }
@@ -80,14 +82,22 @@ class Game < ActiveRecord::Base
       .join(', ') + "')"
   end
 
-  def self.search(search)
-    search.strip!
-    search.upcase!
-    words = search.split(' ')
-    a = where("UPPER(name) LIKE ?", "%#{words[0]}%")
-    for i in 1..words.size
-      a = a.where("UPPER(name) LIKE ?", "%#{words[i]}%")
+  private
+
+  def self.general_search(search)
+    return name_search(search)
+  end
+
+  def self.column_filter(results, filters)
+    if filters.key?("name")
+      results = name_filter(results, filters["name"])
     end
-    a
+    if filters.key?("simulator")
+      results = results.joins(:simulator_instance).where("UPPER(simulator_fullname) LIKE ?", "%#{filters["simulator"]}%")
+    end
+    if filters.key?("size")
+      results = results.where(size: filters["size"])
+    end
+    return results
   end
 end

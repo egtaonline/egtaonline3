@@ -1,7 +1,7 @@
 class SchedulersController < ProfileSpacesController
   expose(:schedulers) do
     if params[:search]
-      klass.search(params[:search]).includes(:simulator_instance)
+      klass.includes(:simulator_instance).search(params[:search])
         .order("#{sort_column} #{sort_direction}#{secondary_column}")
         .page(params[:page])
     else
@@ -38,8 +38,8 @@ class SchedulersController < ProfileSpacesController
 
   expose(:scheduling_requirements) do
     if params[:profile_search]
-      SchedulingRequirement.search(params[:profile_search]).where(scheduler_id: params[:id])
-        .includes(:profile).order("#{sort_column} #{sort_direction}")
+      SchedulingRequirement.where(scheduler_id: params[:id])
+        .includes(:profile).search(params[:profile_search]).order("#{sort_column} #{sort_direction}")
         .page(params[:page])
     else
       SchedulingRequirement.where(scheduler_id: params[:id])
@@ -61,6 +61,10 @@ class SchedulersController < ProfileSpacesController
   def destroy
     scheduler.destroy
     respond_with(scheduler)
+  end
+
+  def index
+    @default_search_column = "Name"
   end
 
   def show

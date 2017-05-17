@@ -1,5 +1,6 @@
 class Scheduler < ActiveRecord::Base
   include ProfileSpaces
+  extend Searchable
 
   validates :name, presence: true, uniqueness: true
   validates_presence_of :process_memory, :nodes, :observations_per_simulation,
@@ -24,17 +25,6 @@ class Scheduler < ActiveRecord::Base
   after_save :update_requirements, on: :update, if: :update_conditions?
   after_save :try_scheduling, on: :update, if: :activated?
   after_save :reset_roles, on: :update, if: :size_changed?
-
-  def self.search(search)
-    search.strip!
-    search.upcase!
-    words = search.split(' ')
-    a = where("UPPER(name) LIKE ?", "%#{words[0]}%")
-    for i in 1..words.size
-      a = a.where("UPPER(name) LIKE ?", "%#{words[i]}%")
-    end
-    a
-  end
 
   def reset_roles
     roles.destroy_all
@@ -72,5 +62,29 @@ class Scheduler < ActiveRecord::Base
 
   def activated?
     active_changed? && active == true
+  end
+
+  def self.general_search(search)
+    return name_search(search)
+  end
+
+  def self.column_filter(results, filters)
+    if filters.key?("name")
+      results = name_filter(results, filters["name"])
+    end
+    if filters.key?("type")
+      results = results.where("UPPER(type) = ?", filters["type"])
+    end
+    if filters.key?("simulator")
+      results = results.joins(:simulator_instance).where("UPPER(simulator_fullname) LIKE ?", "%#{filters["simulator"]}%")
+    end
+    if filters.key?("active?")
+      if filters["active?"] == "YES"
+        results = results.where(active: true)
+      elsif filters["active?"] == "NO"
+        results = results.where(active: false)
+      end
+    end
+    return results
   end
 end

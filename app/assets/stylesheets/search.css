@@ -1,0 +1,20 @@
+.hover_wrapper {
+  position: relative;
+  top: 2px;
+}
+
+.hover_info {
+  visibility: hidden;
+  position: absolute;
+  z-index: 10;
+  border-style: outset;
+  border-radius: 10px;
+  left: -10px;
+  top: 20px;
+  background-color: white;
+  width: 300px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

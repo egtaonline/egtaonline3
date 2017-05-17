@@ -1,7 +1,7 @@
 class SimulationsController < AuthenticatedController
   expose(:simulations) do
     if params[:search]
-      Simulation.search(params[:search]).joins(profile: :simulator_instance)
+      Simulation.joins(profile: :simulator_instance).search(params[:search])
         .order("#{sort_column} #{sort_direction}").page(params[:page])
     else
       Simulation.joins(profile: :simulator_instance).order("#{sort_column} #{sort_direction}")
@@ -9,6 +9,10 @@ class SimulationsController < AuthenticatedController
     end
   end
   expose(:simulation)
+
+  def index
+    @default_search_column = "Profile"
+  end
 
   private
 

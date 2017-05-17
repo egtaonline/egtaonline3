@@ -24,6 +24,10 @@ class SimulatorsController < AuthenticatedController
     respond_with(simulator)
   end
 
+  def index
+    @default_search_column = "Name"
+  end
+
   def download_zip
     path = "./public/uploads/simulator/source/#{simulator.id}/"
     if Dir.exist?(path)

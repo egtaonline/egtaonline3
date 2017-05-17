@@ -1,4 +1,6 @@
 class Simulator < ActiveRecord::Base
+  extend Searchable
+
   mount_uploader :source, SimulatorUploader
   serialize :role_configuration, JSON
   has_many :simulator_instances, dependent: :destroy, inverse_of: :simulator
@@ -71,20 +73,27 @@ class Simulator < ActiveRecord::Base
     self.save!
   end
 
-  def self.search(search)
-    search.strip!
-    search.upcase!
-    words = search.split(' ')
-    a = where("UPPER(name) LIKE ?", "%#{words[0]}%")
-    for i in 1..words.size
-      a = a.where("UPPER(name) LIKE ?", "%#{words[i]}%")
-    end
-    a
+  def default_search_column
+    "name"
   end
 
   private
 
   def location
     File.join(Rails.root, 'simulator_uploads', fullname)
+  end
+
+  def self.general_search(search)
+    return name_search(search)
+  end
+
+  def self.column_filter(results, filters)
+    if filters.key?("name")
+      results = name_filter(results, filters["name"])
+    end
+    if filters.key?("version")
+      results = results.where("UPPER(version) = ?", filters["version"])
+    end
+    return results
   end
 end

@@ -4,7 +4,7 @@ class GamesController < ProfileSpacesController
 
   expose(:games) do
     if params[:search]
-      Game.search(params[:search]).includes(simulator_instance: :simulator)
+      Game.includes(simulator_instance: :simulator).search(params[:search])
       .order("#{sort_column} #{sort_direction}")
       .page(params[:page])
     else
@@ -75,6 +75,10 @@ class GamesController < ProfileSpacesController
   def destroy
     game.destroy
     respond_with(game)
+  end
+
+  def index
+    @default_search_column = "Name"
   end
 
   def create_process
