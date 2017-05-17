@@ -1,3 +1,7 @@
-%h2= "#{controller.controller_name.titleize}"
+%div
+  %div#index_header_box
+    %h2= "#{controller.controller_name.titleize}"
+  %div#search_form_box
+    =render 'search'
 #index_table= render 'index_table'
 =render 'new_links'

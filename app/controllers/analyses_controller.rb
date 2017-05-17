@@ -5,13 +5,14 @@ class AnalysesController < AuthenticatedController
   expose(:analysis)
 
   def index
-    if params[:game_id] != nil
-       Game.find(params[:game_id]).analyses.order("#{sort_column} #{sort_direction}")
-      .page(params[:page])
-    else
-      Analysis.order("#{sort_column} #{sort_direction}")
-      .page(params[:page]) 
+    @default_search_column = "Game"
+
+    a = params[:game_id] ? Game.find(params[:game_id]).analyses : Analysis
+    if params[:search]
+      a = a.search(params[:search])
     end
+    a.order("#{sort_column} #{sort_direction}")
+      .page(params[:page])
   end
 
   def show
@@ -25,7 +26,6 @@ class AnalysesController < AuthenticatedController
       end
     end
   end
-
 
   private
 

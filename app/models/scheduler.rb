@@ -1,5 +1,6 @@
 class Scheduler < ActiveRecord::Base
   include ProfileSpaces
+  extend Searchable
 
   validates :name, presence: true, uniqueness: true
   validates_presence_of :process_memory, :nodes, :observations_per_simulation,
@@ -61,5 +62,29 @@ class Scheduler < ActiveRecord::Base
 
   def activated?
     active_changed? && active == true
+  end
+
+  def self.general_search(search)
+    return name_search(search)
+  end
+
+  def self.column_filter(results, filters)
+    if filters.key?("name")
+      results = name_filter(results, filters["name"])
+    end
+    if filters.key?("type")
+      results = results.where("UPPER(type) = ?", filters["type"])
+    end
+    if filters.key?("simulator")
+      results = results.joins(:simulator_instance).where("UPPER(simulator_fullname) LIKE ?", "%#{filters["simulator"]}%")
+    end
+    if filters.key?("active?")
+      if filters["active?"] == "YES"
+        results = results.where(active: true)
+      elsif filters["active?"] == "NO"
+        results = results.where(active: false)
+      end
+    end
+    return results
   end
 end

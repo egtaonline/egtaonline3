@@ -1,4 +1,6 @@
 class Simulation < ActiveRecord::Base
+  extend Searchable
+
   validates_numericality_of :size, only_integer: true, greater_than: 0
   validates_inclusion_of :state, in:
     %w(pending queued running failed processing complete)
@@ -93,5 +95,30 @@ class Simulation < ActiveRecord::Base
         profile_counter[s.profile_id] == 1
       end
     end
+  end
+
+  private
+
+  def self.general_search(search)
+    return where("UPPER(assignment) LIKE ?", "%#{search}%")
+  end
+
+  def self.column_filter(results, filters)
+    if filters.key?("state")
+      results = results.where("UPPER(state) = ?", filters["state"])
+    end
+    if filters.key?("profile")
+      results = results.where("UPPER(assignment) LIKE ?", "%#{filters["profile"]}%")
+    end
+    if filters.key?("simulator")
+      results = results.where("UPPER(simulator_fullname) LIKE ?", "%#{filters["simulator"]}%")
+    end
+    if filters.key?("folder_number")
+      results = results.where(id: filters["folder_number"])
+    end
+    if filters.key?("job")
+      results = results.where(job_id: filters["job"])
+    end
+    return results
   end
 end
