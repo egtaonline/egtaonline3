@@ -26,7 +26,7 @@ class Pbs < ActiveRecord::Base
 #SBATCH --job-name=analysis-#{self.analysis_id}
 
 #SBATCH --account=wellman
-#SBATCH --partition=standard-oc
+#SBATCH --partition=standard
 
 #SBATCH --time=#{@walltime}
 #SBATCH --nodes=1

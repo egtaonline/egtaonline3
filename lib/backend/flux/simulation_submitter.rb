@@ -8,8 +8,8 @@ class SimulationSubmitter
     if proxy
       begin
         response = proxy.exec!(
-          "SBATCH --export=ALL --no-requeue #{@data_path}/#{simulation.id}/wrapper")
-        if response =~ /\A(\d+)/
+          "sbatch --export=ALL --no-requeue #{@data_path}/#{simulation.id}/wrapper")
+        if response =~ /(\d+)\z/
           simulation.queue_as Regexp.last_match[0].to_i
         else
           simulation.fail "Submission failed: #{response}"

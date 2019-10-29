@@ -16,7 +16,7 @@ class PbsFormatter
     <<-DOCUMENT
 #!/bin/bash
 #SBATCH --account=#{@allocation}
-#SBATCH --partition=standard-oc
+#SBATCH --partition=standard
 #SBATCH --nodes=#{@nodes}
 #SBATCH --mem-per-cpu=#{@memory}m
 #SBATCH --time=#{@walltime}
