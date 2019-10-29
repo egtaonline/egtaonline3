@@ -7,7 +7,7 @@ class AnalysisUpdatter
   def update_analysis(analyses)
     proxy = Backend.connection.acquire
     if proxy
-      output = proxy.exec!('qstat -a | grep analysis-')
+      output = proxy.exec!('squeue -a | grep analysis-')
       status_hash = parse_to_hash(output)
       if status_hash
         analyses.each do |analysis|
@@ -26,7 +26,7 @@ class AnalysisUpdatter
       parsed_output = {}
       if output && output != ''
         output.split("\n").each do |line|
-          parsed_output[line.split('.').first] = line.split(/\s+/)[9]
+          parsed_output[line.split(' ').first] = line.split(' ')[5]
         end
       end
       parsed_output

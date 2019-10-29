@@ -8,7 +8,7 @@ class AnalysisSubmitter
     # proxy = nil
     if proxy
       begin
-        response = proxy.exec!("qsub -V -r n #{File.join(@path_finder.remote_pbs_path, @path_finder.pbs_file_name)}") 
+        response = proxy.exec!("SBATCH --export=All --no-requeue #{File.join(@path_finder.remote_pbs_path, @path_finder.pbs_file_name)}") 
         if response =~ /\A(\d+)/
           @analysis.queue_as Regexp.last_match[0].to_i
         else

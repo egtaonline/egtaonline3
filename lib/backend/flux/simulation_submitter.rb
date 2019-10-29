@@ -8,7 +8,7 @@ class SimulationSubmitter
     if proxy
       begin
         response = proxy.exec!(
-          "qsub -V -r n #{@data_path}/#{simulation.id}/wrapper")
+          "SBATCH --export=ALL --no-requeue #{@data_path}/#{simulation.id}/wrapper")
         if response =~ /\A(\d+)/
           simulation.queue_as Regexp.last_match[0].to_i
         else

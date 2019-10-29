@@ -24,23 +24,19 @@ class AnalysisPbsFormatter
     pbs_output_path = File.join(@path_finder.remote_pbs_path, @path_finder.pbs_output_file)
       <<-DOCUMENT
 #!/bin/bash
-#PBS -N analysis-#{game_id}
+#SBATCH --job-name=analysis-#{game_id}
 
-#PBS -A wellman_flux
-#PBS -q flux
-#PBS -l qos=flux
-#PBS -W group_list=wellman
-
-#PBS -l walltime=#{@walltime}
-#PBS -l nodes=1:ppn=1,pmem=#{@memory}
-
-#PBS -e #{pbs_error_path}
-#PBS -o #{pbs_output_path}
-
-#PBS -M #{@email}
-#PBS -m abe
-#PBS -V
-#PBS -W umask=0022
+#SBATCH --account=wellman
+#SBATCH --partition=standard-oc
+#SBATCH --time=#{@walltime}
+#SBATCH --nodes=1
+#SBATCH --mem-per-cpu=#{@memory}
+#SBATCH --ntasks-per-node=1
+#SBATCH --output=#{pbs_output_path}
+#SBATCH --error=#{pbs_error_path}
+#SBATCH --mail-user=#{@email}
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --export=All
 
 umask 0022
 

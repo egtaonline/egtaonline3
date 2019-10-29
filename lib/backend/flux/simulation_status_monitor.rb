@@ -8,7 +8,7 @@ class SimulationStatusMonitor
   def update_simulations(connection, simulations)
     proxy = connection.acquire
     if proxy
-      output = proxy.exec!('qstat -a | grep egta-')
+      output = proxy.exec!('squeue -a | grep egta-')
       status_hash = parse_to_hash(output)
       if status_hash
         simulations.each do |simulation|
@@ -26,7 +26,7 @@ class SimulationStatusMonitor
       parsed_output = {}
       if output && output != ''
         output.split("\n").each do |line|
-          parsed_output[line.split('.').first] = line.split(/\s+/)[9]
+          parsed_output[line.split(' ').first] = line.split(' ')[5]
         end
       end
       parsed_output

@@ -15,7 +15,7 @@ class CommandSetter
 
 	def set_up_remote_command				
 		<<-DOCUMENT
-module load python-dev/3.5.2
+module load python/3.7.4
 mkdir #{@path_obj.working_dir} 
 cd #{@path_obj.working_dir}
 cp #{@path_obj.remote_input_path}/* .

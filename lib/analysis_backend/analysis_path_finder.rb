@@ -17,7 +17,7 @@ class AnalysisPathFinder
   end
   
   def local_pbs_path
-    File.join(@local_data_path,"pbs")
+    File.join(@local_data_path,"sh")
   end
   
   def remote_input_path
@@ -29,19 +29,19 @@ class AnalysisPathFinder
   end
   
   def remote_pbs_path
-    File.join(@remote_data_path,"pbs")
+    File.join(@remote_data_path,"sh")
   end
 
   def pbs_error_file
-    "#{@game_id}-analysis-#{@analysis_id}-pbs.e"
+    "#{@game_id}-analysis-#{@analysis_id}-sh.e"
   end
 
   def pbs_output_file
-    "#{@game_id}-analysis-#{@analysis_id}-pbs.o"
+    "#{@game_id}-analysis-#{@analysis_id}-sh.o"
   end
 
   def working_dir 
-    "/tmp/${PBS_JOBID}"
+    "/tmp/${SLURM_JOB_ID}"
   end
 
   def input_file_name

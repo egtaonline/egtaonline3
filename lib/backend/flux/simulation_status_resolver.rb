@@ -9,7 +9,7 @@ class SimulationStatusResolver
     case status
     when 'R'
       simulation.start
-    when 'C', '', nil
+    when 'CD', '', nil
       if File.exist?("#{@data_path}/#{simulation.id}/error")
         error_message = File.open("#{@data_path}/#{simulation.id}/error")
           .read(ERROR_LIMIT)

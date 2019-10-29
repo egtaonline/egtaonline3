@@ -23,23 +23,22 @@ class Pbs < ActiveRecord::Base
       pbs_output_path = File.join(@path_obj.remote_pbs_path, @path_obj.pbs_output_file)
       <<-DOCUMENT
 #!/bin/bash
-#PBS -N analysis-#{self.analysis_id}
+#SBATCH --job-name=analysis-#{self.analysis_id}
 
-#PBS -A wellman_flux
-#PBS -q flux
-#PBS -l qos=flux
-#PBS -W group_list=wellman
+#SBATCH --account=wellman
+#SBATCH --partition=standard-oc
 
-#PBS -l walltime=#{@walltime}
-#PBS -l nodes=1:ppn=1,pmem=#{@memory}
+#SBATCH --time=#{@walltime}
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem-per-cpu=#{@memory}
 
-#PBS -e #{pbs_error_path}
-#PBS -o #{pbs_output_path}
+#SBATCH --error=#{pbs_error_path}
+#SBATCH --output=#{pbs_output_path}
 
-#PBS -M #{@email}
-#PBS -m abe
-#PBS -V
-#PBS -W umask=0022
+#SBATCH --mail-user=#{@email}
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --export=All
 
 umask 0022
 
