@@ -12,10 +12,10 @@ class AnalysisSubmitter
         if response =~ /(\d+)\z/
           @analysis.queue_as Regexp.last_match[0].to_i
         else
-          @analysis.fail "Submission failed: #{response}"
+          @analysis.fail "Submission failed: !#{response}!"
         end
       rescue => e
-        @analysis.fail "Submission failed: #{e}"
+        @analysis.fail "Submission failed with error: #{e}"
       end
     else
       @analysis.fail "Lost connection to flux"

@@ -3,7 +3,7 @@ class AnalysisScript < ActiveRecord::Base
 	after_initialize :prepare
 
 	def get_command
-	    "/nfs/wellman_ls/game_analysis/ga analyze -i #{@input_file_name} -o ./out/#{@path_obj.output_file_name} #{@required_argument_list}"
+	    "/nfs/wellman_ls/game_analysis_gl/ga analyze -i #{@input_file_name} -o ./out/#{@path_obj.output_file_name} #{@required_argument_list}"
 	end
 
 	def set_up_remote

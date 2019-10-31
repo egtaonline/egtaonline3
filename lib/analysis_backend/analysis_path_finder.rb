@@ -5,7 +5,7 @@ class AnalysisPathFinder
     @analysis_id = analysis_id.to_s 
     @remote_data_path = File.join(remote_path,'egtaonline','analysis',@game_id, @analysis_id )
     @local_data_path = File.join(local_path,'analysis',@game_id, @analysis_id)
-    @scripts_path = File.join(remote_path,'game_analysis')   
+    @scripts_path = File.join(remote_path,'game_analysis_gl')   
   end
 
   def local_input_path

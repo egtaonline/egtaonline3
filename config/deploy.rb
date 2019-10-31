@@ -16,6 +16,7 @@ set :user, 'deployment'
 set :deploy_to, "/home/#{user}/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
+set :keep_releases, 10
 
 set :scm, 'git'
 set :repository,  'git@github.com:egtaonline/egtaonline3.git'
