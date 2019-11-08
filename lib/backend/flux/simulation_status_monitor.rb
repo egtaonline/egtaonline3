@@ -8,7 +8,7 @@ class SimulationStatusMonitor
   def update_simulations(connection, simulations)
     proxy = connection.acquire
     if proxy
-      output = proxy.exec!('squeue -a | grep egta-')
+      output = proxy.exec!('squeue -a --format="%.18i %.9P %.15j %.8u %.8T %.10M %.9l %.6D %R" | grep egta-')
       status_hash = parse_to_hash(output)
       if status_hash
         simulations.each do |simulation|

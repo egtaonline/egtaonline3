@@ -7,7 +7,7 @@ class AnalysisUpdatter
   def update_analysis(analyses)
     proxy = Backend.connection.acquire
     if proxy
-      output = proxy.exec!('squeue -a | grep analysis-')
+      output = proxy.exec!('squeue -a --format="%.18i %.9P %.15j %.8u %.8T %.10M %.9l %.6D %R" | grep analysis-')
       status_hash = parse_to_hash(output)
       if status_hash
         analyses.each do |analysis|
