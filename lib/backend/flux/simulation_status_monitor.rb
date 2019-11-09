@@ -26,7 +26,7 @@ class SimulationStatusMonitor
       parsed_output = {}
       if output && output != ''
         output.split("\n").each do |line|
-          parsed_output[line.split(' ').first] = line.split(' ')[5]
+          parsed_output[line.split(' ').first] = line.split(' ')[4]
         end
       end
       parsed_output
