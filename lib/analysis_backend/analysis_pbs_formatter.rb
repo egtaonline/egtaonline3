@@ -26,7 +26,7 @@ class AnalysisPbsFormatter
 #!/bin/bash
 #SBATCH --job-name=analysis-#{game_id}
 
-#SBATCH --account=wellman
+#SBATCH --account=wellman1
 #SBATCH --partition=standard-oc
 #SBATCH --time=#{@walltime}
 #SBATCH --nodes=1

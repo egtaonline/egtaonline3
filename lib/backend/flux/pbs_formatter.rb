@@ -6,7 +6,7 @@ class PbsFormatter
     @sim_id = simulation.id
     @sim_size = simulation.size
     @extra_args = scheduler.nodes > 1 ? ' ${PBS_NODEFILE}' : ''
-    @allocation = simulation.qos == 'flux' ? 'wellman' : 'engin'
+    @allocation = simulation.qos == 'flux' ? 'wellman1' : 'engin'
     @simulator_tag = "egta-#{simulator.name.downcase.gsub(' ', '_')}"
     @email = simulator.email
     @walltime = walltime
